@@ -1,0 +1,72 @@
+.unitCard {
+	position: relative;
+	background-color: rgb(11, 11, 14);
+	width: 100px;
+	height: 100px;
+	padding: 0px;
+	margin: 5px;
+	border: solid 1px rgb(182, 150, 6);
+}
+
+.card_health_div {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 20%;
+	padding: 0px;
+	margin: 0px;
+	color: rgb(19, 141, 19);
+}
+
+.card_damage_div {
+	position: absolute;
+	top: 20px;
+	right: 0px;
+	width: 20%;
+	padding: 0px;
+	margin: 0px;
+	color: rgb(173, 62, 62)
+}
+
+.card_speed_div {
+	position: absolute;
+	top: 40px;
+	right: 0px;
+	width: 20%;
+	padding: 0px;
+	margin: 0px;
+	color: rgb(207, 209, 67)
+}
+
+.card_range_div {
+	position: absolute;
+	top: 60px;
+	right: 0px;
+	width: 20%;
+	padding: 0px;
+	margin: 0px;
+	color: rgb(119, 144, 255)
+}
+
+.card_name_div {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	padding: 3px;
+	margin: 2px;
+}
+
+#unitContainer {
+	background-color: rgb(9, 4, 22);
+	width: 50%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: bold;
+	color: rgb(255, 226, 164);
+}
+
+body {
+	background-color: black;
+}
