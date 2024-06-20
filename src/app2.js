@@ -259,9 +259,28 @@ function updateUnitCards() {
 	//cardRemainingContainer.innerHTML += '<p class="advancedfoundry">Advanced Foundry Remaining: ' + remainingPicks['Advanced Foundry'] + '<br>';
 	//cardRemainingContainer.innerHTML += '<p class="advancedstarforge">Advanced Starforge Remaining: ' + remainingPicks['Advanced Starforge'] + '<br>';
 	deckDescriptionContainer.innerHTML = '';
+	//for each unit store their selected strengths
+	var unitStrengths = [];
 	for (var i = 0; i < selectedUnits.length; i++) {
 		if (selectedUnits[i] != null) deckDescriptionContainer.innerHTML += selectedUnits[i].name + '<br>';
+		if (selectedUnits[i].strongAgainst) {
+			unitStrengths.push(selectedUnits[i].strongAgainst);
+		}
+
+		if (selectedUnits[i].strongAgainst2) {
+			unitStrengths.push(selectedUnits[i].strongAgainst2);
+		}
 	}
+	deckDescriptionContainer.innerHTML += '<br>Deck Description:<br>Strong Against:';
+	//for each unit strength in unitstrengths
+	for (var i = 0; i < unitStrengths.length; i++) {
+		//if the unit strength is not null
+		if (unitStrengths[i] != null || unitStrengths[i] != '') {
+			//add the unit strength to the deck description container
+			deckDescriptionContainer.innerHTML += unitStrengths[i] + ',';
+		}
+	}
+	//for each unit strength in unitstrengths
 }
 updateUnitCards();
 
