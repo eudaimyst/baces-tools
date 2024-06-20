@@ -253,34 +253,174 @@ function updateUnitCards() {
 	cardRemainingContainer.appendChild(starforgePicks);
 	cardRemainingContainer.appendChild(advFoundryPicks);
 	cardRemainingContainer.appendChild(advStarforgePicks);
-	//cardRemainingContainer.innerHTML += '<p class="core"> Core Remaining: ' + remainingPicks['Core'] + '<br>';
-	//cardRemainingContainer.innerHTML += '<p class="foundry">Foundry Remaining: ' + remainingPicks['Foundry'] + '<br>';
-	//cardRemainingContainer.innerHTML += '<p class="starforge">Starforge Remaining: ' + remainingPicks['Starforge'] + '<br>';
-	//cardRemainingContainer.innerHTML += '<p class="advancedfoundry">Advanced Foundry Remaining: ' + remainingPicks['Advanced Foundry'] + '<br>';
-	//cardRemainingContainer.innerHTML += '<p class="advancedstarforge">Advanced Starforge Remaining: ' + remainingPicks['Advanced Starforge'] + '<br>';
 	deckDescriptionContainer.innerHTML = '';
 	//for each unit store their selected strengths
+	var unitAttackTypes = [];
+	var unitTypes = [];
 	var unitStrengths = [];
-	for (var i = 0; i < selectedUnits.length; i++) {
-		if (selectedUnits[i] != null) deckDescriptionContainer.innerHTML += selectedUnits[i].name + '<br>';
-		if (selectedUnits[i].strongAgainst) {
-			unitStrengths.push(selectedUnits[i].strongAgainst);
-		}
+	var unitWeaknesses = [];
+	var unitAbilities = [];
+	/*
+		this.health = jsonEntry.Health;
+		this.damage = jsonEntry.Damage;
+		this.speed = jsonEntry.Speed;
+		this.range = jsonEntry.Range;
+		this.matter = jsonEntry.Matter;
+		this.energy = jsonEntry.Energy;
+		this.bandwidth = jsonEntry.Bandwidth;
+		this.building = jsonEntry.Building;
+		this.ability = jsonEntry.Ability;
+	*/
+	//make an array for each unit parameter above
+	var deckHealth = 0;
+	var deckDamage = 0;
+	var deckSpeed = 0;
+	var deckRange = 0;
+	var deckMatter = 0;
+	var deckEnergy = 0;
+	var deckBandwidth = 0;
 
-		if (selectedUnits[i].strongAgainst2) {
-			unitStrengths.push(selectedUnits[i].strongAgainst2);
+	for (var i = 0; i < selectedUnits.length; i++) {
+		if (selectedUnits[i]) {
+			deckDescriptionContainer.innerHTML += selectedUnits[i].name + '<br>';
+			if (selectedUnits[i].strongAgainst) {
+				unitStrengths.push(selectedUnits[i].strongAgainst);
+			}
+			if (selectedUnits[i].strongAgainst2) {
+				unitStrengths.push(selectedUnits[i].strongAgainst2);
+			}
+			if (selectedUnits[i].weakAgainst) {
+				unitWeaknesses.push(selectedUnits[i].weakAgainst);
+			}
+			if (selectedUnits[i].weakAgainst2) {
+				unitWeaknesses.push(selectedUnits[i].weakAgainst2);
+			}
+			if (selectedUnits[i].unitType) {
+				unitTypes.push(selectedUnits[i].unitType);
+			}
+			if (selectedUnits[i].attackType) {
+				unitAttackTypes.push(selectedUnits[i].attackType);
+			}
+			if (selectedUnits[i].attackType2) {
+				unitAttackTypes.push(selectedUnits[i].attackType2);
+			}
+			if (selectedUnits[i].ability) {
+				unitAbilities.push(selectedUnits[i].ability);
+			}
+			if (selectedUnits[i].ability2) {
+				unitAbilities.push(selectedUnits[i].ability2);
+			}
+			deckHealth += selectedUnits[i].health;
+			deckDamage += selectedUnits[i].damage;
+			deckSpeed += selectedUnits[i].speed;
+			deckRange += selectedUnits[i].range;
+			deckMatter += selectedUnits[i].matter;
+			deckEnergy += selectedUnits[i].energy;
+			deckBandwidth += selectedUnits[i].bandwidth;
 		}
 	}
-	deckDescriptionContainer.innerHTML += '<br>Deck Description:<br>Strong Against:';
+	deckDescriptionContainer.innerHTML += 'Deck Description:';
+	var statsString = '';
+	statsString += 'Health: ' + deckHealth + '<br>';
+	statsString += 'Damage: ' + deckDamage + '<br>';
+	statsString += 'Speed: ' + deckSpeed + '<br>';
+	statsString += 'Range: ' + deckRange + '<br>';
+	statsString += 'Matter: ' + deckMatter + '<br>';
+	statsString += 'Energy: ' + deckEnergy + '<br>';
+	statsString += 'Bandwidth: ' + deckBandwidth + '<br>';
+	deckDescriptionContainer.innerHTML += statsString;
+
 	//for each unit strength in unitstrengths
+	var strengthsString = '<br>Strong Against:';
 	for (var i = 0; i < unitStrengths.length; i++) {
 		//if the unit strength is not null
 		if (unitStrengths[i] != null || unitStrengths[i] != '') {
 			//add the unit strength to the deck description container
-			deckDescriptionContainer.innerHTML += unitStrengths[i] + ',';
+			if (!strengthsString.includes(unitStrengths[i])) {
+				strengthsString += unitStrengths[i] + ',';
+			} else {
+				var index = strengthsString.search(unitStrengths[i] + unitStrengths[i].length);
+				strengthsString = strengthsString.slice(0, index) + '+' + strengthsString.slice(index);
+			}
 		}
 	}
-	//for each unit strength in unitstrengths
+	deckDescriptionContainer.innerHTML += strengthsString;
+	//for each unit strength in unitweaknesses
+	var weaknessString = '<br>Weak Against:';
+	for (var i = 0; i < unitWeaknesses.length; i++) {
+		//if the unit strength is not null
+		if (unitWeaknesses[i] != null || unitWeaknesses[i] != '') {
+			//add the unit weaknesses to the deck description container only if it's not repeated
+			// if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+			if (!weaknessString.includes(unitWeaknesses[i])) {
+				weaknessString += unitWeaknesses[i] + ',';
+			} else {
+				var index = weaknessString.search(unitWeaknesses[i] + unitWeaknesses[i].length);
+				weaknessString = weaknessString.slice(0, index) + '+' + weaknessString.slice(index);
+			}
+		}
+	}
+	deckDescriptionContainer.innerHTML += weaknessString;
+	//for each unit strength in
+	//unitAttackTypes;
+	//unitTypes;
+	//unitAbilities;
+	var unitAttackTypesString = '<br>Attack Types:';
+	for (var i = 0; i < unitAttackTypes.length; i++) {
+		//if the unit strength is not null
+		if (unitAttackTypes[i] != null || unitAttackTypes[i] != '') {
+			//add the unit weaknesses to the deck description container only if it's not repeated
+			// if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+			if (!unitAttackTypesString.includes(unitAttackTypes[i])) {
+				unitAttackTypesString += unitAttackTypes[i] + ',';
+			} else {
+				//find the index where unitAbilities is in unitAbilitiesString
+				var index = unitAttackTypesString.search(unitAttackTypes[i] + unitAttackTypes[i].length);
+				unitAttackTypesString = unitAttackTypesString.slice(0, index) + '+' + unitAttackTypesString.slice(index);
+				//at the index insert the '+' character into the string
+			}
+		}
+	}
+	deckDescriptionContainer.innerHTML += unitAttackTypesString;
+	//unitTypes;
+	var unitTypesString = '<br>Unit Types:';
+	for (var i = 0; i < unitTypes.length; i++) {
+		//if the unit strength is not null
+		if (unitTypes[i] != null || unitTypes[i] != '') {
+			//add the unit weaknesses to the deck description container only if it's not repeated
+			// if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+			if (!unitTypesString.includes(unitTypes[i])) {
+				unitTypesString += unitTypes[i] + ',';
+			} else {
+				//find the index where unitAbilities is in unitAbilitiesString
+				var index = unitTypesString.search(unitTypes[i] + unitTypes[i].length);
+				unitTypesString = unitTypesString.slice(0, index) + '+' + unitTypesString.slice(index);
+				//at the index insert the '+' character into the string
+			}
+		}
+	}
+	deckDescriptionContainer.innerHTML += unitTypesString;
+	//unitAbilities;
+	var unitAbilitiesString = '<br>Abilities:';
+	for (var i = 0; i < unitAbilities.length; i++) {
+		//if the unit strength is not null
+		if (unitAbilities[i] != null || unitAbilities[i] != '') {
+			//add the unit weaknesses to the deck description container only if it's not repeated
+			// if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+			if (!unitAbilitiesString.includes(unitAbilities[i])) {
+				unitAbilitiesString += unitAbilities[i] + ',';
+			} else {
+				//find the index where unitAbilities is in unitAbilitiesString
+				var index = unitAbilitiesString.search(unitAbilities[i] + unitAbilities[i].length);
+				unitAbilitiesString = unitAbilitiesString.slice(0, index) + '+' + unitAbilitiesString.slice(index);
+				//at the index insert the '+' character into the string
+			}
+		}
+	}
+	deckDescriptionContainer.innerHTML += unitAbilitiesString;
+
+	//search through deckDescriptionContainer for any commas preceding a new line and remove the commas
+	deckDescriptionContainer.innerHTML = deckDescriptionContainer.innerHTML.replace(/,/g, ' ');
 }
 updateUnitCards();
 
