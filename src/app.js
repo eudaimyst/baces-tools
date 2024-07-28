@@ -256,7 +256,7 @@ function getDeckWeaknesses() {
 	return weaknesses.join(', ');
 	//return weaknesses;
 }
-
+//
 function getDeckAbilities() {
 	var abilities = [];
 	currentDeckList.forEach((unit) => {
@@ -360,8 +360,6 @@ function updateDeckStats() {
 			document.getElementById('Anti-GroundWarningWarning').style.color = 'white';
 		}
 	}
-
-
 }
 
 //addDeckUnit is called by the onClickFunction for the deck, it is passed it's name, so it's a good place to update things when a unit is added to the deck
@@ -409,8 +407,7 @@ Object.keys(unitJson).forEach((key) => {
 		updateAllDeckCells();
 		if (remCoreUnits > 0) {
 			remCoreUnits--;
-		}
-		else coreP.classList.add('outofStock');
+		} else coreP.classList.add('outofStock');
 		//add a class to all buttons in the core building that are out of stock which we will turn grey from css
 		Object.keys(unitJson).forEach((key) => {
 			if (unitJson[key].Building == 'Foundry')
@@ -448,11 +445,11 @@ Object.keys(unitJson).forEach((key) => {
 			addDeckUnit(unitJson[key].Name);
 			//iterate through the currentDeckList, if the unit is in the deck, add a class to the button/
 			// such as button.classList.add('inDeck'); also add a class if the building is out of stock
-			forEach
+			forEach;
 			//call the updateDeckCellsFunction on the highest index of the currentDeckList
 			updateDeckCells(currentDeckList.length - 1, unitJson[key].Name);
 			updateAllDeckCells();
-		})
+		});
 	};
 	var mouseOverFunction = () => {
 		console.log('Mouse over ' + unitJson[key].Name);
@@ -478,7 +475,6 @@ Object.keys(unitJson).forEach((key) => {
 
 deckStatsText.appendChild(document.createElement('br'));
 deckStatsText.classList.add('deckStatsText');
-
 
 var clearDeckButton = document.getElementById('clearDeckButton');
 clearDeckButton.addEventListener('click', () => {

@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83db28d474ddf34fc6498defdcda0d4f, type: 3}
+  m_Name: UnitDefinition_Behemoth
+  m_EditorClassIdentifier:
+  UnitRadius: 1.7
+  UnitType:
+    _id: 57
+  DisplayOrder: 9
+  _castType: 2
+  _unitPlacementRules:
+    _placementRadius: 0
+    _validPlacementRadius:
+      Infinite: 0
+      _value: 0.25
+    _randomRotationRangeDeg: 0
+    _validColor: 1
+    _invalidPlacementColor: 2
+    _insufficientResourcesColor: 3
+    _previewPrefab: {fileID: 0}
+  _resourceCost:
+    _healthPercent: 0
+    _primaryResource: 250
+    _secondaryResource: 0
+  _prerequisite:
+    _requiredFilter:
+      RequiredLabels: []
+      ExcludedLabels: []
+    _techBuilding: 1
+    _techTier: 2
+  _charges:
+    _maxNumberOfCharges: 0
+    _startingNumberOfCharges: 0
+    _chargeCooldownTime: 0
+  _deckSlotFlags: 136
+  _isUnreleased: 0
+  _createUnitAbilityVisualAsset:
+    _id: 59
+  _unitPreview:
+    _id: 44
+  _factoryArmyColors:
+    _id: 41
+  _faction:
+    _id: 7
+  PreviewFOVOffset: -2.5
+  _previewGenerationCameraRotation: {x: 0, y: 0, z: 0, w: 0}
+  _previewPoseClip: {fileID: 0}
+  PrefabAsset:
+    m_AssetGUID: c7c689bed8cd6ec4794b01c134ebafc6
+    m_SubObjectName:
+    m_SubObjectType:
+  Selectable: 1
+  Targetable: 1
+  SupplyCost: 5
+  OverrideGlobalActivationTime: 0
+  ActivationTime: 0
+  LeaderPriority: 250
+  UnitRotationConfig:
+    TurnSpeed: 230
+    HasAimingRotation: 1
+    AimingTurnSpeed: 416
+    AimingReturnDelay: 1
+  _visionRange: 24
+  _attributes:
+  - _type: 4
+    _value: 7000
+  - _type: 0
+    _value: 8.26
+  - _type: 1
+    _value: 280
+  - _type: 2
+    _value: 0.8
+  AttackConfig:
+    TargetPriorityFiltersKey:
+      _id: 11
+    TargetAbilityConstraint:
+      RequiredFilter:
+        RequiredLabels: []
+        ExcludedLabels: []
+      TargetFilter:
+        RequiredLabels:
+        - _id: 1
+        ExcludedLabels: []
+      Range: 6
+      ContextualArmyFilterType: 4
+      ActivatedArmyFilterType: 4
+    Upgrades: []
+    AllowWhileMoving: 0
+    DeprecatedToBeRemovedSplashDamageRadius: 0
+    SelfDestruct: 0
+    WarmUpTime: 0
+    FiringArc: 1
+    ProjectileData:
+      ProjectileType:
+        _id: 0
+      SalvoCount: 1
+      Acceleration: 30
+      LaunchSpeed: 75
+      HomeAbility: 0.5
+      VisualRotationFactor: 0.5
+      LeadLagFactor: 0
+      IgnitionTimer: 0
+      Gravity: 9.8
+      PreIgnitionLabel:
+        _id: 0
+    SecondaryWeaponData: []
+  _abilities:
+  - _id: 12
+  - _id: 14
+  - _id: 33
+  - _id: 88
+  _upgrades: []
+  _outOfCombatUpgrades: []
+  _labels:
+  - _id: 1
+  - _id: 16
+  - _id: 27
+  _fowPersistence: 0
+  EntityMinimapIcon:
+    _id: 1
+  MinimapIconSize: 6
+  EntitlementKey:
+    _id: 101

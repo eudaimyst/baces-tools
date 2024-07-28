@@ -1,0 +1,151 @@
+body {
+	background-color: black;
+	margin: 0;
+	padding: 0;
+	color: white;
+}
+
+
+th {
+	font-size: 14px;
+	font-weight: normal;
+	font-variant-caps: all-small-caps;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+td {
+	border-width: 1px;
+	font-variant-caps: all-small-caps;
+	font-weight: normal;
+	border-color: black;
+	border-style: none;
+
+}
+
+.unit_table_header_image {
+	width: 18px;
+	width: 18px;
+}
+
+.view {
+	position: absolute;
+	border-width: 1px;
+	border-color: black;
+	border-style: solid;
+}
+
+.view_header {
+	background-color: #000000aa;
+	right: 5px;
+	height: 40px;
+	margin: 5px;
+	border-width: 1px;
+	border-color: black;
+	border-style: solid;
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+}
+
+.unitTableImage {
+	width: 24px;
+	height: 24px;
+}
+
+.view_content {
+	overflow: auto;
+	background-color: #000000aa;
+	position: inherit;
+	margin: 5px;
+	left: 0px;
+	right: 0px;
+	top: 48px;
+	bottom: 2px;
+	border-width: 1px;
+	border-color: black;
+	border-style: solid;
+}
+
+.header_element {
+	margin: 5px;
+}
+
+#wrapper {
+	position: absolute;
+	background-image: url('images/a1.png');
+	background-size: cover;
+	border-width: 1px;
+	border-color: white;
+	top: 5px;
+	bottom: 5px;
+	left: 5px;
+	right: 5px;
+}
+
+#unit_view-h {
+	background-image: 'images/a1.png';
+	background-color: #cb8e8e88;
+	margin: 5px;
+	right: 50%;
+	left: 0px;
+	top: 0px;
+	bottom: 0px
+}
+
+#deck_view-h {
+	background-color: #cbc48e88;
+	margin: 5px;
+	left: 50%;
+	top: 0px;
+	right: 0px;
+	bottom: 50%;
+}
+
+#stats_view-h {
+	background-color: #8ecb9988;
+	margin: 5px;
+	left: 50%;
+	top: 50%;
+	right: 0px;
+	bottom: 0px;
+}
+
+#unit_view-v {
+	background-color: #cb8e8e88;
+	margin: 5px;
+	left: 0px;
+	right: 0px;
+	top: 60%;
+	bottom: 0px;
+}
+
+#deck_view-v {
+	background-color: #cbc48e88;
+	margin: 5px;
+	height: 30%;
+	left: 0px;
+	right: 0px;
+	top: 0px
+}
+
+#stats_view-v {
+	background-color: #8ecb9988;
+	margin: 5px;
+	height: 30%;
+	left: 0px;
+	right: 0px;
+	top: 30%;
+}
+
+.unit_table_cell {
+	background-color: #00000022;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 12px;
+}
+
+.unit_table_cell_stats {
+	background-color: #00000022;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
