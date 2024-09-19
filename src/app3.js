@@ -16,6 +16,21 @@ function removeSpacesCapitalsSpecialCharacters(string) {
 	return newString.toLowerCase();
 }
 
+var deck1Contents = {};
+var deck2Contents = {};
+
+function addUnitToDeck(unit, deck) {
+	if (deck == 'deck1') {
+		decl2Conents.add(unit);
+	} else {
+		if (deck2Contents[unit] == undefined) {
+			deck2Contents[unit] = 1;
+		} else {
+			deck2Contents[unit]++;
+		}
+	}
+}
+
 //#region views-contents-headers
 
 const unit_view = document.createElement('div');
@@ -64,13 +79,11 @@ document.body.appendChild(wrapper);
 
 //#region deck-header
 
-//deck1 button
 const deck1_button = document.createElement('button');
 deck1_button.innerHTML = 'Deck 1';
 deck1_button.id = 'deck1_button';
 deck1_button.classList.add('header_element');
 deck_view_header.appendChild(deck1_button);
-//deck2 button
 const deck2_button = document.createElement('button');
 deck2_button.innerHTML = 'Deck 2';
 deck2_button.id = 'deck2_button';
@@ -81,13 +94,11 @@ deck_view_header.appendChild(deck2_button);
 
 //#region stats-header
 
-//deck1 button
 const stats_button = document.createElement('button');
 stats_button.innerHTML = 'stats';
 stats_button.id = 'deck1_button';
 stats_button.classList.add('header_element');
 stats_view_header.appendChild(stats_button);
-//deck2 button
 const compare_button = document.createElement('button');
 compare_button.innerHTML = 'compare';
 compare_button.id = 'deck2_button';
@@ -96,17 +107,7 @@ stats_view_header.appendChild(compare_button);
 
 //#endregion
 
-//#region unit-view-contents
-//contents of unit view
-
-//unit_content.innerHTML = 'unit view';
-
-//set the unit_content.innerhtml to the current sort by option
-//unit_content.innerHTML = unit_header_sort.value;
-//update the unit_header_sort value when an option is selected
-//#endregion
-
-//#region load-units
+//#region load-units loads unit.json files
 
 //load units.json
 var jsonUnitsBase = require('./units.json');
@@ -115,7 +116,7 @@ var jsonUnitsZaokret = require('./Zaokret_units.json');
 
 //#endregion
 
-//#region unit-creation
+//#region unit-creation creates units from the loaded json files
 //create an empty object to use as a base of the units, that has a new constructor to create a object
 class Unit {
 	constructor(jsonEntry) {
@@ -127,10 +128,16 @@ class Unit {
 			if (value.constructor == String) {
 				value = removeSpacesCapitalsSpecialCharacters(value);
 			}
-			if (key == 'Image' && value == '') {
-				value = removeSpacesCapitalsSpecialCharacters(jsonEntry.Name);
+			if (key == 'image') {
+				value = jsonEntry.Name;
 			}
-			this[cleanNameKey] = value;
+			if (cleanNameKey == 'supply') {
+				this['bandwidth'] = value;
+			} else if (cleanNameKey == 'damageg') {
+				this['damage'] = value;
+			} else {
+				this[cleanNameKey] = value;
+			}
 			if (this['building'] == 'core') this['tier'] = '1';
 			else if (this['building'] == 'foundry' || this['building'] == 'starforge') this['tier'] = '2';
 			else if (this['building'] == 'advancedfoundry' || this['building'] == 'advancedstarforge') this['tier'] = '3';
@@ -139,14 +146,9 @@ class Unit {
 			if (this.attacktype != '') tags.push(this['attacktype']);
 			if (this.attacktype2 != '') tags.push(this['attacktype2']);
 			if (this.unittype != '') tags.push(this['unittype']);
-			this['strongtags'] = [];
-			if (this.strongagainst != '') this['strongtags'].push(this['strongagainst']);
-			if (this.strongagainst2 != '') this['strongtags'].push(this['strongagainst2']);
-			this['weaktags'] = [];
-			if (this.strongagainst != '') this['weaktags'].push(this['weakagainst']);
-			if (this.strongagainst2 != '') this['weaktags'].push(this['weakagainst2']);
 		});
-		this['testHeader'] = 'test';
+		//#tag testheader this works for testing the unit table header
+		//this['testHeader'] = 'test';
 
 		//sort each key in this alphabetically
 		//this.sortObjectKeys(this);
@@ -3240,7 +3242,7 @@ function redrawUnitContent() {
 */
 
 	//for each object in unitsJson_base create a new unit passing the object
-	console.log('Umm hello workd?');
+	console.log('Redrawing Unit Content\n-----------------');
 	console.log(unitList);
 
 	//create a table element
@@ -3253,7 +3255,7 @@ function redrawUnitContent() {
 	//add table body
 	var unit_table_body = document.createElement('tbody');
 	unit_table.appendChild(unit_table_body);
-
+	//create table header and add it to the table head
 	var unit_table_header = document.createElement('th');
 	unit_table_header.innerHTML = 'add';
 	unit_table_head.appendChild(unit_table_header);
@@ -3268,48 +3270,79 @@ function redrawUnitContent() {
 		//
 		//for the first row list the nake of each key as a header
 		//if i == 0 then create a table header element
+		//##tag unit-table-header element
 		if (i == 0) {
 			for (const [key, value] of Object.entries(unitList[i])) {
-				var unit_table_header2 = null;
-				unit_table_header = document.createElement('th');
-				//add some images to certain headers
-				if (key == 'health' || key == 'damage' || key == 'speed' || key == 'range' || key == 'strongtags' || key == 'weaktags') {
-					var img = document.createElement('img');
-					img.src = 'images/stats/' + key + '.png';
-					img.classList.add('unit_table_header_image');
-					img.setAttribute('alt', key);
-					img.setAttribute('title', key);
-					unit_table_header.appendChild(img);
-				} else if (key == 'matter' || key == 'energy' || key == 'bandwidth') {
-					var img = document.createElement('img');
-					img.src = 'images/resources/' + key + '.svg';
-					img.classList.add('unit_table_header_image');
-					img.setAttribute('alt', key);
-					img.setAttribute('title', key);
-					unit_table_header.appendChild(img);
-				} else if (key == 'image') {
-					//no header name for images
-				} else if (key == 'ability') {
-					unit_table_header.innerHTML = 'skill';
-					//no header name for images
-				} else if (key == 'attacktype2') {
-					//no header name for attacktype2
-				} else if (key == 'strongagainst') {
-					//no header name for strongagainst2
-				} else if (key == 'weakagainst') {
-					//no header name for weakagainst2
-				} else if (key == 'strongagainst2') {
-					//no header name for strongagainst2
-				} else if (key == 'weakagainst2') {
-					//no header name for weakagainst2
-				} else if (key == 'other') {
-				} else if (key == 'building') {
-					unit_table_header.innerHTML = 'tech';
+				if (key == 'attackrate' || key == 'slug' || key == 'videoturnaround' || key == 'videogameplay' || key == 'website' || key == 'tier') {
 				} else {
-					unit_table_header.innerHTML = key;
-				}
+					unit_table_header = document.createElement('th');
+					//add some images to certain headers
+					if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'strongtags' || key == 'weaktags') {
+						var img = document.createElement('img');
+						img.src = 'images/stats/' + key + '.png';
+						img.classList.add('unit_table_header_image');
+						img.setAttribute('alt', key);
+						img.setAttribute('title', key);
+						unit_table_header.appendChild(img);
+					} else if (key == 'dpsg') {
+						var img = document.createElement('img');
+						img.src = 'images/stats/' + 'damage' + '.png';
+						img.classList.add('unit_table_header_image');
+						img.setAttribute('alt', 'ground dps');
+						img.setAttribute('title', 'ground dps');
+						unit_table_header.appendChild(img);
+						unit_table_header.innerHTML += '/s';
+					} else if (key == 'dpsa') {
+						var img = document.createElement('img');
+						img.src = 'images/stats/' + 'damagea' + '.png';
+						img.classList.add('unit_table_header_image');
+						img.setAttribute('alt', 'air dps');
+						img.setAttribute('title', ' dps');
+						unit_table_header.appendChild(img);
+						unit_table_header.innerHTML += '/s';
+					} else if (key == 'matter' || key == 'energy' || key == 'bandwidth') {
+						var img = document.createElement('img');
+						img.src = 'images/resources/' + key + '.svg';
+						img.classList.add('unit_table_header_image');
+						img.setAttribute('alt', key);
+						img.setAttribute('title', key);
+						unit_table_header.appendChild(img);
+					} else if (key == 'splash' || key == 'small' || key == 'antibig' || key == 'big' || key == 'antiair') {
+						var img = document.createElement('img');
+						img.src = 'images/traits/' + key + '.png';
+						img.classList.add('unit_table_header_image');
+						img.setAttribute('alt', key);
+						img.setAttribute('title', key);
+						unit_table_header.appendChild(img);
+					} else if (key == 'image') {
+						key == 'tier';
+						unit_table_header.innerHTML = 'image';
+						//no header name for images
+					} else if (key == 'ability') {
+						unit_table_header.innerHTML = 'skill';
+						//no header name for images
+					} else if (key == 'tier') {
+						//no header name for attacktype2
+					} else if (key == 'strongagainst') {
+						//no header name for strongagainst2
+					} else if (key == 'weakagainst') {
+						//no header name for weakagainst2
+					} else if (key == 'strongagainst2') {
+						//no header name for strongagainst2
+					} else if (key == 'weakagainst2') {
+						//no header name for weakagainst2
+					} else if (key == 'manufacturer') {
+						unit_table_header.innerHTML = 'manf.';
+						//no header name for weakagainst2
+					} else if (key == 'other') {
+					} else if (key == 'building') {
+						unit_table_header.innerHTML = 'tech';
+					} else {
+						unit_table_header.innerHTML = key;
+					}
 
-				if (key != 'attacktype' && key != 'attacktype2' && key != 'unittype') unit_table_head.appendChild(unit_table_header);
+					if (key != 'attacktype' && key != 'attacktype2' && key != 'unittype') unit_table_head.appendChild(unit_table_header);
+				}
 			}
 		}
 
@@ -3324,12 +3357,23 @@ function redrawUnitContent() {
 		var div = document.createElement('div');
 		//div.innerHTML = unitList[i].name;
 		unit_table_cell.appendChild(div);
+
+		//#tag table_add_unit_button
 		//add the button
-		var button = document.createElement('button');
+		var table_add_unit_button = document.createElement('button');
 		//add text to the button
-		button.innerHTML = '+';
+		table_add_unit_button.innerHTML = '+';
 		//add the button to the cell
-		unit_table_cell.appendChild(button);
+		unit_table_cell.appendChild(table_add_unit_button);
+
+		table_add_unit_button.onclick = function () {
+			console.log('Adding unit to deck: ' + unitList[i].name);
+			console.log(unitList[i]);
+			//add the unit name to the unit_deck_input text box
+			unit_deck_input.value += unitList[i].name + '\n';
+			//addToDeck(unitList[i]);
+		};
+
 		//add the cell to the row
 		unit_table_row.appendChild(unit_table_cell);
 
@@ -3344,7 +3388,9 @@ function redrawUnitContent() {
 				key == 'weakagainst' ||
 				key == 'strongagainst2' ||
 				key == 'weakagainst2' ||
-				key == 'other'
+				key == 'other' ||
+				key == 'attackrate' ||
+				key == 'tier'
 			) {
 			} else {
 				console.log(`${key}: ${value}`);
@@ -3355,7 +3401,17 @@ function redrawUnitContent() {
 				unit_table_cell.id = 'unit_table_cell_' + i;
 				unit_table_cell.appendChild(div);
 
-				if (key == 'unittype' || key == 'attacktype' || key == 'attacktype2' || key == 'other') {
+				if (
+					key == 'unittype' ||
+					key == 'attacktype' ||
+					key == 'attacktype2' ||
+					key == 'other' ||
+					key == 'attackrate' ||
+					key == 'slug' ||
+					key == 'videoturnaround' ||
+					key == 'videogameplay' ||
+					key == 'website'
+				) {
 				} else {
 					unit_table_cell.classList.add('unit_table_cell');
 					unit_table_row.appendChild(unit_table_cell);
@@ -3386,11 +3442,31 @@ function redrawUnitContent() {
 						img.classList.add('unitTableImage');
 						div.appendChild(img);
 					}
+				} else if (key == 'manufacturer') {
+					if (value != '') {
+						var img = document.createElement('img');
+						img.id = 'img_unit_table_manuf_' + i;
+						img.src = 'images/manuf/' + value + '.png';
+						img.setAttribute('alt', value);
+						img.setAttribute('title', value);
+						img.classList.add('unitTableImage');
+						div.appendChild(img);
+					}
 				} else if (key == 'ground') {
 					div.innerHTML = 'gnd';
+				} else if (key == 'splash' || key == 'small' || key == 'antibig' || key == 'big' || key == 'antiair') {
+					if (value != '') {
+						var img = document.createElement('img');
+						img.src = 'images/traits/' + key + '.png';
+						img.classList.add('unit_table_header_image');
+						img.setAttribute('alt', key);
+						img.setAttribute('title', key);
+						div.appendChild(img);
+					}
 				} else {
-					div.innerHTML = value;
+					if (value != 0) div.innerHTML = value;
 				}
+
 				if (key == 'health' || key == 'damage' || key == 'speed' || key == 'range') {
 					unit_table_cell.classList.add('unit_table_cell_stats');
 				}
@@ -3502,7 +3578,7 @@ unit_header_sort.onchange = function () {
 	//sort units
 	function sortUnits(value, unitlist) {
 		// Sort users (array of objects) by firstName in descending order
-		var sorted = sort(unitlist).asc((u) => u[value]);
+		var sorted = sort(unitlist).desc((u) => u[value]);
 		//sort the units by the new option
 		//new function for sorting units
 		unitList = sorted;
