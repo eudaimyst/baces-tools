@@ -182,8 +182,6 @@ stats_view_header.appendChild(compare_button);
 
 //load units.json
 var jsonUnitsBase = require('./units.json');
-var jsonUnitsDatamined = require('./unit_datamined.json');
-var jsonUnitsZaokret = require('./Zaokret_units.json');
 
 //#endregion
 
@@ -534,71 +532,6 @@ function redrawUnitContent() {
 		//create a table body element
 		unit_table_body.appendChild(unit_table_row);
 	}
-
-	//re-arrange table by the following header values
-	//add, skill, image, name, health, damage, speed, range, matter, energy, bandwidth, tech, tier, tags, strongtags, weaktags
-	// for each column in the table, check its name and move it to the correct position
-
-	/* fast-sort example for context (Amazon Q):
- import { sort } from 'fast-sort';
-
-  // Sort flat arrays
-  const ascSorted = sort([1,4,2]).asc(); // => [1, 2, 4]
-  const descSorted = sort([1, 4, 2]).desc(); // => [4, 2, 1]
-
-  // Sort users (array of objects) by firstName in descending order
-  const sorted = sort(users).desc(u => u.firstName);
-
-  // Sort users in ascending order by firstName and lastName
-  const sorted = sort(users).asc([
-	u => u.firstName,
-	u => u.lastName
-  ]);
-
-  // Sort users ascending by firstName and descending by city
-  const sorted = sort(users).by([
-	{ asc: u => u.firstName },
-	{ desc: u => u.address.city }
-  ]);
-
-  // Sort based on computed property
-  const sorted = sort(repositories).desc(r => r.openIssues + r.closedIssues);
-
-  // Sort using string for object key
-  // Only available for root object properties
-  const sorted = sort(users).asc('firstName');
-  */
-
-	// try and sort the list using fast-sort
-
-	/*
-//for each unit in the unit_list create a table row element
-for (let i = 0; i < unitList.length; i++) {
-	var unit = unitList[i];
-	var unit_table_row = document.createElement('tr');
-	unit_table_row.id = 'unit_table_row_' + i;
-	unit_table_row.className = 'unit_table_row';
-
-	//create a table cell element for each unit property
-	var unit_table_cell = document.createElement('td');
-	unit_table_cell.id = 'unit_table_cell_' + i;
-	//add the unit property to the table cell
-
-	//for each key in unit,
-	for (const [key, value] of Object.entries(unit)) {
-		//console.log('hello world');
-		console.log(`${key}: ${value}`);
-		var unit_table_div = document.createElement('td');
-		unit_table_div.id = 'unit_table_div_' + i + '_' + key;
-		unit_table_div.innerHTML = `value`;
-		unit_table_cell.appendChild(unit_table_div);
-	}
-
-	unit_table.appendChild(unit_table_row);
-}
-	*/
-
-	//for each unit in unit_datamined
 
 	//attach the unit_table to the unit_content div
 	unit_content.appendChild(unit_table);
