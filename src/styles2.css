@@ -1,4 +1,6 @@
 body {
+	font-variant-caps: all-small-caps;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	background-color: black;
 	margin: 0;
 	padding: 0;
@@ -22,10 +24,6 @@ td {
 
 }
 
-.unit_table_header_image {
-	width: 18px;
-	width: 18px;
-}
 
 .view {
 	position: absolute;
@@ -45,12 +43,9 @@ td {
 	display: flex;
 	align-items: center;
 	flex-direction: row;
+	
 }
 
-.unitTableImage {
-	width: 24px;
-	height: 24px;
-}
 
 .view_content {
 	overflow: auto;
@@ -68,6 +63,17 @@ td {
 
 .header_element {
 	margin: 5px;
+}
+
+.unit_table_header_image {
+	width: 18px;
+	width: 18px;
+}
+
+
+.unitTableImage {
+	width: 24px;
+	height: 24px;
 }
 
 #wrapper {
@@ -119,6 +125,7 @@ td {
 	bottom: 0px;
 }
 
+
 #deck_view-v {
 	background-color: #cbc48e88;
 	margin: 5px;
@@ -136,16 +143,46 @@ td {
 	right: 0px;
 	top: 30%;
 }
+.unit_table {
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	position:relative;
+	top: 0px;
+}
+
+#unit_table_head {
+	position:sticky;
+	background-color: black;
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	top: 1px;
+}
 
 .unit_table_cell {
 	background-color: #00000022;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-size: 12px;
 	text-align: center;
+	padding: 0px 6px 0px 6px;
 }
 
 .unit_table_cell_stats {
 	background-color: #00000022;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-size: 12px;
+	font-style: bold;
 }
+
+.unit_table_image_traits {
+	width: 18px;
+	height: 18px;
+	padding: 2px;
+}
+unit_table_cell_traits {
+	width: 30px;
+	
+}
+
+
