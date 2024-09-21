@@ -43,7 +43,7 @@ td {
 	display: flex;
 	align-items: center;
 	flex-direction: row;
-	
+
 }
 
 
@@ -143,16 +143,17 @@ td {
 	right: 0px;
 	top: 30%;
 }
+
 .unit_table {
 	border-color: black;
 	border-width: 2px;
 	border-style: solid;
-	position:relative;
+	position: relative;
 	top: 0px;
 }
 
 #unit_table_head {
-	position:sticky;
+	position: sticky;
 	background-color: black;
 	border-color: black;
 	border-width: 2px;
@@ -180,9 +181,39 @@ td {
 	height: 18px;
 	padding: 2px;
 }
-unit_table_cell_traits {
-	width: 30px;
-	
+
+.unit_table_cell_traits {
+	width: 50px;
 }
 
 
+.deckSlotImage {
+	width: 60px;
+	height: 60px;
+	opacity: 80%;
+	resize: none;
+}
+
+.unit_deck_slots_div {
+	width: 300px;
+	height: 150px;
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.unit_deck_slot_div {
+	width: 60px;
+	height: 60px;
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin: 5px;
+	overflow: hidden;
+}

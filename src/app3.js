@@ -22,9 +22,10 @@ var deck1Contents = [];
 var deck2Contents = [];
 var deck1Slots = [];
 var deck2Slots = [];
+var slotBuildings = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge']
 decks.push(deck1Contents, deck2Contents);
 
-var currentDeck = 1; //currentDeck defaults to 1 until deck 2 is selected
+var currentDeck = 0; //currentDeck defaults to 1 until deck 2 is selected
 
 
 
@@ -101,21 +102,36 @@ unit_deck_slots_div.classList.add('unit_deck_slots_div');
 deck_content.appendChild(unit_deck_slots_div);
 //create 8 square divs
 for (var i = 0; i < 8; i++) {
-	var unit_deck_slot_div = document.createElement('div');
-	deck1Slots[i] = unit_deck_slot_div
-	unit_deck_slot_div.classList.add('unit_deck_slot_div');
-	unit_deck_slot_div.id = 'unit_deck_slot_div' + i;
-	unit_deck_slots_div.appendChild(unit_deck_slot_div);
+	var div = document.createElement('div');
+	deck1Slots[i] = div
+	div.classList.add('unit_deck_slot_div');
+	div.id = 'unit_deck_slot_div' + i;
+
+	var img = document.createElement('img');
+	img.id = 'deckSlotImage' + i;
+	img.src = 'images/techtiers/' + slotBuildings[i] + '.png';
+	img.setAttribute('alt', 'deck slot' + i);
+	img.setAttribute('title', 'deck slot' + i);
+	img.classList.add('deckSlotImage');
+	div.appendChild(img);
+	console.log("hello console" + i);
+	console.log(div.firstElementChild);
+
+	unit_deck_slots_div.appendChild(div);
 }
 
 deck_content.appendChild(unit_deck_input);
+
 function redrawDeckContent(deckID) {
 	//iterate through deckslots
 	var deck = decks[deckID];
 	deck1Slots.forEach((slot, index) => {
-		slot.innerHTML = index;
-		if (deck[index] != undefined) {
-			slot.innerHTML = deck[index].name;
+		if (deck[index] == undefined) {
+
+		}
+		else {
+			//slot.innerHTML = deck[index].name;
+			slot.firstElementChild.src = 'images/units/' + deck[index].name + '.png';
 		}
 	});
 
@@ -127,6 +143,7 @@ unit_deck_input.onchange = function () {
 	console.log('unit_deck_input');
 	redrawDeckContent();
 };
+
 
 
 function addUnitToDeck(unit, deckID) {
@@ -200,6 +217,7 @@ class Unit {
 			else if (this['building'] == 'advancedfoundry' || this['building'] == 'advancedstarforge') this['tier'] = '3';
 			else this['tier'] = '0';
 			if (value == 'splash' || value == 'small' || value == 'antibig' || value == 'big' || value == 'antiair') {
+
 				if (this.traits == undefined) {
 					this.traits = [];
 				}
@@ -438,8 +456,8 @@ function redrawUnitContent() {
 				unit_table_cell.id = 'unit_table_cell_' + i;
 				unit_table_cell.appendChild(div);
 
-					unit_table_cell.classList.add('unit_table_cell');
-					unit_table_row.appendChild(unit_table_cell);
+				unit_table_cell.classList.add('unit_table_cell');
+				unit_table_row.appendChild(unit_table_cell);
 
 				if (key == 'image') {
 					var img = document.createElement('img');
@@ -477,7 +495,7 @@ function redrawUnitContent() {
 						img.classList.add('unitTableImage');
 						div.appendChild(img);
 					}
-				}  else if (key == 'splash' || key == 'small' || key == 'antibig' || key == 'big' || key == 'antiair') {
+				} else if (key == 'splash' || key == 'small' || key == 'antibig' || key == 'big' || key == 'antiair') {
 					if (value != '') {
 						var img = document.createElement('img');
 						img.src = 'images/traits/' + key + '.png';
@@ -488,8 +506,7 @@ function redrawUnitContent() {
 					}
 				} else if (key == 'traits') {
 					value.forEach(trait => {
-						if (trait != 'none')
-						{
+						if (trait != 'none') {
 							var img = document.createElement('img');
 							img.src = 'images/traits/' + trait + '.png';
 							img.classList.add('unit_table_image_traits');
@@ -534,14 +551,14 @@ function redrawUnitContent() {
 
   // Sort users in ascending order by firstName and lastName
   const sorted = sort(users).asc([
-    u => u.firstName,
-    u => u.lastName
+	u => u.firstName,
+	u => u.lastName
   ]);
 
   // Sort users ascending by firstName and descending by city
   const sorted = sort(users).by([
-    { asc: u => u.firstName },
-    { desc: u => u.address.city }
+	{ asc: u => u.firstName },
+	{ desc: u => u.address.city }
   ]);
 
   // Sort based on computed property
