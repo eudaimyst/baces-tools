@@ -11,7 +11,8 @@
 		"path-browserify": "^1.0.1"
 	},
 	"dependencies": {
-		"chart.js": "^4.4.3",
+		"chart.js": "^4.4.4",
+		"chat.js": "^1.0.2",
 		"fast-sort": "^3.4.0",
 		"pixi.js": "^8.1.6",
 		"table-sort-js": "^1.21.0"

@@ -1,5 +1,79 @@
 //create 3 divs called unit_view, deck_view and stats_view, and a wrapper to contain them
 import { sort } from 'fast-sort';
+import Chart from 'chart.js/auto';
+
+//load units.json
+
+//#tag load-unit-json
+var jsonUnitsBase = require('./units.json');
+var unitList = [];
+
+var lastSortValue = 'name';
+
+//#region unit-definition creates units from json entry
+//create an empty object to use as a base of the units, that has a new constructor to create a object
+class Unit {
+	constructor(jsonEntry) {
+		const keyLen = Object.keys(jsonEntry).length;
+		var count = 0
+		Object.keys(jsonEntry).forEach((key) => {
+			count++;
+			//if key == 'name' call the removeSpaces function to make the new variable
+			var cleanNameKey = key;
+			cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
+			var value = jsonEntry[key];
+			var cleanValue = removeSpacesCapitalsSpecialCharacters(value)
+			if (value.constructor == String) {
+				if (cleanNameKey != 'emoji') {
+					value = cleanValue;
+				}
+			}
+			if (key == 'image') {
+				value = removeSpacesCapitalsSpecialCharacters(jsonEntry.Name);
+			}
+			if (cleanNameKey == 'supply') {
+				this['bandwidth'] = value;
+			} else if (cleanNameKey == 'damageg') {
+				this['damage'] = value;
+			} else {
+				this[cleanNameKey] = value;
+			}
+			if (this['building'] == 'core') this['tier'] = '1';
+			else if (this['building'] == 'foundry' || this['building'] == 'starforge') this['tier'] = '2';
+			else if (this['building'] == 'advancedfoundry' || this['building'] == 'advancedstarforge') this['tier'] = '3';
+			else this['tier'] = '0';
+			if (value == 'splash' || value == 'small' || value == 'antibig' || value == 'big' || value == 'antiair') {
+
+				if (this.traits == undefined) {
+					this.traits = [];
+				}
+				this.traits.push(value);
+			}
+			if (cleanNameKey == 'antiair') {
+				if (this.traits == undefined) {
+					this.traits = [];
+					this.traits.push('none');
+				}
+			}
+		});
+		//#tag testheader this works for testing the unit table header
+		//this['testHeader'] = 'test';
+
+		//sort each key in this alphabetically
+		//this.sortObjectKeys(this);
+		unitList.push(this);
+		console.log('pushing unit to unit_list');
+		console.log(this);
+	}
+}
+
+
+for (let i = 0; i < jsonUnitsBase.length; i++) {
+	new Unit(jsonUnitsBase[i]);
+	console.log(i);
+}
+
+//#endregion
 
 //helper function which takes a string and removes any spaces and capitilisation or the '-' symbol or + symbol or any other symbols... just letters and numbers
 function removeSpacesCapitalsSpecialCharacters(string) {
@@ -90,10 +164,53 @@ deck_view_header.appendChild(deck2_button);
 
 //#endregion
 
-//#region deck-content section of the deck view
+//#region deck-content section of the deck view, includes: addUnitToDeck
 
 //create a text input box
-var unit_deck_input = document.createElement('input');
+var deck_stats_div = document.createElement('div');
+deck_stats_div.classList.add('deck_stats_div');
+//create a table with 2 columns and 4 rows
+var deck_stats_table = document.createElement('table');
+deck_stats_table.classList.add('deck_stats_table');
+var deck_stats_table2 = document.createElement('table');
+deck_stats_table2.classList.add('deck_stats_table');
+var stat_categories = ['energy', 'matter', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
+var stat_category_cells = {} //stores the cells for each stat category to be updated
+
+for (var i = 0; i < stat_categories.length; i++) {
+	//only every second category create a new row
+	var tr
+	if (i < 7) {
+		if (i % 2 == 0) tr = document.createElement('tr');
+	}
+	else {
+		tr = document.createElement('tr');
+	}
+	for (var j = 0; j < 2; j++) {
+		var td = document.createElement('td');
+		td.classList.add('deck_stats_td');
+		if (j == 1) {
+			stat_category_cells[stat_categories[i]] = td
+		}
+		else {
+			td.innerHTML = stat_categories[i];
+		}
+		tr.appendChild(td);
+	}
+	if (i < 7) {
+		deck_stats_table.appendChild(tr);
+	}
+	else {
+		deck_stats_table2.appendChild(tr);
+	}
+}
+deck_stats_div.appendChild(deck_stats_table);
+deck_stats_div.appendChild(deck_stats_table2);
+
+stat_category_cells.range.innerHTML = 'test';
+
+
+var deck_text_div = document.createElement('div');
 
 
 //create 1 div to hold all the unit deck slots
@@ -120,26 +237,153 @@ for (var i = 0; i < 8; i++) {
 	unit_deck_slots_div.appendChild(div);
 }
 
-deck_content.appendChild(unit_deck_input);
+deck_stats_div.appendChild(deck_text_div);
+deck_content.appendChild(deck_stats_div);
+
+function calculateDeckStats() {
+	var deck = decks[currentDeck];
+	var stats = {
+		energy: 0,
+		matter: 0,
+		bandwidth: 0,
+		health: 0,
+		speed: 0,
+		range: 0,
+		damage: 0,
+		ability: [],
+		type: [],
+		traits: [],
+		manufacturer: []
+	};
+	for (var i = 0; i < deck.length; i++) {
+		if (deck[i] != undefined) {
+			for (var key in stats) {
+				if (deck[i][key] != undefined) {
+					if (key == 'ability' || key == 'type' || key == 'traits' || key == 'manufacturer') {
+						stats[key].push(deck[i][key]);
+					}
+					else stats[key] += deck[i][key];
+				}
+			}
+		}
+	}
+	//stat_category_cells.range.innerHTML = 'test'
+	//for each stat set stat_category_cells['statname'].innerHTML to the correct stat
+	//console.log(stats);
+	for (var key in stats) {
+		if (stat_category_cells[key] != undefined) {
+			stat_category_cells[key].innerHTML = '';
+			if (key == 'ability') {
+				for (var i = 0; i < stats[key].length; i++) {
+					if (stats[key][i] != undefined && (stats[key][i] != '')) {
+						var img = document.createElement('img');
+						img.src = 'images/abilities/' + stats[key][i] + '.png';
+						img.setAttribute('alt', stats[key][i]);
+						img.setAttribute('title', stats[key][i]);
+						img.classList.add('unitTableImage');
+						stat_category_cells[key].appendChild(img);
+					}
+				}
+			}
+			else if (key == 'traits') {
+				for (var i = 0; i < stats[key].length; i++) {
+					if (stats[key][i] != undefined && (stats[key][i] != '')) {
+						var img = document.createElement('img');
+
+						//we need to seperate traits if there are multiple
+						if (stats[key][i].length > 1) {
+							console.log(stats[key][i]);
+							for (var j = 0; j < stats[key][i].length; j++) {
+								img = document.createElement('img');
+								img.src = 'images/traits/' + stats[key][i][j] + '.png';
+								img.setAttribute('alt', stats[key][i][j]);
+								img.setAttribute('title', stats[key][i][j]);
+								img.classList.add('unitTableImage');
+								stat_category_cells[key].appendChild(img);
+							}
+						}
+						else {
+							if (stats[key][i] != 'none') {
+								img.src = 'images/traits/' + stats[key][i] + '.png';
+								img.setAttribute('alt', stats[key][i]);
+								img.setAttribute('title', stats[key][i]);
+								img.classList.add('unitTableImage');
+								stat_category_cells[key].appendChild(img);
+							}
+						}
+
+						/*
+						stat_category_cells[key].sort(function (a, b) {
+							return a.alt.localeCompare(b.alt);
+						})
+						
+						*/
+						//sort children of stat_category_cells[key]
+
+
+						var sortedChildren = Array.from(stat_category_cells[key].children).sort(function (a, b) {
+							return a.alt.localeCompare(b.alt);
+						});
+						stat_category_cells[key].innerHTML = '';
+						sortedChildren.forEach(function (child) {
+							stat_category_cells[key].appendChild(child);
+						});
+
+					}
+				}
+			}
+			else if (key == 'manufacturer') {
+				for (var i = 0; i < stats[key].length; i++) {
+					if (stats[key][i] != undefined && stats[key][i] != '') {
+						var img = document.createElement('img');
+						img.src = 'images/manuf/' + stats[key][i] + '.png';
+						img.setAttribute('alt', stats[key][i]);
+						img.setAttribute('title', stats[key][i]);
+						img.classList.add('unitTableImage');
+						stat_category_cells[key].appendChild(img);
+					}
+
+					//sort children of stat_category_cells[key]
+
+
+					var sortedChildren = Array.from(stat_category_cells[key].children).sort(function (a, b) {
+						return a.alt.localeCompare(b.alt);
+					});
+					stat_category_cells[key].innerHTML = '';
+					sortedChildren.forEach(function (child) {
+						stat_category_cells[key].appendChild(child);
+					});
+				}
+			}
+			else if (key == 'type' || key == 'traits' || key == 'manufacturer') { }
+			else stat_category_cells[key].innerHTML = stats[key];
+		}
+	}
+	return stats;
+}
+
 
 function redrawDeckContent(deckID) {
+	calculateDeckStats();
 	//iterate through deckslots
+	//deck_stats.innerHTML = 'deck stats:\nhello';
 	var deck = decks[deckID];
+	deck_text_div.innerHTML = ''
 	deck1Slots.forEach((slot, index) => {
 		if (deck[index] == undefined) {
 
 		}
 		else {
+			deck_text_div.innerHTML += deck[index].emoji + ' ';
 			//slot.innerHTML = deck[index].name;
 			slot.firstElementChild.src = 'images/units/' + deck[index].name + '.png';
 		}
 	});
 
 }
-redrawDeckContent(1);
 
 //on unit_deck_input update
-unit_deck_input.onchange = function () {
+deck_text_div.onchange = function () {
 	console.log('unit_deck_input');
 	redrawDeckContent();
 };
@@ -151,11 +395,45 @@ function addUnitToDeck(unit, deckID) {
 	console.log('Adding unit to deck ' + deckID + ': ' + unit.name);
 	//console.log(unit);about:blank#blocked
 	//add the unit name to the unit_deck_input text box
-	unit_deck_input.value += unit.name + '\n';
+	//unit_deck_input.value += unit.name + '\n';
 	//addToDeck(unitList[i]);
-	if (deck.length < 8) deck.push(unit);
+	var decklen = 0
+	var exists = false
+	//for each value in deck add +1 to decklen
+	deck.forEach((u) => {
+		console.log(u.name);
+		if (u != undefined) {
+			decklen++;
+		}
+		if (u.name == unit.name) {
+			console.log('unit not added, already in deck');
+			exists = true;
+		}
+	});
+	if (!exists && decklen < 8) {
+
+		//loop through deck and find if deck slotbuildings[i] matches the current units building
+		for (var i = 0; i < 8; i++) {
+			if (deck[i] == undefined) {
+				if (slotBuildings[i] == unit.building) {
+					deck[i] = unit;
+					break;
+				}
+				else if (slotBuildings[i] == 'wildfoundry' && (unit.building == 'foundry' || unit.building == 'advancedfoundry')) {
+					deck[i] = unit;
+					break;
+				}
+				else if (slotBuildings[i] == 'wildstarforge' && (unit.building == 'starforge' || unit.building == 'advancedstarforge')) {
+					deck[i] = unit;
+					break;
+				}
+			}
+		}
+
+		//deck.push(unit);
+	}
 	else console.log('deck limit reached');
-	console.log(deck.length + '/8');
+	console.log(decklen + '/8');
 	redrawDeckContent(deckID);
 }
 
@@ -178,69 +456,12 @@ stats_view_header.appendChild(compare_button);
 
 //#endregion
 
-//#region load-units loads unit.json files
 
-//load units.json
-var jsonUnitsBase = require('./units.json');
+
 
 //#endregion
 
-//#region unit-creation creates units from the loaded json files
-//create an empty object to use as a base of the units, that has a new constructor to create a object
-class Unit {
-	constructor(jsonEntry) {
-		const keyLen = Object.keys(jsonEntry).length;
-		var count = 0
-		Object.keys(jsonEntry).forEach((key) => {
-			count++;
-			//if key == 'name' call the removeSpaces function to make the new variable
-			var cleanNameKey = key;
-			cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
-			var value = jsonEntry[key];
-			if (value.constructor == String) {
-				value = removeSpacesCapitalsSpecialCharacters(value);
-			}
-			if (key == 'image') {
-				value = jsonEntry.Name;
-			}
-			if (cleanNameKey == 'supply') {
-				this['bandwidth'] = value;
-			} else if (cleanNameKey == 'damageg') {
-				this['damage'] = value;
-			} else {
-				this[cleanNameKey] = value;
-			}
-			if (this['building'] == 'core') this['tier'] = '1';
-			else if (this['building'] == 'foundry' || this['building'] == 'starforge') this['tier'] = '2';
-			else if (this['building'] == 'advancedfoundry' || this['building'] == 'advancedstarforge') this['tier'] = '3';
-			else this['tier'] = '0';
-			if (value == 'splash' || value == 'small' || value == 'antibig' || value == 'big' || value == 'antiair') {
-
-				if (this.traits == undefined) {
-					this.traits = [];
-				}
-				this.traits.push(value);
-			}
-			if (cleanNameKey == 'antiair') {
-				if (this.traits == undefined) {
-					this.traits = [];
-					this.traits.push('none');
-				}
-			}
-		});
-		//#tag testheader this works for testing the unit table header
-		//this['testHeader'] = 'test';
-
-		//sort each key in this alphabetically
-		//this.sortObjectKeys(this);
-		unitList.push(this);
-		console.log('pushing unit to unit_list');
-		console.log(this);
-	}
-}
-//#endregion
-
-//#region unit-div-header-element
+//#region unit-div-header
 //label
 const sort_label = document.createElement('p');
 sort_label.innerHTML = 'sort: ';
@@ -250,6 +471,7 @@ const unit_header_sort = document.createElement('select');
 //add an option called test
 unit_header_sort.options.add(new Option('name', 'name'));
 unit_header_sort.options.add(new Option('health', 'health'));
+unit_header_sort.options.add(new Option('type', 'type'));
 unit_header_sort.options.add(new Option('damage', 'damage'));
 unit_header_sort.options.add(new Option('air damage', 'damagea'));
 unit_header_sort.options.add(new Option('dps', 'dpsg'));
@@ -259,14 +481,15 @@ unit_header_sort.options.add(new Option('range', 'range'));
 unit_header_sort.options.add(new Option('matter', 'matter'));
 unit_header_sort.options.add(new Option('energy', 'energy'));
 unit_header_sort.options.add(new Option('bandwidth', 'bandwidth'));
-unit_header_sort.options.add(new Option('ability', 'ability'));
-unit_header_sort.options.add(new Option('building', 'building'));
+unit_header_sort.options.add(new Option('skill', 'ability'));
+unit_header_sort.options.add(new Option('tech', 'building'));
 unit_header_sort.options.add(new Option('tier', 'tier'));
 unit_header_sort.options.add(new Option('big', 'big'));
 unit_header_sort.options.add(new Option('small', 'small'));
 unit_header_sort.options.add(new Option('antibig', 'antibig'));
 unit_header_sort.options.add(new Option('splash', 'splash'));
 unit_header_sort.options.add(new Option('antiair', 'antiair'));
+unit_header_sort.options.add(new Option('manufacturer', 'manufacturer'));
 
 unit_header_sort.id = 'unit_header_sort';
 unit_header_sort.classList.add('header_element');
@@ -288,14 +511,8 @@ unit_view_card_btn.id = 'unit_view_card_btn';
 unit_view_card_btn.classList.add('header_element');
 unit_view_header.appendChild(unit_view_card_btn);
 //#endregion
-var unitList = [];
 
-for (let i = 0; i < jsonUnitsBase.length; i++) {
-	new Unit(jsonUnitsBase[i]);
-	console.log(i);
-}
-
-//#region redrawUnitContent is an expensive function which draws the unit content div, including looping through each unit to load its data for display
+//#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
 	//for each object in unitsJson_base create a new unit passing the object
@@ -332,6 +549,7 @@ function redrawUnitContent() {
 			key == 'slug' ||
 			key == 'videoturnaround' ||
 			key == 'videogameplay' ||
+			key == 'emoji' ||
 			key == 'website'
 		) {
 		} else {
@@ -415,6 +633,7 @@ function redrawUnitContent() {
 		var div = document.createElement('div');
 		//div.innerHTML = unitList[i].name;
 		unit_table_cell.appendChild(div);
+		unit_table_cell.classList.add('unit_table_cell');
 
 		//#tag table_add_unit_button
 		//add the button
@@ -443,6 +662,7 @@ function redrawUnitContent() {
 				key == 'slug' ||
 				key == 'videoturnaround' ||
 				key == 'videogameplay' ||
+				key == 'emoji' ||
 				key == 'website'
 			) {
 			} else {
@@ -455,11 +675,15 @@ function redrawUnitContent() {
 				unit_table_cell.appendChild(div);
 
 				unit_table_cell.classList.add('unit_table_cell');
+				//if i is an alternate number
+				if (i % 2 == 0) {
+					unit_table_cell.classList.add('unit_table_cell_alt');
+				}
+
 				unit_table_row.appendChild(unit_table_cell);
 
 				if (key == 'image') {
 					var img = document.createElement('img');
-					img.id = 'img_unit_table_image_' + i;
 					img.src = 'images/units/' + value + '.png';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
@@ -467,7 +691,6 @@ function redrawUnitContent() {
 					div.appendChild(img);
 				} else if (key == 'building') {
 					var img = document.createElement('img');
-					img.id = 'img_unit_table_building_' + i;
 					img.src = 'images/techtiers/' + value + '.svg';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
@@ -476,7 +699,6 @@ function redrawUnitContent() {
 				} else if (key == 'ability') {
 					if (value != '') {
 						var img = document.createElement('img');
-						img.id = 'img_unit_table_ability_' + i;
 						img.src = 'images/abilities/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
@@ -486,7 +708,6 @@ function redrawUnitContent() {
 				} else if (key == 'manufacturer') {
 					if (value != '') {
 						var img = document.createElement('img');
-						img.id = 'img_unit_table_manuf_' + i;
 						img.src = 'images/manuf/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
@@ -554,17 +775,25 @@ unit_header_sort.onchange = function () {
 	//sort units
 	function sortUnits(value, unitlist) {
 		// Sort users (array of objects) by firstName in descending order
-		var sorted = sort(unitlist).desc((u) => u[value]);
+		var sorted = undefined;
+		if (value == 'name' || value == 'manufacturer') {
+			sorted = sort(unitlist).asc((u) => u[value]);
+		}
+		else {
+			sorted = sort(unitlist).desc((u) => u[value]);
+		}
+		unitList = sorted;
+
 		//sort the units by the new option
 		//new function for sorting units
 		unitList = sorted;
+		lastSortValue = value;
 	}
 	sortUnits(unit_header_sort.value, unitList);
 	//update the unit_content.innerHTML to the new sort by option
 	unit_content.innerHTML = '';
 	redrawUnitContent();
 };
-
 //#endregion
 
 //#region window-resize
@@ -591,3 +820,30 @@ resize();
 
 
 console.log(wrapper);
+
+
+
+
+
+var barChart = document.createElement('canvas');
+stats_content.appendChild(barChart);
+//const ctx = document.getElementById('myChart');
+
+new Chart(barChart, {
+	type: 'bar',
+	data: {
+		labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+		datasets: [{
+			label: '# of Votes',
+			data: [12, 19, 3, 5, 2, 3],
+			borderWidth: 1
+		}]
+	},
+	options: {
+		scales: {
+			y: {
+				beginAtZero: true
+			}
+		}
+	}
+});
