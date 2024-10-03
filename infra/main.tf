@@ -16,16 +16,16 @@ provider "aws" {
 data "aws_caller_identity" "current" {}
 
 locals {
-    project_name = "deckbuild"
+    project_name = "baces-tools"
     
     env = {
         dev = {
             stage = "dev"
-            domain_name = "dev-deckbuild.t.pilepich.com"
+            domain_name = "dev-${local.project_name}.t.pilepich.com"
         }
         prod = {
             stage = "prod"
-            domain_name = "deckbuild.t.pilepich.com"
+            domain_name = "${local.project_name}.t.pilepich.com"
         }
     }
 }
