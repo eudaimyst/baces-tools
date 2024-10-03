@@ -26,7 +26,7 @@ jobs:
     - name: Publish to github
       uses: actions/upload-artifact@v4
       with:
-        name: baces-frontend
+        name: baces-frontend-${{env.stage}}-${{ github.run_id }}
         path: dist
   deploy-infra:
     concurrency:
@@ -74,7 +74,7 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v4
       with:
-        name: baces-frontend
+        name: baces-frontend-${{env.stage}}-${{ github.run_id }}
         path: dist
     - name: Deploy to S3
       run: | 
