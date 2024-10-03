@@ -43,6 +43,7 @@ resource "aws_cloudfront_distribution" "my_distribution" {
     origin {
         domain_name = aws_s3_bucket.my_bucket.bucket_regional_domain_name
         origin_id   = aws_s3_bucket.my_bucket.bucket_regional_domain_name
+        origin_access_control_id = aws_cloudfront_origin_access_control.default.id
     }
 
     enabled             = true
@@ -79,6 +80,14 @@ resource "aws_cloudfront_distribution" "my_distribution" {
     tags = {
         Name = local.project_name
     }
+}
+
+
+resource "aws_cloudfront_origin_access_control" "default" {
+    name = "${local.project_name}-origin-access-control"
+    origin_access_control_origin_type = "s3"
+    signing_behavior = "always"
+    signing_protocol = "sigv4"
 }
 
 # Route53 Record
