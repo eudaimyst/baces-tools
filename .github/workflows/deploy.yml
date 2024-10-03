@@ -77,4 +77,7 @@ jobs:
         name: baces-frontend
         path: dist
     - name: Deploy to S3
-      run: aws s3 sync dist s3://${{ github.event.repository.name }}-${{ env.stage }}-${{env.aws_account_id}} --delete
+      run: | 
+        aws s3 sync dist s3://${{ github.event.repository.name }}-${{ env.stage }}-${{env.aws_account_id}} \
+          --delete -recursive \
+          --cache-control max-age=${{ env.stage == 'prod' && 31536000 || 0 }}
