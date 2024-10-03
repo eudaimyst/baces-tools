@@ -1,0 +1,83 @@
+
+name: Deploy Infrastructure
+on:
+  push:
+
+env:
+  stage: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+  aws_account_id: 597088028622
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
+    - name: Install dependencies
+      run: npm install
+    - name: Build
+      run: |
+        npm run build
+        cp -r src/images dist/images
+    - name: Publish to github
+      uses: actions/upload-artifact@v4
+      with:
+        name: baces-frontend-${{env.stage}}-${{ github.run_id }}
+        path: dist
+  deploy-infra:
+    concurrency:
+      group: "infra-${{ github.ref }}"
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ap-southeast-2
+        role-to-assume: arn:aws:iam::${{env.aws_account_id}}:role/pipeline-role-${{ github.event.repository.name }}
+    - name: Setup Terraform 1.6.5
+      uses: hashicorp/setup-terraform@v3
+    - name: Terraform Init
+      working-directory: infra
+      run: terraform init -backend-config="bucket=terraform-state-${{env.aws_account_id}}" -backend-config="key=${{ github.event.repository.name }}/${{env.stage}}" -backend-config="dynamodb_table=terraform-state-597088028622"
+    - name: Terraform Apply
+      working-directory: infra
+      run: terraform apply -auto-approve -var="stage=${{ env.stage }}"
+  deploy-release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    concurrency:
+      group: "infra-${{ github.ref }}"
+      cancel-in-progress: false
+    needs:
+      - deploy-infra
+      - build-publish
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ap-southeast-2
+        role-to-assume: arn:aws:iam::${{env.aws_account_id}}:role/pipeline-role-${{ github.event.repository.name }}
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: baces-frontend-${{env.stage}}-${{ github.run_id }}
+        path: dist
+    - name: Deploy to S3
+      run: | 
+        aws s3 sync dist s3://${{ github.event.repository.name }}-${{ env.stage }}-${{env.aws_account_id}} \
+          --delete \
+          --cache-control max-age=${{ env.stage == 'prod' && 3600 || 0 }}
