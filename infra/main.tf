@@ -77,7 +77,7 @@ resource "aws_cloudfront_distribution" "my_distribution" {
     }
 
     tags = {
-        Name = "deckbuild"
+        Name = local.project_name
     }
 }
 
