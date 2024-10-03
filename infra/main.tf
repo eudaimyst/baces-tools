@@ -120,3 +120,26 @@ resource "aws_route53_record" "example" {
   type            = each.value.type
   zone_id         = data.aws_route53_zone.selected.zone_id
 }
+
+resource "aws_s3_bucket_policy" "my_bucket_policy" {
+    bucket = aws_s3_bucket.my_bucket.bucket
+    policy = jsonencode({
+        Version = "2012-10-17",
+        Statement = [
+            {
+                Effect = "Allow",
+                Principal = {
+                    Service = "cloudfront.amazonaws.com"
+                },
+                Action = "s3:GetObject",
+                Resource = aws_s3_bucket.my_bucket.arn
+                Condition = {
+                    StringEquals = {
+                        "aws:SourceArn" = aws_cloudfront_distribution.my_distribution.arn
+                    }
+                }
+            }
+        ]
+    })
+  
+}
