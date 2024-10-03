@@ -52,6 +52,9 @@ jobs:
       run: terraform apply -auto-approve -var="stage=${{ env.stage }}"
   deploy-release:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     concurrency:
       group: infra
       cancel-in-progress: false
