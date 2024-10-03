@@ -84,7 +84,7 @@ resource "aws_cloudfront_distribution" "my_distribution" {
 
 
 resource "aws_cloudfront_origin_access_control" "default" {
-    name = "${local.project_name}-origin-access-control"
+    name = "${local.project_name}-origin-access-control-${var.stage}"
     origin_access_control_origin_type = "s3"
     signing_behavior = "always"
     signing_protocol = "sigv4"
