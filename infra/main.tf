@@ -17,7 +17,7 @@ data "aws_caller_identity" "current" {}
 
 locals {
     project_name = "baces-tools"
-    
+    hosted_zone_id = "Z034670833Z7ZI7IJAP83"
     env = {
         dev = {
             stage = "dev"
@@ -72,7 +72,8 @@ resource "aws_cloudfront_distribution" "my_distribution" {
     }
 
     viewer_certificate {
-        cloudfront_default_certificate = true
+        acm_certificate_arn = aws_acm_certificate.cloudfront_default_certificate.arn
+        ssl_support_method  = "sni-only"
     }
 
     tags = {
@@ -82,7 +83,7 @@ resource "aws_cloudfront_distribution" "my_distribution" {
 
 # Route53 Record
 data "aws_route53_zone" "selected" {
-    name         = "t.pilepich.com."
+    zone_id = local.hosted_zone_id
     private_zone = false
 }
 
@@ -96,4 +97,26 @@ resource "aws_route53_record" "selected" {
         zone_id                = aws_cloudfront_distribution.my_distribution.hosted_zone_id
         evaluate_target_health = false
     }
+}
+
+resource "aws_acm_certificate" "cloudfront_default_certificate" {
+    domain_name       = local.env[var.stage].domain_name
+    validation_method = "DNS"
+}
+
+resource "aws_route53_record" "example" {
+  for_each = {
+    for dvo in aws_acm_certificate.cloudfront_default_certificate.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.selected.zone_id
 }
