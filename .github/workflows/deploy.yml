@@ -30,7 +30,7 @@ jobs:
         path: dist
   deploy-infra:
     concurrency:
-      group: infra
+      group: "infra-${{ github.ref }}"
       cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
@@ -58,7 +58,7 @@ jobs:
       id-token: write
       contents: read
     concurrency:
-      group: infra
+      group: "infra-${{ github.ref }}"
       cancel-in-progress: false
     needs:
       - deploy-infra
@@ -79,5 +79,5 @@ jobs:
     - name: Deploy to S3
       run: | 
         aws s3 sync dist s3://${{ github.event.repository.name }}-${{ env.stage }}-${{env.aws_account_id}} \
-          --delete -recursive \
+          --delete \
           --cache-control max-age=${{ env.stage == 'prod' && 31536000 || 0 }}
