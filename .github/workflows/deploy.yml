@@ -46,7 +46,7 @@ jobs:
       uses: hashicorp/setup-terraform@v3
     - name: Terraform Init
       working-directory: infra
-      run: terraform init -backend-config="bucket=terraform-state-${{env.aws_account_id}}" -backend-config="key=${{ github.event.repository.name }}/stage" -backend-config="dynamodb_table=terraform-state-597088028622"
+      run: terraform init -backend-config="bucket=terraform-state-${{env.aws_account_id}}" -backend-config="key=${{ github.event.repository.name }}/${{env.stage}}" -backend-config="dynamodb_table=terraform-state-597088028622"
     - name: Terraform Apply
       working-directory: infra
       run: terraform apply -auto-approve -var="stage=${{ env.stage }}"
