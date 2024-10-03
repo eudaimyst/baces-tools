@@ -73,5 +73,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: baces-frontend
+        path: dist
     - name: Deploy to S3
-      run: aws s3 sync dist s3://${{ github.event.repository.name }}-${{ env.stage }}-${{env.aws_account_id}}- --delete
+      run: aws s3 sync dist s3://${{ github.event.repository.name }}-${{ env.stage }}-${{env.aws_account_id}} --delete
