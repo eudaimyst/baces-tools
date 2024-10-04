@@ -348,7 +348,7 @@
     "website": "https://www.playbattleaces.com/units/falcon"
   },
   {
-    "image": "https://cdn.playbattleaces.com/images/icons/units/advancedbot.png",
+    "image": "https://cdn.playbattleaces.com/images/icons/units/advancedrecall.png",
     "Name": "AdvancedRecall",
     "Type": "Ground",
     "Building": "Starforge",
@@ -372,9 +372,9 @@
     "Manufacturer": "GHOSTS OF VENUS",
     "slug": "advancedbot",
     "emoji": ":AdvancedRecall:",
-    "videoTurnaround": "https://cdn.playbattleaces.com/videos/turnarounds/advancedbot.mp4",
-    "videoGameplay": "https://cdn.playbattleaces.com/videos/gameplay/advancedbot.mp4",
-    "website": "https://www.playbattleaces.com/units/advancedbot"
+    "videoTurnaround": "https://cdn.playbattleaces.com/videos/turnarounds/advancedrecall.mp4",
+    "videoGameplay": "https://cdn.playbattleaces.com/videos/gameplay/advancedrecall.mp4",
+    "website": "https://www.playbattleaces.com/units/advancedrecall"
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/recallshocker.png",
@@ -1204,14 +1204,14 @@
     "Attack Rate": 0.4,
     "DPS_g": 125,
     "DPS_a": 163,
-    "Ability": "",
+    "Ability": "Overclock",
     "Splash": "",
     "Small": "Small",
     "Anti-Big": "",
     "Big": "",
     "Anti-Air": "Anti-Air",
     "Manufacturer": "SENKAISHU LIMITED",
-    "slug": "advancedrecall",
+    "slug": "advancedbot",
     "emoji": ":AdvancedBot:",
     "videoTurnaround": "https://cdn.playbattleaces.com/videos/turnarounds/advancedbot.mp4",
     "videoGameplay": "https://cdn.playbattleaces.com/videos/gameplay/advancedbot.mp4",

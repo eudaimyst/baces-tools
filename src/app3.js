@@ -234,6 +234,27 @@ for (var i = 0; i < 8; i++) {
 	console.log("hello console" + i);
 	console.log(div.firstElementChild);
 
+	//when div is mouseover, make it turn black, then return after mouseover
+	div.addEventListener('mouseover', function () {
+		this.style.backgroundColor = 'black';
+	});
+
+	//if the mouse is clicked
+	div.addEventListener('click', function () {
+		var slotNumber = this.id.slice(-1);
+		// remove the unit from the deck array
+		console.log(slotNumber + ' clicked - removed ' + deck1Contents[slotNumber].name + ' from deck');
+		var deck = decks[0];
+		console.log(deck)
+		delete deck[slotNumber];
+		console.log(deck)
+		redrawDeckContent(0);
+	});
+
+	div.addEventListener('mouseout', function () {
+		this.style.backgroundColor = '';
+	});
+
 	unit_deck_slots_div.appendChild(div);
 }
 
@@ -280,7 +301,7 @@ function calculateDeckStats() {
 						img.src = 'images/abilities/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('unitTableImage');
+						img.classList.add('unit_table_image_small');
 						stat_category_cells[key].appendChild(img);
 					}
 				}
@@ -298,7 +319,7 @@ function calculateDeckStats() {
 								img.src = 'images/traits/' + stats[key][i][j] + '.png';
 								img.setAttribute('alt', stats[key][i][j]);
 								img.setAttribute('title', stats[key][i][j]);
-								img.classList.add('unitTableImage');
+								img.classList.add('unit_table_image_small');
 								stat_category_cells[key].appendChild(img);
 							}
 						}
@@ -307,7 +328,7 @@ function calculateDeckStats() {
 								img.src = 'images/traits/' + stats[key][i] + '.png';
 								img.setAttribute('alt', stats[key][i]);
 								img.setAttribute('title', stats[key][i]);
-								img.classList.add('unitTableImage');
+								img.classList.add('unit_table_image_small');
 								stat_category_cells[key].appendChild(img);
 							}
 						}
@@ -339,7 +360,7 @@ function calculateDeckStats() {
 						img.src = 'images/manuf/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('unitTableImage');
+						img.classList.add('unit_table_image_small');
 						stat_category_cells[key].appendChild(img);
 					}
 
@@ -369,15 +390,14 @@ function redrawDeckContent(deckID) {
 	//deck_stats.innerHTML = 'deck stats:\nhello';
 	var deck = decks[deckID];
 	deck_text_div.innerHTML = ''
-	deck1Slots.forEach((slot, index) => {
-		if (deck[index] == undefined) {
-
-		}
-		else {
-			deck_text_div.innerHTML += deck[index].emoji + ' ';
-			//slot.innerHTML = deck[index].name;
-			slot.firstElementChild.src = 'images/units/' + deck[index].name + '.png';
-		}
+	//for each deck1slot
+	deck1Slots.forEach((slot, i) => {
+		slot.firstElementChild.src = 'images/techtiers/' + slotBuildings[i] + '.png';
+	});
+	deck.forEach((unit, i) => {
+		deck_text_div.innerHTML += unit.emoji + ' ';
+		//slot.innerHTML = deck[index].name;
+		deck1Slots[i].firstElementChild.src = 'images/units/' + unit.name + '.png';
 	});
 
 }
@@ -437,7 +457,6 @@ function addUnitToDeck(unit, deckID) {
 	redrawDeckContent(deckID);
 }
 
-
 //#endregion
 
 
@@ -456,6 +475,7 @@ stats_view_header.appendChild(compare_button);
 
 //#endregion
 
+//#region stats-content
 
 
 
@@ -490,6 +510,7 @@ unit_header_sort.options.add(new Option('antibig', 'antibig'));
 unit_header_sort.options.add(new Option('splash', 'splash'));
 unit_header_sort.options.add(new Option('antiair', 'antiair'));
 unit_header_sort.options.add(new Option('manufacturer', 'manufacturer'));
+sortUnits(unit_header_sort.value, unitList);
 
 unit_header_sort.id = 'unit_header_sort';
 unit_header_sort.classList.add('header_element');
@@ -613,7 +634,7 @@ function redrawUnitContent() {
 	for (let i = 0; i < unitList.length; i++) {
 		//create a table row element
 		var unit_table_row = document.createElement('tr');
-		unit_table_row.id = 'unit_table_row_' + i;
+		unit_table_row.id = unitList[i].name;
 		unit_table_row.classList.add('unit_table_row');
 		//
 		//for the first row list the nake of each key as a header
@@ -628,7 +649,7 @@ function redrawUnitContent() {
 
 		//the first cell of each row, we will add a button to add the unit to the deck
 		var unit_table_cell = document.createElement('td');
-		unit_table_cell.id = 'unit_table_cell_' + i;
+		unit_table_cell.id = unitList[i].name;
 		//add the unit property to the table cell
 		var div = document.createElement('div');
 		//div.innerHTML = unitList[i].name;
@@ -640,6 +661,7 @@ function redrawUnitContent() {
 		var table_add_unit_button = document.createElement('button');
 		//add text to the button
 		table_add_unit_button.innerHTML = '+';
+		table_add_unit_button.classList.add('table_add_unit_button')
 		//add the button to the cell
 		unit_table_cell.appendChild(table_add_unit_button);
 
@@ -666,13 +688,17 @@ function redrawUnitContent() {
 				key == 'website'
 			) {
 			} else {
-				console.log(`${key}: ${value}`);
+				//console.log(`${key}: ${value}`);
 				var div = document.createElement('div');
 				//div.innerHTML = key + ': ' + value;
 				//unit_table_cell.appendChild(div)
 				var unit_table_cell = document.createElement('td');
-				unit_table_cell.id = 'unit_table_cell_' + i;
+				unit_table_cell.id = unitList[i].name;
+				div.id = unitList[i].name;
 				unit_table_cell.appendChild(div);
+				div.addEventListener('mouseover', statRedrawMouseOver);
+				unit_table_cell.addEventListener('mouseover', statRedrawMouseOver);
+
 
 				unit_table_cell.classList.add('unit_table_cell');
 				//if i is an alternate number
@@ -687,14 +713,14 @@ function redrawUnitContent() {
 					img.src = 'images/units/' + value + '.png';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
-					img.classList.add('unitTableImage');
+					img.classList.add('unit_table_image');
 					div.appendChild(img);
 				} else if (key == 'building') {
 					var img = document.createElement('img');
 					img.src = 'images/techtiers/' + value + '.svg';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
-					img.classList.add('unitTableImage');
+					img.classList.add('unit_table_image_small');
 					div.appendChild(img);
 				} else if (key == 'ability') {
 					if (value != '') {
@@ -702,7 +728,7 @@ function redrawUnitContent() {
 						img.src = 'images/abilities/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
-						img.classList.add('unitTableImage');
+						img.classList.add('unit_table_image_small');
 						div.appendChild(img);
 					}
 				} else if (key == 'manufacturer') {
@@ -711,16 +737,7 @@ function redrawUnitContent() {
 						img.src = 'images/manuf/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
-						img.classList.add('unitTableImage');
-						div.appendChild(img);
-					}
-				} else if (key == 'splash' || key == 'small' || key == 'antibig' || key == 'big' || key == 'antiair') {
-					if (value != '') {
-						var img = document.createElement('img');
-						img.src = 'images/traits/' + key + '.png';
-						img.classList.add('unit_table_header_image');
-						img.setAttribute('alt', key);
-						img.setAttribute('title', key);
+						img.classList.add('unit_table_image_small');
 						div.appendChild(img);
 					}
 				} else if (key == 'traits') {
@@ -728,7 +745,7 @@ function redrawUnitContent() {
 						if (trait != 'none') {
 							var img = document.createElement('img');
 							img.src = 'images/traits/' + trait + '.png';
-							img.classList.add('unit_table_image_traits');
+							img.classList.add('unit_table_image_small');
 							img.setAttribute('alt', trait);
 							img.setAttribute('title', trait);
 							div.appendChild(img);
@@ -739,12 +756,24 @@ function redrawUnitContent() {
 					});
 					unit_table_cell.classList.add('unit_table_cell_traits');
 				} else {
+					if (key == 'name') {
+						//div.classList.add('unit_table_name_cell');
+
+					}
 					if (value != 0) div.innerHTML = value;
 				}
 
 				if (key == 'health' || key == 'damage' || key == 'speed' || key == 'range') {
 					unit_table_cell.classList.add('unit_table_cell_stats');
 				}
+				//if div has a child add mousover to child
+				else if (div.children.length > 0) {
+					//for each child
+					for (let j = 0; j < div.children.length; j++) {
+						div.children[j].addEventListener('mouseover', statRedrawMouseOver);
+						div.children[j].id = unitList[i].name;
+					}
+				};
 			}
 		}
 		//div.innerHTML = unitList[i].name;
@@ -756,6 +785,7 @@ function redrawUnitContent() {
 
 	//attach the unit_table to the unit_content div
 	unit_content.appendChild(unit_table);
+
 }
 
 redrawUnitContent(); //upon loading the page we redraw the UnitContentDiv once to initialise it
@@ -764,6 +794,24 @@ redrawUnitContent(); //upon loading the page we redraw the UnitContentDiv once t
 
 //#region change-sort
 
+//sort units
+function sortUnits(value, unitlist) {
+	// Sort users (array of objects) by firstName in descending order
+	var sorted = undefined;
+	if (value == 'name' || value == 'manufacturer') {
+		sorted = sort(unitlist).asc((u) => u[value]);
+	}
+	else {
+		sorted = sort(unitlist).desc((u) => u[value]);
+	}
+	unitList = sorted;
+
+	//sort the units by the new option
+	//new function for sorting units
+	unitList = sorted;
+	lastSortValue = value;
+}
+
 
 unit_header_sort.onchange = function () {
 	//update the unit_content.innerHTML to the new sort by option
@@ -771,29 +819,14 @@ unit_header_sort.onchange = function () {
 	//sort the units by the new option
 	//new function for sorting units
 	console.log(unit_header_sort.value);
-
-	//sort units
-	function sortUnits(value, unitlist) {
-		// Sort users (array of objects) by firstName in descending order
-		var sorted = undefined;
-		if (value == 'name' || value == 'manufacturer') {
-			sorted = sort(unitlist).asc((u) => u[value]);
-		}
-		else {
-			sorted = sort(unitlist).desc((u) => u[value]);
-		}
-		unitList = sorted;
-
-		//sort the units by the new option
-		//new function for sorting units
-		unitList = sorted;
-		lastSortValue = value;
-	}
 	sortUnits(unit_header_sort.value, unitList);
+
 	//update the unit_content.innerHTML to the new sort by option
 	unit_content.innerHTML = '';
 	redrawUnitContent();
 };
+
+
 //#endregion
 
 //#region window-resize
@@ -819,31 +852,187 @@ resize();
 //#endregion
 
 
-console.log(wrapper);
+//console.log(wrapper);
 
 
 
 
 
-var barChart = document.createElement('canvas');
-stats_content.appendChild(barChart);
 //const ctx = document.getElementById('myChart');
 
-new Chart(barChart, {
-	type: 'bar',
-	data: {
-		labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-		datasets: [{
-			label: '# of Votes',
-			data: [12, 19, 3, 5, 2, 3],
-			borderWidth: 1
-		}]
-	},
-	options: {
-		scales: {
-			y: {
-				beginAtZero: true
+//find the min and max value of each stat for all units in the unit list
+var minValues = [];
+var maxValues = [];
+for (var i = 0; i < unitList.length; i++) {
+	for (var [key, value] of Object.entries(unitList[i])) {
+		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
+			if (minValues[key] == undefined || value < minValues[key]) {
+				minValues[key] = value;
+			}
+			if (maxValues[key] == undefined || value > maxValues[key]) {
+				maxValues[key] = value;
 			}
 		}
 	}
-});
+}
+
+var unitNames = [];
+var unitHealth = []
+//for each unit in unitList add its name to unitNames
+
+
+function simpleSort(list, key, sortedArray) {
+
+	var sortedList = []
+
+	sort(list).asc((u) => u[key]).forEach(function (unit) {
+		var sortObject = {};
+		sortObject.label = unit['name']
+		sortObject.data = unit[key];
+		sortedArray.push(unit[key])
+		sortedList.push(unit.name);
+	});
+	return sortedList;
+}
+
+var sortedUnitData = {
+	health: [],
+	damage: [],
+	damagea: [],
+	speed: [],
+	range: [],
+	dpsg: [],
+	dpsa: [],
+}
+var sortData = {
+	health: simpleSort(unitList, 'health', sortedUnitData.health),
+	damage: simpleSort(unitList, 'damage', sortedUnitData.damage),
+	damagea: simpleSort(unitList, 'damagea', sortedUnitData.damagea),
+	speed: simpleSort(unitList, 'speed', sortedUnitData.speed),
+	range: simpleSort(unitList, 'range', sortedUnitData.range),
+	dpsg: simpleSort(unitList, 'dpsg', sortedUnitData.dpsg),
+	dpsa: simpleSort(unitList, 'dpsa', sortedUnitData.dpsa),
+}
+
+function sortColors(unitName, data, label) {
+	var sortedColors = []
+	//for each unit in sortedunitHealth, add a color based on whether it is before or after the unit with the unit name
+	//if it is before, add the color 'red', otherwise add the color 'black'
+	//add the color to the sortedColors array
+	var color;
+	if (label == 'health') {
+		color = '#48F07D';
+	}
+	else if (label == 'damage') {
+		color = '#EF4C48';
+	} else if (label == 'speed') {
+		color = '#F0CA2E';
+	} else if (label == 'range') {
+		color = '#E68B40';
+	}
+	data.forEach(function (unit) {
+		sortedColors.push(color)
+		if (unit == unitName) {
+			color = 'black'
+		}
+	});
+	return sortedColors
+}
+
+var currentUnit = 'crusader';
+
+
+var statsWrapper = document.createElement('div');
+statsWrapper.id = 'statswrapper';
+stats_content.appendChild(statsWrapper);
+
+var statDivs = []
+
+
+function drawBarChart(label) {
+
+	var statsDiv = document.createElement('div');
+	statDivs.push(statsDiv);
+	statsDiv.id = 'statsdiv';
+	statsWrapper.appendChild(statsDiv);
+	var barChart = document.createElement('canvas');
+	//set barchart width to 100px
+	//barChart.width = 100;
+	barChart.id = 'barchart';
+	statsDiv.appendChild(barChart);
+
+	var chart = new Chart(barChart, {
+		type: 'bar',
+		data: {
+			//labels: [unitList[1].name],
+			//make a label for each unit in the unit lists name
+			labels: sortData[label],
+			datasets: [{
+				label: label,
+				//data: [12, 19, 3, 5, 2, 3],
+				data: sortedUnitData[label],
+				backgroundColor: sortColors(currentUnit, sortData[label], label),
+				borderWidth: 0
+			}]
+		},
+		options: {
+			animation: false,
+			scales: {
+				//use the max value as the scale for each label from the minValues using the same keys as the data
+				//use chartjs knowledge to accomplish this
+				y: {
+					max: function () {
+						if (label == 'health') return 13000;
+						else return null;
+					}
+				},
+				x: {
+					display: false,
+				}
+			}
+		}
+	});
+}
+
+
+function drawAllBarCharts() {
+	drawBarChart('health');
+	drawBarChart('damage');
+	drawBarChart('speed');
+	drawBarChart('range');
+}
+drawAllBarCharts();
+
+function statRedrawMouseOver(e) {
+	console.log(e.target.id);
+	//var cell = e.target;
+	//get the unit name, from the cells parent (which is the row), using the name table header
+	//console.log(cell);
+
+	currentUnit = e.target.id;
+	sortColors(e.target.id, sortData['health']);
+	//destroy barchart before redrawing it
+	//if stats_content has an element
+	while (statsWrapper.hasChildNodes()) {
+		while (statsWrapper.firstChild.hasChildNodes()) {
+			statsWrapper.firstChild.removeChild(statsWrapper.firstChild.firstChild);
+		}
+		statsWrapper.removeChild(statsWrapper.firstChild);
+	}
+	statsWrapper.innerHTML = null;
+	var statsUnitName = document.createElement('div');
+	statsUnitName.id = 'statsunitname';
+	statsUnitName.innerHTML = e.target.id;
+	statsWrapper.appendChild(statsUnitName);
+	drawAllBarCharts()
+}
+
+/*
+deprecated, we now add the listener to the cell when its created
+//when a cell in the unit table is mouseover get the unit name from the cell and print to console
+var unit_table = document.getElementsByClassName('unit_table_name_cell');
+for (var i = 0; i < unit_table.length; i++) {
+	unit_table[i].addEventListener('mouseover', statRedrawMouseOver);
+}
+	*/
+
