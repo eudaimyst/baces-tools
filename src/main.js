@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 //create 3 divs called unit_view, deck_view and stats_view, and a wrapper to contain them
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
