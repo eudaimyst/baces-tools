@@ -24,7 +24,7 @@ class Unit {
 			var value = jsonEntry[key];
 			var cleanValue = removeSpacesCapitalsSpecialCharacters(value)
 			if (value.constructor == String) {
-				if (cleanNameKey != 'emoji' && cleanNameKey != 'name' && cleanNameKey != 'videoturnaround') {
+				if (cleanNameKey != 'emoji' && cleanNameKey != 'name' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'type') {
 					value = cleanValue;
 				}
 			}
@@ -337,9 +337,9 @@ var deck_text_div = document.createElement('div');
 
 //#tag deckSlots div for unit deck slots
 //create 1 div to hold all the unit deck slots
-var unit_deck_slots_div = document.createElement('div');
-unit_deck_slots_div.classList.add('unit_deck_slots_div');
-deck_content.appendChild(unit_deck_slots_div);
+var unit_deck_slot_container_div = document.createElement('div');
+unit_deck_slot_container_div.classList.add('unit_deck_slot_container_div');
+deck_content.appendChild(unit_deck_slot_container_div);
 //create 8 square divs
 for (var i = 0; i < 8; i++) {
 	var div = document.createElement('div');
@@ -370,6 +370,7 @@ for (var i = 0; i < 8; i++) {
 		if (deck[slotNumber]) {
 			console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck');
 			delete deck[slotNumber];
+			deck1Slots[slotNumber].classList.remove('unit_deck_slot_div_filled');
 		}
 		else {
 			console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
@@ -382,7 +383,7 @@ for (var i = 0; i < 8; i++) {
 		this.style.backgroundColor = '';
 	});
 
-	unit_deck_slots_div.appendChild(div);
+	unit_deck_slot_container_div.appendChild(div);
 }
 
 deck_stats_div.appendChild(deck_text_div);
@@ -524,7 +525,7 @@ function redrawDeckContent(deckID) {
 	deck.forEach((unit, i) => {
 		deck_text_div.innerHTML += unit.emoji + ' ';
 		//slot.innerHTML = deck[index].name;
-		deck1Slots[i].firstElementChild.src = 'images/units/' + unit.name + '.png';
+		deck1Slots[i].firstElementChild.src = 'images/units/' + unit.image + '.png';
 	});
 
 }
@@ -564,14 +565,17 @@ function addUnitToDeck(unit, deckID) {
 			if (deck[i] == undefined) {
 				if (slotBuildings[i] == unit.building) {
 					deck[i] = unit;
+					deck1Slots[i].classList.add('unit_deck_slot_div_filled');
 					break;
 				}
 				else if (slotBuildings[i] == 'wildfoundry' && (unit.building == 'foundry' || unit.building == 'advancedfoundry')) {
 					deck[i] = unit;
+					deck1Slots[i].classList.add('unit_deck_slot_div_filled');
 					break;
 				}
 				else if (slotBuildings[i] == 'wildstarforge' && (unit.building == 'starforge' || unit.building == 'advancedstarforge')) {
 					deck[i] = unit;
+					deck1Slots[i].classList.add('unit_deck_slot_div_filled');
 					break;
 				}
 			}

@@ -18,15 +18,18 @@ table {
 }
 
 th {
-	font-size: 18px;
+	font-size: 16px;
 	padding: 0px 2px 0px 2px;
+	font-variant: small-caps;
+	background-color: rgba(0, 0, 0, 0);
+	font-weight: 300;
 }
 
 
 td {
-	font-size: 18px;
+	font-size: 16px;
 	border-width: 1px;
-	border-color: black;
+	border-color: rgba(0, 0, 0, 0.075);
 	border-style: none;
 }
 
@@ -312,9 +315,13 @@ select {
 
 #unit_table_head {
 	position: sticky;
-	background-color: rgb(34, 34, 34);
+	background-color: rgba(0, 0, 0, 0.329);
 	top: -1px;
 	height: 30px;
+}
+
+#unit_table_body {
+	top: 30px;
 }
 
 .unit_table_cell {
@@ -349,7 +356,7 @@ select {
 	resize: none;
 }
 
-.unit_deck_slots_div {
+.unit_deck_slot_container_div {
 	width: 300px;
 	height: 150px;
 	border-color: black;
@@ -371,6 +378,10 @@ select {
 	flex-wrap: wrap;
 	margin: 5px;
 	overflow: hidden;
+}
+
+.unit_deck_slot_div_filled {
+	border-color: green;
 }
 
 .deck_stats_div {
