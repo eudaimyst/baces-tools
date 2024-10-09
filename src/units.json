@@ -803,7 +803,7 @@
     "Small": "",
     "Anti-Big": "",
     "Big": "",
-    "Anti-Air": "Anti-Air",
+    "Anti-Air": "",
     "Manufacturer": "IRON AND SONS",
     "slug": "turret",
     "emoji": ":Turret:",
@@ -1190,7 +1190,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/advancedbot.png",
-    "Name": "Advancedbot",
+    "Name": "Advanced Bot",
     "Type": "Ground",
     "Building": "Advanced Foundry",
     "Matter": 50,

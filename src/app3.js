@@ -24,7 +24,7 @@ class Unit {
 			var value = jsonEntry[key];
 			var cleanValue = removeSpacesCapitalsSpecialCharacters(value)
 			if (value.constructor == String) {
-				if (cleanNameKey != 'emoji') {
+				if (cleanNameKey != 'emoji' && cleanNameKey != 'name') {
 					value = cleanValue;
 				}
 			}
@@ -255,7 +255,7 @@ stat_category_cells.range.innerHTML = 'test';
 
 var deck_text_div = document.createElement('div');
 
-
+//#tag deckSlots div for unit deck slots
 //create 1 div to hold all the unit deck slots
 var unit_deck_slots_div = document.createElement('div');
 unit_deck_slots_div.classList.add('unit_deck_slots_div');
@@ -518,12 +518,6 @@ stats_view_header.appendChild(compare_button);
 
 //#endregion
 
-//#region stats-content
-
-
-
-//#endregion
-
 //#region unit-div-header
 //label
 const sort_label = document.createElement('p');
@@ -739,8 +733,8 @@ function redrawUnitContent() {
 				unit_table_cell.id = unitList[i].name;
 				div.id = unitList[i].name;
 				unit_table_cell.appendChild(div);
-				div.addEventListener('mouseover', statRedrawMouseOver);
-				unit_table_cell.addEventListener('mouseover', statRedrawMouseOver);
+				div.addEventListener('mouseover', unitMouseOver);
+				unit_table_cell.addEventListener('mouseover', unitMouseOver);
 
 
 				unit_table_cell.classList.add('unit_table_cell');
@@ -813,7 +807,7 @@ function redrawUnitContent() {
 				else if (div.children.length > 0) {
 					//for each child
 					for (let j = 0; j < div.children.length; j++) {
-						div.children[j].addEventListener('mouseover', statRedrawMouseOver);
+						//div.children[j].addEventListener('mouseover', statRedrawMouseOver); --per cell mouseover
 						div.children[j].id = unitList[i].name;
 					}
 				};
@@ -938,6 +932,15 @@ function simpleSort(list, key, sortedArray) {
 	return sortedList;
 }
 
+
+//#region stats-content
+
+
+
+//#endregion
+
+
+
 var sortedUnitData = {
 	health: [],
 	damage: [],
@@ -946,6 +949,14 @@ var sortedUnitData = {
 	range: [],
 	dpsg: [],
 	dpsa: [],
+}
+var unitStatColors = {
+	health: '#48F07D',
+	damage: '#EF4C48',
+	speed: '#F0CA2E',
+	range: '#E68B40',
+	dpsg: '#48F07D',
+	dpsa: '#EF4C48',
 }
 var sortData = {
 	health: simpleSort(unitList, 'health', sortedUnitData.health),
@@ -963,19 +974,10 @@ function sortColors(unitName, data, label) {
 	//if it is before, add the color 'red', otherwise add the color 'black'
 	//add the color to the sortedColors array
 	var color;
-	if (label == 'health') {
-		color = '#48F07D';
-	}
-	else if (label == 'damage') {
-		color = '#EF4C48';
-	} else if (label == 'speed') {
-		color = '#F0CA2E';
-	} else if (label == 'range') {
-		color = '#E68B40';
-	}
+	color = unitStatColors[label];
 	data.forEach(function (unit) {
 		sortedColors.push(color)
-		if (unit == unitName) {
+		if (unit == unitName) { //once we reaach the name of the unit we set color to black which pushes the rest of the units as black bars
 			color = 'black'
 		}
 	});
@@ -985,24 +987,35 @@ function sortColors(unitName, data, label) {
 var currentUnit = 'crusader';
 
 
-var statsWrapper = document.createElement('div');
-statsWrapper.id = 'statswrapper';
-stats_content.appendChild(statsWrapper);
-
-var statDivs = []
 
 
+var statsChartContainer = document.createElement('div');
+statsChartContainer.id = 'statsChartContainer';
+stats_content.appendChild(statsChartContainer);
+
+var chartDivs = []
+var barCharts = []
+
+
+//#tag barChart definition
 function drawBarChart(label) {
 
-	var statsDiv = document.createElement('div');
-	statDivs.push(statsDiv);
-	statsDiv.id = 'statsdiv';
-	statsWrapper.appendChild(statsDiv);
+	var chartDiv = document.createElement('div');
+	chartDivs.push(chartDiv);
+	chartDiv.id = 'chartDiv';
+	statsChartContainer.appendChild(chartDiv);
 	var barChart = document.createElement('canvas');
 	//set barchart width to 100px
 	//barChart.width = 100;
-	barChart.id = 'barchart';
-	statsDiv.appendChild(barChart);
+	barChart.classList.add('barchart');
+	chartDiv.appendChild(barChart);
+
+	//create an img element of the relevant label icon
+	var img = document.createElement('img');
+	img.src = 'images/stats/' + label + '.png';
+	img.id = 'unitStatsImg';
+	chartDiv.appendChild(img);
+
 
 	var chart = new Chart(barChart, {
 		type: 'bar',
@@ -1019,55 +1032,83 @@ function drawBarChart(label) {
 			}]
 		},
 		options: {
+			plugins: {
+				tooltip: {
+					enabled: false
+				},
+				legend: {
+					display: false
+				},
+			},
 			animation: false,
 			scales: {
 				//use the max value as the scale for each label from the minValues using the same keys as the data
 				//use chartjs knowledge to accomplish this
 				y: {
+					grid: {
+						display: false,
+					},
+					ticks: {
+						display: false,
+					},
 					max: function () {
 						if (label == 'health') return 13000;
 						else return null;
 					}
 				},
 				x: {
+					grid: {
+						display: false,
+					},
+					ticks: {
+						display: false,
+					},
 					display: false,
 				}
 			}
 		}
 	});
+
+	barCharts[label] = chart;
+
 }
 
 
 function drawAllBarCharts() {
-	drawBarChart('health');
-	drawBarChart('damage');
-	drawBarChart('speed');
-	drawBarChart('range');
+	//instead of having each in strings, do it for each key in sorted unit data
+	for (var [key, value] of Object.entries(sortedUnitData)) {
+		//console.log(key);
+		drawBarChart(key);
+	}
 }
 drawAllBarCharts();
 
-function statRedrawMouseOver(e) {
-	console.log(e.target.id);
-	//var cell = e.target;
-	//get the unit name, from the cells parent (which is the row), using the name table header
-	//console.log(cell);
-
+function unitMouseOver(e) {
+	//console.log(e.target.id);
+	//get the unit name from the cells parent (which is the row), using the name table header
 	currentUnit = e.target.id;
-	sortColors(e.target.id, sortData['health']);
-	//destroy barchart before redrawing it
-	//if stats_content has an element
-	while (statsWrapper.hasChildNodes()) {
-		while (statsWrapper.firstChild.hasChildNodes()) {
-			statsWrapper.firstChild.removeChild(statsWrapper.firstChild.firstChild);
-		}
-		statsWrapper.removeChild(statsWrapper.firstChild);
+	//update the data in the bar charts based on the unit id
+	//update the chart
+	//update the colors in the bar charts based on the unit id
+	function updateChart(chart, label) {
+		chart.data.datasets[0].data = sortedUnitData[label];
+		chart.data.datasets[0].backgroundColor = sortColors(e.target.id, sortData[label], label);
+		chart.update();
 	}
-	statsWrapper.innerHTML = null;
-	var statsUnitName = document.createElement('div');
-	statsUnitName.id = 'statsunitname';
-	statsUnitName.innerHTML = e.target.id;
-	statsWrapper.appendChild(statsUnitName);
-	drawAllBarCharts()
+	//update the charts
+	for (var [key, value] of Object.entries(sortedUnitData)) {
+		//console.log(key);
+		updateChart(barCharts[key], key);
+	}
+	/**
+	updateChart(barCharts['health'], 'health');
+	updateChart(barCharts['damage'], 'damage');
+	updateChart(barCharts['speed'], 'speed');
+	updateChart(barCharts['range'], 'range');
+	*/
+
+
+
 }
 
 /*

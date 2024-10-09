@@ -117,9 +117,18 @@ select {
 
 }
 
+#unitStatsImg {
+	width: 24px;
+	height: 24px;
+	transform: translate(0, 20%);
+}
 
-#statsdiv {
-	width: 300px;
+#chartDiv {
+	background-color: rgba(0, 0, 0, 0.329);
+	width: 90px;
+	height: 36px;
+	margin: 3px;
+	padding: 3px;
 	border-width: 2px;
 	border: none;
 	border-color: white;
@@ -130,14 +139,19 @@ select {
 	top: 300px;
 }
 
-#statswrapper {
-	display: flex;
+#statsChartContainer {
 	flex-wrap: wrap;
 	width: 700px;
-	border-width: 0px;
+	border-width: 1px;
 	border: none;
 
 	border-color: black;
+}
+
+.barchart {
+	position: absolute;
+	width: 100px;
+	left: 24px;
 }
 
 
