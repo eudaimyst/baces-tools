@@ -24,7 +24,7 @@ class Unit {
 			var value = jsonEntry[key];
 			var cleanValue = removeSpacesCapitalsSpecialCharacters(value)
 			if (value.constructor == String) {
-				if (cleanNameKey != 'emoji' && cleanNameKey != 'name') {
+				if (cleanNameKey != 'emoji' && cleanNameKey != 'name' && cleanNameKey != 'videoturnaround') {
 					value = cleanValue;
 				}
 			}
@@ -162,8 +162,18 @@ const sidebar_title_div = document.createElement('div');
 sidebar_title_div.id = 'sidebar_title_div';
 sidebar_title_div.innerHTML = 'BAces_Tools';
 const sidebar_footer_div = document.createElement('div');
-sidebar_footer_div.id = 'sidebar_footer_div';
-sidebar_footer_div.innerHTML = '<b>BAces_Tools has no affiliation with Uncapped Games</b>.<br>All rights to any content or data displayed remains with Uncapped Games.<br>No guarantee is made as to the accuracy or correctness of game data';
+sidebar_footer_div.classList.add('sidebar_footer_div')
+const sidebar_footer_contents = document.createElement('div');
+sidebar_footer_div.appendChild(sidebar_footer_contents);
+sidebar_footer_contents.innerHTML = "<b>BAces_Tools has no affiliation with Uncapped Games";
+const sidebar_footer_contents2 = document.createElement('div');
+sidebar_footer_div.appendChild(sidebar_footer_contents2);
+sidebar_footer_contents2.innerHTML = "All rights to any content or data displayed remain the property of Uncapped Games.";
+const sidebar_footer_contents3 = document.createElement('div');
+sidebar_footer_div.appendChild(sidebar_footer_contents3);
+sidebar_footer_contents3.innerHTML = "No warranties or guarantees are provided regarding the accuracy or completeness of the game data displayed.This toolkit is provided ‘as is’ and is for informational purposes only.Use of this toolkit does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains with its respective owner.";
+sidebar_footer_contents3.style.fontSize = '8px';
+//sidebar_footer_div.innerHTML = '<b></b>.<br> <br>';
 function sideBarRedraw() {
 	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
 	if (sidebarActive) {
@@ -996,6 +1006,17 @@ stats_content.appendChild(statsChartContainer);
 var chartDivs = []
 var barCharts = []
 
+//video element
+var video = document.createElement('video');
+//video source is the units videoTurnaround key
+video.src = unitList[1].videoturnaround;
+//set video to repeat
+video.loop = true;
+//crop the right 30% of the video
+
+
+video.id = 'unitVideo';
+statsChartContainer.appendChild(video);
 
 //#tag barChart definition
 function drawBarChart(label) {
@@ -1083,10 +1104,22 @@ function drawAllBarCharts() {
 }
 drawAllBarCharts();
 
+var oldE = null
 function unitMouseOver(e) {
+	//if we are
+	if (e.target.id == oldE) return;
+	oldE = e.target.id;
 	//console.log(e.target.id);
 	//get the unit name from the cells parent (which is the row), using the name table header
 	currentUnit = e.target.id;
+
+	//get the unit from unit list by its name
+	var unit = unitList.find(unit => unit.name === e.target.id);
+	//update the video source
+	video.src = unit.videoturnaround;
+	console.log(unit.videoturnaround);
+	video.play();
+
 	//update the data in the bar charts based on the unit id
 	//update the chart
 	//update the colors in the bar charts based on the unit id
@@ -1098,6 +1131,8 @@ function unitMouseOver(e) {
 	//update the charts
 	for (var [key, value] of Object.entries(sortedUnitData)) {
 		//console.log(key);
+		//video.src = unitList.find(unit => unit.name === e.target.id).videoturnaround;
+		//video.play();
 		updateChart(barCharts[key], key);
 	}
 	/**
