@@ -3,7 +3,7 @@
 	"source": "src/index.html",
 	"scripts": {
 		"start": "npm run build && parcel -p 7112 --no-cache",
-		"build": "rm -rf dist && mkdir -p dist/images && cp -r src/images dist/images/ && parcel build --no-cache"
+		"build": "rm -rf dist && mkdir -p dist/images && cp -r src/images/* dist/images/ && parcel build --no-cache"
 	},
 	"devDependencies": {
 		"parcel": "latest",
