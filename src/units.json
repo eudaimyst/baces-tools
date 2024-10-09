@@ -1,7 +1,7 @@
 [
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/katbus.png",
-    "Name": "Katbus",
+    "Name": "Katbus 😻",
     "Type": "Air",
     "Building": "Advanced Starforge",
     "Matter": 250,
@@ -871,7 +871,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/bomber.png",
-    "Name": "Bomber",
+    "Name": "Bomber 💥",
     "Type": "Ground",
     "Building": "Foundry",
     "Matter": 50,
