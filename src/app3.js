@@ -913,8 +913,9 @@ var maxValues = [];
 for (var i = 0; i < unitList.length; i++) {
 	for (var [key, value] of Object.entries(unitList[i])) {
 		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
-			if (minValues[key] == undefined || value < minValues[key]) {
+			if (minValues[key] == undefined || value <= minValues[key]) {
 				minValues[key] = value;
+				if (key == 'speed') console.log(key, minValues[key]);
 			}
 			if (maxValues[key] == undefined || value > maxValues[key]) {
 				maxValues[key] = value;
@@ -963,10 +964,11 @@ var sortedUnitData = {
 var unitStatColors = {
 	health: '#48F07D',
 	damage: '#EF4C48',
+	damagea: '#EF4C48',
 	speed: '#F0CA2E',
 	range: '#E68B40',
-	dpsg: '#48F07D',
-	dpsa: '#EF4C48',
+	dpsg: '#484CEF',
+	dpsa: '#484CEF',
 }
 var sortData = {
 	health: simpleSort(unitList, 'health', sortedUnitData.health),
@@ -1075,11 +1077,20 @@ function drawBarChart(label) {
 					},
 					ticks: {
 						display: false,
+						suggestedMin: function () {
+							return minValues[label];
+						},
 					},
 					max: function () {
 						if (label == 'health') return 13000;
-						else return null;
-					}
+						else if (label == 'dpsg') return 1800;
+						else if (label == 'dpsa') return 800;
+						else return maxValues[label];
+					},
+					min: function () {
+						if (label == 'speed') return 3;
+						else return minValues[label];
+					},
 				},
 				x: {
 					grid: {
