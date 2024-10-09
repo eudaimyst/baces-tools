@@ -88,7 +88,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/swiftshocker.png",
-    "Name": "SwiftShocker",
+    "Name": "Swift Shocker",
     "Type": "Ground",
     "Building": "Foundry",
     "Matter": 125,
@@ -233,7 +233,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/advancedblink.png",
-    "Name": "AdvancedBlink",
+    "Name": "Advanced Blink",
     "Type": "Ground",
     "Building": "Advanced Foundry",
     "Matter": 50,
@@ -291,7 +291,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/blinkhunter.png",
-    "Name": "BlinkHunter",
+    "Name": "Blink Hunter",
     "Type": "Ground",
     "Building": "Core",
     "Matter": 75,
@@ -349,7 +349,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/advancedrecall.png",
-    "Name": "AdvancedRecall",
+    "Name": "Advanced Recall",
     "Type": "Ground",
     "Building": "Starforge",
     "Matter": 50,
@@ -378,7 +378,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/recallshocker.png",
-    "Name": "RecallShocker",
+    "Name": "Recall Shocker",
     "Type": "Ground",
     "Building": "Foundry",
     "Matter": 125,
@@ -436,7 +436,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/recallhunter.png",
-    "Name": "RecallHunter",
+    "Name": "Recall Hunter",
     "Type": "Ground",
     "Building": "Core",
     "Matter": 75,
@@ -726,7 +726,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/heavyturret.png",
-    "Name": "HeavyTurret",
+    "Name": "Heavy Turret",
     "Type": "Base Defense",
     "Building": "Starforge",
     "Matter": 200,
@@ -900,7 +900,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/heavyballista.png",
-    "Name": "HeavyBallista",
+    "Name": "Heavy Ballista",
     "Type": "Ground",
     "Building": "Advanced Foundry",
     "Matter": 250,
@@ -929,7 +929,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/kingcrab.png",
-    "Name": "KingCrab",
+    "Name": "King Crab",
     "Type": "Ground",
     "Building": "Foundry",
     "Matter": 125,
@@ -1161,7 +1161,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/assaultbot.png",
-    "Name": "Assaultbot",
+    "Name": "Assault Bot",
     "Type": "Ground",
     "Building": "Advanced Foundry",
     "Matter": 50,
@@ -1219,7 +1219,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/missilebot.png",
-    "Name": "MissileBot",
+    "Name": "Missilebot",
     "Type": "Ground",
     "Building": "Core",
     "Matter": 75,
@@ -1248,7 +1248,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/heavyhunter.png",
-    "Name": "HeavyHunter",
+    "Name": "Heavy Hunter",
     "Type": "Ground",
     "Building": "Foundry",
     "Matter": 125,
