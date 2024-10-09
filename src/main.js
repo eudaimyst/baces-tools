@@ -1,11 +1,8 @@
 //create 3 divs called unit_view, deck_view and stats_view, and a wrapper to contain them
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
+import jsonUnitsBase from './units.json';
 
-//load units.json
-
-//#tag load-unit-json
-var jsonUnitsBase = require('./units.json');
 var unitList = [];
 
 var lastSortValue = 'name';
