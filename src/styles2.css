@@ -7,6 +7,9 @@ body {
 	color: white;
 }
 
+a {
+	color: white;
+}
 
 table {
 	margin: 0px;
@@ -398,4 +401,13 @@ select {
 #unit_view_card_btn {
 	color: grey;
 	border-color: grey;
+}
+
+.links_div {
+	flex: auto;
+	position: relative;
+}
+
+.links_content {
+	position: inherit;
 }

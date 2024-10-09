@@ -166,7 +166,6 @@ sidebar_title_v_div.id = 'sidebar_title_div_v';
 sidebar_title_v_div.innerHTML = 'BAces_Tools';
 const sidebar_content_div = document.createElement('div');
 sidebar_content_div.id = 'sidebar_content_div';
-sidebar_content_div.innerHTML = 'This is the sidebar content.';
 const sidebar_footer_div = document.createElement('div');
 sidebar_footer_div.classList.add('sidebar_footer_div')
 const sidebar_footer_contents = document.createElement('div');
@@ -213,6 +212,47 @@ toggleSidebarButton.addEventListener('click', () => {
 
 document.body.appendChild(sidebar);
 document.body.appendChild(wrapper);
+
+
+//#tag sidebar-content this is where everything in the sidebar goes
+
+const linkData = [{
+	name: 'Battle Aces Official Website',
+	url: 'https://www.playbattleaces.com'
+}, {
+	name: 'BA Strategy Planner',
+	url: 'https://trevorcode.github.io/ba-strategy-planner/'
+},
+
+]
+
+
+//create a div which has a menu of links. The div should have a header, which can be clicked to expand, to show the links
+const linksDiv = document.createElement('div');
+linksDiv.classList.add('links_div');
+sidebar_content_div.appendChild(linksDiv);
+
+const linksHeader = document.createElement('div');
+linksHeader.classList.add('links_header');
+linksHeader.innerHTML = 'Links';
+linksDiv.appendChild(linksHeader);
+
+const linksContent = document.createElement('div');
+linksContent.classList.add('links_content');
+linksDiv.appendChild(linksContent);
+//for each link in linkData, create a link
+linkData.forEach((link) => {
+	const linkElement = document.createElement('a');
+	linkElement.href = link.url;
+	linkElement.innerHTML = link.name + '<br>';
+	linksContent.appendChild(linkElement);
+});
+//add event when links header is pressed
+linksHeader.addEventListener('click', () => {
+	//toggle the links div
+	linksDiv.classList.toggle('links_div_active');
+});
+
 
 
 //#region deck-header section of the deck view
