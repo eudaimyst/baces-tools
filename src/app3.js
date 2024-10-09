@@ -161,6 +161,12 @@ var sidebarActive = true;
 const sidebar_title_div = document.createElement('div');
 sidebar_title_div.id = 'sidebar_title_div';
 sidebar_title_div.innerHTML = 'BAces_Tools';
+const sidebar_title_v_div = document.createElement('div');
+sidebar_title_v_div.id = 'sidebar_title_div_v';
+sidebar_title_v_div.innerHTML = 'BAces_Tools';
+const sidebar_content_div = document.createElement('div');
+sidebar_content_div.id = 'sidebar_content_div';
+sidebar_content_div.innerHTML = 'This is the sidebar content.';
 const sidebar_footer_div = document.createElement('div');
 sidebar_footer_div.classList.add('sidebar_footer_div')
 const sidebar_footer_contents = document.createElement('div');
@@ -180,13 +186,20 @@ function sideBarRedraw() {
 		sidebar.style.width = '200px';
 		wrapper.style.marginLeft = '200px';
 		sidebar.appendChild(sidebar_title_div);
+		sidebar.appendChild(sidebar_content_div);
 		sidebar.appendChild(sidebar_footer_div);
+		// if sidebar_title_v_div exists in sidebar
+		if (sidebar.contains(sidebar_title_v_div)) {
+			sidebar.removeChild(sidebar_title_v_div);
+		};
 	} else {
 		sidebar.style.width = '50px';
 		wrapper.style.marginLeft = '50px';
 		//if children exist
 		if (sidebar.children.length > 0) {
 			sidebar.removeChild(sidebar_title_div);
+			sidebar.appendChild(sidebar_title_v_div);
+			sidebar.removeChild(sidebar_content_div);
 			sidebar.removeChild(sidebar_footer_div);
 		}
 	}

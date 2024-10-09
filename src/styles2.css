@@ -186,6 +186,7 @@ select {
 }
 
 
+
 #wrapper {
 	position: absolute;
 	background-image: url('images/a1.png');
@@ -211,6 +212,13 @@ select {
 	right: 0px;
 }
 
+#sidebar_title_div {
+	padding: 10px;
+}
+
+#sidebar_title_div_v {
+	transform: rotate(90deg) translate(30px);
+}
 
 .sidebar_footer_div {
 	position: absolute;
