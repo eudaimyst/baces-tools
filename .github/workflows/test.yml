@@ -3,7 +3,8 @@ name: Lint and Test
 on:
   push:
     branches:
-      - '!main'
+    - '*'
+    - '!master'
 
 jobs:
   build-publish:
