@@ -168,10 +168,10 @@ sidebar_footer_div.appendChild(sidebar_footer_contents);
 sidebar_footer_contents.innerHTML = "<b>BAces_Tools has no affiliation with Uncapped Games";
 const sidebar_footer_contents2 = document.createElement('div');
 sidebar_footer_div.appendChild(sidebar_footer_contents2);
-sidebar_footer_contents2.innerHTML = "All rights to any content or data displayed remain the property of Uncapped Games.";
+sidebar_footer_contents2.innerHTML = "All rights to any content displayed remain the property of Uncapped Games.";
 const sidebar_footer_contents3 = document.createElement('div');
 sidebar_footer_div.appendChild(sidebar_footer_contents3);
-sidebar_footer_contents3.innerHTML = "No warranties or guarantees are provided regarding the accuracy or completeness of the game data displayed.This toolkit is provided ‘as is’ and is for informational purposes only.Use of this toolkit does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains with its respective owner.";
+sidebar_footer_contents3.innerHTML = "No warranties or guarantees are provided regarding the accuracy or completeness of the game data displayed. This toolkit is provided ‘as is’ and is for informational purposes only. Use of this toolkit does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains with its respective owner.";
 sidebar_footer_contents3.style.fontSize = '8px';
 //sidebar_footer_div.innerHTML = '<b></b>.<br> <br>';
 function sideBarRedraw() {
@@ -1002,6 +1002,10 @@ var currentUnit = 'crusader';
 var statsChartContainer = document.createElement('div');
 statsChartContainer.id = 'statsChartContainer';
 stats_content.appendChild(statsChartContainer);
+var statsUnitName = document.createElement('div');
+statsUnitName.id = 'statsUnitName';
+statsUnitName.innerHTML = 'Unit Name';
+stats_content.appendChild(statsUnitName);
 
 var chartDivs = []
 var barCharts = []
@@ -1016,14 +1020,14 @@ video.loop = true;
 
 
 video.id = 'unitVideo';
-statsChartContainer.appendChild(video);
+stats_content.appendChild(video);
 
 //#tag barChart definition
 function drawBarChart(label) {
 
 	var chartDiv = document.createElement('div');
 	chartDivs.push(chartDiv);
-	chartDiv.id = 'chartDiv';
+	chartDiv.classList.add('chartDiv');
 	statsChartContainer.appendChild(chartDiv);
 	var barChart = document.createElement('canvas');
 	//set barchart width to 100px
@@ -1112,6 +1116,7 @@ function unitMouseOver(e) {
 	//console.log(e.target.id);
 	//get the unit name from the cells parent (which is the row), using the name table header
 	currentUnit = e.target.id;
+	statsUnitName.innerHTML = e.target.id;
 
 	//get the unit from unit list by its name
 	var unit = unitList.find(unit => unit.name === e.target.id);
