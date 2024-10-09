@@ -24,7 +24,7 @@ class Unit {
 			var value = jsonEntry[key];
 			var cleanValue = removeSpacesCapitalsSpecialCharacters(value)
 			if (value.constructor == String) {
-				if (cleanNameKey != 'emoji') {
+				if (cleanNameKey != 'emoji' && cleanNameKey != 'name' && cleanNameKey != 'videoturnaround') {
 					value = cleanValue;
 				}
 			}
@@ -102,7 +102,6 @@ decks.push(deck1Contents, deck2Contents);
 var currentDeck = 0; //currentDeck defaults to 1 until deck 2 is selected
 
 
-
 //#region views-contents-headers definitions for all 3 views
 
 const unit_view = document.createElement('div');
@@ -145,9 +144,133 @@ wrapper.appendChild(deck_view);
 wrapper.appendChild(stats_view);
 //set the wrapper width and height to the size of the window
 
+//#endregion
+
+
+
+//# left sidebar (burger menu on vertical)
+const sidebar = document.createElement('div');
+sidebar.id = 'sidebar';
+//add a button to the sidebar to toggle the sidebar
+const toggleSidebarButton = document.createElement('button');
+toggleSidebarButton.innerHTML = '🍔';
+toggleSidebarButton.id = 'toggleSidebarButton';
+sidebar.classList.add('sidebar_inactive');
+sidebar.appendChild(toggleSidebarButton);
+var sidebarActive = true;
+const sidebar_title_div = document.createElement('div');
+sidebar_title_div.id = 'sidebar_title_div';
+sidebar_title_div.innerHTML = 'BAces_Tools';
+const sidebar_title_v_div = document.createElement('div');
+sidebar_title_v_div.id = 'sidebar_title_div_v';
+sidebar_title_v_div.innerHTML = 'BAces_Tools';
+const sidebar_content_div = document.createElement('div');
+sidebar_content_div.id = 'sidebar_content_div';
+const sidebar_footer_div = document.createElement('div');
+sidebar_footer_div.classList.add('sidebar_footer_div')
+const sidebar_footer_contents = document.createElement('div');
+sidebar_footer_div.appendChild(sidebar_footer_contents);
+sidebar_footer_contents.innerHTML = "<b>BAces_Tools has no affiliation with Uncapped Games";
+const sidebar_footer_contents2 = document.createElement('div');
+sidebar_footer_div.appendChild(sidebar_footer_contents2);
+sidebar_footer_contents2.innerHTML = "All rights to any content displayed remain the property of Uncapped Games.";
+const sidebar_footer_contents3 = document.createElement('div');
+sidebar_footer_div.appendChild(sidebar_footer_contents3);
+sidebar_footer_contents3.innerHTML = "No warranties or guarantees are provided regarding the accuracy or completeness of the game data displayed. This toolkit is provided ‘as is’ and is for informational purposes only. Use of this toolkit does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains with its respective owner.";
+sidebar_footer_contents3.style.fontSize = '8px';
+//sidebar_footer_div.innerHTML = '<b></b>.<br> <br>';
+function sideBarRedraw() {
+	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
+	if (sidebarActive) {
+		sidebar.style.width = '200px';
+		wrapper.style.marginLeft = '200px';
+		sidebar.appendChild(sidebar_title_div);
+		sidebar.appendChild(sidebar_content_div);
+		sidebar.appendChild(sidebar_footer_div);
+		// if sidebar_title_v_div exists in sidebar
+		if (sidebar.contains(sidebar_title_v_div)) {
+			sidebar.removeChild(sidebar_title_v_div);
+		};
+	} else {
+		sidebar.style.width = '50px';
+		wrapper.style.marginLeft = '50px';
+		//if children exist
+		if (sidebar.children.length > 0) {
+			sidebar.removeChild(sidebar_title_div);
+			sidebar.appendChild(sidebar_title_v_div);
+			sidebar.removeChild(sidebar_content_div);
+			sidebar.removeChild(sidebar_footer_div);
+		}
+	}
+}
+sideBarRedraw()
+toggleSidebarButton.addEventListener('click', () => {
+	//toggle the sidebarToggle variable
+	sidebarActive = !sidebarActive;
+	sideBarRedraw();
+});
+
+document.body.appendChild(sidebar);
 document.body.appendChild(wrapper);
 
-//#endregion
+
+//#tag sidebar-content this is where everything in the sidebar goes
+
+const linkData = [{
+	name: 'Battle Aces Official Website',
+	url: 'https://www.playbattleaces.com'
+}, {
+	name: '- Units',
+	url: 'https://www.playbattleaces.com/units'
+}, {
+	name: '- Leaderboards',
+	url: 'https://www.playbattleaces.com/leaderboards'
+}, {
+	name: 'BA Strategy Planner',
+	url: 'https://trevorcode.github.io/ba-strategy-planner/'
+}, {
+	name: 'Crablab.gg',
+	url: 'https://crablab.gg/'
+}, {
+	name: 'Battle Aces Stats',
+	url: 'https://battle-aces-stats.com'
+}, {
+	name: 'SimpleAces',
+	url: 'https://jackiefae.github.io/simpleaces.html'
+}, {
+	name: 'BA by Conqueror',
+	url: 'https://docs.google.com/spreadsheets/d/1Y5sro2kxbDu2fCmKHcKmEFuzjpDd8SsFaifKDFY1SIg/edit?gid=0#gid=0'
+}
+]
+
+
+//create a div which has a menu of links. The div should have a header, which can be clicked to expand, to show the links
+const linksDiv = document.createElement('div');
+linksDiv.classList.add('links_div');
+sidebar_content_div.appendChild(linksDiv);
+
+const linksHeader = document.createElement('div');
+linksHeader.classList.add('links_header');
+linksHeader.innerHTML = 'Links';
+linksDiv.appendChild(linksHeader);
+
+const linksContent = document.createElement('div');
+linksContent.classList.add('links_content');
+linksDiv.appendChild(linksContent);
+//for each link in linkData, create a link
+linkData.forEach((link) => {
+	const linkElement = document.createElement('a');
+	linkElement.href = link.url;
+	linkElement.innerHTML = link.name + '<br>';
+	linksContent.appendChild(linkElement);
+});
+//add event when links header is pressed
+linksHeader.addEventListener('click', () => {
+	//toggle the links div
+	linksDiv.classList.toggle('links_div_active');
+});
+
+
 
 //#region deck-header section of the deck view
 
@@ -212,7 +335,7 @@ stat_category_cells.range.innerHTML = 'test';
 
 var deck_text_div = document.createElement('div');
 
-
+//#tag deckSlots div for unit deck slots
 //create 1 div to hold all the unit deck slots
 var unit_deck_slots_div = document.createElement('div');
 unit_deck_slots_div.classList.add('unit_deck_slots_div');
@@ -242,12 +365,16 @@ for (var i = 0; i < 8; i++) {
 	//if the mouse is clicked
 	div.addEventListener('click', function () {
 		var slotNumber = this.id.slice(-1);
-		// remove the unit from the deck array
-		console.log(slotNumber + ' clicked - removed ' + deck1Contents[slotNumber].name + ' from deck');
 		var deck = decks[0];
-		console.log(deck)
-		delete deck[slotNumber];
-		console.log(deck)
+		// remove the unit from the deck array
+		if (deck[slotNumber]) {
+			console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck');
+			delete deck[slotNumber];
+		}
+		else {
+			console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
+			//setFilter(slotBuildings[i]);
+		}
 		redrawDeckContent(0);
 	});
 
@@ -475,12 +602,6 @@ stats_view_header.appendChild(compare_button);
 
 //#endregion
 
-//#region stats-content
-
-
-
-//#endregion
-
 //#region unit-div-header
 //label
 const sort_label = document.createElement('p');
@@ -696,8 +817,8 @@ function redrawUnitContent() {
 				unit_table_cell.id = unitList[i].name;
 				div.id = unitList[i].name;
 				unit_table_cell.appendChild(div);
-				div.addEventListener('mouseover', statRedrawMouseOver);
-				unit_table_cell.addEventListener('mouseover', statRedrawMouseOver);
+				div.addEventListener('mouseover', unitMouseOver);
+				unit_table_cell.addEventListener('mouseover', unitMouseOver);
 
 
 				unit_table_cell.classList.add('unit_table_cell');
@@ -770,7 +891,7 @@ function redrawUnitContent() {
 				else if (div.children.length > 0) {
 					//for each child
 					for (let j = 0; j < div.children.length; j++) {
-						div.children[j].addEventListener('mouseover', statRedrawMouseOver);
+						//div.children[j].addEventListener('mouseover', statRedrawMouseOver); --per cell mouseover
 						div.children[j].id = unitList[i].name;
 					}
 				};
@@ -866,8 +987,9 @@ var maxValues = [];
 for (var i = 0; i < unitList.length; i++) {
 	for (var [key, value] of Object.entries(unitList[i])) {
 		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
-			if (minValues[key] == undefined || value < minValues[key]) {
+			if (minValues[key] == undefined || value <= minValues[key]) {
 				minValues[key] = value;
+				if (key == 'speed') console.log(key, minValues[key]);
 			}
 			if (maxValues[key] == undefined || value > maxValues[key]) {
 				maxValues[key] = value;
@@ -895,6 +1017,15 @@ function simpleSort(list, key, sortedArray) {
 	return sortedList;
 }
 
+
+//#region stats-content
+
+
+
+//#endregion
+
+
+
 var sortedUnitData = {
 	health: [],
 	damage: [],
@@ -903,6 +1034,15 @@ var sortedUnitData = {
 	range: [],
 	dpsg: [],
 	dpsa: [],
+}
+var unitStatColors = {
+	health: '#48F07D',
+	damage: '#EF4C48',
+	damagea: '#EF4C48',
+	speed: '#F0CA2E',
+	range: '#E68B40',
+	dpsg: '#484CEF',
+	dpsa: '#484CEF',
 }
 var sortData = {
 	health: simpleSort(unitList, 'health', sortedUnitData.health),
@@ -920,19 +1060,10 @@ function sortColors(unitName, data, label) {
 	//if it is before, add the color 'red', otherwise add the color 'black'
 	//add the color to the sortedColors array
 	var color;
-	if (label == 'health') {
-		color = '#48F07D';
-	}
-	else if (label == 'damage') {
-		color = '#EF4C48';
-	} else if (label == 'speed') {
-		color = '#F0CA2E';
-	} else if (label == 'range') {
-		color = '#E68B40';
-	}
+	color = unitStatColors[label];
 	data.forEach(function (unit) {
 		sortedColors.push(color)
-		if (unit == unitName) {
+		if (unit == unitName) { //once we reaach the name of the unit we set color to black which pushes the rest of the units as black bars
 			color = 'black'
 		}
 	});
@@ -942,24 +1073,50 @@ function sortColors(unitName, data, label) {
 var currentUnit = 'crusader';
 
 
-var statsWrapper = document.createElement('div');
-statsWrapper.id = 'statswrapper';
-stats_content.appendChild(statsWrapper);
-
-var statDivs = []
 
 
+var statsChartContainer = document.createElement('div');
+statsChartContainer.id = 'statsChartContainer';
+stats_content.appendChild(statsChartContainer);
+var statsUnitName = document.createElement('div');
+statsUnitName.id = 'statsUnitName';
+statsUnitName.innerHTML = 'Unit Name';
+stats_content.appendChild(statsUnitName);
+
+var chartDivs = []
+var barCharts = []
+
+//video element
+var video = document.createElement('video');
+//video source is the units videoTurnaround key
+video.src = unitList[1].videoturnaround;
+//set video to repeat
+video.loop = true;
+//crop the right 30% of the video
+
+
+video.id = 'unitVideo';
+stats_content.appendChild(video);
+
+//#tag barChart definition
 function drawBarChart(label) {
 
-	var statsDiv = document.createElement('div');
-	statDivs.push(statsDiv);
-	statsDiv.id = 'statsdiv';
-	statsWrapper.appendChild(statsDiv);
+	var chartDiv = document.createElement('div');
+	chartDivs.push(chartDiv);
+	chartDiv.classList.add('chartDiv');
+	statsChartContainer.appendChild(chartDiv);
 	var barChart = document.createElement('canvas');
 	//set barchart width to 100px
 	//barChart.width = 100;
-	barChart.id = 'barchart';
-	statsDiv.appendChild(barChart);
+	barChart.classList.add('barchart');
+	chartDiv.appendChild(barChart);
+
+	//create an img element of the relevant label icon
+	var img = document.createElement('img');
+	img.src = 'images/stats/' + label + '.png';
+	img.id = 'unitStatsImg';
+	chartDiv.appendChild(img);
+
 
 	var chart = new Chart(barChart, {
 		type: 'bar',
@@ -976,55 +1133,107 @@ function drawBarChart(label) {
 			}]
 		},
 		options: {
+			plugins: {
+				tooltip: {
+					enabled: false
+				},
+				legend: {
+					display: false
+				},
+			},
 			animation: false,
 			scales: {
 				//use the max value as the scale for each label from the minValues using the same keys as the data
 				//use chartjs knowledge to accomplish this
 				y: {
+					grid: {
+						display: false,
+					},
+					ticks: {
+						display: false,
+						suggestedMin: function () {
+							return minValues[label];
+						},
+					},
 					max: function () {
 						if (label == 'health') return 13000;
-						else return null;
-					}
+						else if (label == 'dpsg') return 1800;
+						else if (label == 'dpsa') return 800;
+						else return maxValues[label];
+					},
+					min: function () {
+						if (label == 'speed') return 3;
+						else return minValues[label];
+					},
 				},
 				x: {
+					grid: {
+						display: false,
+					},
+					ticks: {
+						display: false,
+					},
 					display: false,
 				}
 			}
 		}
 	});
+
+	barCharts[label] = chart;
+
 }
 
 
 function drawAllBarCharts() {
-	drawBarChart('health');
-	drawBarChart('damage');
-	drawBarChart('speed');
-	drawBarChart('range');
+	//instead of having each in strings, do it for each key in sorted unit data
+	for (var [key, value] of Object.entries(sortedUnitData)) {
+		//console.log(key);
+		drawBarChart(key);
+	}
 }
 drawAllBarCharts();
 
-function statRedrawMouseOver(e) {
-	console.log(e.target.id);
-	//var cell = e.target;
-	//get the unit name, from the cells parent (which is the row), using the name table header
-	//console.log(cell);
-
+var oldE = null
+function unitMouseOver(e) {
+	//if we are
+	if (e.target.id == oldE) return;
+	oldE = e.target.id;
+	//console.log(e.target.id);
+	//get the unit name from the cells parent (which is the row), using the name table header
 	currentUnit = e.target.id;
-	sortColors(e.target.id, sortData['health']);
-	//destroy barchart before redrawing it
-	//if stats_content has an element
-	while (statsWrapper.hasChildNodes()) {
-		while (statsWrapper.firstChild.hasChildNodes()) {
-			statsWrapper.firstChild.removeChild(statsWrapper.firstChild.firstChild);
-		}
-		statsWrapper.removeChild(statsWrapper.firstChild);
-	}
-	statsWrapper.innerHTML = null;
-	var statsUnitName = document.createElement('div');
-	statsUnitName.id = 'statsunitname';
 	statsUnitName.innerHTML = e.target.id;
-	statsWrapper.appendChild(statsUnitName);
-	drawAllBarCharts()
+
+	//get the unit from unit list by its name
+	var unit = unitList.find(unit => unit.name === e.target.id);
+	//update the video source
+	video.src = unit.videoturnaround;
+	console.log(unit.videoturnaround);
+	video.play();
+
+	//update the data in the bar charts based on the unit id
+	//update the chart
+	//update the colors in the bar charts based on the unit id
+	function updateChart(chart, label) {
+		chart.data.datasets[0].data = sortedUnitData[label];
+		chart.data.datasets[0].backgroundColor = sortColors(e.target.id, sortData[label], label);
+		chart.update();
+	}
+	//update the charts
+	for (var [key, value] of Object.entries(sortedUnitData)) {
+		//console.log(key);
+		//video.src = unitList.find(unit => unit.name === e.target.id).videoturnaround;
+		//video.play();
+		updateChart(barCharts[key], key);
+	}
+	/**
+	updateChart(barCharts['health'], 'health');
+	updateChart(barCharts['damage'], 'damage');
+	updateChart(barCharts['speed'], 'speed');
+	updateChart(barCharts['range'], 'range');
+	*/
+
+
+
 }
 
 /*
