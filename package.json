@@ -6,6 +6,9 @@
 		"build": "rm -rf dist && mkdir -p dist/images && cp -r src/images/* dist/images/ && parcel build --no-cache"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.12.0",
+		"eslint": "^9.12.0",
+		"globals": "^15.11.0",
 		"parcel": "latest",
 		"parcel-plugin-static-files-copy": "^1.2.4",
 		"path-browserify": "^1.0.1"
