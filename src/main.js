@@ -3,19 +3,11 @@ import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import jsonUnitsBase from './units.json';
 
-var unitList = [];
-
-var lastSortValue = 'name';
-
 //#region unit-definition creates units from json entry
 //create an empty object to use as a base of the units, that has a new constructor to create a object
 class Unit {
 	constructor(jsonEntry) {
-		const keyLen = Object.keys(jsonEntry).length;
-		var count = 0
 		Object.keys(jsonEntry).forEach((key) => {
-			count++;
-			//if key == 'name' call the removeSpaces function to make the new variable
 			var cleanNameKey = key;
 			cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
 			var value = jsonEntry[key];
@@ -57,6 +49,7 @@ class Unit {
 }
 
 
+var unitList = [];
 for (let i = 0; i < jsonUnitsBase.length; i++) {
 	unitList.push(new Unit(jsonUnitsBase[i]));;
 }
@@ -83,7 +76,6 @@ var decks = []
 var deck1Contents = [];
 var deck2Contents = [];
 var deck1Slots = [];
-var deck2Slots = [];
 var slotBuildings = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge']
 decks.push(deck1Contents, deck2Contents);
 
@@ -426,7 +418,6 @@ function calculateDeckStats() {
 				for (var i = 0; i < stats[key].length; i++) {
 					if (stats[key][i] != undefined && (stats[key][i] != '')) {
 						var img = document.createElement('img');
-
 						//we need to seperate traits if there are multiple
 						if (stats[key][i].length > 1) {
 							console.log(stats[key][i]);
@@ -492,7 +483,6 @@ function calculateDeckStats() {
 					});
 				}
 			}
-			else if (key == 'type' || key == 'traits' || key == 'manufacturer') { }
 			else stat_category_cells[key].innerHTML = stats[key];
 		}
 	}
@@ -649,6 +639,8 @@ unit_view_header.appendChild(unit_view_card_btn);
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
+	const excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
+
 	//for each object in unitsJson_base create a new unit passing the object
 	console.log('Redrawing Unit Content\n-----------------');
 	console.log(unitList);
@@ -671,22 +663,8 @@ function redrawUnitContent() {
 	unit_table_head.appendChild(unit_table_header);
 
 	//##tag unit-content-table-loop
-	for (const [key, value] of Object.entries(unitList[1])) {
-		if (
-			key == 'attackrate' ||
-			key == 'tier' ||
-			key == 'splash' ||
-			key == 'small' ||
-			key == 'big' ||
-			key == 'antiair' ||
-			key == 'antibig' ||
-			key == 'slug' ||
-			key == 'videoturnaround' ||
-			key == 'videogameplay' ||
-			key == 'emoji' ||
-			key == 'website'
-		) {
-		} else {
+	for (const [key] of Object.entries(unitList[1])) {
+		if (!excludeKeys.includes(key)) {
 			unit_table_header = document.createElement('th');
 			//add some images to certain headers
 			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range') {
@@ -749,12 +727,6 @@ function redrawUnitContent() {
 		var unit_table_row = document.createElement('tr');
 		unit_table_row.id = unitList[i].name;
 		unit_table_row.classList.add('unit_table_row');
-		//
-		//for the first row list the nake of each key as a header
-		//if i == 0 then create a table header element
-		//##tag unit-table-header element
-		if (i == 0) {
-		}
 
 		//create a table cell element for each unit property
 		//add the unit property to the table cell
@@ -786,25 +758,8 @@ function redrawUnitContent() {
 		unit_table_row.appendChild(unit_table_cell);
 
 		for (var [key, value] of Object.entries(unitList[i])) {
-			if (
-				key == 'attackrate' ||
-				key == 'tier' ||
-				key == 'splash' ||
-				key == 'small' ||
-				key == 'big' ||
-				key == 'antiair' ||
-				key == 'antibig' ||
-				key == 'slug' ||
-				key == 'videoturnaround' ||
-				key == 'videogameplay' ||
-				key == 'emoji' ||
-				key == 'website'
-			) {
-			} else {
-				//console.log(`${key}: ${value}`);
+			if (!excludeKeys.includes(key)) {
 				var div = document.createElement('div');
-				//div.innerHTML = key + ': ' + value;
-				//unit_table_cell.appendChild(div)
 				var unit_table_cell = document.createElement('td');
 				unit_table_cell.id = unitList[i].name;
 				div.id = unitList[i].name;
@@ -821,15 +776,14 @@ function redrawUnitContent() {
 
 				unit_table_row.appendChild(unit_table_cell);
 
+				var img = document.createElement('img');
 				if (key == 'image') {
-					var img = document.createElement('img');
 					img.src = 'images/units/' + value + '.png';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
 					img.classList.add('unit_table_image');
 					div.appendChild(img);
 				} else if (key == 'building') {
-					var img = document.createElement('img');
 					img.src = 'images/techtiers/' + value + '.svg';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
@@ -837,7 +791,6 @@ function redrawUnitContent() {
 					div.appendChild(img);
 				} else if (key == 'ability') {
 					if (value != '') {
-						var img = document.createElement('img');
 						img.src = 'images/abilities/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
@@ -846,7 +799,6 @@ function redrawUnitContent() {
 					}
 				} else if (key == 'manufacturer') {
 					if (value != '') {
-						var img = document.createElement('img');
 						img.src = 'images/manuf/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
@@ -856,7 +808,6 @@ function redrawUnitContent() {
 				} else if (key == 'traits') {
 					value.forEach(trait => {
 						if (trait != 'none') {
-							var img = document.createElement('img');
 							img.src = 'images/traits/' + trait + '.png';
 							img.classList.add('unit_table_image_small');
 							img.setAttribute('alt', trait);
@@ -922,7 +873,6 @@ function sortUnits(value, unitlist) {
 	//sort the units by the new option
 	//new function for sorting units
 	unitList = sorted;
-	lastSortValue = value;
 }
 
 
@@ -976,8 +926,9 @@ resize();
 //find the min and max value of each stat for all units in the unit list
 var minValues = [];
 var maxValues = [];
-for (var i = 0; i < unitList.length; i++) {
-	for (var [key, value] of Object.entries(unitList[i])) {
+
+for (const unit in unitList) {
+	for (var [key, value] of Object.entries(unit)) {
 		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
 			if (minValues[key] == undefined || value <= minValues[key]) {
 				minValues[key] = value;
@@ -989,10 +940,6 @@ for (var i = 0; i < unitList.length; i++) {
 		}
 	}
 }
-
-var unitNames = [];
-var unitHealth = []
-//for each unit in unitList add its name to unitNames
 
 
 function simpleSort(list, key, sortedArray) {
@@ -1178,7 +1125,7 @@ function drawBarChart(label) {
 
 function drawAllBarCharts() {
 	//instead of having each in strings, do it for each key in sorted unit data
-	for (var [key, value] of Object.entries(sortedUnitData)) {
+	for (var [key] of Object.entries(sortedUnitData)) {
 		//console.log(key);
 		drawBarChart(key);
 	}
@@ -1211,10 +1158,7 @@ function unitMouseOver(e) {
 		chart.update();
 	}
 	//update the charts
-	for (var [key, value] of Object.entries(sortedUnitData)) {
-		//console.log(key);
-		//video.src = unitList.find(unit => unit.name === e.target.id).videoturnaround;
-		//video.play();
+	for (var [key] of Object.entries(sortedUnitData)) {
 		updateChart(barCharts[key], key);
 	}
 	/**

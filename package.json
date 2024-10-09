@@ -20,5 +20,6 @@
 		"fast-sort": "^3.4.0",
 		"pixi.js": "^8.1.6",
 		"table-sort-js": "^1.21.0"
-	}
+	},
+	"license": "UNLICENSED"
 }
