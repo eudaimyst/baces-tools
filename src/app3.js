@@ -220,10 +220,27 @@ const linkData = [{
 	name: 'Battle Aces Official Website',
 	url: 'https://www.playbattleaces.com'
 }, {
+	name: '- Units',
+	url: 'https://www.playbattleaces.com/units'
+}, {
+	name: '- Leaderboards',
+	url: 'https://www.playbattleaces.com/leaderboards'
+}, {
 	name: 'BA Strategy Planner',
 	url: 'https://trevorcode.github.io/ba-strategy-planner/'
-},
-
+}, {
+	name: 'Crablab.gg',
+	url: 'https://crablab.gg/'
+}, {
+	name: 'Battle Aces Stats',
+	url: 'https://battle-aces-stats.com'
+}, {
+	name: 'SimpleAces',
+	url: 'https://jackiefae.github.io/simpleaces.html'
+}, {
+	name: 'BA by Conqueror',
+	url: 'https://docs.google.com/spreadsheets/d/1Y5sro2kxbDu2fCmKHcKmEFuzjpDd8SsFaifKDFY1SIg/edit?gid=0#gid=0'
+}
 ]
 
 

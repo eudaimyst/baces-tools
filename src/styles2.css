@@ -206,7 +206,9 @@ select {
 
 #sidebar {
 	position: absolute;
-	font-size: x-large;
+	font-size: small;
+	font-variant: small-caps;
+	font-style: bold;
 	height: 100%;
 	background-color: rgba(39, 39, 39, 0.952);
 	top: 0px;
