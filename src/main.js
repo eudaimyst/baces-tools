@@ -56,21 +56,12 @@ class Unit {
 				}
 			}
 		});
-		//#tag testheader this works for testing the unit table header
-		//this['testHeader'] = 'test';
-
-		//sort each key in this alphabetically
-		//this.sortObjectKeys(this);
-		unitList.push(this);
-		console.log('pushing unit to unit_list');
-		console.log(this);
 	}
 }
 
 
 for (let i = 0; i < jsonUnitsBase.length; i++) {
-	new Unit(jsonUnitsBase[i]);
-	console.log(i);
+	unitList.push(new Unit(jsonUnitsBase[i]));;
 }
 
 //#endregion
