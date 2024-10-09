@@ -809,6 +809,7 @@ function redrawUnitContent() {
 				} else if (key == 'traits') {
 					value.forEach(trait => {
 						if (trait != 'none') {
+							var img = document.createElement('img');
 							img.src = 'images/traits/' + trait + '.png';
 							img.classList.add('unit_table_image_small');
 							img.setAttribute('alt', trait);
