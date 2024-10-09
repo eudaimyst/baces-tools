@@ -102,7 +102,6 @@ decks.push(deck1Contents, deck2Contents);
 var currentDeck = 0; //currentDeck defaults to 1 until deck 2 is selected
 
 
-
 //#region views-contents-headers definitions for all 3 views
 
 const unit_view = document.createElement('div');
@@ -145,9 +144,53 @@ wrapper.appendChild(deck_view);
 wrapper.appendChild(stats_view);
 //set the wrapper width and height to the size of the window
 
+//#endregion
+
+
+
+//# left sidebar (burger menu on vertical)
+const sidebar = document.createElement('div');
+sidebar.id = 'sidebar';
+//add a button to the sidebar to toggle the sidebar
+const toggleSidebarButton = document.createElement('button');
+toggleSidebarButton.innerHTML = '🍔';
+toggleSidebarButton.id = 'toggleSidebarButton';
+sidebar.classList.add('sidebar_inactive');
+sidebar.appendChild(toggleSidebarButton);
+var sidebarActive = true;
+const sidebar_title_div = document.createElement('div');
+sidebar_title_div.id = 'sidebar_title_div';
+sidebar_title_div.innerHTML = 'BAces_Tools';
+const sidebar_footer_div = document.createElement('div');
+sidebar_footer_div.id = 'sidebar_footer_div';
+sidebar_footer_div.innerHTML = '<b>BAces_Tools has no affiliation with Uncapped Games</b>.<br>All rights to any content or data displayed remains with Uncapped Games.<br>No guarantee is made as to the accuracy or correctness of game data';
+function sideBarRedraw() {
+	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
+	if (sidebarActive) {
+		sidebar.style.width = '200px';
+		wrapper.style.marginLeft = '200px';
+		sidebar.appendChild(sidebar_title_div);
+		sidebar.appendChild(sidebar_footer_div);
+	} else {
+		sidebar.style.width = '50px';
+		wrapper.style.marginLeft = '50px';
+		//if children exist
+		if (sidebar.children.length > 0) {
+			sidebar.removeChild(sidebar_title_div);
+			sidebar.removeChild(sidebar_footer_div);
+		}
+	}
+}
+sideBarRedraw()
+toggleSidebarButton.addEventListener('click', () => {
+	//toggle the sidebarToggle variable
+	sidebarActive = !sidebarActive;
+	sideBarRedraw();
+});
+
+document.body.appendChild(sidebar);
 document.body.appendChild(wrapper);
 
-//#endregion
 
 //#region deck-header section of the deck view
 

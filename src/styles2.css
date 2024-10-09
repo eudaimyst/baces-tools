@@ -117,6 +117,7 @@ select {
 
 }
 
+
 #statsdiv {
 	width: 300px;
 	border-width: 2px;
@@ -133,10 +134,12 @@ select {
 	display: flex;
 	flex-wrap: wrap;
 	width: 700px;
-	border-width: 1px;
+	border-width: 0px;
 	border: none;
+
 	border-color: black;
 }
+
 
 #wrapper {
 	position: absolute;
@@ -147,14 +150,43 @@ select {
 	border-color: white;
 	top: 5px;
 	bottom: 5px;
-	left: 5px;
+	left: 0px;
 	right: 5px;
+}
+
+#sidebar {
+	position: absolute;
+	font-size: x-large;
+	height: 100%;
+	background-color: rgba(39, 39, 39, 0.952);
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+}
+
+#sidebar_footer_div {
+	position: absolute;
+	bottom: 0px;
+	padding: 5px;
+	font-size: 12px;
+	color: rgb(158, 158, 158);
+}
+
+#toggleSidebarButton {
+	position: relative;
+	font-size: xx-large;
+	height: auto;
+	width: auto;
+	top: 10px;
+	left: 50%;
+	transform: translate(-50%);
 }
 
 #unit_view-h {
 	background-image: 'images/a1.png';
 	background-color: #cb8e8e88;
-	margin: 5px;
+	margin: 3px;
 	right: 50%;
 	left: 0px;
 	top: 0px;
@@ -163,7 +195,7 @@ select {
 
 #deck_view-h {
 	background-color: #cbc48e88;
-	margin: 5px;
+	margin: 3px;
 	left: 50%;
 	top: 0px;
 	right: 0px;
@@ -172,7 +204,7 @@ select {
 
 #stats_view-h {
 	background-color: #8ecb9988;
-	margin: 5px;
+	margin: 3px;
 	left: 50%;
 	top: 50%;
 	right: 0px;
