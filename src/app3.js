@@ -365,12 +365,16 @@ for (var i = 0; i < 8; i++) {
 	//if the mouse is clicked
 	div.addEventListener('click', function () {
 		var slotNumber = this.id.slice(-1);
-		// remove the unit from the deck array
-		console.log(slotNumber + ' clicked - removed ' + deck1Contents[slotNumber].name + ' from deck');
 		var deck = decks[0];
-		console.log(deck)
-		delete deck[slotNumber];
-		console.log(deck)
+		// remove the unit from the deck array
+		if (deck[slotNumber]) {
+			console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck');
+			delete deck[slotNumber];
+		}
+		else {
+			console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
+			//setFilter(slotBuildings[i]);
+		}
 		redrawDeckContent(0);
 	});
 
