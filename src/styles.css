@@ -174,12 +174,13 @@ select {
 }
 
 #statsUnitRankDiv {
+	font-style: italic;
 	position: absolute;
 	line-height: 160%;
 	font-weight: 800;
 	font-size: 20px;
-	-webkit-text-stroke-width: 1px;
-	-webkit-text-stroke-color: rgb(59, 59, 59);
+	-webkit-text-stroke-width: 2px;
+	-webkit-text-stroke-color: rgba(26, 21, 0, 0.678);
 	top: 0%;
 	padding: 5px;
 	bottom: 0%;
