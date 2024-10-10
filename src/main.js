@@ -1232,15 +1232,22 @@ function drawAllBarCharts() {
 drawAllBarCharts();
 
 function updateRank(label, unit) {
-	var rank = sortedUnitData[label].length - sortedUnitData[label].findIndex(value => value === unit[label]);
-	//also add a style tag to the html which changes the font to the appropriate statColor
-	//statsUnitRankDiv.innerHTML += rank + '<sup>' + getRankSuffix(rank) + '</sup><BR>';
-	statsUnitRankDiv.innerHTML += '<span style="color:' + unitStatColors[label] + '">' + rank + '<sup>' + getRankSuffix(rank) + '</sup></span><BR>';
+	var rank = sortedUnitData[label].length - sortedUnitData[label].lastIndexOf(unit[label]);
+	//if unit has no airdps ignore it its rank
+	//console.log(unit);
+	if ((label == 'dpsa' && unit['dpsa'] == '0') || (label == 'damagea' && unit['damagea'] == '0')) {
+		statsUnitRankDiv.innerHTML += '<br>';
+	}
+	else {
+		statsUnitRankDiv.innerHTML += '<span style="color:' + unitStatColors[label] + '">' + rank + '<sup>' + getRankSuffix(rank) + '</sup></span><BR>';
+	}
+
 }
 //write a function to add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
 function getRankSuffix(rank) {
 	//if rank ends in 1
-	if (rank % 10 == 1) return 'st';
+	if (rank == 11 || rank == 12 || rank == 13) return 'th';
+	else if (rank % 10 == 1) return 'st';
 	//if rank ends in 2
 	else if (rank % 10 == 2) return 'nd';
 	//if rank ends in 3
@@ -1262,16 +1269,9 @@ function getColour(value, min, max) {
 console.log(getColour(.5, 0, 1));
 
 
-var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
-var oldE = null
-function unitMouseOver(e) {
-	//if we are
-	if (e.target.id == oldE) return;
-	oldE = e.target.id;
-	var unit = unitList.find(unit => unit.name === e.target.id);
+function unitMouseOverAndTapped(unit) {
 	//console.log(e.target.id);
 	//get the unit name from the cells parent (which is the row), using the name table header
-	currentUnit = e.target.id;
 
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
@@ -1287,7 +1287,6 @@ function unitMouseOver(e) {
 	//add the img to the statsUnitName
 
 	//get the unit from unit list by its name
-	var unit = unitList.find(unit => unit.name === e.target.id);
 	//update the video source
 	video.src = unit.videoturnaround;
 	console.log(unit.videoturnaround);
@@ -1298,7 +1297,7 @@ function unitMouseOver(e) {
 	//update the colors in the bar charts based on the unit id
 	function updateChart(chart, label) {
 		chart.data.datasets[0].data = sortedUnitData[label];
-		chart.data.datasets[0].backgroundColor = sortColors(e.target.id, sortData[label], label);
+		chart.data.datasets[0].backgroundColor = sortColors(unit.name, sortData[label], label);
 		chart.update();
 	}
 	//update the charts
@@ -1321,9 +1320,20 @@ function unitMouseOver(e) {
 	updateChart(barCharts['range'], 'range');
 	*/
 
-
-
 }
+
+var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
+var oldE = null
+function unitMouseOver(e) {
+	//if we are
+	if (e.target.id == oldE) return;
+	oldE = e.target.id;
+	var unit = unitList.find(unit => unit.name === e.target.id);
+	//console.log(e.target.id);
+	currentUnit = e.target.id;
+	unitMouseOverAndTapped(unit);
+}
+unitMouseOverAndTapped(unitList[0]);
 
 /*
 deprecated, we now add the listener to the cell when its created
