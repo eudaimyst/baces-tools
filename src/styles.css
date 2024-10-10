@@ -44,6 +44,10 @@ input {
 	font-variant-caps: all-small-caps;
 }
 
+.filterHidden {
+	opacity: 0%;
+}
+
 button {
 	font-size: 14px;
 	font-variant: all-small-caps;

@@ -397,6 +397,16 @@ for (var i = 0; i < 8; i++) {
 	//when div is mouseover, make it turn black, then return after mouseover
 	div.addEventListener('mouseover', function () {
 		this.style.backgroundColor = 'black';
+		var slotNumber = this.id.slice(-1);
+		var deck = decks[0];
+		// remove the unit from the deck array
+		if (deck[slotNumber]) {
+			console.log(slotNumber + ' mouseOver - ' + deck[slotNumber].name);
+			//trigger the mouseover event
+			//get the unit from the unitlist by the unit name
+			var unit = unitList.find(unit => unit.name === deck[slotNumber].name);
+			unitMouseOverAndTapped(unit);
+		}
 	});
 
 	//if the mouse is clicked
@@ -412,6 +422,10 @@ for (var i = 0; i < 8; i++) {
 		else {
 			console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
 			//setFilter(slotBuildings[i]);
+			//set the filter input box to the name of the building
+			unit_filter_input.value = slotBuildings[slotNumber];
+			//run the unit_filter input changed event
+			unit_filter_input.dispatchEvent(new Event('input'));
 		}
 		redrawDeckContent(0);
 	});
@@ -691,6 +705,92 @@ unit_view_card_btn.innerHTML = 'card';
 unit_view_card_btn.id = 'unit_view_card_btn';
 unit_view_card_btn.classList.add('header_element');
 unit_view_header.appendChild(unit_view_card_btn);
+
+//filter input box
+const unit_filter_input = document.createElement('input');
+unit_filter_input.type = 'text';
+unit_filter_input.id = 'unit_filter_input';
+unit_filter_input.placeholder = 'filter';
+unit_filter_input.classList.add('header_element');
+unit_view_header.appendChild(unit_filter_input);
+
+//filter clear button that clears the filter
+const unit_filter_clear_btn = document.createElement('button');
+unit_filter_clear_btn.innerHTML = 'clear';
+unit_filter_clear_btn.id = 'unit_filter_clear_btn';
+unit_filter_clear_btn.classList.add('header_element');
+unit_view_header.appendChild(unit_filter_clear_btn);
+unit_filter_clear_btn.onclick = function () {
+	//clear the filter
+	unit_filter_input.value = '';
+	//run the unit_filter input changed event
+	unit_filter_input.dispatchEvent(new Event('input'));
+}
+
+/**
+ *
+itbuttonbutton
+main.js:734 boo!
+main.js:732 COMPARING column 0 of row 2 to 
+main.js:733 divdivbuttonclasstableaddunitbuttonbutton
+main.js:734 boo!
+main.js:732 COMPARING column 0 of row 3 to 
+main.js:733 divdivbuttonclasstableaddunitbuttonbutton
+main.js:734 boo!
+main.js:732 COMPARING column 0 of row 4 to 
+main.js:733 divdivbuttonclasstableaddunitbuttonbutton
+main.js:734 boo!
+main.js:732 COMPARING column 0 of row 5 to 
+main.js:733 divdivbuttonclasstableaddunitbuttonbutton
+main.js:734 boo!
+main.js:732 COMPARING column 0 of row 6 to 
+main.js:733 divdivbuttonclasstableaddunitbuttonbutton
+main.js:734 boo!
+
+Amazon Q use this
+above is the console output, of the below code, instead of searching the text fo the innerHTML. I want to compare with the unit from the unitList to see if the filter text matches any of the unit data
+ *
+ * @param {*} filter
+ */
+function setFilter(filter) {
+	filter = removeSpacesCapitalsSpecialCharacters(filter);
+	console.log('Filter set to ' + filter);
+	for (var i = 0; i < unitList.length; i++) {
+		if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filter) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filter) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filter) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filter) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filter) ||
+			unitList[i].ability.toLowerCase().includes(filter)
+		) {
+			//unit_content_div.children[i].style.display = 'block';
+			//search the unit unit_table and hide the units which do not have values of strings which match the filter
+			var table = document.getElementById('unit_table');
+			var rows = table.getElementsByTagName('tr');
+			for (var j = 0; j < rows.length; j++) {
+				var found = false;
+
+				found = removeSpacesCapitalsSpecialCharacters(rows[j].innerHTML).includes(removeSpacesCapitalsSpecialCharacters(filter));
+				if (found) {
+					rows[j].style.display = '';
+				} else {
+					rows[j].style.display = 'none';
+				}
+			}
+
+		}
+		else {
+			//document.getElementById('unit_table').getElementsByTagName('tr')[i].getElementsByTagName('td').classList.Add('filterHidden');
+			document.getElementById('unit_table').getElementsByTagName('tr')[i].style.display = 'none';
+		}
+	}
+}
+
+unit_filter_input.oninput = function () {
+	setFilter(unit_filter_input.value);
+};
+
+
 //#endregion
 
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
@@ -1269,8 +1369,13 @@ function getColour(value, min, max) {
 
 console.log(getColour(.5, 0, 1));
 
-
+var unitMouseOverAndTappedPrev = null;
 function unitMouseOverAndTapped(unit) {
+	if (unitMouseOverAndTappedPrev == unit) {
+		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
+		return;
+	}
+	unitMouseOverAndTappedPrev = unit;
 	//console.log(e.target.id);
 	//get the unit name from the cells parent (which is the row), using the name table header
 
