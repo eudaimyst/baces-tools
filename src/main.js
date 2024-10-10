@@ -753,6 +753,7 @@ above is the console output, of the below code, instead of searching the text fo
  * @param {*} filter
  */
 function setFilter(filter) {
+	filter = removeSpacesCapitalsSpecialCharacters(filter);
 	console.log('Filter set to ' + filter);
 	for (var i = 0; i < unitList.length; i++) {
 		if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filter) ||
