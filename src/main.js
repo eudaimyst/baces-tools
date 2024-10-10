@@ -3,18 +3,9 @@
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import jsonUnitsBase from './units.json';
+import { sidebar } from './menu';
 
-var islocalhost = false;
 
-if (window.location.href == 'http://localhost:7112/') {
-	console.log('local host');
-	islocalhost = true;
-}
-else {
-	console.log('not local host');
-	islocalhost = false;
-}
-console.log(window.location.href, islocalhost);
 
 //#region unit-definition creates units from json entry
 //create an empty object to use as a base of the units, that has a new constructor to create a object
@@ -132,9 +123,13 @@ stats_view.appendChild(stats_content);
 
 const wrapper = document.createElement('div');
 wrapper.id = 'wrapper';
-wrapper.appendChild(unit_view);
-wrapper.appendChild(deck_view);
-wrapper.appendChild(stats_view);
+const app = document.createElement('div');
+app.id = 'app';
+wrapper.appendChild(sidebar);
+wrapper.appendChild(app);
+app.appendChild(unit_view);
+app.appendChild(deck_view);
+app.appendChild(stats_view);
 //set the wrapper width and height to the size of the window
 
 //#endregion
@@ -144,24 +139,16 @@ wrapper.appendChild(stats_view);
 //# left sidebar (burger menu on vertical)
 const sidebar = document.createElement('div');
 sidebar.id = 'sidebar';
-
-const sidebarLogoImg = document.createElement('img');
-sidebarLogoImg.src = 'images/baces_tools.svg';
-sidebarLogoImg.alt = 'BAces_Tools';
-
-sidebarLogoImg.id = 'sidebarLogoImg';
-sidebar.appendChild(sidebarLogoImg);
-
 //add a button to the sidebar to toggle the sidebar
 const toggleSidebarButton = document.createElement('button');
-toggleSidebarButton.innerHTML = '=';
+toggleSidebarButton.innerHTML = '🍔';
 toggleSidebarButton.id = 'toggleSidebarButton';
 sidebar.classList.add('sidebar_inactive');
 sidebar.appendChild(toggleSidebarButton);
 var sidebarActive = true;
 const sidebar_title_div = document.createElement('div');
 sidebar_title_div.id = 'sidebar_title_div';
-sidebar_title_div.innerHTML = '';
+sidebar_title_div.innerHTML = 'BAces_Tools';
 const sidebar_title_v_div = document.createElement('div');
 sidebar_title_v_div.id = 'sidebar_title_div_v';
 sidebar_title_v_div.innerHTML = 'BAces_Tools';
@@ -252,7 +239,7 @@ sidebar_content_div.appendChild(linksDiv);
 
 const linksHeader = document.createElement('div');
 linksHeader.classList.add('links_header');
-linksHeader.innerHTML = '<b>Links:</b>';
+linksHeader.innerHTML = 'Links';
 linksDiv.appendChild(linksHeader);
 
 const linksContent = document.createElement('div');
@@ -294,7 +281,7 @@ function getRemainingTime() {
 
 //set countdown div text to the remaining time using the function
 setInterval(() => {
-	counDownDivCountdownText.innerHTML = 'COUNTDOWN 🎉🦀🦀🦀🦀<br>Closed Beta 2 Release <br><b>' + getRemainingTime() + '</b><br> 🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀';
+	counDownDivCountdownText.innerHTML = 'COUNTDOWN:<br>Closed Beta 2 Release: ' + getRemainingTime();
 }, 1000);
 
 
