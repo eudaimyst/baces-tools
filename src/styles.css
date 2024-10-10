@@ -250,24 +250,28 @@ select {
 	background-size: cover;
 	border-width: 1px;
 	border-color: white;
-	top: 5px;
-	bottom: 5px;
-	left: 0px;
-	right: 5px;
-	overflow: hidden;
-}
-
-#sidebar {
-	position: absolute;
-	font-size: small;
-	font-variant: small-caps;
-	font-style: bold;
-	height: 100%;
-	background-color: rgba(39, 39, 39, 0.952);
 	top: 0px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
+	overflow: hidden;
+	display: flex;
+}
+
+#sidebar {
+	position: relative;
+	font-size: small;
+	font-variant: small-caps;
+	font-style: bold;
+	height: 100%;
+	float: left;
+	background-color: rgba(39, 39, 39, 0.952);
+}
+
+#app {
+	position: relative;
+	flex-grow: 1;
+	margin: 5px;
 }
 
 #sidebar_title_div {

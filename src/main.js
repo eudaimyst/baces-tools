@@ -3,18 +3,9 @@
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import jsonUnitsBase from './units.json';
+import { sidebar } from './menu';
 
-var islocalhost = false;
 
-if (window.location.href == 'http://localhost:7112/') {
-	console.log('local host');
-	islocalhost = true;
-}
-else {
-	console.log('not local host');
-	islocalhost = false;
-}
-console.log(window.location.href, islocalhost);
 
 //#region unit-definition creates units from json entry
 //create an empty object to use as a base of the units, that has a new constructor to create a object
@@ -132,180 +123,22 @@ stats_view.appendChild(stats_content);
 
 const wrapper = document.createElement('div');
 wrapper.id = 'wrapper';
-wrapper.appendChild(unit_view);
-wrapper.appendChild(deck_view);
-wrapper.appendChild(stats_view);
+const app = document.createElement('div');
+app.id = 'app';
+wrapper.appendChild(sidebar);
+wrapper.appendChild(app);
+app.appendChild(unit_view);
+app.appendChild(deck_view);
+app.appendChild(stats_view);
 //set the wrapper width and height to the size of the window
 
 //#endregion
 
 
 
-//# left sidebar (burger menu on vertical)
-const sidebar = document.createElement('div');
-sidebar.id = 'sidebar';
-//add a button to the sidebar to toggle the sidebar
-const toggleSidebarButton = document.createElement('button');
-toggleSidebarButton.innerHTML = '🍔';
-toggleSidebarButton.id = 'toggleSidebarButton';
-sidebar.classList.add('sidebar_inactive');
-sidebar.appendChild(toggleSidebarButton);
-var sidebarActive = true;
-const sidebar_title_div = document.createElement('div');
-sidebar_title_div.id = 'sidebar_title_div';
-sidebar_title_div.innerHTML = 'BAces_Tools';
-const sidebar_title_v_div = document.createElement('div');
-sidebar_title_v_div.id = 'sidebar_title_div_v';
-sidebar_title_v_div.innerHTML = 'BAces_Tools';
-const sidebar_content_div = document.createElement('div');
-sidebar_content_div.id = 'sidebar_content_div';
-const sidebar_footer_div = document.createElement('div');
-sidebar_footer_div.classList.add('sidebar_footer_div')
-const sidebar_footer_contents = document.createElement('div');
-sidebar_footer_div.appendChild(sidebar_footer_contents);
-sidebar_footer_contents.innerHTML = "<b>BAces_Tools has no affiliation with Uncapped Games";
-const sidebar_footer_contents2 = document.createElement('div');
-sidebar_footer_div.appendChild(sidebar_footer_contents2);
-sidebar_footer_contents2.innerHTML = "All rights to any content displayed remain the property of Uncapped Games.";
-const sidebar_footer_contents3 = document.createElement('div');
-sidebar_footer_div.appendChild(sidebar_footer_contents3);
-sidebar_footer_contents3.innerHTML = "No warranties or guarantees are provided regarding the accuracy or completeness of the game data displayed. This toolkit is provided ‘as is’ and is for informational purposes only. Use of this toolkit does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains with its respective owner.";
-sidebar_footer_contents3.style.fontSize = '8px';
-//sidebar_footer_div.innerHTML = '<b></b>.<br> <br>';
-function sideBarRedraw() {
-	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
-	if (sidebarActive) {
-		sidebar.style.width = '200px';
-		wrapper.style.marginLeft = '200px';
-		sidebar.appendChild(sidebar_title_div);
-		sidebar.appendChild(sidebar_content_div);
-		sidebar.appendChild(sidebar_footer_div);
-		// if sidebar_title_v_div exists in sidebar
-		if (sidebar.contains(sidebar_title_v_div)) {
-			sidebar.removeChild(sidebar_title_v_div);
-		};
-	} else {
-		sidebar.style.width = '50px';
-		wrapper.style.marginLeft = '50px';
-		//if children exist
-		if (sidebar.children.length > 0) {
-			sidebar.removeChild(sidebar_title_div);
-			sidebar.appendChild(sidebar_title_v_div);
-			sidebar.removeChild(sidebar_content_div);
-			sidebar.removeChild(sidebar_footer_div);
-		}
-	}
-}
-sideBarRedraw()
-toggleSidebarButton.addEventListener('click', () => {
-	//toggle the sidebarToggle variable
-	sidebarActive = !sidebarActive;
-	sideBarRedraw();
-});
 
-document.body.appendChild(sidebar);
 document.body.appendChild(wrapper);
 
-
-//#tag sidebar-content this is where everything in the sidebar goes
-
-const linkData = [{
-	name: 'Battle Aces Official Website',
-	url: 'https://www.playbattleaces.com'
-}, {
-	name: '- Units',
-	url: 'https://www.playbattleaces.com/units'
-}, {
-	name: '- Leaderboards',
-	url: 'https://www.playbattleaces.com/leaderboards'
-}, {
-	name: 'BA Strategy Planner',
-	url: 'https://trevorcode.github.io/ba-strategy-planner/'
-}, {
-	name: 'Crablab.gg',
-	url: 'https://crablab.gg/'
-}, {
-	name: 'Battle Aces Stats',
-	url: 'https://battle-aces-stats.com'
-}, {
-	name: 'SimpleAces',
-	url: 'https://jackiefae.github.io/simpleaces.html'
-}, {
-	name: 'BA by Conqueror',
-	url: 'https://docs.google.com/spreadsheets/d/1Y5sro2kxbDu2fCmKHcKmEFuzjpDd8SsFaifKDFY1SIg/edit?gid=0#gid=0'
-}
-]
-
-
-//create a div which has a menu of links. The div should have a header, which can be clicked to expand, to show the links
-const linksDiv = document.createElement('div');
-linksDiv.classList.add('links_div');
-sidebar_content_div.appendChild(linksDiv);
-
-const linksHeader = document.createElement('div');
-linksHeader.classList.add('links_header');
-linksHeader.innerHTML = 'Links';
-linksDiv.appendChild(linksHeader);
-
-const linksContent = document.createElement('div');
-linksContent.classList.add('links_content');
-linksDiv.appendChild(linksContent);
-//for each link in linkData, create a link
-linkData.forEach((link) => {
-	const linkElement = document.createElement('a');
-	linkElement.href = link.url;
-	linkElement.innerHTML = link.name + '<br>';
-	linksContent.appendChild(linkElement);
-});
-//add event when links header is pressed
-linksHeader.addEventListener('click', () => {
-	//toggle the links div
-	linksDiv.classList.toggle('links_div_active');
-});
-
-//create a div for a countdown to the beta release date
-const countdownDiv = document.createElement('div');
-countdownDiv.classList.add('countdown_div');
-sidebar_content_div.appendChild(countdownDiv);
-const counDownDivCountdownText = document.createElement('p');
-counDownDivCountdownText.classList.add('countdown_text');
-countdownDiv.appendChild(counDownDivCountdownText);
-//get the remaining time in days hours minutes and secionds until the 6th of November, 12pm, PST American West Coast
-//returns a string
-function getRemainingTime() {
-	const now = new Date();
-	const targetDate = new Date('2024-11-06T12:00:00Z');
-	const timeDifference = targetDate - now;
-	const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-	const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-	const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-	const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-	//return the remaining time in a string
-	return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-}
-
-//set countdown div text to the remaining time using the function
-setInterval(() => {
-	counDownDivCountdownText.innerHTML = 'COUNTDOWN:<br>Closed Beta 2 Release: ' + getRemainingTime();
-}, 1000);
-
-
-//this is just a test for fun
-if (islocalhost) {//create a sidebar div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
-	const adsDiv = document.createElement('div');
-	adsDiv.classList.add('ads_div');
-	//adsDiv.innerHTML = '💸💰💲🤑 This is where the money I don\'t have goes 💰💸🤑🤑💸💲💰💸🤑💲💰💲';
-	adsDiv.style.textAlign = 'center';
-	adsDiv.style.fontWeight = 'bold';
-	adsDiv.style.color = 'gold';
-	adsDiv.style.textShadow = '0 0 10px black';
-	adsDiv.style.top = '50%';
-	//line spacing small
-	adsDiv.style.lineHeight = '.5';
-
-	adsDiv.style.fontSize = '60px';
-	sidebar_content_div.appendChild(adsDiv);
-}
 
 
 
