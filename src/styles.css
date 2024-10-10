@@ -129,18 +129,6 @@ select {
 	transform: translate(0, 20%);
 }
 
-.chartDiv {
-	background-color: rgba(0, 0, 0, 0.5);
-	width: 92px;
-	height: 36px;
-	margin: 3px;
-	padding: 3px;
-	border-width: 2px;
-	border: none;
-	border-color: white;
-	z-index: 10;
-}
-
 #statsUnitName {
 	position: absolute;
 	border-width: 1px;
@@ -157,14 +145,47 @@ select {
 }
 
 #statsChartContainer {
-	position: absolute;
+	position: relative;
+	left: 60%;
+	top: 10%;
+	width: 180px;
+	right: 10%;
 	border-width: 1px;
 	border: none;
-	right: 10%;
-	top: 10%;
+	padding: 5px;
+
 	border-color: rgb(0, 0, 0);
-	background-color: rgba(255, 255, 255, 0.185);
+	background-color: rgba(0, 0, 0, 0.185);
 	z-index: 10;
+}
+
+.chartDiv {
+	position: relative;
+	background-color: rgba(0, 0, 0, 0.5);
+	left: 45%;
+	width: 45%;
+	height: 20%;
+	margin: 3px;
+	padding: 3px;
+	border: dashed;
+	border-color: rgba(255, 255, 255, 0.479);
+	z-index: 10;
+	border-width: 1px;
+}
+
+#statsUnitRankDiv {
+	font-style: italic;
+	position: absolute;
+	line-height: 160%;
+	font-weight: 800;
+	font-size: 20px;
+	-webkit-text-stroke-width: 2px;
+	-webkit-text-stroke-color: rgba(26, 21, 0, 0.678);
+	top: 0%;
+	padding: 5px;
+	bottom: 0%;
+	right: 55%;
+	left: 10%;
 }
 
 #unitVideo {

@@ -4,6 +4,18 @@ import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import jsonUnitsBase from './units.json';
 
+var islocalhost = false;
+
+if (window.location.href == 'http://localhost:7112/') {
+	console.log('local host');
+	islocalhost = true;
+}
+else {
+	console.log('not local host');
+	islocalhost = false;
+}
+console.log(window.location.href, islocalhost);
+
 //#region unit-definition creates units from json entry
 //create an empty object to use as a base of the units, that has a new constructor to create a object
 class Unit {
@@ -250,6 +262,50 @@ linksHeader.addEventListener('click', () => {
 	//toggle the links div
 	linksDiv.classList.toggle('links_div_active');
 });
+
+//create a div for a countdown to the beta release date
+const countdownDiv = document.createElement('div');
+countdownDiv.classList.add('countdown_div');
+sidebar_content_div.appendChild(countdownDiv);
+const counDownDivCountdownText = document.createElement('p');
+counDownDivCountdownText.classList.add('countdown_text');
+countdownDiv.appendChild(counDownDivCountdownText);
+//get the remaining time in days hours minutes and secionds until the 6th of November, 12pm, PST American West Coast
+//returns a string
+function getRemainingTime() {
+	const now = new Date();
+	const targetDate = new Date('2024-11-06T12:00:00Z');
+	const timeDifference = targetDate - now;
+	const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+	const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+	const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+	//return the remaining time in a string
+	return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+//set countdown div text to the remaining time using the function
+setInterval(() => {
+	counDownDivCountdownText.innerHTML = 'COUNTDOWN:<br>Closed Beta 2 Release: ' + getRemainingTime();
+}, 1000);
+
+
+//this is just a test for fun
+if (islocalhost) {//create a sidebar div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
+	const adsDiv = document.createElement('div');
+	adsDiv.classList.add('ads_div');
+	adsDiv.innerHTML = '💸💰💲🤑 This is where the money I don\'t have goes 💰💸🤑🤑💸💲💰💸🤑💲💰💲';
+	adsDiv.style.textAlign = 'center';
+	adsDiv.style.fontWeight = 'bold';
+	adsDiv.style.color = 'gold';
+	adsDiv.style.textShadow = '0 0 10px black';
+	adsDiv.style.top = '50%';
+	//line spacing small
+	adsDiv.style.lineHeight = '.5';
+
+	adsDiv.style.fontSize = '60px';
+	sidebar_content_div.appendChild(adsDiv);
+}
 
 
 
@@ -1013,12 +1069,20 @@ function sortColors(unitName, data, label) {
 
 var currentUnit = 'crusader';
 
-
+console.log('sorterd unit data')
+console.log('------------------------------')
+console.log(sortedUnitData)
 
 
 var statsChartContainer = document.createElement('div');
 statsChartContainer.id = 'statsChartContainer';
 stats_content.appendChild(statsChartContainer);
+
+var statsUnitRankDiv = document.createElement('div');
+statsUnitRankDiv.id = 'statsUnitRankDiv';
+statsChartContainer.appendChild(statsUnitRankDiv);
+statsUnitRankDiv.innerHTML = 'Rank';
+
 var statsUnitName = document.createElement('div');
 statsUnitName.id = 'statsUnitName';
 statsUnitName.innerHTML = 'Unit Name';
@@ -1134,6 +1198,38 @@ function drawAllBarCharts() {
 }
 drawAllBarCharts();
 
+function updateRank(label, unit) {
+	var rank = sortedUnitData[label].length - sortedUnitData[label].findIndex(value => value === unit[label]);
+	//also add a style tag to the html which changes the font to the appropriate statColor
+	//statsUnitRankDiv.innerHTML += rank + '<sup>' + getRankSuffix(rank) + '</sup><BR>';
+	statsUnitRankDiv.innerHTML += '<span style="color:' + unitStatColors[label] + '">' + rank + '<sup>' + getRankSuffix(rank) + '</sup></span><BR>';
+}
+//write a function to add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
+function getRankSuffix(rank) {
+	//if rank ends in 1
+	if (rank % 10 == 1) return 'st';
+	//if rank ends in 2
+	else if (rank % 10 == 2) return 'nd';
+	//if rank ends in 3
+	else if (rank % 10 == 3) return 'rd';
+	else return 'th';
+}
+
+//create a function which returns a colour on a gradient scale from red to green based on the value
+function getColour(value, min, max) {
+	//set defaults for min and max to 0 and 50
+	//if min and max are not provided, use the min and max values of the data
+	if (min == undefined) min = Math.min(...sortedUnitData);
+	var red = Math.round((value - min) * 255 / (max - min));
+	var green = 255 - red;
+	var color = 'rgb(' + red + ', ' + green + ', 0)';
+	return color;
+}
+
+console.log(getColour(.5, 0, 1));
+
+
+var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 var oldE = null
 function unitMouseOver(e) {
 	//if we are
@@ -1163,6 +1259,15 @@ function unitMouseOver(e) {
 	for (var [key] of Object.entries(sortedUnitData)) {
 		updateChart(barCharts[key], key);
 	}
+
+	//update the rank for each stat
+	//update the ranks for each label for each unit stat
+	//update the ranks for each label for each unit stat
+	statsUnitRankDiv.innerHTML = '';
+	unitStats.forEach(function (label) {
+		updateRank(label, unit);
+	});
+
 	/**
 	updateChart(barCharts['health'], 'health');
 	updateChart(barCharts['damage'], 'damage');
@@ -1182,4 +1287,6 @@ for (var i = 0; i < unit_table.length; i++) {
 	unit_table[i].addEventListener('mouseover', statRedrawMouseOver);
 }
 	*/
+
+
 
