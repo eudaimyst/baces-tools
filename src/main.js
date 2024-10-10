@@ -1012,12 +1012,20 @@ function sortColors(unitName, data, label) {
 
 var currentUnit = 'crusader';
 
-
+console.log('sorterd unit data')
+console.log('------------------------------')
+console.log(sortedUnitData)
 
 
 var statsChartContainer = document.createElement('div');
 statsChartContainer.id = 'statsChartContainer';
 stats_content.appendChild(statsChartContainer);
+
+var statsUnitRankDiv = document.createElement('div');
+statsUnitRankDiv.id = 'statsUnitRankDiv';
+statsChartContainer.appendChild(statsUnitRankDiv);
+statsUnitRankDiv.innerHTML = 'Rank';
+
 var statsUnitName = document.createElement('div');
 statsUnitName.id = 'statsUnitName';
 statsUnitName.innerHTML = 'Unit Name';
@@ -1133,6 +1141,24 @@ function drawAllBarCharts() {
 }
 drawAllBarCharts();
 
+function updateRank(label, unit) {
+	var rank = sortedUnitData[label].length - sortedUnitData[label].findIndex(value => value === unit[label]);
+	//also add a style tag to the html which changes the font to the appropriate statColor
+	//statsUnitRankDiv.innerHTML += rank + '<sup>' + getRankSuffix(rank) + '</sup><BR>';
+	statsUnitRankDiv.innerHTML += '<span style="color:' + unitStatColors[label] + '">' + rank + '<sup>' + getRankSuffix(rank) + '</sup></span><BR>';
+}
+//write a function to add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
+function getRankSuffix(rank) {
+	//if rank ends in 1
+	if (rank % 10 == 1) return 'st';
+	//if rank ends in 2
+	else if (rank % 10 == 2) return 'nd';
+	//if rank ends in 3
+	else if (rank % 10 == 3) return 'rd';
+	else return 'th';
+}
+
+var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 var oldE = null
 function unitMouseOver(e) {
 	//if we are
@@ -1162,6 +1188,15 @@ function unitMouseOver(e) {
 	for (var [key] of Object.entries(sortedUnitData)) {
 		updateChart(barCharts[key], key);
 	}
+
+	//update the rank for each stat
+	//update the ranks for each label for each unit stat
+	//update the ranks for each label for each unit stat
+	statsUnitRankDiv.innerHTML = '';
+	unitStats.forEach(function (label) {
+		updateRank(label, unit);
+	});
+
 	/**
 	updateChart(barCharts['health'], 'health');
 	updateChart(barCharts['damage'], 'damage');
