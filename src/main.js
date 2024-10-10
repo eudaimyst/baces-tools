@@ -397,6 +397,16 @@ for (var i = 0; i < 8; i++) {
 	//when div is mouseover, make it turn black, then return after mouseover
 	div.addEventListener('mouseover', function () {
 		this.style.backgroundColor = 'black';
+		var slotNumber = this.id.slice(-1);
+		var deck = decks[0];
+		// remove the unit from the deck array
+		if (deck[slotNumber]) {
+			console.log(slotNumber + ' mouseOver - ' + deck[slotNumber].name);
+			//trigger the mouseover event
+			//get the unit from the unitlist by the unit name
+			var unit = unitList.find(unit => unit.name === deck[slotNumber].name);
+			unitMouseOverAndTapped(unit);
+		}
 	});
 
 	//if the mouse is clicked
@@ -412,6 +422,10 @@ for (var i = 0; i < 8; i++) {
 		else {
 			console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
 			//setFilter(slotBuildings[i]);
+			//set the filter input box to the name of the building
+			unit_filter_input.value = slotBuildings[slotNumber];
+			//run the unit_filter input changed event
+			unit_filter_input.dispatchEvent(new Event('input'));
 		}
 		redrawDeckContent(0);
 	});
@@ -699,6 +713,19 @@ unit_filter_input.id = 'unit_filter_input';
 unit_filter_input.placeholder = 'filter';
 unit_filter_input.classList.add('header_element');
 unit_view_header.appendChild(unit_filter_input);
+
+//filter clear button that clears the filter
+const unit_filter_clear_btn = document.createElement('button');
+unit_filter_clear_btn.innerHTML = 'clear';
+unit_filter_clear_btn.id = 'unit_filter_clear_btn';
+unit_filter_clear_btn.classList.add('header_element');
+unit_view_header.appendChild(unit_filter_clear_btn);
+unit_filter_clear_btn.onclick = function () {
+	//clear the filter
+	unit_filter_input.value = '';
+	//run the unit_filter input changed event
+	unit_filter_input.dispatchEvent(new Event('input'));
+}
 
 /**
  *
@@ -1341,8 +1368,13 @@ function getColour(value, min, max) {
 
 console.log(getColour(.5, 0, 1));
 
-
+var unitMouseOverAndTappedPrev = null;
 function unitMouseOverAndTapped(unit) {
+	if (unitMouseOverAndTappedPrev == unit) {
+		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
+		return;
+	}
+	unitMouseOverAndTappedPrev = unit;
 	//console.log(e.target.id);
 	//get the unit name from the cells parent (which is the row), using the name table header
 
