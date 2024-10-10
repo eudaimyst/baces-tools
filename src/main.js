@@ -294,7 +294,7 @@ setInterval(() => {
 if (islocalhost) {//create a sidebar div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
 	const adsDiv = document.createElement('div');
 	adsDiv.classList.add('ads_div');
-	adsDiv.innerHTML = '💸💰💲🤑 This is where the money I don\'t have goes 💰💸🤑🤑💸💲💰💸🤑💲💰💲';
+	//adsDiv.innerHTML = '💸💰💲🤑 This is where the money I don\'t have goes 💰💸🤑🤑💸💲💰💸🤑💲💰💲';
 	adsDiv.style.textAlign = 'center';
 	adsDiv.style.fontWeight = 'bold';
 	adsDiv.style.color = 'gold';
@@ -1082,10 +1082,44 @@ statsUnitRankDiv.id = 'statsUnitRankDiv';
 statsChartContainer.appendChild(statsUnitRankDiv);
 statsUnitRankDiv.innerHTML = 'Rank';
 
+var statsUnitBottomContainer = document.createElement('div');
+statsUnitBottomContainer.id = 'statsUnitBottomContainer';
+statsUnitBottomContainer.innerHTML = '';
+stats_content.appendChild(statsUnitBottomContainer);
+
 var statsUnitName = document.createElement('div');
 statsUnitName.id = 'statsUnitName';
-statsUnitName.innerHTML = 'Unit Name';
-stats_content.appendChild(statsUnitName);
+statsUnitName.innerHTML = currentUnit.name;
+statsUnitBottomContainer.appendChild(statsUnitName);
+
+//using stats and matter div below as a template, make a function that creates such divs for other unit stats
+
+function createStatsUnitDiv(label) {
+	var statsUnitDiv = document.createElement('div');
+	statsUnitDiv.classList.add('statsUnitResourceContainer');
+	var statsUnitImg = document.createElement('img');
+	statsUnitImg.classList.add('unitStatsResourceImg');
+	//set the src of the img to the relevant label icon
+	statsUnitImg.src = 'images/resources/' + label + '.svg';
+	//add the img to the matterDiv
+	statsUnitDiv.appendChild(statsUnitImg);
+	//add a text value to energy div for the units energy value
+	var statsUnitValue = document.createElement('div');
+	statsUnitValue.id = 'statsUnit' + label + 'Value';
+	statsUnitValue.classList.add('unitStatsResourceValue');
+	statsUnitDiv.appendChild(statsUnitValue);
+	return statsUnitDiv;
+}
+
+var statsUnitMatterDiv = createStatsUnitDiv('Matter');
+var statsUnitEnergyDiv = createStatsUnitDiv('Energy');
+var statsUnitBandwidthDiv = createStatsUnitDiv('Bandwidth');
+
+
+
+statsUnitBottomContainer.appendChild(statsUnitMatterDiv);
+statsUnitBottomContainer.appendChild(statsUnitEnergyDiv);
+statsUnitBottomContainer.appendChild(statsUnitBandwidthDiv);
 
 var chartDivs = []
 var barCharts = []
@@ -1234,10 +1268,23 @@ function unitMouseOver(e) {
 	//if we are
 	if (e.target.id == oldE) return;
 	oldE = e.target.id;
+	var unit = unitList.find(unit => unit.name === e.target.id);
 	//console.log(e.target.id);
 	//get the unit name from the cells parent (which is the row), using the name table header
 	currentUnit = e.target.id;
-	statsUnitName.innerHTML = e.target.id;
+
+
+	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
+	//do the same as above, but add the matter and energy images before the values
+	statsUnitName.innerHTML = unit.name;
+	//get the div by its id
+	statsUnitMatterDiv.children[1].innerHTML = unit.matter;
+	statsUnitEnergyDiv.children[1].innerHTML = unit.energy;
+	statsUnitBandwidthDiv.children[1].innerHTML = unit.bandwidth;
+	//statsUnitEnergyValue.innerHTML = unit.energy;
+	//statsUnitMatterValue.innerHTML = unit.matter;
+	//create an img element of the relevant label icon
+	//add the img to the statsUnitName
 
 	//get the unit from unit list by its name
 	var unit = unitList.find(unit => unit.name === e.target.id);
