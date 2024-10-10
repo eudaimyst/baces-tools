@@ -1100,7 +1100,7 @@ function createStatsUnitDiv(label) {
 	var statsUnitImg = document.createElement('img');
 	statsUnitImg.classList.add('unitStatsResourceImg');
 	//set the src of the img to the relevant label icon
-	statsUnitImg.src = 'images/resources/' + label + '.svg';
+	statsUnitImg.src = 'images/resources/' + removeSpacesCapitalsSpecialCharacters(label) + '.svg';
 	//add the img to the matterDiv
 	statsUnitDiv.appendChild(statsUnitImg);
 	//add a text value to energy div for the units energy value
