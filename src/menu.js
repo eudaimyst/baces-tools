@@ -161,4 +161,4 @@ function advertisement() {
 }
 
 
-export { sidebar }
+export { sidebar, advertisement };

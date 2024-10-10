@@ -5,15 +5,7 @@ import Chart from 'chart.js/auto';
 import jsonUnitsBase from './units.json';
 import { sidebar } from './menu';
 
-if (window.location.href == 'http://localhost:7112/') {
-	console.log('local host');
-	islocalhost = true;
-}
-else {
-	console.log('not local host');
-	islocalhost = false;
-}
-console.log(window.location.href, islocalhost);
+
 
 //#region unit-definition creates units from json entry
 //create an empty object to use as a base of the units, that has a new constructor to create a object
