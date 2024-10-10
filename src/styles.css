@@ -126,11 +126,19 @@ select {
 #unitStatsImg {
 	width: 24px;
 	height: 24px;
-	transform: translate(0, 20%);
+	transform: translate(0, 10%);
 }
 
-#statsUnitName {
+.unitStatsResourceImg {
+	width: 20px;
+	height: 20px;
+	transform: translate(0, 40%);
+}
+
+#statsUnitBottomContainer {
 	position: absolute;
+	display: flex;
+	flex-direction: row;
 	border-width: 1px;
 	border: none;
 	left: 10%;
@@ -138,10 +146,30 @@ select {
 	border-color: rgb(255, 255, 255);
 	background-color: rgba(0, 0, 0, 0.5);
 	padding: 5px 25px 5px 25px;
+
 	z-index: 10;
 	font-style: bold;
 	font-size: x-large;
 	font-variant: small-caps;
+}
+
+#statsUnitEnergyValue {
+	color: rgb(68, 140, 233);
+}
+
+#statsUnitBandwidthValue {
+	color: rgb(233, 220, 43);
+}
+
+#statsUnitMatterValue {
+	color: rgb(255, 58, 58);
+}
+
+.statsUnitResourceContainer {
+	font-weight: 700;
+	display: flex;
+	flex-direction: row;
+	padding: 0 0 0 20px;
 }
 
 #statsChartContainer {
@@ -174,13 +202,10 @@ select {
 }
 
 #statsUnitRankDiv {
-	font-style: italic;
 	position: absolute;
 	line-height: 160%;
-	font-weight: 800;
+	font-weight: bold;
 	font-size: 20px;
-	-webkit-text-stroke-width: 2px;
-	-webkit-text-stroke-color: rgba(26, 21, 0, 0.678);
 	top: 0%;
 	padding: 5px;
 	bottom: 0%;
