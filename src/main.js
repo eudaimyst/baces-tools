@@ -52,7 +52,6 @@ class Unit {
 	}
 }
 
-
 var unitList = [];
 for (let i = 0; i < jsonUnitsBase.length; i++) {
 	unitList.push(new Unit(jsonUnitsBase[i]));;
@@ -130,16 +129,12 @@ wrapper.appendChild(app);
 app.appendChild(unit_view);
 app.appendChild(deck_view);
 app.appendChild(stats_view);
-//set the wrapper width and height to the size of the window
 
 //#endregion
 
 
 
-
 document.body.appendChild(wrapper);
-
-
 
 
 //#region deck-header section of the deck view

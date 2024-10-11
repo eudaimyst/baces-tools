@@ -8,7 +8,11 @@ body {
 }
 
 a {
-	color: white;
+	color: rgb(192, 192, 192);
+}
+
+a:hover {
+	color: rgb(255, 255, 255);
 }
 
 table {
@@ -33,6 +37,11 @@ td {
 	border-style: none;
 }
 
+#sidebarLogoImg {
+	width: 100%;
+	opacity: 20%;
+}
+
 tr {
 	height: 20px;
 }
@@ -53,12 +62,21 @@ button {
 	font-variant: all-small-caps;
 	font-style: bold;
 	background-color: rgba(39, 39, 39, 0.7);
-	color: rgb(255, 255, 255);
+	color: rgb(151, 151, 151);
 	border-radius: 10px;
 	border-width: 1px;
 	border-color: rgb(255, 255, 255);
 	border-style: double;
 	height: 60%;
+}
+
+button:hover {
+	color: rgb(255, 255, 255);
+}
+
+button:active {
+	color: rgb(151, 151, 151);
+	background-color: black;
 }
 
 select {
@@ -295,13 +313,23 @@ select {
 }
 
 #toggleSidebarButton {
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
 	position: relative;
 	font-size: xx-large;
-	height: auto;
-	width: auto;
+	height: 30px;
+	width: 30px;
 	top: 10px;
 	left: 50%;
+	background-image: 'images/burgericon.png';
 	transform: translate(-50%);
+}
+
+#toggleSidebarButtonImg {
+	padding: 0 0 0 0;
+	margin: 0 0 4 0;
+	height: 20px;
+	width: 20px;
 }
 
 #unit_view-h {
@@ -477,4 +505,5 @@ select {
 
 .links_content {
 	position: inherit;
+	color: grey;
 }
