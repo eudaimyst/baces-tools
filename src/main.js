@@ -984,8 +984,8 @@ function sortColors(unitName, data, label) {
 	//for each unit in sortedunitHealth, add a color based on whether it is before or after the unit with the unit name
 	//if it is before, add the color 'red', otherwise add the color 'black'
 	//add the color to the sortedColors array
-	var color;
-	color = unitStatColors[label];
+	var color = 'white';
+	//color = unitStatColors[label];
 	data.forEach(function (unit) {
 		sortedColors.push(color)
 		if (unit == unitName) { //once we reaach the name of the unit we set color to black which pushes the rest of the units as black bars
@@ -1165,10 +1165,10 @@ function updateRank(label, unit) {
 	//if unit has no airdps ignore it its rank
 	//console.log(unit);
 	if ((label == 'dpsa' && unit['dpsa'] == '0') || (label == 'damagea' && unit['damagea'] == '0')) {
-		statsUnitRankDiv.innerHTML += '<br>';
+		statsUnitRankDiv.innerHTML += '0<br>0<br>';
 	}
 	else {
-		statsUnitRankDiv.innerHTML += '<span style="color:' + unitStatColors[label] + '">' + rank + '<sup>' + getRankSuffix(rank) + '</sup></span><BR>';
+		statsUnitRankDiv.innerHTML += '<span style="color:' + 'white' + '">' + unit[label] + '<br>' + rank + '<sup>' + getRankSuffix(rank) + '</sup></span><BR>';
 	}
 
 }
