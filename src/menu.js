@@ -31,6 +31,19 @@ const linkData = [{
 //# left sidebar (burger menu on vertical)
 const sidebar = document.createElement('div');
 sidebar.id = 'sidebar';
+
+
+const sidebarLogoImg = document.createElement('img');
+sidebarLogoImg.src = 'images/baces_tools.svg';
+sidebarLogoImg.alt = 'BAces_Tools';
+
+sidebarLogoImg.id = 'sidebarLogoImg';
+sidebarLogoImg.style.width = '50px';
+
+sidebar.appendChild(sidebarLogoImg);
+
+
+
 //add a button to the sidebar to toggle the sidebar
 const toggleSidebarButton = document.createElement('button');
 toggleSidebarButton.innerHTML = '🍔';
@@ -60,6 +73,7 @@ sidebar_footer_contents3.innerHTML = "No warranties or guarantees are provided r
 sidebar_footer_contents3.style.fontSize = '8px';
 //sidebar_footer_div.innerHTML = '<b></b>.<br> <br>';
 function expandMenu(expand) {
+	sidebarLogoImg.style.width = '100%';
 	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
 	if (expand) {
 		sidebar.style.width = '200px';
@@ -76,17 +90,21 @@ function expandMenu(expand) {
 		// wrapper.style.marginLeft = '50px';
 		//if children exist
 		if (sidebar.children.length > 0) {
-			sidebar.removeChild(sidebar_title_div);
+			// if it is a child
+			if (sidebar.contains(sidebar_title_div)) {
+				sidebar.removeChild(sidebar_title_div);
+				sidebar.removeChild(sidebar_content_div);
+				sidebar.removeChild(sidebar_footer_div);
+			}
 			sidebar.appendChild(sidebar_title_v_div);
-			sidebar.removeChild(sidebar_content_div);
-			sidebar.removeChild(sidebar_footer_div);
 		}
 	}
 }
 toggleSidebarButton.addEventListener('click', () => {
-    sidebarActive = !sidebarActive;
+	sidebarActive = !sidebarActive;
 	expandMenu(!sidebarActive);
 });
+expandMenu(false);
 
 //#tag sidebar-content this is where everything in the sidebar goes
 
@@ -144,21 +162,27 @@ setInterval(() => {
 
 
 function advertisement() {
-    //create a div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
-    const adsDiv = document.createElement('div');
-    adsDiv.classList.add('ads_div');
-    //adsDiv.innerHTML = '💸💰💲🤑 This is where the money I don\'t have goes 💰💸🤑🤑💸💲💰💸🤑💲💰💲';
-    adsDiv.style.textAlign = 'center';
-    adsDiv.style.fontWeight = 'bold';
-    adsDiv.style.color = 'gold';
-    adsDiv.style.textShadow = '0 0 10px black';
-    adsDiv.style.top = '50%';
-    //line spacing small
-    adsDiv.style.lineHeight = '.5';
+	//create a div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
+	const adsDiv = document.createElement('div');
+	adsDiv.classList.add('ads_div');
+	//adsDiv.innerHTML = '💸💰💲🤑 This is where the money I don\'t have goes 💰💸🤑🤑💸💲💰💸🤑💲💰💲';
+	adsDiv.style.textAlign = 'center';
+	adsDiv.style.fontWeight = 'bold';
+	adsDiv.style.color = 'gold';
+	adsDiv.style.textShadow = '0 0 10px black';
+	adsDiv.style.top = '50%';
+	//line spacing small
+	adsDiv.style.lineHeight = '.5';
 
-    adsDiv.style.fontSize = '60px';
-    return adsDiv;
+	adsDiv.style.fontSize = '60px';
+	return adsDiv;
 }
 
 
+
+
 export { sidebar, advertisement };
+
+
+
+
