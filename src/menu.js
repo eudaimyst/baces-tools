@@ -46,10 +46,15 @@ sidebar.appendChild(sidebarLogoImg);
 
 //add a button to the sidebar to toggle the sidebar
 const toggleSidebarButton = document.createElement('button');
-toggleSidebarButton.innerHTML = '🍔';
 toggleSidebarButton.id = 'toggleSidebarButton';
 sidebar.classList.add('sidebar_inactive');
 sidebar.appendChild(toggleSidebarButton);
+//create a button image and add it to the toggleSidebarButton
+const toggleSidebarButtonImg = document.createElement('img');
+toggleSidebarButtonImg.src = 'images/burgericon.png';
+toggleSidebarButtonImg.id = 'toggleSidebarButtonImg';
+toggleSidebarButton.appendChild(toggleSidebarButtonImg);
+
 var sidebarActive = true;
 const sidebar_title_div = document.createElement('div');
 sidebar_title_div.id = 'sidebar_title_div';

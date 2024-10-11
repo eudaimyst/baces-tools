@@ -313,13 +313,23 @@ select {
 }
 
 #toggleSidebarButton {
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
 	position: relative;
 	font-size: xx-large;
-	height: auto;
-	width: auto;
+	height: 30px;
+	width: 30px;
 	top: 10px;
 	left: 50%;
+	background-image: 'images/burgericon.png';
 	transform: translate(-50%);
+}
+
+#toggleSidebarButtonImg {
+	padding: 0 0 0 0;
+	margin: 0 0 4 0;
+	height: 20px;
+	width: 20px;
 }
 
 #unit_view-h {
