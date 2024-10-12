@@ -428,6 +428,13 @@ sup {
 	height: 32px;
 }
 
+#deck_content {
+	background-color: rgba(34, 23, 0, 0.452);
+	border: dotted;
+	border-width: 2px;
+	display: flex;
+}
+
 .unit_table_cell_traits {
 	width: 100px;
 }
@@ -446,15 +453,28 @@ sup {
 	resize: none;
 }
 
-.unit_deck_slot_container_div {
+.deckSlotContainer {
 	width: 300px;
 	height: 150px;
-	border-color: black;
+	border-color: rgb(255, 166, 0);
 	border-width: 2px;
 	border-style: solid;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+}
+
+.deckContainer {
+	width: 300px;
+	bottom: 10px;
+	border-color: rgb(11, 150, 46);
+	border-width: 2px;
+	border-style: solid;
+	overflow: hidden;
+}
+
+.deck2Container {
+	border-color: red;
 }
 
 .unit_deck_slot_div {

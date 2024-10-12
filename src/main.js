@@ -79,6 +79,7 @@ var decks = []
 var deck1Contents = [];
 var deck2Contents = [];
 var deck1Slots = [];
+var deck2Slots = [];
 var slotBuildings = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge']
 decks.push(deck1Contents, deck2Contents);
 
@@ -154,122 +155,162 @@ deck_view_header.appendChild(deck2_button);
 
 //#region deck-content section of the deck view, includes: addUnitToDeck
 
-//create a text input box
-var deck_stats_div = document.createElement('div');
-deck_stats_div.classList.add('deck_stats_div');
-//create a table with 2 columns and 4 rows
-var deck_stats_table = document.createElement('table');
-deck_stats_table.classList.add('deck_stats_table');
-var deck_stats_table2 = document.createElement('table');
-deck_stats_table2.classList.add('deck_stats_table');
-var stat_categories = ['energy', 'matter', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
-var stat_category_cells = {} //stores the cells for each stat category to be updated
+//#tag deck-container 
+//create a function that uses the code below to allow for calling a function to create new deck containers
+function createNewDeckContainer() {
+	var deckContainer = document.createElement('div');
+	deckContainer.classList.add('deckContainer');
+	deck_content.appendChild(deckContainer);
+	return deckContainer;
+}
+var deckContainer = createNewDeckContainer();
 
-for (var i = 0; i < stat_categories.length; i++) {
-	//only every second category create a new row
-	var tr
-	if (i < 7) {
-		if (i % 2 == 0) tr = document.createElement('tr');
+var deck2Container = createNewDeckContainer();
+deck2Container.classList.add('deck2Container');
+//#tag slot-container 
+
+
+//#tag deckSlots divs for units
+function createDeckSlots(container) {
+
+	var deckSlotContainer = document.createElement('div');
+	deckSlotContainer.classList.add('deckSlotContainer');
+	container.appendChild(deckSlotContainer);
+	//create 8 square divs
+	for (var i = 0; i < 8; i++) {
+		var div = document.createElement('div');
+		deck1Slots[i] = div
+		div.classList.add('unit_deck_slot_div');
+		div.id = 'unit_deck_slot_div' + i;
+
+		var img = document.createElement('img');
+		img.id = 'deckSlotImage' + i;
+		img.src = 'images/techtiers/' + slotBuildings[i] + '.png';
+		img.setAttribute('alt', 'deck slot' + i);
+		img.setAttribute('title', 'deck slot' + i);
+		img.classList.add('deckSlotImage');
+		div.appendChild(img);
+		console.log("hello console" + i);
+		console.log(div.firstElementChild);
+
+		//when div is mouseover, make it turn black, then return after mouseover
+		div.addEventListener('mouseover', function () {
+			this.style.backgroundColor = 'black';
+			var slotNumber = this.id.slice(-1);
+			var deck = decks[0];
+			if (deck[slotNumber]) {
+				console.log(slotNumber + ' mouseOver - ' + deck[slotNumber].name);
+				//trigger the mouseover event
+				//get the unit from the unitlist by the unit name
+				var unit = unitList.find(unit => unit.name === deck[slotNumber].name);
+				unitMouseOverAndTapped(unit);
+			}
+		});
+
+		//if the mouse is clicked
+		div.addEventListener('click', function () {
+			var slotNumber = this.id.slice(-1);
+			var deck = decks[0];
+			// remove the unit from the deck array
+			if (deck[slotNumber]) {
+				console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck');
+				delete deck[slotNumber];
+				deck1Slots[slotNumber].classList.remove('unit_deck_slot_div_filled');
+			}
+			else {
+				console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
+				//setFilter(slotBuildings[i]);
+				//set the filter input box to the name of the building
+				unit_filter_input.value = slotBuildings[slotNumber];
+				//run the unit_filter input changed event
+				unit_filter_input.dispatchEvent(new Event('input'));
+			}
+			redrawDeckContent(0);
+		});
+
+		div.addEventListener('mouseout', function () {
+			this.style.backgroundColor = '';
+		});
+
+		deckSlotContainer.appendChild(div);
 	}
-	else {
-		tr = document.createElement('tr');
-	}
-	for (var j = 0; j < 2; j++) {
-		var td = document.createElement('td');
-		td.classList.add('deck_stats_td');
-		if (j == 1) {
-			stat_category_cells[stat_categories[i]] = td
+
+}
+createDeckSlots(deckContainer);
+createDeckSlots(deck2Container);
+
+//#tag stats-container 
+
+function createDeckStats(container) {
+
+	//create a text input box
+	var deck_stats_div = document.createElement('div');
+	deck_stats_div.classList.add('deck_stats_div');
+	//create a table with 2 columns and 4 rows
+	var deck_stats_table = document.createElement('table');
+	deck_stats_table.classList.add('deck_stats_table');
+	var deck_stats_table2 = document.createElement('table');
+	deck_stats_table2.classList.add('deck_stats_table');
+	var stat_categories = ['energy', 'matter', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
+	var stat_category_cells = {} //stores the cells for each stat category to be updated
+
+	for (var i = 0; i < stat_categories.length; i++) {
+		//only every second category create a new row
+		var tr
+		if (i < 7) {
+			if (i % 2 == 0) tr = document.createElement('tr');
 		}
 		else {
-			td.innerHTML = stat_categories[i];
+			tr = document.createElement('tr');
 		}
-		tr.appendChild(td);
+		for (var j = 0; j < 2; j++) {
+			var td = document.createElement('td');
+			td.classList.add('deck_stats_td');
+			if (j == 1) {
+				stat_category_cells[stat_categories[i]] = td
+			}
+			else {
+				td.innerHTML = stat_categories[i];
+			}
+			tr.appendChild(td);
+		}
+		if (i < 7) {
+			deck_stats_table.appendChild(tr);
+		}
+		else {
+			deck_stats_table2.appendChild(tr);
+		}
 	}
-	if (i < 7) {
-		deck_stats_table.appendChild(tr);
-	}
-	else {
-		deck_stats_table2.appendChild(tr);
-	}
+	deck_stats_div.appendChild(deck_stats_table);
+	deck_stats_div.appendChild(deck_stats_table2);
+
+	stat_category_cells.range.innerHTML = 'test';
+
+	var deckEmojiText = document.createElement('div');
+
+	//on unit_deck_input update
+	deckEmojiText.onchange = function () {
+		console.log('unit_deck_input');
+		redrawDeckContent();
+	};
+
+	deck_stats_div.appendChild(deckEmojiText);
+	container.appendChild(deck_stats_div);
+
+	return stat_category_cells;
 }
-deck_stats_div.appendChild(deck_stats_table);
-deck_stats_div.appendChild(deck_stats_table2);
 
-stat_category_cells.range.innerHTML = 'test';
+var stat_category_cells = createDeckStats(deckContainer);
+stat_category_cells = createDeckStats(deck2Container);
+console.log("STAT CATEGORY CELLS");
+console.log(stat_category_cells);
 
-
-var deck_text_div = document.createElement('div');
-
-//#tag deckSlots div for unit deck slots
 //create 1 div to hold all the unit deck slots
-var unit_deck_slot_container_div = document.createElement('div');
-unit_deck_slot_container_div.classList.add('unit_deck_slot_container_div');
-deck_content.appendChild(unit_deck_slot_container_div);
-//create 8 square divs
-for (var i = 0; i < 8; i++) {
-	var div = document.createElement('div');
-	deck1Slots[i] = div
-	div.classList.add('unit_deck_slot_div');
-	div.id = 'unit_deck_slot_div' + i;
 
-	var img = document.createElement('img');
-	img.id = 'deckSlotImage' + i;
-	img.src = 'images/techtiers/' + slotBuildings[i] + '.png';
-	img.setAttribute('alt', 'deck slot' + i);
-	img.setAttribute('title', 'deck slot' + i);
-	img.classList.add('deckSlotImage');
-	div.appendChild(img);
-	console.log("hello console" + i);
-	console.log(div.firstElementChild);
 
-	//when div is mouseover, make it turn black, then return after mouseover
-	div.addEventListener('mouseover', function () {
-		this.style.backgroundColor = 'black';
-		var slotNumber = this.id.slice(-1);
-		var deck = decks[0];
-		// remove the unit from the deck array
-		if (deck[slotNumber]) {
-			console.log(slotNumber + ' mouseOver - ' + deck[slotNumber].name);
-			//trigger the mouseover event
-			//get the unit from the unitlist by the unit name
-			var unit = unitList.find(unit => unit.name === deck[slotNumber].name);
-			unitMouseOverAndTapped(unit);
-		}
-	});
 
-	//if the mouse is clicked
-	div.addEventListener('click', function () {
-		var slotNumber = this.id.slice(-1);
-		var deck = decks[0];
-		// remove the unit from the deck array
-		if (deck[slotNumber]) {
-			console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck');
-			delete deck[slotNumber];
-			deck1Slots[slotNumber].classList.remove('unit_deck_slot_div_filled');
-		}
-		else {
-			console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
-			//setFilter(slotBuildings[i]);
-			//set the filter input box to the name of the building
-			unit_filter_input.value = slotBuildings[slotNumber];
-			//run the unit_filter input changed event
-			unit_filter_input.dispatchEvent(new Event('input'));
-		}
-		redrawDeckContent(0);
-	});
-
-	div.addEventListener('mouseout', function () {
-		this.style.backgroundColor = '';
-	});
-
-	unit_deck_slot_container_div.appendChild(div);
-}
-
-deck_stats_div.appendChild(deck_text_div);
-deck_content.appendChild(deck_stats_div);
-
-function calculateDeckStats() {
-	var deck = decks[currentDeck];
+function calculateDeckStats(deckID) {
+	var deck = decks[deckID];
 	var stats = {
 		energy: 0,
 		matter: 0,
@@ -285,6 +326,7 @@ function calculateDeckStats() {
 	};
 	for (var i = 0; i < deck.length; i++) {
 		if (deck[i] != undefined) {
+			console.log(deck[i]);
 			for (var key in stats) {
 				if (deck[i][key] != undefined) {
 					if (key == 'ability' || key == 'type' || key == 'traits' || key == 'manufacturer') {
@@ -390,28 +432,23 @@ function calculateDeckStats() {
 
 
 function redrawDeckContent(deckID) {
-	calculateDeckStats();
+	calculateDeckStats(deckID);
 	//iterate through deckslots
 	//deck_stats.innerHTML = 'deck stats:\nhello';
 	var deck = decks[deckID];
-	deck_text_div.innerHTML = ''
+	//deckEmojiText.innerHTML = ''
 	//for each deck1slot
 	deck1Slots.forEach((slot, i) => {
 		slot.firstElementChild.src = 'images/techtiers/' + slotBuildings[i] + '.png';
 	});
 	deck.forEach((unit, i) => {
-		deck_text_div.innerHTML += unit.emoji + ' ';
+		//deckEmojiText.innerHTML += unit.emoji + ' ';
 		//slot.innerHTML = deck[index].name;
 		deck1Slots[i].firstElementChild.src = 'images/units/' + unit.image + '.png';
 	});
 
 }
 
-//on unit_deck_input update
-deck_text_div.onchange = function () {
-	console.log('unit_deck_input');
-	redrawDeckContent();
-};
 
 
 
@@ -960,15 +997,6 @@ var sortedUnitData = {
 	dpsg: [],
 	dpsa: [],
 }
-var unitStatColors = {
-	health: '#48F07D',
-	damage: '#EF4C48',
-	damagea: '#EF4C48',
-	speed: '#F0CA2E',
-	range: '#E68B40',
-	dpsg: '#484CEF',
-	dpsa: '#484CEF',
-}
 var sortData = {
 	health: simpleSort(unitList, 'health', sortedUnitData.health),
 	damage: simpleSort(unitList, 'damage', sortedUnitData.damage),
@@ -979,11 +1007,8 @@ var sortData = {
 	dpsa: simpleSort(unitList, 'dpsa', sortedUnitData.dpsa),
 }
 
-function sortColors(unitName, data, label) {
+function sortColors(unitName, data) {
 	var sortedColors = []
-	//for each unit in sortedunitHealth, add a color based on whether it is before or after the unit with the unit name
-	//if it is before, add the color 'red', otherwise add the color 'black'
-	//add the color to the sortedColors array
 	var color = 'white';
 	//color = unitStatColors[label];
 	data.forEach(function (unit) {
@@ -1165,7 +1190,7 @@ function updateRank(label, unit) {
 	//if unit has no airdps ignore it its rank
 	//console.log(unit);
 	if ((label == 'dpsa' && unit['dpsa'] == '0') || (label == 'damagea' && unit['damagea'] == '0')) {
-		statsUnitRankDiv.innerHTML += '0<br>0<br>';
+		statsUnitRankDiv.innerHTML += '<br><br>';
 	}
 	else {
 		statsUnitRankDiv.innerHTML += '<span style="color:' + 'white' + '">' + unit[label] + '<br>' + rank + '<sup>' + getRankSuffix(rank) + '</sup></span><BR>';
