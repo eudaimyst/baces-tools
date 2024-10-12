@@ -31,7 +31,6 @@ th {
 
 
 td {
-	font-size: 16px;
 	border-width: 1px;
 	border-color: rgba(0, 0, 0, 0.075);
 	border-style: none;
@@ -49,13 +48,14 @@ tr {
 input {
 	background-color: rgba(0, 0, 0, 0.7);
 	border-width: 1px;
-	color: yellow;
+	color: rgb(212, 201, 45);
 	font-variant-caps: all-small-caps;
 }
 
 .filterHidden {
 	opacity: 0%;
 }
+
 
 button {
 	font-size: 14px;
@@ -68,6 +68,10 @@ button {
 	border-color: rgb(255, 255, 255);
 	border-style: double;
 	height: 60%;
+}
+
+.selected {
+	color: rgb(212, 201, 45);
 }
 
 button:hover {
@@ -170,7 +174,6 @@ select {
 	padding: 5px 25px 5px 25px;
 
 	z-index: 10;
-	font-style: bold;
 	font-size: x-large;
 	font-variant: small-caps;
 }
@@ -223,13 +226,21 @@ select {
 	border-width: 1px;
 }
 
+sup {
+	vertical-align: top;
+	font-size: 6px;
+	position: relative;
+	top: -0.5em;
+}
+
 #statsUnitRankDiv {
 	position: absolute;
 	line-height: 160%;
-	font-weight: bold;
-	font-size: 20px;
-	top: 0%;
-	padding: 5px;
+	font-weight: 300;
+	font-size: 12px;
+	text-align: right;
+	top: 3%;
+	padding: 0px;
 	bottom: 0%;
 	right: 55%;
 	left: 10%;
@@ -416,8 +427,18 @@ select {
 }
 
 .unit_table_image_small {
-	width: 32px;
-	height: 32px;
+	width: 24px;
+	height: 24px;
+}
+
+#deck_content {
+	padding: 2%;
+	background-color: rgba(5, 1, 66, 0.678);
+	border: dotted;
+	border-width: 0px;
+	display: flex;
+	flex-flow: row;
+	justify-content: space-evenly;
 }
 
 .unit_table_cell_traits {
@@ -438,21 +459,34 @@ select {
 	resize: none;
 }
 
-.unit_deck_slot_container_div {
+.deckSlotContainer {
 	width: 300px;
 	height: 150px;
-	border-color: black;
-	border-width: 2px;
+	border-color: rgb(2, 1, 90);
+	border-width: 4px;
 	border-style: solid;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
 
+.deckContainer {
+	width: 310px;
+	bottom: 10px;
+	border-color: rgb(35, 179, 71);
+	border-width: 2px;
+	border-style: none;
+	overflow: hidden;
+}
+
+.deck2Container {
+	border-color: rgb(92, 13, 13);
+}
+
 .unit_deck_slot_div {
 	width: 60px;
 	height: 60px;
-	border-color: black;
+	border-color: rgba(2, 0, 36, 0.781);
 	border-width: 2px;
 	border-style: solid;
 	display: flex;
@@ -462,12 +496,18 @@ select {
 	overflow: hidden;
 }
 
-.unit_deck_slot_div_filled {
-	border-color: green;
+.unit_deck1_slot_div_filled {
+	border-color: rgb(19, 104, 19);
+}
+
+.unit_deck2_slot_div_filled {
+	border-color: rgb(104, 24, 24);
 }
 
 .deck_stats_div {
+	font-weight: 350;
 	font-size: 16px;
+	line-height: 80%;
 	width: 300px;
 	border: 0px;
 	border-style: solid;
@@ -475,17 +515,31 @@ select {
 }
 
 .deck_stats_table {
+	font-variant: small-caps;
 	width: 300px;
 }
 
+.deck_stats_img {
+	width: 15px;
+	height: 15px;
+
+}
+
 .deck_stats_td {
+	border: none;
+	border-width: 1px;
 	padding: 0px;
+	width: 300px;
 	margin: 0px;
 }
 
-#deck2_button {
-	color: grey;
-	border-color: grey;
+.deck_stats_td_right {
+	border: dashed;
+	border-color: rgb(0, 0, 0);
+	border-width: 1px;
+	padding: 0px;
+	width: 1200px;
+	margin: 0px;
 }
 
 #compare_button {
