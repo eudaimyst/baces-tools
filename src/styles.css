@@ -70,10 +70,6 @@ button {
 	height: 60%;
 }
 
-.selected {
-	color: rgb(212, 201, 45);
-}
-
 button:hover {
 	color: rgb(255, 255, 255);
 }
@@ -542,11 +538,6 @@ sup {
 	margin: 0px;
 }
 
-#compare_button {
-	color: grey;
-	border-color: grey;
-}
-
 #unit_view_card_btn {
 	color: grey;
 	border-color: grey;
@@ -560,4 +551,8 @@ sup {
 .links_content {
 	position: inherit;
 	color: grey;
+}
+
+.selected {
+	color: rgb(212, 201, 45);
 }

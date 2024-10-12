@@ -547,21 +547,6 @@ function addUnitToDeck(unit, deckID) {
 //#endregion
 
 
-//#region stats-header
-
-const stats_button = document.createElement('button');
-stats_button.innerHTML = 'stats';
-stats_button.id = 'deck1_button';
-stats_button.classList.add('header_element');
-stats_view_header.appendChild(stats_button);
-const compare_button = document.createElement('button');
-compare_button.innerHTML = 'compare';
-compare_button.id = 'compare_button';
-compare_button.classList.add('header_element');
-stats_view_header.appendChild(compare_button);
-
-//#endregion
-
 //#region unit-div-header
 //label
 const sort_label = document.createElement('p');
@@ -1022,12 +1007,37 @@ function simpleSort(list, key, sortedArray) {
 }
 
 
-//#region stats-content
 
-
+//#region stats-header
+var statsMode = 0 //0 = unit, 1 = compare
+const stats_button = document.createElement('button');
+stats_button.innerHTML = 'unit';
+stats_button.id = 'stats_button';
+stats_button.classList.add('header_element');
+stats_view_header.appendChild(stats_button);
+//when button is pressed set current mode to unit
+stats_button.addEventListener('click', function () {
+	statsMode = 0
+	stats_button.classList.add('selected');
+	compare_button.classList.remove('selected');
+	refreshStatsContent()
+});
+const compare_button = document.createElement('button');
+compare_button.innerHTML = 'compare';
+compare_button.id = 'compare_button';
+compare_button.classList.add('header_element');
+stats_view_header.appendChild(compare_button);
+//when deck 2 is pressed it should set current deck to 1
+compare_button.addEventListener('click', function () {
+	statsMode = 1;
+	stats_button.classList.remove('selected');
+	compare_button.classList.add('selected');
+	refreshStatsContent()
+});
+stats_button.classList.add('selected');
 
 //#endregion
-
+//#region stats-content
 
 
 var sortedUnitData = {
@@ -1264,8 +1274,10 @@ function getColour(value, min, max) {
 
 console.log(getColour(.5, 0, 1));
 
+var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 var unitMouseOverAndTappedPrev = null;
 function unitMouseOverAndTapped(unit) {
+	if (statsMode != 0) return;
 	if (unitMouseOverAndTappedPrev == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
 		return;
@@ -1323,7 +1335,26 @@ function unitMouseOverAndTapped(unit) {
 
 }
 
-var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
+
+function refreshStatsContent() {
+	while (stats_content.firstChild) {
+		stats_content.removeChild(stats_content.firstChild);
+	};
+	if (statsMode == 0) {
+		stats_content.appendChild(video);
+		video.play();
+		stats_content.appendChild(statsUnitBottomContainer);
+		stats_content.appendChild(statsChartContainer);
+	}
+	if (statsMode == 1) {
+		//remove all children from stats_content
+
+	}
+}
+
+refreshStatsContent()
+//#endregion
+
 var oldE = null
 function unitMouseOver(e) {
 	//if we are
