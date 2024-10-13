@@ -1532,6 +1532,8 @@ function createResourceChart(id) {
 	canvas.id = 'resourceChart' + id;
 	canvas.classList.add('resourceChart');
 	resourcesComparisonChartContainer.appendChild(canvas);
+	var c1 = 'rgba(180, 255, 180, 0.05)';
+	var c2 = 'rgba(255, 180, 180, 0.05)';
 	var resourceChart = new Chart(canvas, {
 		type: 'bar',
 		data: {
@@ -1543,7 +1545,7 @@ function createResourceChart(id) {
 					type: 'bar',
 					data: [6, 22, 30],
 					borderColor: 'rgba(255, 206, 86, 1)',
-					backgroundColor: 'rgba(0, 0, 0, 0.2)',
+					backgroundColor: [c1, c1, c1, c2, c2, c2],
 					borderWidth: 2,
 					yAxisID: 'test3'
 				},
@@ -1553,7 +1555,7 @@ function createResourceChart(id) {
 					grouped: false,
 					data: [100, 250, 200],
 					borderColor: 'rgba(54, 162, 235, 1)',
-					backgroundColor: 'rgba(0, 0, 0, 0.2)',
+					backgroundColor: [c1, c1, c1, c2, c2, c2],
 					position: 'right',
 					borderWidth: 2,
 					yAxisID: 'test2'
@@ -1564,7 +1566,7 @@ function createResourceChart(id) {
 					type: 'bar',
 					data: [150, 350, 500],
 					borderColor: 'rgba(255, 99, 132, 1)',
-					backgroundColor: 'rgba(0, 0, 0, 0.2)',
+					backgroundColor: [c1, c1, c1, c2, c2, c2],
 					borderWidth: 2,
 					yAxisID: 'test1'
 				},
@@ -1572,10 +1574,35 @@ function createResourceChart(id) {
 		},
 		options: {
 			scales: {
-				y: {
-					beginAtZero: true
+				test1: {
+					display: false
+				},
+				test2: {
+					display: false
+				},
+				test3: {
+					display: false
+				},
+				x: {
+					ticks: {
+						color: 'rgba(255, 255, 255, .8)',
+						font: {
+							size: 14
+						}
+					}
+
 				}
-			}
+			},
+			plugins: {
+				legend: {
+					labels: {
+						color: 'rgba(255, 255, 255, .8)',
+						font: {
+							size: 14
+						}
+					}
+				},
+			},
 		}
 	});
 	return resourceChart;
@@ -1598,19 +1625,19 @@ function calculateTierValues() {
 			var x = (3 * deckID);
 			if (unit) {
 				if (unit.tier == 1) {
-					t1[0 + x] += unit.matter;
+					t1[0 + x] += unit.bandwidth;
 					t1[1 + x] += unit.energy;
-					t1[2 + x] += unit.bandwidth;
+					t1[2 + x] += unit.matter;
 				}
 				else if (unit.tier == 2) {
-					t2[0 + x] += unit.matter;
+					t2[0 + x] += unit.bandwidth;
 					t2[1 + x] += unit.energy;
-					t2[2 + x] += unit.bandwidth;
+					t2[2 + x] += unit.matter;
 				}
 				else if (unit.tier == 3) {
-					t3[0 + x] += unit.matter;
+					t3[0 + x] += unit.bandwidth;
 					t3[1 + x] += unit.energy;
-					t3[2 + x] += unit.bandwidth;
+					t3[2 + x] += unit.matter;
 				}
 			}
 		}
