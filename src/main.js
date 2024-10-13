@@ -236,7 +236,7 @@ function createDeckSlots(container, deckID) {
 				delete deck[slotNumber];
 				deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
 				deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
-				updateChartData();
+				updateComparisonCharts();
 			}
 			else {
 				console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
@@ -543,7 +543,7 @@ function addUnitToDeck(unit, deckID) {
 	else console.log('deck limit reached');
 	console.log(decklen + '/8');
 	redrawDeckContent(deckID);
-	updateChartData();
+	updateComparisonCharts();
 }
 
 //#endregion
@@ -1012,6 +1012,7 @@ function simpleSort(list, key, sortedArray) {
 
 //#region stats-header
 var statsMode = 0 //0 = unit, 1 = compare
+var compareMode = 0 //0= stats, 1 = resources, 2 = traits
 const stats_button = document.createElement('button');
 stats_button.innerHTML = 'unit';
 stats_button.id = 'stats_button';
@@ -1037,6 +1038,25 @@ compare_button.addEventListener('click', function () {
 	refreshStatsContent()
 });
 stats_button.classList.add('selected');
+
+//dropdown to choose between stats, resource and traits comparison modes
+const stats_mode_select = document.createElement('select');
+stats_mode_select.id = 'stats_mode_select';
+stats_mode_select.classList.add('header_element');
+stats_view_header.appendChild(stats_mode_select);
+//add option to stats mode select for stats, resources and traits
+var stats_mode_select_options = ['stats', 'resources', 'traits'];
+stats_mode_select_options.forEach(function (option) {
+	var option_element = document.createElement('option');
+	option_element.value = option;
+	option_element.innerHTML = option;
+	stats_mode_select.appendChild(option_element);
+});
+//when an option is selected, set compareMode to the selected index
+stats_mode_select.addEventListener('change', function () {
+	compareMode = stats_mode_select.selectedIndex;
+	refreshStatsContent()
+});
 
 //#endregion
 //#region stats-content
@@ -1337,15 +1357,20 @@ function unitMouseOverAndTapped(unit) {
 
 }
 
-var comparisonChartContainer = document.createElement('div');
-comparisonChartContainer.id = 'comparisonChartContainer';
-comparisonChartContainer.innerHTML = '';
+var statsComparisonChartContainer = document.createElement('div');
+statsComparisonChartContainer.classList.add('comparisonChartContainer');
+statsComparisonChartContainer.innerHTML = '';
+
+var resourcesComparisonChartContainer = document.createElement('div');
+resourcesComparisonChartContainer.classList.add('comparisonChartContainer');
+resourcesComparisonChartContainer.innerHTML = '';
+
+var traitsComparisonChartContainer = document.createElement('div');
+traitsComparisonChartContainer.classList.add('comparisonChartContainer');
+traitsComparisonChartContainer.innerHTML = 'traitsComparisonChart';
 
 
-
-
-
-
+//#region statsComparisonChart "starchart", associated minmax and scaling functions
 var unitDeckStats = [];
 //get the unit deck stats from the deck div
 
@@ -1394,7 +1419,7 @@ function createStarchart(id) {
 	canvases[id] = document.createElement('canvas');
 	canvases[id].id = 'starchart' + id;
 	canvases[id].classList.add('starchart');
-	comparisonChartContainer.appendChild(canvases[id]);
+	statsComparisonChartContainer.appendChild(canvases[id]);
 
 	starcharts.push(new Chart(canvases[id], {
 		type: 'radar',
@@ -1460,15 +1485,12 @@ function doScaling(deckID, input, min, max) { //given an input value, and a mini
 	return value;
 }
 
-var deck1StatTotals = [0, 0, 0, 0, 0];
+var deck1StatTotals = [];
 var deck2StatTotals = [0, 0, 0, 0, 0];
 function scaleDeckTotals(d, deckID) {
 	//deck count scale factor
 	starchartUnitStats.forEach(function (stat, index) {
-		var min = starchartMinMax[stat][0];
-		var max = starchartMinMax[stat][1];
-		console.log(deckID + 'this one: ' + stat + ': ' + d[index]);
-		d[index] = doScaling(deckID, d[index], min, max);
+		d[index] = doScaling(deckID, d[index], starchartMinMax[stat][0], starchartMinMax[stat][1]);
 	});
 }
 
@@ -1487,7 +1509,7 @@ function updateDeckStatTotals(d, deckID) {
 	});
 }
 
-function updateChartData() {
+function updateStarchartData() {
 	deck1StatTotals = [];
 	deck2StatTotals = [];
 	updateDeckStatTotals(deck1StatTotals, 0);
@@ -1500,6 +1522,139 @@ function updateChartData() {
 	starcharts[1].update();
 }
 
+//#endregion
+
+//#region resourcesComparisonChartContainer
+
+var resourceChart
+function createResourceChart(id) {
+	var canvas = document.createElement('canvas');
+	canvas.id = 'resourceChart' + id;
+	canvas.classList.add('resourceChart');
+	resourcesComparisonChartContainer.appendChild(canvas);
+	var resourceChart = new Chart(canvas, {
+		type: 'bar',
+		data: {
+			labels: ['T1', 'T2', 'T3', 'T1', 'T2', 'T3'],
+			datasets: [
+				{
+					label: 'Bandwidth',
+					grouped: false,
+					type: 'bar',
+					data: [6, 22, 30],
+					borderColor: 'rgba(255, 206, 86, 1)',
+					backgroundColor: 'rgba(0, 0, 0, 0.2)',
+					borderWidth: 2,
+					yAxisID: 'test3'
+				},
+				{
+					label: 'Energy',
+					type: 'bar',
+					grouped: false,
+					data: [100, 250, 200],
+					borderColor: 'rgba(54, 162, 235, 1)',
+					backgroundColor: 'rgba(0, 0, 0, 0.2)',
+					position: 'right',
+					borderWidth: 2,
+					yAxisID: 'test2'
+				},
+				{
+					label: 'Matter',
+					grouped: false,
+					type: 'bar',
+					data: [150, 350, 500],
+					borderColor: 'rgba(255, 99, 132, 1)',
+					backgroundColor: 'rgba(0, 0, 0, 0.2)',
+					borderWidth: 2,
+					yAxisID: 'test1'
+				},
+			]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
+	return resourceChart;
+}
+resourceChart = createResourceChart(0)
+var matterValues = []
+var energyValues = []
+var bandwidthValues = []
+
+//calculate tier values based off the total matter, energy and bandwidth for units in each tier
+//add units in the deck with tier 1 and push their matter, energy and bandwidth values to the respective arrays
+function calculateTierValues() {
+	//for each unit in the deck, add its tier values to the respective arrays
+	var t1Totals = [0, 0, 0, 0, 0, 0];
+	var t2Totals = [0, 0, 0, 0, 0, 0];
+	var t3Totals = [0, 0, 0, 0, 0, 0];
+	function perDeck(deckID, t1, t2, t3) {
+		for (var i = 0; i < decks[deckID].length; i++) {
+			var unit = decks[deckID][i];
+			var x = (3 * deckID);
+			if (unit) {
+				if (unit.tier == 1) {
+					t1[0 + x] += unit.matter;
+					t1[1 + x] += unit.energy;
+					t1[2 + x] += unit.bandwidth;
+				}
+				else if (unit.tier == 2) {
+					t2[0 + x] += unit.matter;
+					t2[1 + x] += unit.energy;
+					t2[2 + x] += unit.bandwidth;
+				}
+				else if (unit.tier == 3) {
+					t3[0 + x] += unit.matter;
+					t3[1 + x] += unit.energy;
+					t3[2 + x] += unit.bandwidth;
+				}
+			}
+		}
+	}
+	console.log(t1Totals, t2Totals, t3Totals)
+	perDeck(0, t1Totals, t2Totals, t3Totals)
+	perDeck(1, t1Totals, t2Totals, t3Totals)
+	matterValues = [t1Totals[0], t2Totals[0], t3Totals[0], t1Totals[3], t2Totals[3], t3Totals[3]]
+	energyValues = [t1Totals[1], t2Totals[1], t3Totals[1], t1Totals[4], t2Totals[4], t3Totals[4]];
+	bandwidthValues = [t1Totals[2], t2Totals[2], t3Totals[2], t1Totals[5], t2Totals[5], t3Totals[5]];
+}
+
+
+
+function updateResourceCharts() {
+	calculateTierValues()
+	resourceChart.data.datasets[0].data = matterValues;
+	resourceChart.data.datasets[1].data = energyValues;
+	resourceChart.data.datasets[2].data = bandwidthValues;
+	resourceChart.update();
+}
+updateResourceCharts();
+
+
+
+//#endregion
+
+//#region traitsComparisonChartContainer
+
+function updateTraitsChart() {
+	console.log('todo');
+}
+
+//#endregion
+
+function updateComparisonCharts() //called when a unit is added/removed from the deck, calls the current comparion charts update function
+{
+	if (statsMode == 1) {
+		if (compareMode == 0) updateStarchartData();
+		else if (compareMode == 1) updateResourceCharts();
+		else if (compareMode == 2) updateTraitsChart();
+
+	}
+}
 
 function refreshStatsContent() {
 	while (stats_content.firstChild) {
@@ -1512,8 +1667,17 @@ function refreshStatsContent() {
 		stats_content.appendChild(statsChartContainer);
 	}
 	if (statsMode == 1) {
-		updateChartData();
-		stats_content.appendChild(comparisonChartContainer);
+		if (compareMode == 0) {
+			updateStarchartData();
+			stats_content.appendChild(statsComparisonChartContainer);
+		}
+		else if (compareMode == 1) {
+			updateResourceCharts();
+			stats_content.appendChild(resourcesComparisonChartContainer);
+		}
+		else if (compareMode == 2) {
+			stats_content.appendChild(traitsComparisonChartContainer);
+		}
 		//updateComparisonChart();
 		//remove all children from stats_content
 

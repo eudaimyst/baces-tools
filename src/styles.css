@@ -222,7 +222,7 @@ select {
 	border-width: 1px;
 }
 
-#comparisonChartContainer {
+.comparisonChartContainer {
 	position: relative;
 	display: flex;
 	flex-direction: row;
