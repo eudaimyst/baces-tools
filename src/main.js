@@ -1547,7 +1547,7 @@ function createResourceChart(id) {
 					borderColor: 'rgba(255, 206, 86, 1)',
 					backgroundColor: [c1, c1, c1, c2, c2, c2],
 					borderWidth: 2,
-					yAxisID: 'test3'
+					yAxisID: 'test2'
 				},
 				{
 					label: 'Energy',
@@ -1558,7 +1558,7 @@ function createResourceChart(id) {
 					backgroundColor: [c1, c1, c1, c2, c2, c2],
 					position: 'right',
 					borderWidth: 2,
-					yAxisID: 'test2'
+					yAxisID: 'test1'
 				},
 				{
 					label: 'Matter',
@@ -1578,9 +1578,6 @@ function createResourceChart(id) {
 					display: false
 				},
 				test2: {
-					display: false
-				},
-				test3: {
 					display: false
 				},
 				x: {

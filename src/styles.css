@@ -133,6 +133,10 @@ select {
 	margin: 5px;
 }
 
+.unit_table {
+	width: 100%;
+}
+
 .unit_table_header_image {
 	width: 20px;
 	height: 20px;
@@ -389,38 +393,38 @@ sup {
 #unit_view-v {
 	overflow: auto;
 	background-color: #cb8e8e88;
-	margin: 5px;
-	left: 0px;
-	right: 0px;
-	top: 30%;
-	bottom: 30%;
+	margin: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 60.5%;
 }
 
 
 #deck_view-v {
 	overflow: auto;
 	background-color: #cbc48e88;
-	margin: 5px;
-	height: 30%;
-	left: 0px;
-	right: 0px;
-	top: 0px
+	margin: 0;
+	height: 29.5%;
+	left: 0;
+	right: 0;
+	top: 40%;
 }
 
 #stats_view-v {
 	background-color: #8ecb9988;
-	margin: 5px;
+	margin: 0;
 	height: 30%;
-	left: 0px;
-	right: 0px;
-	top: 70.%;
-	bottom: 0px;
+	left: 0;
+	right: 0;
+	top: 70%;
+	bottom: 0;
 	overflow: hidden;
 }
 
 #unit_table_head {
 	position: sticky;
-	background-color: rgba(0, 0, 0, 0.329);
+	background-color: rgba(0, 0, 0, 0.623);
 	top: -1px;
 	height: 30px;
 }
