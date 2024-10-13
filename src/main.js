@@ -1011,7 +1011,7 @@ function simpleSort(list, key, sortedArray) {
 
 
 //#region stats-header
-var statsMode = 1 //0 = unit, 1 = compare
+var statsMode = 0 //0 = unit, 1 = compare
 const stats_button = document.createElement('button');
 stats_button.innerHTML = 'unit';
 stats_button.id = 'stats_button';
@@ -1036,7 +1036,7 @@ compare_button.addEventListener('click', function () {
 	compare_button.classList.add('selected');
 	refreshStatsContent()
 });
-compare_button.classList.add('selected');
+stats_button.classList.add('selected');
 
 //#endregion
 //#region stats-content
@@ -1369,6 +1369,8 @@ const data = {
 	datasets: [
 		{
 			data: [0, 0, 0, 0, 0],
+			borderColor: 'green',
+			backgroundColor: 'darkgreen',
 		},
 	]
 };
@@ -1377,6 +1379,8 @@ const data2 = {
 	datasets: [
 		{
 			data: [0, 0, 0, 0, 0],
+			borderColor: 'red',
+			backgroundColor: 'darkred',
 		},
 	]
 };
@@ -1399,7 +1403,15 @@ function createStarchart(id) {
 					borderWidth: 3
 
 				},
-				color: 'white'
+			},
+			plugins: {
+				// Accessing labels and making them images
+				tooltip: {
+					enabled: false
+				},
+				legend: {
+					display: false
+				},
 			},
 			scales: {
 				r: {
