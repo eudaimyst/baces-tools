@@ -222,6 +222,25 @@ select {
 	border-width: 1px;
 }
 
+#comparisonChartContainer {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	height: 80%;
+	border: solid;
+	border-color: black;
+	border-width: 1px;
+
+}
+
+#starchart0 {
+	background-color: rgba(0, 136, 7, 0.068);
+}
+
+#starchart1 {
+	background-color: rgba(155, 0, 0, 0.123);
+}
+
 sup {
 	vertical-align: top;
 	font-size: 6px;

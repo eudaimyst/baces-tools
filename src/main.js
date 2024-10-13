@@ -236,6 +236,7 @@ function createDeckSlots(container, deckID) {
 				delete deck[slotNumber];
 				deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
 				deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
+				updateChartData();
 			}
 			else {
 				console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
@@ -542,6 +543,7 @@ function addUnitToDeck(unit, deckID) {
 	else console.log('deck limit reached');
 	console.log(decklen + '/8');
 	redrawDeckContent(deckID);
+	updateChartData();
 }
 
 //#endregion
@@ -1009,7 +1011,7 @@ function simpleSort(list, key, sortedArray) {
 
 
 //#region stats-header
-var statsMode = 0 //0 = unit, 1 = compare
+var statsMode = 1 //0 = unit, 1 = compare
 const stats_button = document.createElement('button');
 stats_button.innerHTML = 'unit';
 stats_button.id = 'stats_button';
@@ -1034,7 +1036,7 @@ compare_button.addEventListener('click', function () {
 	compare_button.classList.add('selected');
 	refreshStatsContent()
 });
-stats_button.classList.add('selected');
+compare_button.classList.add('selected');
 
 //#endregion
 //#region stats-content
@@ -1335,6 +1337,142 @@ function unitMouseOverAndTapped(unit) {
 
 }
 
+var comparisonChartContainer = document.createElement('div');
+comparisonChartContainer.id = 'comparisonChartContainer';
+comparisonChartContainer.innerHTML = '';
+
+
+
+
+
+
+var unitDeckStats = [];
+//get the unit deck stats from the deck div
+
+//add the correct format for unitDeckStats to be chartJS data
+console.log(unitDeckStats);
+
+//create an example star chart in chartjs
+//const DATA_COUNT = 7;
+//const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
+var starchartUnitStats = ['health', 'damage', 'damagea', 'speed', 'range'];
+var starchartMinMax = {
+	health: [5350, 48000],
+	damage: [520, 3800],
+	damagea: [0, 2000],
+	speed: [30, 93],
+	range: [13, 134]
+}
+var starchartUnitData = [];
+const data = {
+	labels: starchartUnitStats,
+	datasets: [
+		{
+			data: [0, 0, 0, 0, 0],
+		},
+	]
+};
+const data2 = {
+	labels: starchartUnitStats,
+	datasets: [
+		{
+			data: [0, 0, 0, 0, 0],
+		},
+	]
+};
+starchartUnitData.push(data);
+starchartUnitData.push(data2);
+var canvases = []
+var starcharts = []
+function createStarchart(id) {
+	canvases[id] = document.createElement('canvas');
+	canvases[id].id = 'starchart' + id;
+	comparisonChartContainer.appendChild(canvases[id]);
+
+	starcharts.push(new Chart(canvases[id], {
+		type: 'radar',
+		labels: 'test',
+		data: starchartUnitData[id],
+		options: {
+			elements: {
+				line: {
+					borderWidth: 3
+
+				},
+				color: 'white'
+			},
+			scales: {
+				r: {
+					min: 0,
+					max: 1,
+					ticks: {
+						display: false,
+					},
+				},
+			}
+		}
+	}));
+}
+createStarchart(0);
+createStarchart(1);
+
+function doScaling(deckID, input, min, max) { //given an input value, and a minimum and maximum, return a float such that  then the value is at the minimum value 0 is the returned value and when the value is at the maximum value 1 is the max
+	var sf = (.125) * decks[deckID].length; //scale factor\
+	var deckLength = 0
+	//iterate through deck if slot not empty add to legnth var
+	for (var i = 0; i < decks[deckID].length; i++) {
+		if (decks[deckID][i] != undefined) deckLength++;
+	}
+	console.log('deck ' + deckID + ' length:' + deckLength)
+	console.log('SF: ' + sf);
+	var _min = min * sf
+	var _max = max * sf
+	var value = (input - _min) / (_max - _min);
+	console.log(input, min, max, value);
+	if (value < 0) value = 0;
+	return value;
+}
+
+var deck1StatTotals = [0, 0, 0, 0, 0];
+var deck2StatTotals = [0, 0, 0, 0, 0];
+function scaleDeckTotals(d, deckID) {
+	//deck count scale factor
+	starchartUnitStats.forEach(function (stat, index) {
+		var min = starchartMinMax[stat][0];
+		var max = starchartMinMax[stat][1];
+		console.log(deckID + 'this one: ' + stat + ': ' + d[index]);
+		d[index] = doScaling(deckID, d[index], min, max);
+	});
+}
+
+
+function updateDeckStatTotals(d, deckID) {
+	//for each label in unitStats, add the total of values of the stats for each unit in the deck
+	console.log('totals array: ' + d)
+	console.log('deck ' + deckID)
+	console.log(decks[deckID]);
+	starchartUnitStats.forEach(function (label) {
+		var total = 0;
+		decks[deckID].forEach(function (unit) {
+			total += parseFloat(unit[label]);
+		});
+		d.push(total);
+	});
+}
+
+function updateChartData() {
+	deck1StatTotals = [];
+	deck2StatTotals = [];
+	updateDeckStatTotals(deck1StatTotals, 0);
+	updateDeckStatTotals(deck2StatTotals, 1);
+	scaleDeckTotals(deck1StatTotals, 0);
+	scaleDeckTotals(deck2StatTotals, 1);
+	starcharts[0].data.datasets[0].data = deck1StatTotals;
+	starcharts[1].data.datasets[0].data = deck2StatTotals;
+	starcharts[0].update();
+	starcharts[1].update();
+}
+
 
 function refreshStatsContent() {
 	while (stats_content.firstChild) {
@@ -1347,6 +1485,9 @@ function refreshStatsContent() {
 		stats_content.appendChild(statsChartContainer);
 	}
 	if (statsMode == 1) {
+		updateChartData();
+		stats_content.appendChild(comparisonChartContainer);
+		//updateComparisonChart();
 		//remove all children from stats_content
 
 	}
