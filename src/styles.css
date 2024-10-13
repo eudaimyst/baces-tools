@@ -95,7 +95,7 @@ select {
 .view {
 	position: absolute;
 	border-width: 1px;
-	border-color: black;
+	border-color: rgb(95, 82, 47);
 	border-style: solid;
 }
 
@@ -123,8 +123,8 @@ select {
 	right: 0px;
 	top: 48px;
 	bottom: 2px;
-	border-width: 1px;
-	border-color: black;
+	border-width: 2px;
+	border-color: rgb(95, 82, 47);
 	border-style: solid;
 	scrollbar-color: rgba(227, 239, 252, 0.637) rgba(12, 12, 12, 0.445);
 }
@@ -226,19 +226,16 @@ select {
 	position: relative;
 	display: flex;
 	flex-direction: row;
-	height: 80%;
-	border: solid;
-	border-color: black;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.192);
+	justify-content: space-evenly;
+
+}
+
+.starchart {
+	border: dashed;
 	border-width: 1px;
-
-}
-
-#starchart0 {
-	background-color: rgba(0, 136, 7, 0.068);
-}
-
-#starchart1 {
-	background-color: rgba(155, 0, 0, 0.123);
+	border-color: rgba(192, 162, 81, 0.205);
 }
 
 sup {
@@ -573,5 +570,5 @@ sup {
 }
 
 .selected {
-	color: rgb(212, 201, 45);
+	color: rgb(192, 162, 81);
 }

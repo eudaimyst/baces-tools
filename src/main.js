@@ -1369,8 +1369,9 @@ const data = {
 	datasets: [
 		{
 			data: [0, 0, 0, 0, 0],
-			borderColor: 'green',
-			backgroundColor: 'darkgreen',
+			borderColor: 'rgb(192, 162, 81)',
+			backgroundColor: 'rgba(180, 255, 180, 0.137)',
+			borderWidth: '8'
 		},
 	]
 };
@@ -1379,8 +1380,9 @@ const data2 = {
 	datasets: [
 		{
 			data: [0, 0, 0, 0, 0],
-			borderColor: 'red',
-			backgroundColor: 'darkred',
+			borderColor: 'rgb(192, 162, 81)',
+			backgroundColor: 'rgba(255, 180, 180, 0.137)',
+			borderWidth: '8'
 		},
 	]
 };
@@ -1391,18 +1393,20 @@ var starcharts = []
 function createStarchart(id) {
 	canvases[id] = document.createElement('canvas');
 	canvases[id].id = 'starchart' + id;
+	canvases[id].classList.add('starchart');
 	comparisonChartContainer.appendChild(canvases[id]);
 
 	starcharts.push(new Chart(canvases[id], {
 		type: 'radar',
-		labels: 'test',
 		data: starchartUnitData[id],
 		options: {
 			elements: {
 				line: {
-					borderWidth: 3
-
+					borderWidth: 3,
 				},
+				point: {
+					radius: 0
+				}
 			},
 			plugins: {
 				// Accessing labels and making them images
@@ -1419,7 +1423,18 @@ function createStarchart(id) {
 					max: 1,
 					ticks: {
 						display: false,
+						maxTicksLimit: 10,
 					},
+					pointLabels: {
+						color: 'rgba(255, 255, 255, .8)',
+						font: {
+							size: 14
+						}
+					},
+					grid: {
+						circular: true,
+						color: 'rgba(255, 255, 255, .1)'
+					}
 				},
 			}
 		}
