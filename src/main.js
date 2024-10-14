@@ -170,6 +170,36 @@ deck2_button.addEventListener('click', function () {
 });
 deck1_button.classList.add('selected');
 
+//Deck header elements: deck1 button, deck 2 button, deck name input box, save button, dropdown, load button, delete button
+//deck name input box:
+const name_input = document.createElement('input');
+name_input.id = 'name_input';
+name_input.classList.add('header_element');
+deck_view_header.appendChild(name_input);
+//save button:
+const save_button = document.createElement('button');
+save_button.innerHTML = 'save';
+save_button.id = 'save_button';
+save_button.classList.add('header_element');
+deck_view_header.appendChild(save_button);
+//decklist dropdown:
+const decklist_dropdown = document.createElement('select');
+decklist_dropdown.id = 'decklist_dropdown';
+decklist_dropdown.classList.add('header_element');
+deck_view_header.appendChild(decklist_dropdown);
+//load button:
+const load_button = document.createElement('button');
+load_button.innerHTML = 'load';
+load_button.id = 'load_button';
+load_button.classList.add('header_element');
+deck_view_header.appendChild(load_button);
+//delete button:
+const delete_button = document.createElement('button');
+delete_button.innerHTML = 'delete';
+delete_button.id = 'delete_button';
+delete_button.classList.add('header_element');
+deck_view_header.appendChild(delete_button);
+
 //#endregion
 
 //#region deck-content section of the deck view, includes: addUnitToDeck
