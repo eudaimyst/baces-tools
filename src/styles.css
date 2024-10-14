@@ -70,10 +70,6 @@ button {
 	height: 60%;
 }
 
-.selected {
-	color: rgb(212, 201, 45);
-}
-
 button:hover {
 	color: rgb(255, 255, 255);
 }
@@ -99,7 +95,7 @@ select {
 .view {
 	position: absolute;
 	border-width: 1px;
-	border-color: black;
+	border-color: rgb(95, 82, 47);
 	border-style: solid;
 }
 
@@ -127,14 +123,18 @@ select {
 	right: 0px;
 	top: 48px;
 	bottom: 2px;
-	border-width: 1px;
-	border-color: black;
+	border-width: 2px;
+	border-color: rgb(95, 82, 47);
 	border-style: solid;
 	scrollbar-color: rgba(227, 239, 252, 0.637) rgba(12, 12, 12, 0.445);
 }
 
 .header_element {
 	margin: 5px;
+}
+
+.unit_table {
+	width: 100%;
 }
 
 .unit_table_header_image {
@@ -224,6 +224,22 @@ select {
 	border-color: rgba(255, 255, 255, 0.479);
 	z-index: 10;
 	border-width: 1px;
+}
+
+.comparisonChartContainer {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.192);
+	justify-content: space-evenly;
+
+}
+
+.starchart {
+	border: dashed;
+	border-width: 1px;
+	border-color: rgba(192, 162, 81, 0.205);
 }
 
 sup {
@@ -377,38 +393,38 @@ sup {
 #unit_view-v {
 	overflow: auto;
 	background-color: #cb8e8e88;
-	margin: 5px;
-	left: 0px;
-	right: 0px;
-	top: 30%;
-	bottom: 30%;
+	margin: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 60.5%;
 }
 
 
 #deck_view-v {
 	overflow: auto;
 	background-color: #cbc48e88;
-	margin: 5px;
-	height: 30%;
-	left: 0px;
-	right: 0px;
-	top: 0px
+	margin: 0;
+	height: 29.5%;
+	left: 0;
+	right: 0;
+	top: 40%;
 }
 
 #stats_view-v {
 	background-color: #8ecb9988;
-	margin: 5px;
+	margin: 0;
 	height: 30%;
-	left: 0px;
-	right: 0px;
-	top: 70.%;
-	bottom: 0px;
+	left: 0;
+	right: 0;
+	top: 70%;
+	bottom: 0;
 	overflow: hidden;
 }
 
 #unit_table_head {
 	position: sticky;
-	background-color: rgba(0, 0, 0, 0.329);
+	background-color: rgba(0, 0, 0, 0.623);
 	top: -1px;
 	height: 30px;
 }
@@ -542,11 +558,6 @@ sup {
 	margin: 0px;
 }
 
-#compare_button {
-	color: grey;
-	border-color: grey;
-}
-
 #unit_view_card_btn {
 	color: grey;
 	border-color: grey;
@@ -560,4 +571,8 @@ sup {
 .links_content {
 	position: inherit;
 	color: grey;
+}
+
+.selected {
+	color: rgb(192, 162, 81);
 }

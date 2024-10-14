@@ -236,6 +236,7 @@ function createDeckSlots(container, deckID) {
 				delete deck[slotNumber];
 				deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
 				deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
+				updateComparisonCharts();
 			}
 			else {
 				console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
@@ -542,25 +543,11 @@ function addUnitToDeck(unit, deckID) {
 	else console.log('deck limit reached');
 	console.log(decklen + '/8');
 	redrawDeckContent(deckID);
+	updateComparisonCharts();
 }
 
 //#endregion
 
-
-//#region stats-header
-
-const stats_button = document.createElement('button');
-stats_button.innerHTML = 'stats';
-stats_button.id = 'deck1_button';
-stats_button.classList.add('header_element');
-stats_view_header.appendChild(stats_button);
-const compare_button = document.createElement('button');
-compare_button.innerHTML = 'compare';
-compare_button.id = 'compare_button';
-compare_button.classList.add('header_element');
-stats_view_header.appendChild(compare_button);
-
-//#endregion
 
 //#region unit-div-header
 //label
@@ -1022,12 +1009,57 @@ function simpleSort(list, key, sortedArray) {
 }
 
 
-//#region stats-content
 
+//#region stats-header
+var statsMode = 0 //0 = unit, 1 = compare
+var compareMode = 0 //0= stats, 1 = resources, 2 = traits
+const stats_button = document.createElement('button');
+stats_button.innerHTML = 'unit';
+stats_button.id = 'stats_button';
+stats_button.classList.add('header_element');
+stats_view_header.appendChild(stats_button);
+//when button is pressed set current mode to unit
+stats_button.addEventListener('click', function () {
+	statsMode = 0
+	stats_button.classList.add('selected');
+	compare_button.classList.remove('selected');
+	refreshStatsContent()
+});
+const compare_button = document.createElement('button');
+compare_button.innerHTML = 'compare';
+compare_button.id = 'compare_button';
+compare_button.classList.add('header_element');
+stats_view_header.appendChild(compare_button);
+//when deck 2 is pressed it should set current deck to 1
+compare_button.addEventListener('click', function () {
+	statsMode = 1;
+	stats_button.classList.remove('selected');
+	compare_button.classList.add('selected');
+	refreshStatsContent()
+});
+stats_button.classList.add('selected');
 
+//dropdown to choose between stats, resource and traits comparison modes
+const stats_mode_select = document.createElement('select');
+stats_mode_select.id = 'stats_mode_select';
+stats_mode_select.classList.add('header_element');
+stats_view_header.appendChild(stats_mode_select);
+//add option to stats mode select for stats, resources and traits
+var stats_mode_select_options = ['stats', 'resources', 'traits'];
+stats_mode_select_options.forEach(function (option) {
+	var option_element = document.createElement('option');
+	option_element.value = option;
+	option_element.innerHTML = option;
+	stats_mode_select.appendChild(option_element);
+});
+//when an option is selected, set compareMode to the selected index
+stats_mode_select.addEventListener('change', function () {
+	compareMode = stats_mode_select.selectedIndex;
+	refreshStatsContent()
+});
 
 //#endregion
-
+//#region stats-content
 
 
 var sortedUnitData = {
@@ -1264,8 +1296,10 @@ function getColour(value, min, max) {
 
 console.log(getColour(.5, 0, 1));
 
+var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 var unitMouseOverAndTappedPrev = null;
 function unitMouseOverAndTapped(unit) {
+	if (statsMode != 0) return;
 	if (unitMouseOverAndTappedPrev == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
 		return;
@@ -1323,7 +1357,360 @@ function unitMouseOverAndTapped(unit) {
 
 }
 
-var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
+var statsComparisonChartContainer = document.createElement('div');
+statsComparisonChartContainer.classList.add('comparisonChartContainer');
+statsComparisonChartContainer.innerHTML = '';
+
+var resourcesComparisonChartContainer = document.createElement('div');
+resourcesComparisonChartContainer.classList.add('comparisonChartContainer');
+resourcesComparisonChartContainer.innerHTML = '';
+
+var traitsComparisonChartContainer = document.createElement('div');
+traitsComparisonChartContainer.classList.add('comparisonChartContainer');
+traitsComparisonChartContainer.innerHTML = 'traitsComparisonChart';
+
+
+//#region statsComparisonChart "starchart", associated minmax and scaling functions
+var unitDeckStats = [];
+//get the unit deck stats from the deck div
+
+//add the correct format for unitDeckStats to be chartJS data
+console.log(unitDeckStats);
+
+//create an example star chart in chartjs
+//const DATA_COUNT = 7;
+//const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
+var starchartUnitStats = ['health', 'damage', 'damagea', 'speed', 'range'];
+var starchartMinMax = {
+	health: [5350, 48000],
+	damage: [520, 3800],
+	damagea: [0, 2000],
+	speed: [30, 93],
+	range: [13, 134]
+}
+var starchartUnitData = [];
+const data = {
+	labels: starchartUnitStats,
+	datasets: [
+		{
+			data: [0, 0, 0, 0, 0],
+			borderColor: 'rgb(192, 162, 81)',
+			backgroundColor: 'rgba(180, 255, 180, 0.137)',
+			borderWidth: '8'
+		},
+	]
+};
+const data2 = {
+	labels: starchartUnitStats,
+	datasets: [
+		{
+			data: [0, 0, 0, 0, 0],
+			borderColor: 'rgb(192, 162, 81)',
+			backgroundColor: 'rgba(255, 180, 180, 0.137)',
+			borderWidth: '8'
+		},
+	]
+};
+starchartUnitData.push(data);
+starchartUnitData.push(data2);
+var canvases = []
+var starcharts = []
+function createStarchart(id) {
+	canvases[id] = document.createElement('canvas');
+	canvases[id].id = 'starchart' + id;
+	canvases[id].classList.add('starchart');
+	statsComparisonChartContainer.appendChild(canvases[id]);
+
+	starcharts.push(new Chart(canvases[id], {
+		type: 'radar',
+		data: starchartUnitData[id],
+		options: {
+			elements: {
+				line: {
+					borderWidth: 3,
+				},
+				point: {
+					radius: 0
+				}
+			},
+			plugins: {
+				// Accessing labels and making them images
+				tooltip: {
+					enabled: false
+				},
+				legend: {
+					display: false
+				},
+			},
+			scales: {
+				r: {
+					min: 0,
+					max: 1,
+					ticks: {
+						display: false,
+						maxTicksLimit: 10,
+					},
+					pointLabels: {
+						color: 'rgba(255, 255, 255, .8)',
+						font: {
+							size: 14
+						}
+					},
+					grid: {
+						circular: true,
+						color: 'rgba(255, 255, 255, .1)'
+					}
+				},
+			}
+		}
+	}));
+}
+createStarchart(0);
+createStarchart(1);
+
+function doScaling(deckID, input, min, max) { //given an input value, and a minimum and maximum, return a float such that  then the value is at the minimum value 0 is the returned value and when the value is at the maximum value 1 is the max
+	var sf = (.125) * decks[deckID].length; //scale factor\
+	var deckLength = 0
+	//iterate through deck if slot not empty add to legnth var
+	for (var i = 0; i < decks[deckID].length; i++) {
+		if (decks[deckID][i] != undefined) deckLength++;
+	}
+	console.log('deck ' + deckID + ' length:' + deckLength)
+	console.log('SF: ' + sf);
+	var _min = min * sf
+	var _max = max * sf
+	var value = (input - _min) / (_max - _min);
+	console.log(input, min, max, value);
+	if (value < 0) value = 0;
+	return value;
+}
+
+var deck1StatTotals = [];
+var deck2StatTotals = [0, 0, 0, 0, 0];
+function scaleDeckTotals(d, deckID) {
+	//deck count scale factor
+	starchartUnitStats.forEach(function (stat, index) {
+		d[index] = doScaling(deckID, d[index], starchartMinMax[stat][0], starchartMinMax[stat][1]);
+	});
+}
+
+
+function updateDeckStatTotals(d, deckID) {
+	//for each label in unitStats, add the total of values of the stats for each unit in the deck
+	console.log('totals array: ' + d)
+	console.log('deck ' + deckID)
+	console.log(decks[deckID]);
+	starchartUnitStats.forEach(function (label) {
+		var total = 0;
+		decks[deckID].forEach(function (unit) {
+			total += parseFloat(unit[label]);
+		});
+		d.push(total);
+	});
+}
+
+function updateStarchartData() {
+	deck1StatTotals = [];
+	deck2StatTotals = [];
+	updateDeckStatTotals(deck1StatTotals, 0);
+	updateDeckStatTotals(deck2StatTotals, 1);
+	scaleDeckTotals(deck1StatTotals, 0);
+	scaleDeckTotals(deck2StatTotals, 1);
+	starcharts[0].data.datasets[0].data = deck1StatTotals;
+	starcharts[1].data.datasets[0].data = deck2StatTotals;
+	starcharts[0].update();
+	starcharts[1].update();
+}
+
+//#endregion
+
+//#region resourcesComparisonChartContainer
+
+var resourceChart
+function createResourceChart(id) {
+	var canvas = document.createElement('canvas');
+	canvas.id = 'resourceChart' + id;
+	canvas.classList.add('resourceChart');
+	resourcesComparisonChartContainer.appendChild(canvas);
+	var c1 = 'rgba(180, 255, 180, 0.05)';
+	var c2 = 'rgba(255, 180, 180, 0.05)';
+	var resourceChart = new Chart(canvas, {
+		type: 'bar',
+		data: {
+			labels: ['T1', 'T2', 'T3', 'T1', 'T2', 'T3'],
+			datasets: [
+				{
+					label: 'Bandwidth',
+					grouped: false,
+					type: 'bar',
+					data: [6, 22, 30],
+					borderColor: 'rgba(255, 206, 86, 1)',
+					backgroundColor: [c1, c1, c1, c2, c2, c2],
+					borderWidth: 2,
+					yAxisID: 'test2'
+				},
+				{
+					label: 'Energy',
+					type: 'bar',
+					grouped: false,
+					data: [100, 250, 200],
+					borderColor: 'rgba(54, 162, 235, 1)',
+					backgroundColor: [c1, c1, c1, c2, c2, c2],
+					position: 'right',
+					borderWidth: 2,
+					yAxisID: 'test1'
+				},
+				{
+					label: 'Matter',
+					grouped: false,
+					type: 'bar',
+					data: [150, 350, 500],
+					borderColor: 'rgba(255, 99, 132, 1)',
+					backgroundColor: [c1, c1, c1, c2, c2, c2],
+					borderWidth: 2,
+					yAxisID: 'test1'
+				},
+			]
+		},
+		options: {
+			scales: {
+				test1: {
+					display: false
+				},
+				test2: {
+					display: false
+				},
+				x: {
+					ticks: {
+						color: 'rgba(255, 255, 255, .8)',
+						font: {
+							size: 14
+						}
+					}
+
+				}
+			},
+			plugins: {
+				legend: {
+					labels: {
+						color: 'rgba(255, 255, 255, .8)',
+						font: {
+							size: 14
+						}
+					}
+				},
+			},
+		}
+	});
+	return resourceChart;
+}
+resourceChart = createResourceChart(0)
+var matterValues = []
+var energyValues = []
+var bandwidthValues = []
+
+//calculate tier values based off the total matter, energy and bandwidth for units in each tier
+//add units in the deck with tier 1 and push their matter, energy and bandwidth values to the respective arrays
+function calculateTierValues() {
+	//for each unit in the deck, add its tier values to the respective arrays
+	var t1Totals = [0, 0, 0, 0, 0, 0];
+	var t2Totals = [0, 0, 0, 0, 0, 0];
+	var t3Totals = [0, 0, 0, 0, 0, 0];
+	function perDeck(deckID, t1, t2, t3) {
+		for (var i = 0; i < decks[deckID].length; i++) {
+			var unit = decks[deckID][i];
+			var x = (3 * deckID);
+			if (unit) {
+				if (unit.tier == 1) {
+					t1[0 + x] += unit.bandwidth;
+					t1[1 + x] += unit.energy;
+					t1[2 + x] += unit.matter;
+				}
+				else if (unit.tier == 2) {
+					t2[0 + x] += unit.bandwidth;
+					t2[1 + x] += unit.energy;
+					t2[2 + x] += unit.matter;
+				}
+				else if (unit.tier == 3) {
+					t3[0 + x] += unit.bandwidth;
+					t3[1 + x] += unit.energy;
+					t3[2 + x] += unit.matter;
+				}
+			}
+		}
+	}
+	console.log(t1Totals, t2Totals, t3Totals)
+	perDeck(0, t1Totals, t2Totals, t3Totals)
+	perDeck(1, t1Totals, t2Totals, t3Totals)
+	matterValues = [t1Totals[0], t2Totals[0], t3Totals[0], t1Totals[3], t2Totals[3], t3Totals[3]]
+	energyValues = [t1Totals[1], t2Totals[1], t3Totals[1], t1Totals[4], t2Totals[4], t3Totals[4]];
+	bandwidthValues = [t1Totals[2], t2Totals[2], t3Totals[2], t1Totals[5], t2Totals[5], t3Totals[5]];
+}
+
+
+
+function updateResourceCharts() {
+	calculateTierValues()
+	resourceChart.data.datasets[0].data = matterValues;
+	resourceChart.data.datasets[1].data = energyValues;
+	resourceChart.data.datasets[2].data = bandwidthValues;
+	resourceChart.update();
+}
+updateResourceCharts();
+
+
+
+//#endregion
+
+//#region traitsComparisonChartContainer
+
+function updateTraitsChart() {
+	console.log('todo');
+}
+
+//#endregion
+
+function updateComparisonCharts() //called when a unit is added/removed from the deck, calls the current comparion charts update function
+{
+	if (statsMode == 1) {
+		if (compareMode == 0) updateStarchartData();
+		else if (compareMode == 1) updateResourceCharts();
+		else if (compareMode == 2) updateTraitsChart();
+
+	}
+}
+
+function refreshStatsContent() {
+	while (stats_content.firstChild) {
+		stats_content.removeChild(stats_content.firstChild);
+	};
+	if (statsMode == 0) {
+		stats_content.appendChild(video);
+		video.play();
+		stats_content.appendChild(statsUnitBottomContainer);
+		stats_content.appendChild(statsChartContainer);
+	}
+	if (statsMode == 1) {
+		if (compareMode == 0) {
+			updateStarchartData();
+			stats_content.appendChild(statsComparisonChartContainer);
+		}
+		else if (compareMode == 1) {
+			updateResourceCharts();
+			stats_content.appendChild(resourcesComparisonChartContainer);
+		}
+		else if (compareMode == 2) {
+			stats_content.appendChild(traitsComparisonChartContainer);
+		}
+		//updateComparisonChart();
+		//remove all children from stats_content
+
+	}
+}
+
+refreshStatsContent()
+//#endregion
+
 var oldE = null
 function unitMouseOver(e) {
 	//if we are
