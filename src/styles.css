@@ -100,6 +100,7 @@ option {
 	position: absolute;
 	border-width: 1px;
 	border-color: rgb(95, 82, 47);
+	border-color: rgb(95, 82, 47);
 	border-style: solid;
 }
 
@@ -129,12 +130,18 @@ option {
 	bottom: 2px;
 	border-width: 2px;
 	border-color: rgb(95, 82, 47);
+	border-width: 2px;
+	border-color: rgb(95, 82, 47);
 	border-style: solid;
 	scrollbar-color: rgba(227, 239, 252, 0.637) rgba(12, 12, 12, 0.445);
 }
 
 .header_element {
 	margin: 5px;
+}
+
+.unit_table {
+	width: 100%;
 }
 
 .unit_table {
@@ -406,6 +413,11 @@ sup {
 	right: 0;
 	top: 0;
 	bottom: 60.5%;
+	margin: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 60.5%;
 }
 
 
@@ -417,12 +429,22 @@ sup {
 	left: 0;
 	right: 0;
 	top: 40%;
+	margin: 0;
+	height: 29.5%;
+	left: 0;
+	right: 0;
+	top: 40%;
 }
 
 #stats_view-v {
 	background-color: #8ecb9988;
 	margin: 0;
+	margin: 0;
 	height: 30%;
+	left: 0;
+	right: 0;
+	top: 70%;
+	bottom: 0;
 	left: 0;
 	right: 0;
 	top: 70%;
@@ -432,6 +454,7 @@ sup {
 
 #unit_table_head {
 	position: sticky;
+	background-color: rgba(0, 0, 0, 0.623);
 	background-color: rgba(0, 0, 0, 0.623);
 	top: -1px;
 	height: 30px;
@@ -578,6 +601,10 @@ sup {
 .links_content {
 	position: inherit;
 	color: grey;
+}
+
+.selected {
+	color: rgb(192, 162, 81);
 }
 
 .selected {
