@@ -290,7 +290,7 @@ sup {
 
 #wrapper {
 	position: absolute;
-	background-image: url('images/a1.png');
+	background-image: url('images/a1.jpg');
 	background-position: center center;
 	background-size: cover;
 	border-width: 1px;
@@ -361,7 +361,7 @@ sup {
 
 #unit_view-h {
 	overflow: auto;
-	background-image: 'images/a1.png';
+	background-image: 'images/a1.jpg';
 	background-color: #cb8e8e88;
 	margin: 3px;
 	right: 50%;
