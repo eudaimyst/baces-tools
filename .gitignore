@@ -9,3 +9,6 @@ ignored/
 #terraform
 *.tfstate
 .terraform*
+
+#vscode
+.vscode/
