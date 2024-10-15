@@ -30,11 +30,6 @@ const linkData = [{
 ]
 
 
-//# left sidebar (burger menu on vertical)
-const sidebar = document.createElement('div');
-sidebar.id = 'sidebar';
-
-
 const SidebarLogo = () => {
 	return (
 		<div>
@@ -42,9 +37,6 @@ const SidebarLogo = () => {
 		</div>
 	)
 }
-
-const sidebar_content_div = document.createElement('div');
-sidebar_content_div.id = 'sidebar_content_div';
 
 
 
@@ -110,8 +102,8 @@ const ReleaseCountdown = () => {
 	})
 	return (
 		<div>
-			<p>Closed Beta 2 Release:<br/>
-			{remainingTime}</p>
+			<p>Closed Beta 2 Release:<br />
+				{remainingTime}</p>
 		</div>
 	)
 }
@@ -124,15 +116,16 @@ const AdvertisementDiv = () => {
 	)
 }
 
-const menuRoot = document.createElement('div');
-sidebar.appendChild(menuRoot);
-const sidebarMenu = createRoot(menuRoot);
+
+const sidebar = document.createElement('div');
+sidebar.id = 'sidebar';
+const sidebarMenu = createRoot(sidebar);
 sidebarMenu.render(
 	<Menu />
 );
 
 
-export { sidebar, advertisement };
+export { sidebar };
 
 
 
