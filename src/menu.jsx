@@ -116,23 +116,6 @@ const ReleaseCountdown = () => {
 	)
 }
 
-
-function advertisement() {
-	//create a div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
-	const adsDiv = document.createElement('div');
-	adsDiv.classList.add('ads_div');
-	//adsDiv.innerHTML = '💸💰💲🤑 This is where the money I don\'t have goes 💰💸🤑🤑💸💲💰💸🤑💲💰💲';
-	adsDiv.style.textAlign = 'center';
-	adsDiv.style.fontWeight = 'bold';
-	adsDiv.style.color = 'gold';
-	adsDiv.style.textShadow = '0 0 10px black';
-	adsDiv.style.top = '50%';
-	//line spacing small
-	adsDiv.style.lineHeight = '.5';
-	adsDiv.style.fontSize = '60px';
-	return adsDiv;
-}
-
 const AdvertisementDiv = () => {
 	return (
 		<div style={{ textAlign: 'center', color: 'gold', fontWeight: 'bold', textShadow: '0 0 10px black', lineHeight: '.5', fontSize: '60px', display: window.location.hostname === 'localhost' ? 'block' : 'none' }}>
@@ -140,7 +123,6 @@ const AdvertisementDiv = () => {
 		</div>
 	)
 }
-
 
 const menuRoot = document.createElement('div');
 sidebar.appendChild(menuRoot);
