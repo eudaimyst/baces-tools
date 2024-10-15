@@ -57,23 +57,21 @@ const Menu = () => {
 		<div style={{ width: menuVisible ? '200px' : '50px' }}>
 			<SidebarLogo />
 			<button id='toggleSidebarButton' onClick={() => setMenuVisible(!menuVisible)}>
-				<img src='images/burgericon.png' alt='burgericon' id='toggleSidebarButtonImg'/>
+				<img src='images/burgericon.png' alt='burgericon' id='toggleSidebarButtonImg' />
 			</button>
 			<div id={!menuVisible ? 'sidebar_title_div_v' : 'sidebar_title_div'}>BAces_Tools</div>
-			{menuVisible && (
-				<div>
-					<ul>
-						{linkData.map((link) => (
-							<li key={link.url}>
-								<a href={link.url} target="_blank" rel="noreferrer">{link.name}</a>
-							</li>
-						))}
-					</ul>
-					<ReleaseCountdown />
-					<AdvertisementDiv />
-					<MenuFooter />
-				</div>
-			)}
+			<div style={{ display: menuVisible ? 'block' : 'none' }}>
+				<ul>
+					{linkData.map((link) => (
+						<li key={link.url}>
+							<a href={link.url} target="_blank" rel="noreferrer">{link.name}</a>
+						</li>
+					))}
+				</ul>
+				<ReleaseCountdown />
+				<AdvertisementDiv />
+				<MenuFooter />
+			</div>
 		</div>
 	)
 }
