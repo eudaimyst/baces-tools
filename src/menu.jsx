@@ -57,7 +57,7 @@ const Menu = () => {
 		<div style={{ width: menuVisible ? '200px' : '50px' }}>
 			<SidebarLogo />
 			<button id='toggleSidebarButton' onClick={() => setMenuVisible(!menuVisible)}>
-				<img src='images/burgericon.png' alt='burgericon' id='toggleSidebarButtonImg' onClick={() => setMenuVisible(!menuVisible)} />
+				<img src='images/burgericon.png' alt='burgericon' id='toggleSidebarButtonImg'/>
 			</button>
 			<div id={!menuVisible ? 'sidebar_title_div_v' : 'sidebar_title_div'}>BAces_Tools</div>
 			{menuVisible && (
