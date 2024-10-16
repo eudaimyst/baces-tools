@@ -2,83 +2,14 @@
 //create 3 divs called unit_view, deck_view and stats_view, and a wrapper to contain them
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
-import jsonUnitsBase from './units.json';
 import { sidebar } from './menu';
+import { units } from './units';
 
-
-
-
-
-
-//#region unit-definition creates units from json entry
-//create an empty object to use as a base of the units, that has a new constructor to create a object
-class Unit {
-	constructor(jsonEntry) {
-		Object.keys(jsonEntry).forEach((key) => {
-			var cleanNameKey = key;
-			cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
-			var value = jsonEntry[key];
-			var cleanValue = removeSpacesCapitalsSpecialCharacters(value)
-			if (value.constructor == String) {
-				if (cleanNameKey != 'emoji' && cleanNameKey != 'name' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'type') {
-					value = cleanValue;
-				}
-			}
-			if (key == 'image') {
-				value = removeSpacesCapitalsSpecialCharacters(jsonEntry.Name);
-			}
-			if (cleanNameKey == 'supply') {
-				this['bandwidth'] = value;
-			} else if (cleanNameKey == 'damageg') {
-				this['damage'] = value;
-			} else {
-				this[cleanNameKey] = value;
-			}
-			if (this['building'] == 'core') this['tier'] = '1';
-			else if (this['building'] == 'foundry' || this['building'] == 'starforge') this['tier'] = '2';
-			else if (this['building'] == 'advancedfoundry' || this['building'] == 'advancedstarforge') this['tier'] = '3';
-			else this['tier'] = '0';
-			if (value == 'splash' || value == 'small' || value == 'antibig' || value == 'big' || value == 'antiair') {
-
-				if (this.traits == undefined) {
-					this.traits = [];
-				}
-				this.traits.push(value);
-			}
-			if (cleanNameKey == 'antiair') {
-				if (this.traits == undefined) {
-					this.traits = [];
-					this.traits.push('none');
-				}
-			}
-		});
-	}
-}
-
-var unitList = [];
-for (let i = 0; i < jsonUnitsBase.length; i++) {
-	unitList.push(new Unit(jsonUnitsBase[i]));;
-}
+var unitList = Object.values(units);
 
 //#endregion
 
 //#region deck format
-
-function findUnit(name) {
-	var unit
-	unitList.forEach((u) => {
-		//if unit.name contains name
-		if (u.name) {
-			console.log(u.name, name)
-			if (removeSpacesCapitalsSpecialCharacters(u.name) == removeSpacesCapitalsSpecialCharacters(name)) unit = u;
-		} else {
-			unit = unitList[0];
-		}
-
-	});
-	console.log('found ' + unit.name)
-	return unit;
-}
 
 
 var savedDecks = []
@@ -92,7 +23,7 @@ class SavedDeck {
 
 function fillSlotsFromDeck(deck, deckID) {
 	deck.deckList.forEach((unitName) => {
-		var unit = findUnit(unitName);
+		var unit = units[unitName];
 		addUnitToDeck(unit, deckID);
 	});
 }
@@ -410,10 +341,7 @@ deck2Container.addEventListener('click', function () {
 function mouseOverUnit(deck, slotNumber) {
 	if (deck[slotNumber]) {
 		console.log(slotNumber + ' mouseOver - ' + deck[slotNumber].name);
-		//trigger the mouseover event
-		//get the unit from the unitlist by the unit name
-		var unit = unitList.find(unit => unit.name === deck[slotNumber].name);
-		unitMouseOverAndTapped(unit);
+		unitMouseOverAndTapped(units[deck[slotNumber].slug]);
 	}
 }
 function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
@@ -435,7 +363,6 @@ function removeAllUnitsFromDeck(deckID) {
 
 //#tag deckSlots divs for units
 function createDeckSlots(container, deckID) {
-
 	var deckSlotContainer = document.createElement('div');
 	deckSlotContainer.id = 'deckSlotContainer' + deckID;
 	deckSlotContainer.classList.add('deckSlotContainer');
@@ -721,7 +648,7 @@ function redrawDeckContent(deckID) {
 	deck.forEach((unit, i) => {
 		//deckEmojiText.innerHTML += unit.emoji + ' ';
 		//slot.innerHTML = deck[index].name;
-		deckSlots[deckID][i].firstElementChild.src = 'images/units/' + unit.image + '.png';
+		deckSlots[deckID][i].firstElementChild.src = 'images/units/' + unit.slug + '.png';
 	});
 
 }
@@ -1048,8 +975,8 @@ function redrawUnitContent() {
 			if (!excludeKeys.includes(key)) {
 				var div = document.createElement('div');
 				var unit_table_cell = document.createElement('td');
-				unit_table_cell.id = unitList[i].name;
-				div.id = unitList[i].name;
+				unit_table_cell.id = unitList[i].slug;
+				div.id = unitList[i].slug;
 				unit_table_cell.appendChild(div);
 				div.addEventListener('mouseover', unitMouseOver);
 				unit_table_cell.addEventListener('mouseover', unitMouseOver);
@@ -1395,10 +1322,13 @@ video.src = unitList[1].videoturnaround;
 //set video to repeat
 video.loop = true;
 //crop the right 30% of the video
-
+var videoblind = document.createElement('div');
+videoblind.id = 'videoblind';
+videoblind.style = 'position: absolute; background-color: black; width: 100%; height: 100%;';
 
 video.id = 'unitVideo';
 stats_content.appendChild(video);
+stats_content.appendChild(videoblind);
 
 //#tag barChart definition
 function drawBarChart(label) {
@@ -1535,6 +1465,7 @@ console.log(getColour(.5, 0, 1));
 var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 var unitMouseOverAndTappedPrev = null;
 function unitMouseOverAndTapped(unit) {
+	if (!unit) return;
 	if (statsMode != 0) return;
 	if (unitMouseOverAndTappedPrev == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
@@ -1560,9 +1491,16 @@ function unitMouseOverAndTapped(unit) {
 	//get the unit from unit list by its name
 	//update the video source
 	video.src = unit.videoturnaround;
-	console.log(unit.videoturnaround);
-	video.play();
-
+	// periodically decrease the opacity of the video blind
+	videoblind.style.opacity = 1
+	var fadein = setInterval(() => {
+		videoblind.style.opacity = videoblind.style.opacity -= .01
+		if (videoblind.style.opacity <= 0) clearInterval(fadein);
+	}, 20);
+	setTimeout(function () {
+		if (video.src != unit.videoturnaround) return
+		video.play();
+	}, 200);
 	//update the data in the bar charts based on the unit id
 	//update the chart
 	//update the colors in the bar charts based on the unit id
@@ -1923,6 +1861,7 @@ function refreshStatsContent() {
 	if (statsMode == 0) {
 		stats_content.appendChild(video);
 		video.play();
+		stats_content.appendChild(videoblind);
 		stats_content.appendChild(statsUnitBottomContainer);
 		stats_content.appendChild(statsChartContainer);
 	}
@@ -1952,8 +1891,7 @@ function unitMouseOver(e) {
 	//if we are
 	if (e.target.id == oldE) return;
 	oldE = e.target.id;
-	var unit = unitList.find(unit => unit.name === e.target.id);
-	//console.log(e.target.id);
+	var unit = units[e.target.id];
 	currentUnit = e.target.id;
 	unitMouseOverAndTapped(unit);
 }
