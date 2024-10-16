@@ -2,62 +2,68 @@
 //create 3 divs called unit_view, deck_view and stats_view, and a wrapper to contain them
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
-import jsonUnitsBase from './units.json';
 import { sidebar } from './menu';
 
 
 
+import { units } from './units';
+
+var unitList = Object.values(units);
+
+//#endregion
+
+//#region deck format
 
 
+var savedDecks = []
 
-//#region unit-definition creates units from json entry
-//create an empty object to use as a base of the units, that has a new constructor to create a object
-class Unit {
-	constructor(jsonEntry) {
-		Object.keys(jsonEntry).forEach((key) => {
-			var cleanNameKey = key;
-			cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
-			var value = jsonEntry[key];
-			var cleanValue = removeSpacesCapitalsSpecialCharacters(value)
-			if (value.constructor == String) {
-				if (cleanNameKey != 'emoji' && cleanNameKey != 'name' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'type') {
-					value = cleanValue;
-				}
-			}
-			if (key == 'image') {
-				value = removeSpacesCapitalsSpecialCharacters(jsonEntry.Name);
-			}
-			if (cleanNameKey == 'supply') {
-				this['bandwidth'] = value;
-			} else if (cleanNameKey == 'damageg') {
-				this['damage'] = value;
-			} else {
-				this[cleanNameKey] = value;
-			}
-			if (this['building'] == 'core') this['tier'] = '1';
-			else if (this['building'] == 'foundry' || this['building'] == 'starforge') this['tier'] = '2';
-			else if (this['building'] == 'advancedfoundry' || this['building'] == 'advancedstarforge') this['tier'] = '3';
-			else this['tier'] = '0';
-			if (value == 'splash' || value == 'small' || value == 'antibig' || value == 'big' || value == 'antiair') {
-
-				if (this.traits == undefined) {
-					this.traits = [];
-				}
-				this.traits.push(value);
-			}
-			if (cleanNameKey == 'antiair') {
-				if (this.traits == undefined) {
-					this.traits = [];
-					this.traits.push('none');
-				}
-			}
-		});
+class SavedDeck {
+	constructor(deckName, deckList) {
+		this.deckName = deckName;
+		this.deckList = deckList;
 	}
 }
 
-var unitList = [];
-for (let i = 0; i < jsonUnitsBase.length; i++) {
-	unitList.push(new Unit(jsonUnitsBase[i]));;
+function fillSlotsFromDeck(deck, deckID) {
+	deck.deckList.forEach((unitName) => {
+		var unit = units[unitName];
+		addUnitToDeck(unit, deckID);
+	});
+}
+var testDeckData = new SavedDeck('Starter',
+	['crab',
+		'hunter',
+		'butterfly',
+		'airship',
+		'king crab',
+		'ballista',
+		'bulwark',
+		'heavy ballista']);
+console.log(testDeckData);
+
+savedDecks.push(testDeckData);
+
+function saveNewDeck(deckName, deck) {
+	var deckList = []
+	//add the name of each unit to the decklist
+	deck.forEach((unit) => {
+		deckList.push(unit.name);
+	});
+	savedDecks.push(new SavedDeck(deckName, deckList));
+}
+
+//load savedDecks from localStorage
+function loadSavedDecks() {
+	var savedDecksJSON = localStorage.getItem('savedDecks');
+	if (savedDecksJSON) {
+		savedDecks = JSON.parse(savedDecksJSON);
+	}
+}
+loadSavedDecks();
+//if there are no saved decks, save the testDeckData
+if (savedDecks.length == 0) {
+	savedDecks.push(testDeckData)
+	localStorage.setItem('savedDecks', JSON.stringify(savedDecks));
 }
 
 //#endregion
@@ -154,6 +160,9 @@ function removeSpacesCapitalsSpecialCharacters(string) {
 var deck1Name = '';
 var deck2Name = '';
 var deckNames = [deck1Name, deck2Name];
+var deck1Name = '';
+var deck2Name = '';
+var deckNames = [deck1Name, deck2Name];
 var decks = []
 var deck1Contents = [];
 var deck2Contents = [];
@@ -234,6 +243,10 @@ deck1_button.addEventListener('click', function () {
 	currentDeck = 0;
 	deck1_button.classList.add('selected');
 	deck2_button.classList.remove('selected');
+	deckContainer.classList.add('deckContainerActive');
+	deck2Container.classList.remove('deckContainerActive');
+	refreshNameInput();
+
 	deckContainer.classList.add('deckContainerActive');
 	deck2Container.classList.remove('deckContainerActive');
 	refreshNameInput();
@@ -403,9 +416,32 @@ deckContainer.addEventListener('click', function () {
 	deck2Container.classList.remove('deckContainerActive');
 	refreshNameInput();
 });
+deckContainer.classList.add('deckContainerActive');
+
+//when deck container is clicked, set it as the current deck
+deckContainer.addEventListener('click', function () {
+	currentDeck = 0;
+	deck1_button.classList.add('selected');
+	deck2_button.classList.remove('selected');
+	deckContainer.classList.add('deckContainerActive');
+	deck2Container.classList.remove('deckContainerActive');
+	refreshNameInput();
+});
 
 var deck2Container = createNewDeckContainer();
 deck2Container.classList.add('deck2Container');
+
+//when deck container is clicked, set it as the current deck
+deck2Container.addEventListener('click', function () {
+	currentDeck = 1;
+	deck2_button.classList.add('selected');
+	deck1_button.classList.remove('selected');
+	deck2Container.classList.add('deckContainerActive');
+	deckContainer.classList.remove('deckContainerActive');
+	refreshNameInput();
+});
+
+//#tag slot-container
 
 //when deck container is clicked, set it as the current deck
 deck2Container.addEventListener('click', function () {
@@ -459,7 +495,6 @@ function fillDeckWithUnits(deckID) {
 
 //#tag deckSlots divs for units
 function createDeckSlots(container, deckID) {
-
 	var deckSlotContainer = document.createElement('div');
 	deckSlotContainer.id = 'deckSlotContainer' + deckID;
 	deckSlotContainer.classList.add('deckSlotContainer');
@@ -489,6 +524,10 @@ function createDeckSlots(container, deckID) {
 			var deckID = this.parentElement.id.slice(-1);
 			var deck = decks[deckID];
 			mouseOverUnit(deck, slotNumber)
+			//get the deck ID of the current element
+			var deckID = this.parentElement.id.slice(-1);
+			var deck = decks[deckID];
+			mouseOverUnit(deck, slotNumber)
 		});
 
 		//if the mouse is clicked
@@ -497,6 +536,7 @@ function createDeckSlots(container, deckID) {
 			var deck = decks[deckID];
 			// remove the unit from the deck array
 			if (deck[slotNumber]) {
+				removeUnitFromDeck(slotNumber, deckID, true);
 				removeUnitFromDeck(slotNumber, deckID, true);
 			}
 			else {
@@ -745,7 +785,7 @@ function redrawDeckContent(deckID) {
 	deck.forEach((unit, i) => {
 		//deckEmojiText.innerHTML += unit.emoji + ' ';
 		//slot.innerHTML = deck[index].name;
-		deckSlots[deckID][i].firstElementChild.src = 'images/units/' + unit.image + '.png';
+		deckSlots[deckID][i].firstElementChild.src = 'images/units/' + unit.slug + '.png';
 	});
 
 }
@@ -1072,8 +1112,8 @@ function redrawUnitContent() {
 			if (!excludeKeys.includes(key)) {
 				var div = document.createElement('div');
 				var unit_table_cell = document.createElement('td');
-				unit_table_cell.id = unitList[i].name;
-				div.id = unitList[i].name;
+				unit_table_cell.id = unitList[i].slug;
+				div.id = unitList[i].slug;
 				unit_table_cell.appendChild(div);
 				div.addEventListener('mouseover', unitMouseOver);
 				unit_table_cell.addEventListener('mouseover', unitMouseOver);
@@ -1419,10 +1459,13 @@ video.src = unitList[1].videoturnaround;
 //set video to repeat
 video.loop = true;
 //crop the right 30% of the video
-
+var videoblind = document.createElement('div');
+videoblind.id = 'videoblind';
+videoblind.style = 'position: absolute; background-color: black; width: 100%; height: 100%;';
 
 video.id = 'unitVideo';
 stats_content.appendChild(video);
+stats_content.appendChild(videoblind);
 
 //#tag barChart definition
 function drawBarChart(label) {
@@ -1559,6 +1602,7 @@ console.log(getColour(.5, 0, 1));
 var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 var unitMouseOverAndTappedPrev = null;
 function unitMouseOverAndTapped(unit) {
+	if (!unit) return;
 	if (statsMode != 0) return;
 	if (unitMouseOverAndTappedPrev == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
@@ -1584,9 +1628,16 @@ function unitMouseOverAndTapped(unit) {
 	//get the unit from unit list by its name
 	//update the video source
 	video.src = unit.videoturnaround;
-	console.log(unit.videoturnaround);
-	video.play();
-
+	// periodically decrease the opacity of the video blind
+	videoblind.style.opacity = 1
+	var fadein = setInterval(() => {
+		videoblind.style.opacity = videoblind.style.opacity -= .01
+		if (videoblind.style.opacity <= 0) clearInterval(fadein);
+	}, 20);
+	setTimeout(function () {
+		if (video.src != unit.videoturnaround) return
+		video.play();
+	}, 200);
 	//update the data in the bar charts based on the unit id
 	//update the chart
 	//update the colors in the bar charts based on the unit id
@@ -1947,6 +1998,7 @@ function refreshStatsContent() {
 	if (statsMode == 0) {
 		stats_content.appendChild(video);
 		video.play();
+		stats_content.appendChild(videoblind);
 		stats_content.appendChild(statsUnitBottomContainer);
 		stats_content.appendChild(statsChartContainer);
 	}
@@ -1976,8 +2028,7 @@ function unitMouseOver(e) {
 	//if we are
 	if (e.target.id == oldE) return;
 	oldE = e.target.id;
-	var unit = unitList.find(unit => unit.name === e.target.id);
-	//console.log(e.target.id);
+	var unit = units[e.target.id];
 	currentUnit = e.target.id;
 	unitMouseOverAndTapped(unit);
 }
