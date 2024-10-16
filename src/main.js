@@ -4,7 +4,8 @@ import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import jsonUnitsBase from './units.json';
 import { sidebar } from './menu';
-import { units, unitList } from './units';
+import { units } from './units';
+
 var unitList = Object.values(units);
 
 //#endregion
