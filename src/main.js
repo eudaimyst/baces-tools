@@ -1891,9 +1891,7 @@ function unitMouseOver(e) {
 	//if we are
 	if (e.target.id == oldE) return;
 	oldE = e.target.id;
-	console.log(e.target);
 	var unit = units[e.target.id];
-	//console.log(e.target.id);
 	currentUnit = e.target.id;
 	unitMouseOverAndTapped(unit);
 }

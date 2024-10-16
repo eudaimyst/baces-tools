@@ -7,6 +7,16 @@ function removeSpacesCapitalsSpecialCharacters(inputString) {
 	return inputString.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 }
 
+
+const buildingTiers = {
+    'core': 1,
+    'foundry': 2,
+    'starforge': 2,
+    'advancedfoundry': 3,
+    'advancedstarforge': 3,
+}
+
+
 class Unit {
 	constructor(jsonImportedUnit) {
 		Object.keys(jsonImportedUnit).forEach((key) => {
@@ -25,25 +35,15 @@ class Unit {
 			} else {
 				this[cleanNameKey] = value;
 			}
-			if (this['building'] == 'core') this['tier'] = '1';
-			else if (this['building'] == 'foundry' || this['building'] == 'starforge') this['tier'] = '2';
-			else if (this['building'] == 'advancedfoundry' || this['building'] == 'advancedstarforge') this['tier'] = '3';
-			else this['tier'] = '0';
 			if (value == 'splash' || value == 'small' || value == 'antibig' || value == 'big' || value == 'antiair') {
-
 				if (this.traits == undefined) {
 					this.traits = [];
 				}
 				this.traits.push(value);
 			}
-			if (cleanNameKey == 'antiair') {
-				if (this.traits == undefined) {
-					this.traits = [];
-					this.traits.push('none');
-				}
-			}
 		}
     );
+    this['tier'] = buildingTiers[this['building']] || 0;
     this['image'] = jsonImportedUnit.slug;
     this['slug'] = jsonImportedUnit.slug;
 	}
