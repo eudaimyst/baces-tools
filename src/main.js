@@ -256,14 +256,26 @@ deck2_button.addEventListener('click', function () {
 deck1_button.classList.add('selected');
 
 //clear button to clear the current deck
-const clear_button = document.createElement('button');
-clear_button.innerHTML = 'clear';
-clear_button.id = 'clear_button';
-clear_button.classList.add('header_element');
-deck_view_header.appendChild(clear_button);
+const deck_clear_button = document.createElement('button');
+deck_clear_button.innerHTML = 'clear';
+deck_clear_button.id = 'clear_button';
+deck_clear_button.classList.add('header_element');
+deck_view_header.appendChild(deck_clear_button);
 //when the clear button is pressed, clear the current deck
-clear_button.addEventListener('click', function () {
+deck_clear_button.addEventListener('click', function () {
 	removeAllUnitsFromDeck(currentDeck);
+	refreshNameInput();
+});
+
+//fill deck button which tries to add units from the unit list in order until the deck is full
+const deck_fill_button = document.createElement('button');
+deck_fill_button.innerHTML = 'fill';
+deck_fill_button.id = 'fill_button';
+deck_fill_button.classList.add('header_element');
+deck_view_header.appendChild(deck_fill_button);
+//when the fill button is pressed, fill the current deck with units
+deck_fill_button.addEventListener('click', function () {
+	fillDeckWithUnits(currentDeck);
 	refreshNameInput();
 });
 
@@ -431,6 +443,18 @@ function removeAllUnitsFromDeck(deckID) {
 	updateComparisonCharts(); deckNames[currentDeck] = '';
 
 	redrawDeckContent(deckID);
+}
+
+function fillDeckWithUnits(deckID) {
+	var deck = decks[deckID];
+	//for each unit in the sorted unit list
+	//if the unit is not in the deck, add it to the deck
+	unitList.forEach(unit => {
+		if (unit.name != 'Kraken') addUnitToDeck(unit, deckID);
+	});
+
+	redrawDeckContent(deckID);
+	updateComparisonCharts();
 }
 
 //#tag deckSlots divs for units
