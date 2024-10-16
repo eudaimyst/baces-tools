@@ -70,24 +70,6 @@ if (savedDecks.length == 0) {
 
 //#endregion
 
-//#region deck format
-
-function findUnit(name) {
-	var unit
-	unitList.forEach((u) => {
-		//if unit.name contains name
-		if (u.name) {
-			console.log(u.name, name)
-			if (removeSpacesCapitalsSpecialCharacters(u.name) == removeSpacesCapitalsSpecialCharacters(name)) unit = u;
-		} else {
-			unit = unitList[0];
-		}
-
-	});
-	console.log('found ' + unit.name)
-	return unit;
-}
-
 //helper function which takes a string and removes any spaces and capitilisation or the '-' symbol or + symbol or any other symbols... just letters and numbers
 function removeSpacesCapitalsSpecialCharacters(input) {
 	if (typeof input !== 'string') {
@@ -98,9 +80,6 @@ function removeSpacesCapitalsSpecialCharacters(input) {
 
 //#tag define-deck-contents
 //decks contain the unit objects
-var deck1Name = '';
-var deck2Name = '';
-var deckNames = [deck1Name, deck2Name];
 var deck1Name = '';
 var deck2Name = '';
 var deckNames = [deck1Name, deck2Name];
@@ -184,10 +163,6 @@ deck1_button.addEventListener('click', function () {
 	currentDeck = 0;
 	deck1_button.classList.add('selected');
 	deck2_button.classList.remove('selected');
-	deckContainer.classList.add('deckContainerActive');
-	deck2Container.classList.remove('deckContainerActive');
-	refreshNameInput();
-
 	deckContainer.classList.add('deckContainerActive');
 	deck2Container.classList.remove('deckContainerActive');
 	refreshNameInput();
@@ -359,30 +334,8 @@ deckContainer.addEventListener('click', function () {
 });
 deckContainer.classList.add('deckContainerActive');
 
-//when deck container is clicked, set it as the current deck
-deckContainer.addEventListener('click', function () {
-	currentDeck = 0;
-	deck1_button.classList.add('selected');
-	deck2_button.classList.remove('selected');
-	deckContainer.classList.add('deckContainerActive');
-	deck2Container.classList.remove('deckContainerActive');
-	refreshNameInput();
-});
-
 var deck2Container = createNewDeckContainer();
 deck2Container.classList.add('deck2Container');
-
-//when deck container is clicked, set it as the current deck
-deck2Container.addEventListener('click', function () {
-	currentDeck = 1;
-	deck2_button.classList.add('selected');
-	deck1_button.classList.remove('selected');
-	deck2Container.classList.add('deckContainerActive');
-	deckContainer.classList.remove('deckContainerActive');
-	refreshNameInput();
-});
-
-//#tag slot-container
 
 //when deck container is clicked, set it as the current deck
 deck2Container.addEventListener('click', function () {
@@ -799,27 +752,36 @@ unit_view_header.appendChild(sort_label);
 //create a dropdown selector for sorting
 const unit_header_sort = document.createElement('select');
 //add an option called test
-unit_header_sort.options.add(new Option('name', 'name'));
-unit_header_sort.options.add(new Option('health', 'health'));
-unit_header_sort.options.add(new Option('type', 'type'));
-unit_header_sort.options.add(new Option('damage', 'damage'));
-unit_header_sort.options.add(new Option('air damage', 'damagea'));
-unit_header_sort.options.add(new Option('dps', 'dpsg'));
-unit_header_sort.options.add(new Option('air dps', 'dpsa'));
-unit_header_sort.options.add(new Option('speed', 'speed'));
-unit_header_sort.options.add(new Option('range', 'range'));
-unit_header_sort.options.add(new Option('matter', 'matter'));
-unit_header_sort.options.add(new Option('energy', 'energy'));
-unit_header_sort.options.add(new Option('bandwidth', 'bandwidth'));
-unit_header_sort.options.add(new Option('skill', 'ability'));
-unit_header_sort.options.add(new Option('tech', 'building'));
-unit_header_sort.options.add(new Option('tier', 'tier'));
-unit_header_sort.options.add(new Option('big', 'big'));
-unit_header_sort.options.add(new Option('small', 'small'));
-unit_header_sort.options.add(new Option('antibig', 'antibig'));
-unit_header_sort.options.add(new Option('splash', 'splash'));
-unit_header_sort.options.add(new Option('antiair', 'antiair'));
-unit_header_sort.options.add(new Option('manufacturer', 'manufacturer'));
+function addOptionsToTable(displayName, statName) {
+	unit_header_sort.add(new Option(displayName, statName));
+}
+//name, health, type, damage, air damage, dps, air dps, speed, range, matter, energy, bandwidth, skill, tech, tier, big, small, antibig, splash, antiair, manufacturer
+const sortOptions = [
+	['Name', 'name'],
+	['Health', 'health'],
+	['Type', 'type'],
+	['Damage', 'damage'],
+	['Air Damage', 'damagea'],
+	['DPS', 'dpsg'],
+	['Air DPS', 'dpsa'],
+	['Speed', 'speed'],
+	['Range', 'range'],
+	['Matter', 'matter'],
+	['Energy', 'energy'],
+	['Bandwidth', 'bandwidth'],
+	['Skill', 'ability'],
+	['Tech', 'building'],
+	['Tier', 'tier'],
+	['Big', 'big'],
+	['Small', 'small'],
+	['Anti-Big', 'antibig'],
+	['Splash', 'splash'],
+	['Anti-Air', 'antiair'],
+	['Manufacturer', 'manufacturer']
+];
+sortOptions.forEach((option) => {
+	addOptionsToTable(option[0], option[1])
+});
 sortUnits(unit_header_sort.value, unitList);
 
 unit_header_sort.id = 'unit_header_sort';
@@ -1567,19 +1529,41 @@ function unitMouseOverAndTapped(unit) {
 	//create an img element of the relevant label icon
 	//add the img to the statsUnitName
 
-	//get the unit from unit list by its name
-	//update the video source
-	video.src = unit.videoturnaround;
-	// periodically decrease the opacity of the video blind
 	videoblind.style.opacity = 1
-	var fadein = setInterval(() => {
+	// periodically decrease the opacity of the video blind
+	var fadein;
+	fadein = setInterval(() => {
 		videoblind.style.opacity = videoblind.style.opacity -= .01
 		if (videoblind.style.opacity <= 0) clearInterval(fadein);
-	}, 20);
-	setTimeout(function () {
-		if (video.src != unit.videoturnaround) return
-		video.play();
-	}, 200);
+	}, 40);
+	//get the unit from unit list by its name
+	//update the video source
+	fetchAndPlay();
+	function fetchAndPlay() {
+		var playVideo = false
+		console.log('fetching ' + unit.videoturnaround)
+		fetch(unit.videoturnaround)
+			.then(response => response.blob())
+			.then(blob => {
+				if (unit.name == unitMouseOverAndTappedPrev.name) {
+					playVideo = true;
+					video.src = URL.createObjectURL(blob);
+					console.log(unit.name + ' ' + unitMouseOverAndTappedPrev.name)
+				}
+			})
+			.then(thisIsWhyNoUnusedVarsSucks => {
+				if (playVideo) {
+					video.play();
+					// Video playback started ;)
+					console.log('video playback started for ' + unit.name)
+				}
+			})
+			.catch(e => {
+				// Video playback failed ;(
+				console.log(e);
+				console.log('video playback failed')
+			})
+	}
 	//update the data in the bar charts based on the unit id
 	//update the chart
 	//update the colors in the bar charts based on the unit id
