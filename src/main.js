@@ -2,7 +2,6 @@
 //create 3 divs called unit_view, deck_view and stats_view, and a wrapper to contain them
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
-import jsonUnitsBase from './units.json';
 import { sidebar } from './menu';
 import { units } from './units';
 
@@ -1318,7 +1317,6 @@ var barCharts = []
 
 //video element
 var video = document.createElement('video');
-video.id = 'unitVideo';
 //video source is the units videoTurnaround key
 video.src = unitList[1].videoturnaround;
 //set video to repeat
@@ -1326,11 +1324,7 @@ video.loop = true;
 //crop the right 30% of the video
 var videoblind = document.createElement('div');
 videoblind.id = 'videoblind';
-videoblind.style.position = 'absolute';
-videoblind.style.width = '100%';
-videoblind.style.height = '100%';
-videoblind.style.backgroundColor = 'black';
-videoblind.innerHTML = '';
+videoblind.style = 'position: absolute; background-color: black; width: 100%; height: 100%;';
 
 video.id = 'unitVideo';
 stats_content.appendChild(video);
@@ -1500,12 +1494,8 @@ function unitMouseOverAndTapped(unit) {
 	// periodically decrease the opacity of the video blind
 	videoblind.style.opacity = 1
 	var fadein = setInterval(() => {
-		if (videoblind.style.opacity > 0) {
-			videoblind.style.opacity -= .01;
-		}
-		else {
-			clearInterval(fadein);
-		}
+		videoblind.style.opacity = videoblind.style.opacity -= .01
+		if (videoblind.style.opacity <= 0) clearInterval(fadein);
 	}, 20);
 	setTimeout(function () {
 		if (video.src != unit.videoturnaround) return
