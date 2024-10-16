@@ -25,8 +25,10 @@ class SavedDeck {
 }
 
 function fillSlotsFromDeck(deck, deckID) {
-	deck.deckList.forEach((unitName) => {
-		var unit = units[unitName];
+	deck.deckList.forEach((unitSlug) => {
+		console.log(unitSlug)
+		console.log(units[unitSlug])
+		var unit = units[unitSlug];
 		addUnitToDeck(unit, deckID);
 	});
 }
@@ -35,10 +37,10 @@ var testDeckData = new SavedDeck('Starter',
 		'hunter',
 		'butterfly',
 		'airship',
-		'king crab',
+		'kingcrab',
 		'ballista',
 		'bulwark',
-		'heavy ballista']);
+		'heavyballista']);
 console.log(testDeckData);
 
 savedDecks.push(testDeckData);
@@ -47,7 +49,7 @@ function saveNewDeck(deckName, deck) {
 	var deckList = []
 	//add the name of each unit to the decklist
 	deck.forEach((unit) => {
-		deckList.push(unit.name);
+		deckList.push(unit.slug);
 	});
 	savedDecks.push(new SavedDeck(deckName, deckList));
 }
@@ -86,73 +88,12 @@ function findUnit(name) {
 	return unit;
 }
 
-
-var savedDecks = []
-
-class SavedDeck {
-	constructor(deckName, deckList) {
-		this.deckName = deckName;
-		this.deckList = deckList;
-	}
-}
-
-function fillSlotsFromDeck(deck, deckID) {
-	deck.deckList.forEach((unitName) => {
-		var unit = findUnit(unitName);
-		addUnitToDeck(unit, deckID);
-	});
-}
-var testDeckData = new SavedDeck('Starter',
-	['crab',
-		'hunter',
-		'butterfly',
-		'airship',
-		'king crab',
-		'ballista',
-		'bulwark',
-		'heavy ballista']);
-console.log(testDeckData);
-
-savedDecks.push(testDeckData);
-
-function saveNewDeck(deckName, deck) {
-	var deckList = []
-	//add the name of each unit to the decklist
-	deck.forEach((unit) => {
-		deckList.push(unit.name);
-	});
-	savedDecks.push(new SavedDeck(deckName, deckList));
-}
-
-//load savedDecks from localStorage
-function loadSavedDecks() {
-	var savedDecksJSON = localStorage.getItem('savedDecks');
-	if (savedDecksJSON) {
-		savedDecks = JSON.parse(savedDecksJSON);
-	}
-}
-loadSavedDecks();
-//if there are no saved decks, save the testDeckData
-if (savedDecks.length == 0) {
-	savedDecks.push(testDeckData)
-	localStorage.setItem('savedDecks', JSON.stringify(savedDecks));
-}
-
-//#endregion
-
 //helper function which takes a string and removes any spaces and capitilisation or the '-' symbol or + symbol or any other symbols... just letters and numbers
-function removeSpacesCapitalsSpecialCharacters(string) {
-	var newString = '';
-	//loop through the string
-	for (var i = 0; i < string.length; i++) {
-		//if the character is a letter or a number, add it to the new string
-		if (string[i].match(/[a-zA-Z0-9]/)) {
-			newString += string[i];
-		}
+function removeSpacesCapitalsSpecialCharacters(input) {
+	if (typeof input !== 'string') {
+		input = String(input);
 	}
-	//return the new string
-
-	return newString.toLowerCase();
+	return input.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 }
 
 //#tag define-deck-contents
@@ -466,6 +407,7 @@ function mouseOverUnit(deck, slotNumber) {
 }
 function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 	var deck = decks[deckID];
+	console.log(deck[slotNumber]);
 	console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
 	delete deck[slotNumber];
 	deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
@@ -482,9 +424,10 @@ function removeAllUnitsFromDeck(deckID) {
 }
 
 function fillDeckWithUnits(deckID) {
-	var deck = decks[deckID];
 	//for each unit in the sorted unit list
 	//if the unit is not in the deck, add it to the deck
+	//check if unit is in the deck
+
 	unitList.forEach(unit => {
 		if (unit.name != 'Kraken') addUnitToDeck(unit, deckID);
 	});
@@ -536,7 +479,6 @@ function createDeckSlots(container, deckID) {
 			var deck = decks[deckID];
 			// remove the unit from the deck array
 			if (deck[slotNumber]) {
-				removeUnitFromDeck(slotNumber, deckID, true);
 				removeUnitFromDeck(slotNumber, deckID, true);
 			}
 			else {
