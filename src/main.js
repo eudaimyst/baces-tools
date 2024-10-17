@@ -1227,6 +1227,7 @@ stats_button.addEventListener('click', function () {
 	statsMode = 0
 	stats_button.classList.add('selected');
 	compare_button.classList.remove('selected');
+	stats_mode_select.disabled = true;
 	refreshStatsContent()
 });
 const compare_button = document.createElement('button');
@@ -1239,12 +1240,14 @@ compare_button.addEventListener('click', function () {
 	statsMode = 1;
 	stats_button.classList.remove('selected');
 	compare_button.classList.add('selected');
+	stats_mode_select.disabled = false;
 	refreshStatsContent()
 });
 stats_button.classList.add('selected');
 
 //dropdown to choose between stats, resource and traits comparison modes
 const stats_mode_select = document.createElement('select');
+stats_mode_select.disabled = true;
 stats_mode_select.id = 'stats_mode_select';
 stats_mode_select.classList.add('header_element');
 stats_view_header.appendChild(stats_mode_select);
@@ -1551,16 +1554,15 @@ function unitMouseOverAndTapped(unit) {
 					console.log(unit.name + ' ' + unitMouseOverAndTappedPrev.name)
 				}
 			})
-			.then(thisIsWhyNoUnusedVarsSucks => {
+			.then(() => {
 				if (playVideo) {
 					video.play();
 					// Video playback started ;)
 					console.log('video playback started for ' + unit.name)
 				}
 			})
-			.catch(e => {
+			.catch(() => {
 				// Video playback failed ;(
-				console.log(e);
 				console.log('video playback failed')
 			})
 	}
@@ -1922,6 +1924,7 @@ function refreshStatsContent() {
 		stats_content.removeChild(stats_content.firstChild);
 	};
 	if (statsMode == 0) {
+
 		stats_content.appendChild(video);
 		video.play();
 		stats_content.appendChild(videoblind);
