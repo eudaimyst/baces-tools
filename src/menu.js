@@ -34,7 +34,7 @@ sidebar.id = 'sidebar';
 
 
 const sidebarLogoImg = document.createElement('img');
-sidebarLogoImg.src = 'images/baces_tools.svg';
+sidebarLogoImg.src = 'images/baces_tools2.svg';
 sidebarLogoImg.alt = 'BAces_Tools';
 
 sidebarLogoImg.id = 'sidebarLogoImg';

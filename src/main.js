@@ -32,7 +32,7 @@ function fillSlotsFromDeck(deck, deckID) {
 		addUnitToDeck(unit, deckID);
 	});
 }
-var testDeckData = new SavedDeck('Starter',
+var testDeckData = new SavedDeck('North Performance',
 	['crab',
 		'hunter',
 		'butterfly',
