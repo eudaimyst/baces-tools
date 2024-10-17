@@ -32,8 +32,13 @@ th {
 
 td {
 	border-width: 1px;
-	border-color: rgba(0, 0, 0, 0.075);
+	border-color: rgb(255, 255, 255);
 	border-style: none;
+	padding: 0 0 0 0;
+}
+
+.simpleStatsPadding {
+	padding: 0 10px 0 10px;
 }
 
 #sidebarLogoImg {
@@ -146,30 +151,55 @@ option {
 	width: 100%;
 }
 
-.unit_table {
-	width: 100%;
-}
-
 .unit_table_header_image {
 	width: 20px;
 	height: 20px;
 }
 
-
 .unit_table_image {
-	width: 42px;
-	height: 42px;
+	width: 48px;
+	height: 48px;
 
+}
+
+.unit_table_image_medium {
+	width: 36px;
+	height: 36px;
+}
+
+.unit_table_image_small {
+	width: 28px;
+	height: 28px;
+}
+
+.unit_table_smalltext {
+	font-size: 9px;
+}
+
+.unit_table_cell {
+	background-color: #00000022;
+	text-align: center;
+}
+
+.unit_table_cell_alt {
+	background-color: #72727222;
+}
+
+.unit_table_cell_traits {
+	width: 100px;
+}
+
+.table_add_unit_button {
+	width: 100%;
+	height: 36px;
+	font-style: bold;
+	font-size: 18px;
 }
 
 #unitStatsImg {
 	width: 24px;
 	height: 24px;
 	transform: translate(0, 10%);
-}
-
-.unit_table_smalltext {
-	font-size: 9px;
 }
 
 .unitStatsResourceImg {
@@ -470,20 +500,6 @@ sup {
 	top: 30px;
 }
 
-.unit_table_cell {
-	background-color: #00000022;
-	text-align: center;
-}
-
-.unit_table_cell_alt {
-	background-color: #72727222;
-}
-
-.unit_table_image_small {
-	width: 24px;
-	height: 24px;
-}
-
 #deck_content {
 	padding: 2%;
 	background-color: rgba(5, 1, 66, 0.685);
@@ -494,16 +510,6 @@ sup {
 	justify-content: space-evenly;
 }
 
-.unit_table_cell_traits {
-	width: 100px;
-}
-
-.table_add_unit_button {
-	width: 100%;
-	height: 36px;
-	font-style: bold;
-	font-size: 18px;
-}
 
 .deckSlotImage {
 	width: 60px;

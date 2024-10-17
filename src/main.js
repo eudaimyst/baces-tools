@@ -762,6 +762,7 @@ const sortOptions = [
 	['Health', 'health'],
 	['Type', 'type'],
 	['Damage', 'damage'],
+	['Simple Damage', 'dpsm'],
 	['Air Damage', 'damagea'],
 	['DPS', 'dpsg'],
 	['Air DPS', 'dpsa'],
@@ -837,6 +838,8 @@ unit_view_header.appendChild(unit_simple_stats_checkbox);
 //if checkbox is checked, hide the advanced stats
 unit_simple_stats_checkbox.checked = true;
 var simpleStatsMode = true;
+//mouseover /alt text for the checkbox
+unit_simple_stats_checkbox.title = 'Simple Health/Damage NOT to scale';
 unit_simple_stats_checkbox.addEventListener('change', function () {
 	if (unit_simple_stats_checkbox.checked) {
 		simpleStatsMode = true;
@@ -920,6 +923,9 @@ function redrawUnitContent() {
 	if (simpleStatsMode) {
 		//add to excludeKeys, the following: damage, damagea, dps, dpsa
 		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
+	}
+	else {
+		excludeKeys.push('dpsm', 'hp/100')
 	}
 	//for each object in unitsJson_base create a new unit passing the object
 	console.log('Redrawing Unit Content\n-----------------');
@@ -1034,6 +1040,9 @@ function redrawUnitContent() {
 		//the first cell of each row, we will add a button to add the unit to the deck
 		var unit_table_cell = document.createElement('td');
 		unit_table_cell.id = unitList[i].name;
+		if (i % 2 == 0) {
+			unit_table_cell.classList.add('unit_table_cell_alt');
+		}
 		//add the unit property to the table cell
 		var div = document.createElement('div');
 		//div.innerHTML = unitList[i].name;
@@ -1061,6 +1070,9 @@ function redrawUnitContent() {
 				var div = document.createElement('div');
 				var unit_table_cell = document.createElement('td');
 				unit_table_cell.id = unitList[i].slug;
+				if (simpleStatsMode) {
+					unit_table_cell.classList.add('simpleStatsPadding');
+				}
 				div.id = unitList[i].slug;
 				unit_table_cell.appendChild(div);
 				div.addEventListener('mouseover', unitMouseOver);
@@ -1086,14 +1098,14 @@ function redrawUnitContent() {
 					img.src = 'images/techtiers/' + value + '.svg';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
-					img.classList.add('unit_table_image_small');
+					img.classList.add('unit_table_image_medium');
 					div.appendChild(img);
 				} else if (key == 'ability') {
 					if (value != '') {
 						img.src = 'images/abilities/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
-						img.classList.add('unit_table_image_small');
+						img.classList.add('unit_table_image_medium');
 						div.appendChild(img);
 					}
 				} else if (key == 'manufacturer') {
