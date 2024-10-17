@@ -570,7 +570,7 @@ function calculateDeckStats(deckID) {
 						img.src = 'images/abilities/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('unit_table_image_small');
+						img.classList.add('deck_stats_img_small');
 						stat_category_cells[deckID][key].appendChild(img);
 					}
 				}
@@ -587,7 +587,7 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i][j] + '.png';
 								img.setAttribute('alt', stats[key][i][j]);
 								img.setAttribute('title', stats[key][i][j]);
-								img.classList.add('unit_table_image_small');
+								img.classList.add('deck_stats_img_small');
 								stat_category_cells[deckID][key].appendChild(img);
 							}
 						}
@@ -596,7 +596,7 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i] + '.png';
 								img.setAttribute('alt', stats[key][i]);
 								img.setAttribute('title', stats[key][i]);
-								img.classList.add('unit_table_image_small');
+								img.classList.add('deck_stats_img_small');
 								stat_category_cells[deckID][key].appendChild(img);
 							}
 						}
@@ -628,7 +628,7 @@ function calculateDeckStats(deckID) {
 						img.src = 'images/manuf/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('unit_table_image_small');
+						img.classList.add('deck_stats_img_small');
 						stat_category_cells[deckID][key].appendChild(img);
 					}
 
