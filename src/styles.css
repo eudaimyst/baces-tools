@@ -41,11 +41,6 @@ td {
 	padding: 0 5px 0 5px;
 }
 
-#sidebarLogoImg {
-	width: 100%;
-	opacity: 80%;
-}
-
 tr {
 	height: 20px;
 }
@@ -356,6 +351,12 @@ sup {
 	display: flex;
 }
 
+#app {
+	position: relative;
+	flex-grow: 1;
+	margin: 5px;
+}
+
 #sidebar {
 	position: relative;
 	font-size: small;
@@ -365,12 +366,19 @@ sup {
 	float: left;
 	background-color: rgba(8, 8, 10, 0.596);
 	box-shadow: 2px 2px 2px 1px rgb(0 0 0 / 20%);
+	;
 }
 
-#app {
-	position: relative;
-	flex-grow: 1;
-	margin: 5px;
+#sidebarLogoImg {
+	width: 100%;
+	opacity: 100%;
+	transform: translate(2%, 0);
+}
+
+#sidebarLogoImg {
+	padding: 15 0 0 0;
+	width: 100%;
+	opacity: 100%;
 }
 
 #sidebar_title_div {
@@ -386,11 +394,18 @@ sup {
 	bottom: 0px;
 	padding: 5px;
 	font-size: 12px;
-	color: rgb(158, 158, 158);
+	color: rgba(255, 255, 255, 0.671);
+	text-shadow: 2px 2px 1px black;
 }
 
-.extraSmallFont {
+.sidebar_extraSmallFont {
+	padding: 5 0 5 0;
+	font-family: 'Times New Roman', Times, serif;
 	font-size: 8px;
+	font-variant: normal;
+	color: rgba(255, 255, 255, 0.671);
+	font-weight: 600;
+	text-shadow: 2px 2px 1px black;
 }
 
 #toggleSidebarButton {
@@ -403,7 +418,7 @@ sup {
 	top: 10px;
 	left: 50%;
 	background-image: 'images/burgericon.png';
-	transform: translate(-50%);
+	transform: translate(-40%, 0);
 }
 
 #toggleSidebarButtonImg {
@@ -590,6 +605,7 @@ sup {
 	border: none;
 	border-width: 1px;
 	border-color: green;
+	background-color: rgba(0, 0, 0, 0.308);
 }
 
 .complexStatDiv {
