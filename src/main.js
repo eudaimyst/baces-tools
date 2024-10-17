@@ -744,10 +744,11 @@ function addUnitToDeck(unit, deckID) {
 //#endregion
 
 
-//#region unit-div-header
+//#region unit-header
 //label
-const sort_label = document.createElement('p');
+const sort_label = document.createElement('div');
 sort_label.innerHTML = 'sort: ';
+sort_label.classList.add('header_element');
 unit_view_header.appendChild(sort_label);
 //create a dropdown selector for sorting
 const unit_header_sort = document.createElement('select');
@@ -790,6 +791,7 @@ unit_view_header.appendChild(unit_header_sort);
 //label
 const view_label = document.createElement('p');
 view_label.innerHTML = 'view: ';
+view_label.classList.add('header_element');
 unit_view_header.appendChild(view_label);
 //table view button
 const unit_view_table_btn = document.createElement('button');
@@ -824,6 +826,25 @@ unit_filter_clear_btn.onclick = function () {
 	//run the unit_filter input changed event
 	unit_filter_input.dispatchEvent(new Event('input'));
 }
+const simple_stats_label = document.createElement('p');
+simple_stats_label.innerHTML = 'simple: ';
+simple_stats_label.classList.add('header_element');
+unit_view_header.appendChild(simple_stats_label);
+//unit_simple_stats_checkbox is a checkbox
+const unit_simple_stats_checkbox = document.createElement('input');
+unit_simple_stats_checkbox.type = 'checkbox';
+unit_view_header.appendChild(unit_simple_stats_checkbox);
+//if checkbox is checked, hide the advanced stats
+unit_simple_stats_checkbox.checked = true;
+var simpleStatsMode = true;
+unit_simple_stats_checkbox.addEventListener('change', function () {
+	if (unit_simple_stats_checkbox.checked) {
+		simpleStatsMode = true;
+	} else {
+		simpleStatsMode = false;
+	}
+	redrawUnitContent();
+});
 
 /**
  *
@@ -894,8 +915,12 @@ unit_filter_input.oninput = function () {
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
+	unit_content.innerHTML = '';
 	const excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
-
+	if (simpleStatsMode) {
+		//add to excludeKeys, the following: damage, damagea, dps, dpsa
+		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
+	}
 	//for each object in unitsJson_base create a new unit passing the object
 	console.log('Redrawing Unit Content\n-----------------');
 	console.log(unitList);
@@ -927,15 +952,32 @@ function redrawUnitContent() {
 				img.src = 'images/stats/' + key + '.png';
 				img.classList.add('unit_table_header_image');
 				if (key == 'damagea') {
-					img.setAttribute('alt', 'air damage');
-					img.setAttribute('title', 'air damage');
+					img.setAttribute('alt', 'Air Damage');
+					img.setAttribute('title', 'Air Damage');
 				}
 				else {
 					img.setAttribute('alt', key);
 					img.setAttribute('title', key);
 				}
 				unit_table_header.appendChild(img);
-			} else if (key == 'dpsg') {
+			} else if (key == 'hp/100') {
+				var img = document.createElement('img');
+				img.src = 'images/stats/' + 'health' + '.png';
+				img.classList.add('unit_table_header_image');
+				img.setAttribute('alt', 'Health/100');
+				img.setAttribute('title', 'Health/100');
+				unit_table_header.appendChild(img);
+				unit_table_header.classList.add('unit_table_smalltext');
+			} else if (key == 'dpsm') {
+				var img = document.createElement('img');
+				img.src = 'images/stats/' + 'damage' + '.png';
+				img.classList.add('unit_table_header_image');
+				img.setAttribute('alt', 'DPS*10/m');
+				img.setAttribute('title', 'DPS*10/m');
+				unit_table_header.appendChild(img);
+				unit_table_header.classList.add('unit_table_smalltext');
+			}
+			else if (key == 'dpsg') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damage' + '.png';
 				img.classList.add('unit_table_header_image');
@@ -943,6 +985,7 @@ function redrawUnitContent() {
 				img.setAttribute('title', 'ground dps');
 				unit_table_header.appendChild(img);
 				unit_table_header.innerHTML += '/s';
+				unit_table_header.classList.add('unit_table_smalltext');
 			} else if (key == 'dpsa') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damagea' + '.png';
@@ -951,6 +994,7 @@ function redrawUnitContent() {
 				img.setAttribute('title', ' air dps');
 				unit_table_header.appendChild(img);
 				unit_table_header.innerHTML += '/s';
+				unit_table_header.classList.add('unit_table_smalltext');
 			} else if (key == 'matter' || key == 'energy' || key == 'bandwidth') {
 				var img = document.createElement('img');
 				img.src = 'images/resources/' + key + '.svg';
@@ -972,7 +1016,7 @@ function redrawUnitContent() {
 				unit_table_header.innerHTML = key;
 			}
 
-			if (key != 'attacktype' && key != 'attacktype2' && key != 'unittype') unit_table_head.appendChild(unit_table_header);
+			unit_table_head.appendChild(unit_table_header);
 		}
 	}
 
@@ -1141,7 +1185,6 @@ unit_header_sort.onchange = function () {
 	sortUnits(unit_header_sort.value, unitList);
 
 	//update the unit_content.innerHTML to the new sort by option
-	unit_content.innerHTML = '';
 	redrawUnitContent();
 };
 

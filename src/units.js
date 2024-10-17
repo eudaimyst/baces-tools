@@ -42,6 +42,9 @@ class Unit {
 				this['damage'] = value;
 			} else {
 				this[cleanNameKey] = value;
+				//calculations after dpsa for table column order purposes
+				if (cleanNameKey == 'dpsa') this['dpsm'] = Math.floor(calcDPSM(this));
+				else if (cleanNameKey == 'health') this['hp/100'] = Math.floor(this.health / 100);
 			}
 			if (value == 'splash' || value == 'small' || value == 'antibig' || value == 'big' || value == 'antiair') {
 				if (this.traits == undefined) {
@@ -51,11 +54,11 @@ class Unit {
 			}
 		}
 		);
+		//instead of 
+
 		this['tier'] = buildingTiers[this['building']] || 0;
 		this['image'] = jsonImportedUnit.slug;
 		this['slug'] = jsonImportedUnit.slug;
-		this['dpsm'] = Math.floor(calcDPSM(this));
-		this['hp/100'] = Math.floor(this.health / 100);
 	}
 }
 

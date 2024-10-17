@@ -58,11 +58,12 @@ input {
 
 
 button {
+	color: rgb(199, 199, 199);
 	font-size: 14px;
 	font-variant: all-small-caps;
 	font-style: bold;
+	margin: 5px;
 	background-color: rgba(39, 39, 39, 0.7);
-	color: rgb(216, 216, 216);
 	border-radius: 10px;
 	border-width: 1px;
 	border-style: double;
@@ -80,11 +81,8 @@ button:active {
 }
 
 select {
-	font-size: 14px;
-	font-variant: all-small-caps;
-	font-style: bold;
 	background-color: rgba(39, 39, 39, 0.7);
-	color: rgb(192, 162, 81);
+	color: rgb(189, 173, 128);
 	border-radius: 10px;
 	border-width: 1px;
 	border-style: double;
@@ -137,6 +135,10 @@ option {
 }
 
 .header_element {
+	color: rgb(199, 199, 199);
+	font-size: 14px;
+	font-variant: all-small-caps;
+	font-style: bold;
 	margin: 5px;
 }
 
@@ -164,6 +166,10 @@ option {
 	width: 24px;
 	height: 24px;
 	transform: translate(0, 10%);
+}
+
+.unit_table_smalltext {
+	font-size: 9px;
 }
 
 .unitStatsResourceImg {
