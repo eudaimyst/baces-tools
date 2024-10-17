@@ -1372,9 +1372,16 @@ function createStatsUnitDiv(label) {
 	var statsUnitDiv = document.createElement('div');
 	statsUnitDiv.classList.add('statsUnitResourceContainer');
 	var statsUnitImg = document.createElement('img');
-	statsUnitImg.classList.add('unitStatsResourceImg');
 	//set the src of the img to the relevant label icon
-	statsUnitImg.src = 'images/resources/' + removeSpacesCapitalsSpecialCharacters(label) + '.svg';
+	if (label == 'Building') {
+		statsUnitImg.src = 'images/techtiers/' + 'core' + '.svg';
+		statsUnitImg.classList.add('unitStatsBuildingImg')
+	}
+	else {
+		statsUnitImg.src = 'images/resources/' + removeSpacesCapitalsSpecialCharacters(label) + '.svg';
+		statsUnitImg.classList.add('unitStatsResourceImg');
+	}
+
 	//add the img to the matterDiv
 	statsUnitDiv.appendChild(statsUnitImg);
 	//add a text value to energy div for the units energy value
@@ -1388,9 +1395,10 @@ function createStatsUnitDiv(label) {
 var statsUnitMatterDiv = createStatsUnitDiv('Matter');
 var statsUnitEnergyDiv = createStatsUnitDiv('Energy');
 var statsUnitBandwidthDiv = createStatsUnitDiv('Bandwidth');
+var statsUnitBuildingDiv = createStatsUnitDiv('Building');
 
 
-
+statsUnitBottomContainer.appendChild(statsUnitBuildingDiv);
 statsUnitBottomContainer.appendChild(statsUnitMatterDiv);
 statsUnitBottomContainer.appendChild(statsUnitEnergyDiv);
 statsUnitBottomContainer.appendChild(statsUnitBandwidthDiv);
@@ -1543,13 +1551,23 @@ function getColour(value, min, max) {
 	return color;
 }
 
+function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, building) {
+	statsUnitName.innerHTML = name;
+	//get the div by its id
+	statsUnitMatterDiv.children[1].innerHTML = matter;
+	statsUnitEnergyDiv.children[1].innerHTML = energy;
+	statsUnitBandwidthDiv.children[1].innerHTML = bandwidth;
+	statsUnitBuildingDiv.children[0].src = 'images/techtiers/' + building + '.svg';
+
+}
+
 console.log(getColour(.5, 0, 1));
 
 var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 var unitMouseOverAndTappedPrev = null;
 function unitMouseOverAndTapped(unit) {
 	if (!unit) return;
-	if (statsMode != 0) return;
+	if (statsMode != 0) return; //exits if in deck compare mode for the stats view
 	if (unitMouseOverAndTappedPrev == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
 		return;
@@ -1561,15 +1579,8 @@ function unitMouseOverAndTapped(unit) {
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
-	statsUnitName.innerHTML = unit.name;
-	//get the div by its id
-	statsUnitMatterDiv.children[1].innerHTML = unit.matter;
-	statsUnitEnergyDiv.children[1].innerHTML = unit.energy;
-	statsUnitBandwidthDiv.children[1].innerHTML = unit.bandwidth;
-	//statsUnitEnergyValue.innerHTML = unit.energy;
-	//statsUnitMatterValue.innerHTML = unit.matter;
-	//create an img element of the relevant label icon
-	//add the img to the statsUnitName
+	refreshStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building)
+
 
 	videoblind.style.opacity = 1
 	// periodically decrease the opacity of the video blind
@@ -1605,8 +1616,6 @@ function unitMouseOverAndTapped(unit) {
 				console.log('video playback failed')
 			})
 	}
-	//update the data in the bar charts based on the unit id
-	//update the chart
 	//update the colors in the bar charts based on the unit id
 	function updateChart(chart, label) {
 		chart.data.datasets[0].data = sortedUnitData[label];
@@ -1617,22 +1626,11 @@ function unitMouseOverAndTapped(unit) {
 	for (var [key] of Object.entries(sortedUnitData)) {
 		updateChart(barCharts[key], key);
 	}
-
-	//update the rank for each stat
-	//update the ranks for each label for each unit stat
 	//update the ranks for each label for each unit stat
 	statsUnitRankDiv.innerHTML = '';
 	unitStats.forEach(function (label) {
 		updateRank(label, unit);
 	});
-
-	/**
-	updateChart(barCharts['health'], 'health');
-	updateChart(barCharts['damage'], 'damage');
-	updateChart(barCharts['speed'], 'speed');
-	updateChart(barCharts['range'], 'range');
-	*/
-
 }
 
 var statsComparisonChartContainer = document.createElement('div');
