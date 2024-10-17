@@ -68,14 +68,15 @@ const sidebar_footer_div = document.createElement('div');
 sidebar_footer_div.classList.add('sidebar_footer_div')
 const sidebar_footer_contents = document.createElement('div');
 sidebar_footer_div.appendChild(sidebar_footer_contents);
-sidebar_footer_contents.innerHTML = "<b>BAces_Tools has no affiliation with Uncapped Games";
+sidebar_footer_contents.innerHTML = "<b>BACES Tools has no association with Uncapped Games. All rights to any game-related content remain the exclusive property of Uncapped Games.";
 const sidebar_footer_contents2 = document.createElement('div');
 sidebar_footer_div.appendChild(sidebar_footer_contents2);
-sidebar_footer_contents2.innerHTML = "All rights to any content displayed remain the property of Uncapped Games.";
+sidebar_footer_contents2.classList.add('extraSmallFont');
+sidebar_footer_contents2.innerHTML = "This software is provided 'as is' warranty or guarantee regarding the accuracy, completeness, or current relevance of the game data displayed. The use of this software does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains the sole property of its respective owners.";
 const sidebar_footer_contents3 = document.createElement('div');
 sidebar_footer_div.appendChild(sidebar_footer_contents3);
-sidebar_footer_contents3.innerHTML = "No warranties or guarantees are provided regarding the accuracy or completeness of the game data displayed. This toolkit is provided ‘as is’ and is for informational purposes only. Use of this toolkit does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains with its respective owner.";
-sidebar_footer_contents3.style.fontSize = '8px';
+sidebar_footer_contents3.innerHTML = "By using this software, you acknowledge that the developers are not responsible for any claims, liabilities, or damages that may arise from the use of this software. The software is intended solely for informational purposes, and any reliance on the data provided is at the user’s own risk.";
+sidebar_footer_contents3.classList.add('extraSmallFont');
 //sidebar_footer_div.innerHTML = '<b></b>.<br> <br>';
 function expandMenu(expand) {
 	sidebarLogoImg.style.width = '100%';

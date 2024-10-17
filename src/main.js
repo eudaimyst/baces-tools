@@ -464,59 +464,43 @@ function createDeckStats(container) {
 	var deck_stats_div = document.createElement('div');
 	deck_stats_div.classList.add('deck_stats_div');
 	//create a table with 2 columns and 4 rows
-	var deck_stats_table = document.createElement('table');
-	deck_stats_table.classList.add('deck_stats_table');
-	var deck_stats_table2 = document.createElement('table');
-	deck_stats_table2.classList.add('deck_stats_table');
 	var stat_categories = ['matter', 'energy', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
-	var stat_category_cells = {} //stores the cells for each stat category to be updated
+	var stat_category_divs = {} //stores the cells for each stat category to be updated
 
-	for (var i = 0; i < stat_categories.length; i++) {
-		//only every third category create a new row
-		var tr
-		if (i % 3 == 0) tr = document.createElement('tr');
+	stat_categories.forEach(statCategory => {
+		const statDiv = document.createElement('div')
+		statDiv.classList.add('statDiv');
+		stat_category_divs[statCategory] = valueDiv;
 
-
-
-		for (var j = 0; j < 2; j++) {
-			var td = document.createElement('td');
-			td.classList.add('deck_stats_td');
-			if (j == 1) {
-				stat_category_cells[stat_categories[i]] = td
-				td.id = 'stat_category_cell_' + stat_categories[i];
-				td.classList.add('deck_stats_td_right');
-				td.innerHTML = '';
-			}
-			else {
-				//td.innerHTML = stat_categories[i];
-				//instead of just setting the text, draw the stat image
-				if (i < 7) {
-					var img = document.createElement('img');
-					if (stat_categories[i] == 'energy' || stat_categories[i] == 'matter' || stat_categories[i] == 'bandwidth') img.src = 'images/resources/' + stat_categories[i] + '.svg';
-					else img.src = 'images/stats/' + stat_categories[i] + '.png';
-					img.classList.add('deck_stats_img');
-					td.appendChild(img);
-				}
-				else {
-					tr = document.createElement('tr');
-					if (i % 2 == 0) tr = document.createElement('tr');
-					if (stat_categories[i] == 'manufacturer') td.innerHTML = 'manf.'
-					else td.innerHTML = stat_categories[i];
-				}
-			}
-			tr.appendChild(td);
+		if (statCategory == 'traits' || statCategory == 'ability') {
+			statDiv.innerText = statCategory;
+			statDiv.classList.add('complexStatDiv');
 		}
-		if (i < 7) {
-			deck_stats_table.appendChild(tr);
+		else if (statCategory == 'manufacturer') {
+			statDiv.innerText = 'manf.';
+			statDiv.classList.add('complexStatDiv');
 		}
 		else {
-			deck_stats_table2.appendChild(tr);
-		}
-	}
-	deck_stats_div.appendChild(deck_stats_table);
-	deck_stats_div.appendChild(deck_stats_table2);
+			var img = document.createElement('img');
+			if (statCategory == 'energy' || statCategory == 'matter' || statCategory == 'bandwidth') {
+				img.src = 'images/resources/' + statCategory + '.svg';
+				statDiv.classList.add('resourceStatDiv');
+				img.classList.add('resourceStatImg');
+			}
+			else {
+				img.src = 'images/stats/' + statCategory + '.png';
+				img.classList.add('deck_stats_img');
+			}
 
-	//stat_category_cells.range.innerHTML = 'test';
+			statDiv.appendChild(img);
+		}
+		var valueDiv = document.createElement('div');
+		stat_category_divs[statCategory] = valueDiv;
+		valueDiv.innerText = '';
+		statDiv.appendChild(valueDiv);
+		deck_stats_div.appendChild(statDiv);
+	});
+
 
 	var deckEmojiText = document.createElement('div');
 
@@ -526,10 +510,10 @@ function createDeckStats(container) {
 		redrawDeckContent();
 	};
 
-	deck_stats_div.appendChild(deckEmojiText);
+	//stat_category_cells.range.innerHTML = 'test';
 	container.appendChild(deck_stats_div);
 
-	return stat_category_cells;
+	return stat_category_divs;
 }
 
 var stat_category_cells = []
