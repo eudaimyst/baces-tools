@@ -55,6 +55,7 @@ class Unit {
 		this['image'] = jsonImportedUnit.slug;
 		this['slug'] = jsonImportedUnit.slug;
 		this['dpsm'] = Math.floor(calcDPSM(this));
+		this['hp/100'] = Math.floor(this.health / 100);
 	}
 }
 
