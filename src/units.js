@@ -9,11 +9,19 @@ function removeSpacesCapitalsSpecialCharacters(inputString) {
 
 
 const buildingTiers = {
-    'core': 1,
-    'foundry': 2,
-    'starforge': 2,
-    'advancedfoundry': 3,
-    'advancedstarforge': 3,
+	'core': 1,
+	'foundry': 2,
+	'starforge': 2,
+	'advancedfoundry': 3,
+	'advancedstarforge': 3,
+}
+
+
+
+function calcDPSM(unit) {
+	//damage per second per matter
+	if (unit.dpsg > unit.dpsa) return (unit.dpsg / unit.matter) * 10;
+	else return (unit.dpsa / unit.matter) * 10;
 }
 
 
@@ -42,19 +50,20 @@ class Unit {
 				this.traits.push(value);
 			}
 		}
-    );
-    this['tier'] = buildingTiers[this['building']] || 0;
-    this['image'] = jsonImportedUnit.slug;
-    this['slug'] = jsonImportedUnit.slug;
+		);
+		this['tier'] = buildingTiers[this['building']] || 0;
+		this['image'] = jsonImportedUnit.slug;
+		this['slug'] = jsonImportedUnit.slug;
+		this['dpsm'] = Math.floor(calcDPSM(this));
 	}
 }
 
 const units = importedUnits.reduce((obj, unit) => {
-        obj[unit.slug] = new Unit(unit);
-        return obj;
-    }, {});
+	obj[unit.slug] = new Unit(unit);
+	return obj;
+}, {});
 
 const unitList = Object.values(units);
 
 
-export {units, unitList};
+export { units, unitList };
