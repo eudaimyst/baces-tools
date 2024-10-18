@@ -143,14 +143,22 @@ option {
 }
 
 .header_element {
-	font-size: 16px;
+	font-size: small;
 	font-variant: all-small-caps;
 	font-style: bold;
-	margin: 5px;
+	margin: 2px;
 }
 
 .unit_table {
 	width: 98%;
+}
+
+.bgImgSelectDiv {
+	margin-top: 20%;
+}
+
+.countdown_div {
+	margin-top: 20%;
 }
 
 .unit_table_header {
@@ -199,13 +207,15 @@ option {
 }
 
 .mouseOverSelected {
-	outline-color: rgba(255, 221, 221, 0.342);
+	outline: inset;
+	outline-color: rgba(255, 221, 221, 0.651);
 	outline-style: dotted;
-	outline-width: 2px;
+	outline-offset: -3px;
+	outline-width: 1px;
 }
 
 .unit_table_cell_traits {
-	width: 100px;
+	overflow-x: visible;
 }
 
 .table_add_unit_button {

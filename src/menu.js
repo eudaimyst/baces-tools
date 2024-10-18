@@ -34,7 +34,7 @@ sidebar.id = 'sidebar';
 
 
 const sidebarLogoImg = document.createElement('img');
-sidebarLogoImg.src = 'images/baces_tools2.svg';
+sidebarLogoImg.src = 'images/baces_tools3.png';
 sidebarLogoImg.alt = 'BACES Tools';
 
 sidebarLogoImg.id = 'sidebarLogoImg';
@@ -214,6 +214,11 @@ bgImgSelectDiv.appendChild(randomToggle);
 //save the value of the toggle to local storage
 randomToggle.addEventListener('change', () => {
 	localStorage.setItem('randomToggle', randomToggle.checked);
+	//if the random toggle is set to on, set a random background
+	//if the random toggle is set to off, set the background to the selected value
+	if (randomToggle.checked) {
+		updateBG(document.getElementById('wrapper'));
+	}
 });
 //load the value of the toggle from local storage
 randomToggle.checked = localStorage.getItem('randomToggle') === 'true';
@@ -226,6 +231,10 @@ function updateBG(wrapper) {
 		const randomNum = Math.floor(Math.random() * 19) + 1;
 		//set the background image to the random number
 		wrapper.style.backgroundImage = 'url(images/bg/' + randomNum + '.jpg)';
+		//set the current option to the randomly selected image
+		bgImgSelect.value = 'images/bg/' + randomNum + '.jpg';
+		//save the selected value to local storage
+		localStorage.setItem('bgImgSelect', bgImgSelect.value);
 	}
 	else {
 		//if there is a value in image select
@@ -261,6 +270,10 @@ bgImgSelect.addEventListener('change', () => {
 	//save the selected value to local storage
 	localStorage.setItem('bgImgSelect', bgImgSelect.value);
 });
+//add a final text box under the select element that says 'select a background image'
+const bgImgSelectText = document.createElement('p');
+bgImgSelectText.innerHTML = 'all artwork credit to <a href = "https://www.playbattleaces.com">playbattleaces.com</a >';
+bgImgSelectDiv.appendChild(bgImgSelectText);
 
 
 
