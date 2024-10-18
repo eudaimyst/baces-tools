@@ -2,7 +2,7 @@
 //create 3 divs called unit_view, deck_view and stats_view, and a wrapper to contain them
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
-import { sidebar } from './menu';
+import { sidebar, updateBG } from './menu';
 
 
 
@@ -32,7 +32,7 @@ function fillSlotsFromDeck(deck, deckID) {
 		addUnitToDeck(unit, deckID);
 	});
 }
-var testDeckData = new SavedDeck('Starter',
+var testDeckData = new SavedDeck('North Performance',
 	['crab',
 		'hunter',
 		'butterfly',
@@ -139,6 +139,7 @@ wrapper.id = 'wrapper';
 const app = document.createElement('div');
 app.id = 'app';
 wrapper.appendChild(sidebar);
+updateBG(wrapper); //needs to load the background After wrapper has been created
 wrapper.appendChild(app);
 app.appendChild(unit_view);
 app.appendChild(deck_view);
@@ -464,59 +465,43 @@ function createDeckStats(container) {
 	var deck_stats_div = document.createElement('div');
 	deck_stats_div.classList.add('deck_stats_div');
 	//create a table with 2 columns and 4 rows
-	var deck_stats_table = document.createElement('table');
-	deck_stats_table.classList.add('deck_stats_table');
-	var deck_stats_table2 = document.createElement('table');
-	deck_stats_table2.classList.add('deck_stats_table');
 	var stat_categories = ['matter', 'energy', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
-	var stat_category_cells = {} //stores the cells for each stat category to be updated
+	var stat_category_divs = {} //stores the cells for each stat category to be updated
 
-	for (var i = 0; i < stat_categories.length; i++) {
-		//only every third category create a new row
-		var tr
-		if (i % 3 == 0) tr = document.createElement('tr');
+	stat_categories.forEach(statCategory => {
+		const statDiv = document.createElement('div')
+		statDiv.classList.add('statDiv');
+		stat_category_divs[statCategory] = valueDiv;
 
-
-
-		for (var j = 0; j < 2; j++) {
-			var td = document.createElement('td');
-			td.classList.add('deck_stats_td');
-			if (j == 1) {
-				stat_category_cells[stat_categories[i]] = td
-				td.id = 'stat_category_cell_' + stat_categories[i];
-				td.classList.add('deck_stats_td_right');
-				td.innerHTML = '';
-			}
-			else {
-				//td.innerHTML = stat_categories[i];
-				//instead of just setting the text, draw the stat image
-				if (i < 7) {
-					var img = document.createElement('img');
-					if (stat_categories[i] == 'energy' || stat_categories[i] == 'matter' || stat_categories[i] == 'bandwidth') img.src = 'images/resources/' + stat_categories[i] + '.svg';
-					else img.src = 'images/stats/' + stat_categories[i] + '.png';
-					img.classList.add('deck_stats_img');
-					td.appendChild(img);
-				}
-				else {
-					tr = document.createElement('tr');
-					if (i % 2 == 0) tr = document.createElement('tr');
-					if (stat_categories[i] == 'manufacturer') td.innerHTML = 'manf.'
-					else td.innerHTML = stat_categories[i];
-				}
-			}
-			tr.appendChild(td);
+		if (statCategory == 'traits' || statCategory == 'ability') {
+			statDiv.innerText = statCategory;
+			statDiv.classList.add('complexStatDiv');
 		}
-		if (i < 7) {
-			deck_stats_table.appendChild(tr);
+		else if (statCategory == 'manufacturer') {
+			statDiv.innerText = 'manf.';
+			statDiv.classList.add('complexStatDiv');
 		}
 		else {
-			deck_stats_table2.appendChild(tr);
-		}
-	}
-	deck_stats_div.appendChild(deck_stats_table);
-	deck_stats_div.appendChild(deck_stats_table2);
+			var img = document.createElement('img');
+			if (statCategory == 'energy' || statCategory == 'matter' || statCategory == 'bandwidth') {
+				img.src = 'images/resources/' + statCategory + '.svg';
+				statDiv.classList.add('resourceStatDiv');
+				img.classList.add('resourceStatImg');
+			}
+			else {
+				img.src = 'images/stats/' + statCategory + '.png';
+				img.classList.add('deck_stats_img');
+			}
 
-	//stat_category_cells.range.innerHTML = 'test';
+			statDiv.appendChild(img);
+		}
+		var valueDiv = document.createElement('div');
+		stat_category_divs[statCategory] = valueDiv;
+		valueDiv.innerText = '';
+		statDiv.appendChild(valueDiv);
+		deck_stats_div.appendChild(statDiv);
+	});
+
 
 	var deckEmojiText = document.createElement('div');
 
@@ -526,10 +511,10 @@ function createDeckStats(container) {
 		redrawDeckContent();
 	};
 
-	deck_stats_div.appendChild(deckEmojiText);
+	//stat_category_cells.range.innerHTML = 'test';
 	container.appendChild(deck_stats_div);
 
-	return stat_category_cells;
+	return stat_category_divs;
 }
 
 var stat_category_cells = []
@@ -586,7 +571,7 @@ function calculateDeckStats(deckID) {
 						img.src = 'images/abilities/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('unit_table_image_small');
+						img.classList.add('deck_stats_img_small');
 						stat_category_cells[deckID][key].appendChild(img);
 					}
 				}
@@ -603,7 +588,7 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i][j] + '.png';
 								img.setAttribute('alt', stats[key][i][j]);
 								img.setAttribute('title', stats[key][i][j]);
-								img.classList.add('unit_table_image_small');
+								img.classList.add('deck_stats_img_small');
 								stat_category_cells[deckID][key].appendChild(img);
 							}
 						}
@@ -612,7 +597,7 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i] + '.png';
 								img.setAttribute('alt', stats[key][i]);
 								img.setAttribute('title', stats[key][i]);
-								img.classList.add('unit_table_image_small');
+								img.classList.add('deck_stats_img_small');
 								stat_category_cells[deckID][key].appendChild(img);
 							}
 						}
@@ -644,7 +629,7 @@ function calculateDeckStats(deckID) {
 						img.src = 'images/manuf/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('unit_table_image_small');
+						img.classList.add('deck_stats_img_small');
 						stat_category_cells[deckID][key].appendChild(img);
 					}
 
@@ -915,6 +900,9 @@ unit_filter_input.oninput = function () {
 
 //#endregion
 
+//unitRows stores the rows of unit table by unit name so we can apply highlights later
+var tableUnitRows = {};
+
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
@@ -952,6 +940,7 @@ function redrawUnitContent() {
 	for (const [key] of Object.entries(unitList[1])) {
 		if (!excludeKeys.includes(key)) {
 			unit_table_header = document.createElement('th');
+			unit_table_header.classList.add('unit_table_header');
 			//add some images to certain headers
 			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range') {
 				var img = document.createElement('img');
@@ -1032,6 +1021,7 @@ function redrawUnitContent() {
 		var unit_table_row = document.createElement('tr');
 		unit_table_row.id = unitList[i].name;
 		unit_table_row.classList.add('unit_table_row');
+		tableUnitRows[unitList[i].name] = unit_table_row;
 
 		//create a table cell element for each unit property
 		//add the unit property to the table cell
@@ -1056,6 +1046,7 @@ function redrawUnitContent() {
 		table_add_unit_button.innerHTML = '+';
 		table_add_unit_button.classList.add('table_add_unit_button')
 		//add the button to the cell
+		unit_table_cell.classList.add('table_add_unit_button_cell')
 		unit_table_cell.appendChild(table_add_unit_button);
 
 		table_add_unit_button.onclick = function () {
@@ -1388,10 +1379,17 @@ function createStatsUnitDiv(label) {
 	var statsUnitDiv = document.createElement('div');
 	statsUnitDiv.classList.add('statsUnitResourceContainer');
 	var statsUnitImg = document.createElement('img');
-	statsUnitImg.classList.add('unitStatsResourceImg');
 	//set the src of the img to the relevant label icon
-	statsUnitImg.src = 'images/resources/' + removeSpacesCapitalsSpecialCharacters(label) + '.svg';
-	//add the img to the matterDiv
+	if (label == 'Building') {
+		statsUnitImg.src = 'images/techtiers/' + 'core' + '.svg';
+		statsUnitImg.classList.add('unitStatsBuildingImg')
+	}
+	else {
+		statsUnitImg.src = 'images/resources/' + removeSpacesCapitalsSpecialCharacters(label) + '.svg';
+		statsUnitImg.classList.add('unitStatsResourceImg');
+	}
+
+	//add the img to the matterDivca
 	statsUnitDiv.appendChild(statsUnitImg);
 	//add a text value to energy div for the units energy value
 	var statsUnitValue = document.createElement('div');
@@ -1404,9 +1402,10 @@ function createStatsUnitDiv(label) {
 var statsUnitMatterDiv = createStatsUnitDiv('Matter');
 var statsUnitEnergyDiv = createStatsUnitDiv('Energy');
 var statsUnitBandwidthDiv = createStatsUnitDiv('Bandwidth');
+var statsUnitBuildingDiv = createStatsUnitDiv('Building');
 
 
-
+statsUnitBottomContainer.appendChild(statsUnitBuildingDiv);
 statsUnitBottomContainer.appendChild(statsUnitMatterDiv);
 statsUnitBottomContainer.appendChild(statsUnitEnergyDiv);
 statsUnitBottomContainer.appendChild(statsUnitBandwidthDiv);
@@ -1559,33 +1558,43 @@ function getColour(value, min, max) {
 	return color;
 }
 
+function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, building) {
+	statsUnitName.innerHTML = name;
+	//get the div by its id
+	statsUnitMatterDiv.children[1].innerHTML = matter;
+	statsUnitEnergyDiv.children[1].innerHTML = energy;
+	statsUnitBandwidthDiv.children[1].innerHTML = bandwidth;
+	statsUnitBuildingDiv.children[0].src = 'images/techtiers/' + building + '.svg';
+
+}
+
 console.log(getColour(.5, 0, 1));
 
 var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
-var unitMouseOverAndTappedPrev = null;
+var preMouseoverUnit = null;
+
 function unitMouseOverAndTapped(unit) {
 	if (!unit) return;
-	if (statsMode != 0) return;
-	if (unitMouseOverAndTappedPrev == unit) {
+	if (statsMode != 0) return; //exits if in deck compare mode for the stats view
+	if (preMouseoverUnit == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
 		return;
 	}
-	unitMouseOverAndTappedPrev = unit;
+	preMouseoverUnit = unit;
 	//console.log(e.target.id);
-	//get the unit name from the cells parent (which is the row), using the name table header
+	//add a mouseOverSelected class to the unit row in the unit table using tableUnitRows
+	//remove the mouseOverSelected class from all other unit rows
+	for (var [key] of Object.entries(tableUnitRows)) {
+		tableUnitRows[key].classList.remove('mouseOverSelected');
+	}
+	tableUnitRows[unit.name].classList.add('mouseOverSelected');
+	//get the unit from unit list by its name
 
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
-	statsUnitName.innerHTML = unit.name;
-	//get the div by its id
-	statsUnitMatterDiv.children[1].innerHTML = unit.matter;
-	statsUnitEnergyDiv.children[1].innerHTML = unit.energy;
-	statsUnitBandwidthDiv.children[1].innerHTML = unit.bandwidth;
-	//statsUnitEnergyValue.innerHTML = unit.energy;
-	//statsUnitMatterValue.innerHTML = unit.matter;
-	//create an img element of the relevant label icon
-	//add the img to the statsUnitName
+	refreshStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building)
+
 
 	videoblind.style.opacity = 1
 	// periodically decrease the opacity of the video blind
@@ -1603,10 +1612,10 @@ function unitMouseOverAndTapped(unit) {
 		fetch(unit.videoturnaround)
 			.then(response => response.blob())
 			.then(blob => {
-				if (unit.name == unitMouseOverAndTappedPrev.name) {
+				if (unit.name == preMouseoverUnit.name) {
 					playVideo = true;
 					video.src = URL.createObjectURL(blob);
-					console.log(unit.name + ' ' + unitMouseOverAndTappedPrev.name)
+					console.log(unit.name + ' ' + preMouseoverUnit.name)
 				}
 			})
 			.then(() => {
@@ -1621,8 +1630,6 @@ function unitMouseOverAndTapped(unit) {
 				console.log('video playback failed')
 			})
 	}
-	//update the data in the bar charts based on the unit id
-	//update the chart
 	//update the colors in the bar charts based on the unit id
 	function updateChart(chart, label) {
 		chart.data.datasets[0].data = sortedUnitData[label];
@@ -1633,22 +1640,11 @@ function unitMouseOverAndTapped(unit) {
 	for (var [key] of Object.entries(sortedUnitData)) {
 		updateChart(barCharts[key], key);
 	}
-
-	//update the rank for each stat
-	//update the ranks for each label for each unit stat
 	//update the ranks for each label for each unit stat
 	statsUnitRankDiv.innerHTML = '';
 	unitStats.forEach(function (label) {
 		updateRank(label, unit);
 	});
-
-	/**
-	updateChart(barCharts['health'], 'health');
-	updateChart(barCharts['damage'], 'damage');
-	updateChart(barCharts['speed'], 'speed');
-	updateChart(barCharts['range'], 'range');
-	*/
-
 }
 
 var statsComparisonChartContainer = document.createElement('div');

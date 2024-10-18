@@ -34,8 +34,8 @@ sidebar.id = 'sidebar';
 
 
 const sidebarLogoImg = document.createElement('img');
-sidebarLogoImg.src = 'images/baces_tools.svg';
-sidebarLogoImg.alt = 'BAces_Tools';
+sidebarLogoImg.src = 'images/baces_tools3.png';
+sidebarLogoImg.alt = 'BACES Tools';
 
 sidebarLogoImg.id = 'sidebarLogoImg';
 sidebarLogoImg.style.width = '50px';
@@ -58,25 +58,53 @@ toggleSidebarButton.appendChild(toggleSidebarButtonImg);
 var sidebarActive = true;
 const sidebar_title_div = document.createElement('div');
 sidebar_title_div.id = 'sidebar_title_div';
-sidebar_title_div.innerHTML = 'BAces_Tools';
+sidebar_title_div.innerHTML = '';
 const sidebar_title_v_div = document.createElement('div');
 sidebar_title_v_div.id = 'sidebar_title_div_v';
-sidebar_title_v_div.innerHTML = 'BAces_Tools';
+sidebar_title_v_div.innerHTML = '';
 const sidebar_content_div = document.createElement('div');
 sidebar_content_div.id = 'sidebar_content_div';
+
+
 const sidebar_footer_div = document.createElement('div');
 sidebar_footer_div.classList.add('sidebar_footer_div')
 const sidebar_footer_contents = document.createElement('div');
 sidebar_footer_div.appendChild(sidebar_footer_contents);
-sidebar_footer_contents.innerHTML = "<b>BAces_Tools has no affiliation with Uncapped Games";
+sidebar_footer_contents.innerHTML = "<b>BACES Tools has no association with Uncapped Games. All rights to any game-related content remain the exclusive property of Uncapped Games.";
+
+//make a region element that hides footer_contents2 and 3 until it is clicked
+const sidebar_footer_contents_region = document.createElement('div');
+sidebar_footer_contents_region.innerText = '[legal]'
+sidebar_footer_div.appendChild(sidebar_footer_contents_region);
+//set icon to pointer when mouse is over the region
+sidebar_footer_contents_region.style.cursor = 'pointer';
+//when region is clicked, toggle the visibility of the children using an event
+sidebar_footer_contents_region.addEventListener('click', function () {
+	if (sidebar_footer_contents2.style.display == 'none') {
+		sidebar_footer_contents2.style.display = 'block';
+		sidebar_footer_contents3.style.display = 'block';
+	} else {
+		sidebar_footer_contents2.style.display = 'none';
+		sidebar_footer_contents3.style.display = 'none';
+	}
+});
+
+
+
+
 const sidebar_footer_contents2 = document.createElement('div');
-sidebar_footer_div.appendChild(sidebar_footer_contents2);
-sidebar_footer_contents2.innerHTML = "All rights to any content displayed remain the property of Uncapped Games.";
+sidebar_footer_contents_region.appendChild(sidebar_footer_contents2);
+sidebar_footer_contents2.classList.add('sidebar_extraSmallFont');
+sidebar_footer_contents2.style.display = 'none';
+sidebar_footer_contents2.innerHTML = "This software is provided 'as is' with NO warranty or guarantee regarding the accuracy, completeness, or current relevance of the game data displayed. The use of this software does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains the sole property of its respective owners.";
 const sidebar_footer_contents3 = document.createElement('div');
-sidebar_footer_div.appendChild(sidebar_footer_contents3);
-sidebar_footer_contents3.innerHTML = "No warranties or guarantees are provided regarding the accuracy or completeness of the game data displayed. This toolkit is provided ‘as is’ and is for informational purposes only. Use of this toolkit does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains with its respective owner.";
-sidebar_footer_contents3.style.fontSize = '8px';
+sidebar_footer_contents_region.appendChild(sidebar_footer_contents3);
+sidebar_footer_contents3.innerHTML = "By using this software, you acknowledge that the developers are not responsible for any claims, liabilities, or damages that may arise from the use of this software. The software is intended solely for informational purposes.";
+sidebar_footer_contents3.classList.add('sidebar_extraSmallFont');
+sidebar_footer_contents3.style.display = 'none';
 //sidebar_footer_div.innerHTML = '<b></b>.<br> <br>';
+
+
 function expandMenu(expand) {
 	sidebarLogoImg.style.width = '100%';
 	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
@@ -162,8 +190,91 @@ function getRemainingTime() {
 
 //set countdown div text to the remaining time using the function
 setInterval(() => {
-	counDownDivCountdownText.innerHTML = 'COUNTDOWN:<br>Closed Beta 2 Release: ' + getRemainingTime();
+	counDownDivCountdownText.innerHTML = 'Release Countdown (estimate):<br>Closed Beta 2: ' + getRemainingTime();
 }, 1000);
+
+//create a new div for setting the background image with a select element and append it to sidebar_content_div 
+const bgImgSelectDiv = document.createElement('div');
+bgImgSelectDiv.classList.add('bgImgSelectDiv');
+sidebar_content_div.appendChild(bgImgSelectDiv);
+
+//create a select element and append it to bgImgSelectDiv
+const bgImgSelect = document.createElement('select');
+bgImgSelect.classList.add('bgImgSelect');
+bgImgSelectDiv.appendChild(bgImgSelect);
+
+//add a random toggle
+const randomToggle = document.createElement('input');
+randomToggle.type = 'checkbox';
+randomToggle.id = 'randomToggle';
+//add a mouseover title that says it will load a random bg on load
+randomToggle.title = 'Load a random background each visit';
+randomToggle.classList.add('randomToggle');
+bgImgSelectDiv.appendChild(randomToggle);
+//save the value of the toggle to local storage
+randomToggle.addEventListener('change', () => {
+	localStorage.setItem('randomToggle', randomToggle.checked);
+	//if the random toggle is set to on, set a random background
+	//if the random toggle is set to off, set the background to the selected value
+	if (randomToggle.checked) {
+		updateBG(document.getElementById('wrapper'));
+	}
+});
+//load the value of the toggle from local storage
+randomToggle.checked = localStorage.getItem('randomToggle') === 'true';
+//if the toggle is checked, load a random background image
+
+function updateBG(wrapper) {
+
+	if (randomToggle.checked) {
+		//get a random number between 1 and 19
+		const randomNum = Math.floor(Math.random() * 19) + 1;
+		//set the background image to the random number
+		wrapper.style.backgroundImage = 'url(images/bg/' + randomNum + '.jpg)';
+		//set the current option to the randomly selected image
+		bgImgSelect.value = 'images/bg/' + randomNum + '.jpg';
+		//save the selected value to local storage
+		localStorage.setItem('bgImgSelect', bgImgSelect.value);
+	}
+	else {
+		//if there is a value in image select
+		if (localStorage.getItem('bgImgSelect')) {
+			//set the background image to the value of the select element
+			wrapper.style.backgroundImage = 'url(' + localStorage.getItem('bgImgSelect') + ')';
+			//set the current option to the value of the select element
+			bgImgSelect.value = localStorage.getItem('bgImgSelect');
+		}
+	}
+}
+//add a label for the random toggle
+const randomToggleLabel = document.createElement('label');
+randomToggleLabel.for = 'randomToggle';
+randomToggleLabel.innerHTML = 'Random';
+bgImgSelectDiv.appendChild(randomToggleLabel);
+//create an option element for each background image and append it to bgImgSelect
+function createOption(value, text) {
+	const bgImgSelectOption1 = document.createElement('option');
+	bgImgSelectOption1.value = value;
+	bgImgSelectOption1.innerHTML = text;
+	bgImgSelect.appendChild(bgImgSelectOption1);
+}
+//createOption('images/baces_tools2.svg', 'BACES Tools');
+//for each background image in the images/bg folder, create an option
+for (let i = 1; i <= 19; i++) {
+	createOption('images/bg/' + (20 - i) + '.jpg', 'Background ' + i);
+}
+//when the select element is changed, set the background image to the selected value
+bgImgSelect.addEventListener('change', () => {
+	//get the element with the id wrapper
+	document.getElementById('wrapper').style.backgroundImage = 'url(' + bgImgSelect.value + ')';
+	//save the selected value to local storage
+	localStorage.setItem('bgImgSelect', bgImgSelect.value);
+});
+//add a final text box under the select element that says 'select a background image'
+const bgImgSelectText = document.createElement('p');
+bgImgSelectText.innerHTML = 'all artwork credit to <a href = "https://www.playbattleaces.com">playbattleaces.com</a >';
+bgImgSelectDiv.appendChild(bgImgSelectText);
+
 
 
 function advertisement() {
@@ -186,7 +297,7 @@ function advertisement() {
 
 
 
-export { sidebar, advertisement };
+export { sidebar, advertisement, updateBG };
 
 
 
