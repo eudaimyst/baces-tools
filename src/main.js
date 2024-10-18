@@ -2,7 +2,7 @@
 //create 3 divs called unit_view, deck_view and stats_view, and a wrapper to contain them
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
-import { sidebar } from './menu';
+import { sidebar, updateBG } from './menu';
 
 
 
@@ -139,6 +139,7 @@ wrapper.id = 'wrapper';
 const app = document.createElement('div');
 app.id = 'app';
 wrapper.appendChild(sidebar);
+updateBG(wrapper); //needs to load the background After wrapper has been created
 wrapper.appendChild(app);
 app.appendChild(unit_view);
 app.appendChild(deck_view);
@@ -899,6 +900,9 @@ unit_filter_input.oninput = function () {
 
 //#endregion
 
+//unitRows stores the rows of unit table by unit name so we can apply highlights later
+var tableUnitRows = {};
+
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
@@ -1017,6 +1021,7 @@ function redrawUnitContent() {
 		var unit_table_row = document.createElement('tr');
 		unit_table_row.id = unitList[i].name;
 		unit_table_row.classList.add('unit_table_row');
+		tableUnitRows[unitList[i].name] = unit_table_row;
 
 		//create a table cell element for each unit property
 		//add the unit property to the table cell
@@ -1566,17 +1571,24 @@ function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, buildi
 console.log(getColour(.5, 0, 1));
 
 var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
-var unitMouseOverAndTappedPrev = null;
+var preMouseoverUnit = null;
+
 function unitMouseOverAndTapped(unit) {
 	if (!unit) return;
 	if (statsMode != 0) return; //exits if in deck compare mode for the stats view
-	if (unitMouseOverAndTappedPrev == unit) {
+	if (preMouseoverUnit == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
 		return;
 	}
-	unitMouseOverAndTappedPrev = unit;
+	preMouseoverUnit = unit;
 	//console.log(e.target.id);
-	//get the unit name from the cells parent (which is the row), using the name table header
+	//add a mouseOverSelected class to the unit row in the unit table using tableUnitRows
+	//remove the mouseOverSelected class from all other unit rows
+	for (var [key] of Object.entries(tableUnitRows)) {
+		tableUnitRows[key].classList.remove('mouseOverSelected');
+	}
+	tableUnitRows[unit.name].classList.add('mouseOverSelected');
+	//get the unit from unit list by its name
 
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
@@ -1600,10 +1612,10 @@ function unitMouseOverAndTapped(unit) {
 		fetch(unit.videoturnaround)
 			.then(response => response.blob())
 			.then(blob => {
-				if (unit.name == unitMouseOverAndTappedPrev.name) {
+				if (unit.name == preMouseoverUnit.name) {
 					playVideo = true;
 					video.src = URL.createObjectURL(blob);
-					console.log(unit.name + ' ' + unitMouseOverAndTappedPrev.name)
+					console.log(unit.name + ' ' + preMouseoverUnit.name)
 				}
 			})
 			.then(() => {
