@@ -936,6 +936,7 @@ function redrawUnitContent() {
 	for (const [key] of Object.entries(unitList[1])) {
 		if (!excludeKeys.includes(key)) {
 			unit_table_header = document.createElement('th');
+			unit_table_header.classList.add('unit_table_header');
 			//add some images to certain headers
 			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range') {
 				var img = document.createElement('img');
@@ -1040,6 +1041,7 @@ function redrawUnitContent() {
 		table_add_unit_button.innerHTML = '+';
 		table_add_unit_button.classList.add('table_add_unit_button')
 		//add the button to the cell
+		unit_table_cell.classList.add('table_add_unit_button_cell')
 		unit_table_cell.appendChild(table_add_unit_button);
 
 		table_add_unit_button.onclick = function () {
@@ -1382,7 +1384,7 @@ function createStatsUnitDiv(label) {
 		statsUnitImg.classList.add('unitStatsResourceImg');
 	}
 
-	//add the img to the matterDiv
+	//add the img to the matterDivca
 	statsUnitDiv.appendChild(statsUnitImg);
 	//add a text value to energy div for the units energy value
 	var statsUnitValue = document.createElement('div');
