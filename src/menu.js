@@ -34,7 +34,7 @@ sidebar.id = 'sidebar';
 
 
 const sidebarLogoImg = document.createElement('img');
-sidebarLogoImg.src = 'images/baces_tools3.png';
+sidebarLogoImg.src = 'images/baces_tools.png';
 sidebarLogoImg.alt = 'BACES Tools';
 
 sidebarLogoImg.id = 'sidebarLogoImg';
@@ -258,7 +258,6 @@ function createOption(value, text) {
 	bgImgSelectOption1.innerHTML = text;
 	bgImgSelect.appendChild(bgImgSelectOption1);
 }
-//createOption('images/baces_tools2.svg', 'BACES Tools');
 //for each background image in the images/bg folder, create an option
 for (let i = 1; i <= 19; i++) {
 	createOption('images/bg/' + (20 - i) + '.jpg', 'Background ' + i);
@@ -281,7 +280,7 @@ function advertisement() {
 	//create a div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
 	const adsDiv = document.createElement('div');
 	adsDiv.classList.add('ads_div');
-	//adsDiv.innerHTML = '💸💰💲🤑 This is where the money I don\'t have goes 💰💸🤑🤑💸💲💰💸🤑💲💰💲';
+	adsDiv.innerHTML = '💸🤑';
 	adsDiv.style.textAlign = 'center';
 	adsDiv.style.fontWeight = 'bold';
 	adsDiv.style.color = 'gold';
