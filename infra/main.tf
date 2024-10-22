@@ -110,6 +110,9 @@ resource "aws_route53_record" "selected" {
 }
 
 resource "aws_acm_certificate" "cloudfront_default_certificate" {
+    lifecycle {
+        create_before_destroy = true
+    }
     domain_name       = local.env[var.stage].domain_name
     validation_method = "DNS"
 }
