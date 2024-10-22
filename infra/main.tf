@@ -17,15 +17,16 @@ data "aws_caller_identity" "current" {}
 
 locals {
     project_name = "baces-tools"
-    hosted_zone_id = "Z034670833Z7ZI7IJAP83"
     env = {
         dev = {
+            hosted_zone_id = "Z034670833Z7ZI7IJAP83"
             stage = "dev"
             domain_name = "dev-${local.project_name}.t.pilepich.com"
         }
         prod = {
+            hosted_zone_id = "Z098308517HVBQRVJRVXA"
             stage = "prod"
-            domain_name = "${local.project_name}.t.pilepich.com"
+            domain_name = "baces.tools"
         }
     }
 }
@@ -92,7 +93,7 @@ resource "aws_cloudfront_origin_access_control" "default" {
 
 # Route53 Record
 data "aws_route53_zone" "selected" {
-    zone_id = local.hosted_zone_id
+    zone_id = local.env[var.stage].hosted_zone_id
     private_zone = false
 }
 
