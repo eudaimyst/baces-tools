@@ -3,9 +3,9 @@
 	"source": "src/index.html",
 	"scripts": {
 		"start": "npm run build && parcel -p 7112 --no-cache",
-		"startwin": "parcel -p 7112 --no-cache",
 		"build": "rm -rf dist && mkdir -p dist/images && cp -r src/images/* dist/images/ && parcel build --no-cache",
-		"buildwin": "parcel build --no-cache",
+		"startwin": "powershell -ExecutionPolicy Bypass -File .\\start.ps1",
+		"buildwin": "powershell -ExecutionPolicy Bypass -File .\\build.ps1",
 		"lint": "eslint src"
 	},
 	"devDependencies": {
