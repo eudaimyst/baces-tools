@@ -362,11 +362,13 @@ function mouseOverUnit(deck, slotNumber) {
 function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 	var deck = decks[deckID];
 	console.log(deck[slotNumber]);
-	console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
-	delete deck[slotNumber];
-	deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
-	deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
-	if (updateCharts) updateComparisonCharts();
+	if (deck[slotNumber]) {
+		console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
+		delete deck[slotNumber];
+		deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
+		deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
+		if (updateCharts) updateComparisonCharts();
+	}
 }
 function removeAllUnitsFromDeck(deckID) {
 	for (var i = 0; i < 8; i++) {
@@ -376,7 +378,7 @@ function removeAllUnitsFromDeck(deckID) {
 
 	redrawDeckContent(deckID);
 }
-
+//
 function fillDeckWithUnits(deckID) {
 	//for each unit in the sorted unit list
 	//if the unit is not in the deck, add it to the deck
@@ -941,16 +943,17 @@ unit_filter_input.oninput = function () {
 //unitRows stores the rows of unit table by unit name so we can apply highlights later
 var tableUnitRows = {};
 
-const excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
-if (simpleStatsMode) {
-	//add to excludeKeys, the following: damage, damagea, dps, dpsa
-	excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
-}
-else {
-	excludeKeys.push('dpsm', 'hp/100')
-}
-function drawUnitTable() {
+var excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
 
+function drawUnitTable() {
+	excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
+	if (simpleStatsMode) {
+		//add to excludeKeys, the following: damage, damagea, dps, dpsa
+		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
+	}
+	else {
+		excludeKeys.push('dpsm', 'hp/100')
+	}
 	//create a table element
 	var unit_table = document.createElement('table');
 	unit_table.id = 'unit_table';
