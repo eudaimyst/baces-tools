@@ -362,11 +362,13 @@ function mouseOverUnit(deck, slotNumber) {
 function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 	var deck = decks[deckID];
 	console.log(deck[slotNumber]);
-	console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
-	delete deck[slotNumber];
-	deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
-	deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
-	if (updateCharts) updateComparisonCharts();
+	if (deck[slotNumber]) {
+		console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
+		delete deck[slotNumber];
+		deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
+		deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
+		if (updateCharts) updateComparisonCharts();
+	}
 }
 function removeAllUnitsFromDeck(deckID) {
 	for (var i = 0; i < 8; i++) {
