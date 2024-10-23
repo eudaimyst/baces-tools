@@ -780,7 +780,7 @@ view_label.innerHTML = 'view: ';
 view_label.classList.add('header_element');
 unit_view_header.appendChild(view_label);
 
-var unitViewMode = 0; //0 = table 1 = card
+var unitViewMode = 1; //0 = table 1 = card
 
 //table view button
 const unit_view_table_btn = document.createElement('button');
@@ -802,7 +802,6 @@ unit_view_table_btn.onclick = function () {
 	unit_view_card_btn.classList.remove('selected');
 	redrawUnitContent();
 }
-unit_view_table_btn.classList.add('selected');
 //when card is selected set unitViewMode to 1
 unit_view_card_btn.onclick = function () {
 	unitViewMode = 1;
@@ -810,6 +809,7 @@ unit_view_card_btn.onclick = function () {
 	unit_view_table_btn.classList.remove('selected');
 	redrawUnitContent();
 }
+unit_view_card_btn.classList.add('selected');
 
 
 
@@ -1169,6 +1169,124 @@ function drawUnitTable() {
 	unit_content.appendChild(unit_table);
 }
 
+var shortTypes = {
+	Air: 'A', Ground: 'G', 'Base Defense': 'B'
+}
+function createUnitCard(unit) {
+	//create a card div
+	var unit_card = document.createElement('div');
+	//add a class to the card div
+	unit_card.classList.add('unit_card');
+	//when the unit is moused over, call the mouseover function to update the views
+	unit_card.addEventListener('mouseover', () => {
+		console.log(unit.name);
+		unitMouseOverAndTapped(unit);
+	});
+	//when the unit is clicked, add the unit to the deck
+	
+
+
+	//matter
+	var unit_card_matter = document.createElement('div');
+	unit_card_matter.classList.add('unit_card_matter');
+	unit_card_matter.classList.add('unit_card_text');
+	unit_card_matter.innerHTML = unit.matter
+	unit_card.appendChild(unit_card_matter);
+	//bandwidth
+	var unit_card_bandwidth = document.createElement('div');
+	unit_card_bandwidth.classList.add('unit_card_text');
+	unit_card_bandwidth.classList.add('unit_card_bandwidth');
+	unit_card_bandwidth.innerHTML = unit.bandwidth
+	unit_card.appendChild(unit_card_bandwidth);
+	//energy
+	var unit_card_energy = document.createElement('div');
+	unit_card_energy.classList.add('unit_card_energy');
+	unit_card_energy.classList.add('unit_card_text');
+	unit_card_energy.innerHTML = unit.energy;
+	unit_card.appendChild(unit_card_energy);
+
+	var unit_card_name = document.createElement('div');
+	unit_card_name.classList.add('unit_card_name');
+	unit_card_name.classList.add('unit_card_text');
+	unit_card_name.innerHTML = unit.name
+	unit_card.appendChild(unit_card_name);
+	//create a video element using the unit.turnaround as a source and attack it to the body
+	//create a div for the unit image
+	var unit_card_image = document.createElement('img');
+	unit_card_image.src = 'images/units/' + unit.slug + '.png';
+	unit_card_image.alt = unit.name;
+	unit_card_image.title = unit.name;
+	unit_card_image.classList.add('unit_card_image');
+	unit_card.appendChild(unit_card_image);
+	//create a div for the unit building
+	var unit_card_building = document.createElement('img');
+	unit_card_building.src = 'images/techtiers/' + unit.building + '.svg';
+	unit_card_building.alt = unit.building;
+	unit_card_building.title = unit.building;
+	unit_card_building.classList.add('unit_card_building');
+	unit_card.appendChild(unit_card_building);
+	//create a div for the unit type
+	var unit_card_type = document.createElement('div');
+	unit_card_type.classList.add('unit_card_type');
+	unit_card_type.classList.add('unit_card_text');
+	//create a div for the unit traits
+	var unit_card_traits = document.createElement('div');
+	unit_card_traits.classList.add('unit_card_traits');
+	//for each trait in the unit traits array
+	console.log(unit);
+	if (unit.traits) {
+		for (let i = 0; i < unit.traits.length; i++) {
+			//create a div for the trait
+			var unit_card_trait = document.createElement('img');
+			unit_card_trait.src = 'images/traits/' + unit.traits[i] + '.png';
+			unit_card_trait.alt = unit.traits[i];
+			unit_card_trait.title = unit.traits[i];
+			unit_card_trait.classList.add('unit_card_trait');
+			unit_card_traits.appendChild(unit_card_trait);
+		}
+	}
+	unit_card.appendChild(unit_card_traits);
+	//create a div for the unit manufacturer
+	var unit_card_manufacturer = document.createElement('img');
+	//if the manufacturer is not none
+	if (unit.manufacturer != 'none') {
+		unit_card_manufacturer.src = 'images/manuf/' + unit.manufacturer + '.png';
+		unit_card_manufacturer.alt = unit.manufacturer;
+		unit_card_manufacturer.title = unit.manufacturer;
+		unit_card_manufacturer.classList.add('unit_card_manufacturer');
+		unit_card.appendChild(unit_card_manufacturer);
+	}
+
+	unit_card_type.innerHTML = shortTypes[unit.type];
+	unit_card.appendChild(unit_card_type);
+
+
+
+	//name
+
+
+	return unit_card
+}
+
+function drawUnitCards() {
+	//create a container div
+	var unit_card_container = document.createElement('div');
+	//add a class to the container div
+	unit_card_container.id = 'unit_card_container';
+	//add the container div to the unit_content div
+
+	//for each unit in the unit list create a card
+	for (let i = 0; i < unitList.length; i++) {
+		//add the card body div to the card div
+		unit_card_container.appendChild(createUnitCard(unitList[i]));
+	}
+
+
+
+
+
+	unit_content.appendChild(unit_card_container);
+}
 
 
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
@@ -1179,11 +1297,12 @@ function redrawUnitContent() {
 	console.log('Redrawing Unit Content\n-----------------');
 	console.log(unitList);
 
-	//if unitview mode == 0
+	//if unitview mode == 0 draw table view
 	if (unitViewMode == 0) {
 		drawUnitTable();
 	}
-	else {
+	//if unitview mode == 1 draw card view
+	else if (unitViewMode == 1) {
 		drawUnitCards();
 	}
 
@@ -1619,10 +1738,13 @@ function unitMouseOverAndTapped(unit) {
 	//console.log(e.target.id);
 	//add a mouseOverSelected class to the unit row in the unit table using tableUnitRows
 	//remove the mouseOverSelected class from all other unit rows
-	for (var [key] of Object.entries(tableUnitRows)) {
-		tableUnitRows[key].classList.remove('mouseOverSelected');
+	if (unitViewMode == 0) //if in table view
+	{
+		for (var [key] of Object.entries(tableUnitRows)) {
+			tableUnitRows[key].classList.remove('mouseOverSelected');
+		}
+		tableUnitRows[unit.name].classList.add('mouseOverSelected');
 	}
-	tableUnitRows[unit.name].classList.add('mouseOverSelected');
 	//get the unit from unit list by its name
 
 
