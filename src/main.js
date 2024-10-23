@@ -1172,6 +1172,8 @@ function drawUnitTable() {
 var shortTypes = {
 	Air: 'A', Ground: 'G', 'Base Defense': 'B'
 }
+
+var unitCards = {};
 function createUnitCard(unit) {
 	//create a card div
 	var unit_card = document.createElement('div');
@@ -1183,8 +1185,9 @@ function createUnitCard(unit) {
 		unitMouseOverAndTapped(unit);
 	});
 	//when the unit is clicked, add the unit to the deck
-	
-
+	unit_card.addEventListener('click', () => {
+		addUnitToDeck(unit, currentDeck);
+	});
 
 	//matter
 	var unit_card_matter = document.createElement('div');
@@ -1264,7 +1267,7 @@ function createUnitCard(unit) {
 
 	//name
 
-
+	unitCards[unit.name] = unit_card;
 	return unit_card
 }
 
@@ -1744,6 +1747,14 @@ function unitMouseOverAndTapped(unit) {
 			tableUnitRows[key].classList.remove('mouseOverSelected');
 		}
 		tableUnitRows[unit.name].classList.add('mouseOverSelected');
+	}
+	else if (unitViewMode == 1) //if in card view mode
+	{
+		//for each unit in unitCards (these are divs), add the same classes above
+		for (var [key] of Object.entries(unitCards)) {
+			unitCards[key].classList.remove('mouseOverSelected');
+		}
+		unitCards[unit.name].classList.add('mouseOverSelected');
 	}
 	//get the unit from unit list by its name
 

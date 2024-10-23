@@ -790,13 +790,13 @@ sup {
 
 .unit_card_type {
 	position: absolute;
-	left: 0%;
-	top: 24%;
-	color: white;
-	margin: 2%;
-	width: 30%;
+	left: 6%;
+	top: 23%;
+	color: rgb(204, 204, 204);
+	width: 0%;
 	height: 10%;
-	text-align: center;
+	font-style: italic;
+	font-size: large;
 }
 
 .unit_card_trait {
@@ -806,7 +806,7 @@ sup {
 
 .unit_card_traits {
 	position: absolute;
-	top: 30%;
+	top: 26%;
 	left: 80%;
 	right: 4%;
 }
