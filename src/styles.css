@@ -209,9 +209,9 @@ option {
 
 .mouseOverSelected {
 	outline: inset;
-	outline-color: rgba(255, 221, 221, 0.651);
+	outline-color: rgba(255, 221, 221, 0.425);
 	outline-style: dotted;
-	outline-offset: -3px;
+	outline-offset: -1px;
 	outline-width: 1px;
 }
 
@@ -687,11 +687,6 @@ sup {
 	height: 8%;
 }
 
-#unit_view_card_btn {
-	color: grey;
-	border-color: grey;
-}
-
 .links_div {
 	flex: auto;
 	position: relative;
@@ -704,4 +699,121 @@ sup {
 
 .selected {
 	color: rgb(192, 162, 81);
+}
+
+#unit_card_container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	flex-basis: 97%;
+	gap: 2%;
+	width: 100%;
+	height: 100%;
+
+}
+
+.unit_card_text {
+	text-shadow: 2px 2px 1px black;
+	font-weight: 700;
+}
+
+.unit_card_name {
+	position: absolute;
+	left: 4%;
+	top: 12%;
+	color: white;
+	margin: 0%;
+	width: 90%;
+	height: 10%;
+	border: solid;
+	border-width: 1px;
+	border-style: dashed;
+	border-color: rgb(77, 77, 77);
+	text-align: center;
+}
+
+.unit_card {
+	overflow: hidden;
+	position: relative;
+	background-color: rgba(0, 0, 0, 0.493);
+	width: 140px;
+	height: 200px;
+	border-radius: 5%;
+}
+
+.unit_card_image {
+	position: absolute;
+	width: 70%;
+	left: 15%;
+	top: 30%;
+}
+
+.unit_card_building {
+	position: absolute;
+	width: 40%;
+	right: 0%;
+	bottom: 2%;
+}
+
+.unit_card_matter {
+	position: absolute;
+	top: 0;
+	color: rgb(255, 58, 58);
+	margin: 2%;
+	width: 30%;
+	height: 10%;
+	text-align: center;
+}
+
+.unit_card_bandwidth {
+	position: absolute;
+	left: 32%;
+	top: 0;
+	color: rgb(233, 220, 43);
+	margin: 2%;
+	width: 30%;
+	height: 10%;
+	text-align: center;
+}
+
+.unit_card_energy {
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: rgb(68, 140, 233);
+	margin: 2%;
+	width: 30%;
+	height: 10%;
+	text-align: center;
+}
+
+.unit_card_type {
+	position: absolute;
+	left: 6%;
+	top: 23%;
+	color: rgb(204, 204, 204);
+	width: 0%;
+	height: 10%;
+	font-style: italic;
+	font-size: large;
+}
+
+.unit_card_trait {
+	width: 90%;
+	padding: 0 0 30% 0;
+}
+
+.unit_card_traits {
+	position: absolute;
+	top: 26%;
+	left: 80%;
+	right: 4%;
+}
+
+.unit_card_manufacturer {
+	position: absolute;
+	width: 20%;
+	bottom: 2%;
+	left: 40%;
 }
