@@ -941,16 +941,17 @@ unit_filter_input.oninput = function () {
 //unitRows stores the rows of unit table by unit name so we can apply highlights later
 var tableUnitRows = {};
 
-const excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
-if (simpleStatsMode) {
-	//add to excludeKeys, the following: damage, damagea, dps, dpsa
-	excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
-}
-else {
-	excludeKeys.push('dpsm', 'hp/100')
-}
-function drawUnitTable() {
+var excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
 
+function drawUnitTable() {
+	excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
+	if (simpleStatsMode) {
+		//add to excludeKeys, the following: damage, damagea, dps, dpsa
+		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
+	}
+	else {
+		excludeKeys.push('dpsm', 'hp/100')
+	}
 	//create a table element
 	var unit_table = document.createElement('table');
 	unit_table.id = 'unit_table';

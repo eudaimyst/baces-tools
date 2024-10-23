@@ -163,8 +163,8 @@ option {
 }
 
 .unit_table_header {
-	font-size: 20px;
-	font-weight: 500;
+	font-size: 14px;
+	font-weight: 600;
 	color: rgb(214, 214, 214);
 	line-height: 10px;
 	height: 20px;
