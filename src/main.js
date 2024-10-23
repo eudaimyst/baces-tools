@@ -378,7 +378,7 @@ function removeAllUnitsFromDeck(deckID) {
 
 	redrawDeckContent(deckID);
 }
-
+//
 function fillDeckWithUnits(deckID) {
 	//for each unit in the sorted unit list
 	//if the unit is not in the deck, add it to the deck
