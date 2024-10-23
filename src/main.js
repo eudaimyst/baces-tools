@@ -780,7 +780,7 @@ view_label.innerHTML = 'view: ';
 view_label.classList.add('header_element');
 unit_view_header.appendChild(view_label);
 
-var unitViewMode = 1; //0 = table 1 = card
+var unitViewMode = 0; //0 = table 1 = card
 
 //table view button
 const unit_view_table_btn = document.createElement('button');
@@ -802,6 +802,7 @@ unit_view_table_btn.onclick = function () {
 	unit_view_card_btn.classList.remove('selected');
 	redrawUnitContent();
 }
+unit_view_table_btn.classList.add('selected');
 //when card is selected set unitViewMode to 1
 unit_view_card_btn.onclick = function () {
 	unitViewMode = 1;
@@ -809,7 +810,7 @@ unit_view_card_btn.onclick = function () {
 	unit_view_table_btn.classList.remove('selected');
 	redrawUnitContent();
 }
-unit_view_card_btn.classList.add('selected');
+//unit_view_card_btn.classList.add('selected');
 
 
 
@@ -891,25 +892,41 @@ function setFilter(filter) {
 			removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filter) ||
 			unitList[i].ability.toLowerCase().includes(filter)
 		) {
-			//unit_content_div.children[i].style.display = 'block';
-			//search the unit unit_table and hide the units which do not have values of strings which match the filter
-			var table = document.getElementById('unit_table');
-			var rows = table.getElementsByTagName('tr');
-			for (var j = 0; j < rows.length; j++) {
-				var found = false;
+			//unit view mode
+			if (unitViewMode == 0) {
+				//unit_content_div.children[i].style.display = 'block';
+				//search the unit unit_table and hide the units which do not have values of strings which match the filter
+				var table = document.getElementById('unit_table');
+				var rows = table.getElementsByTagName('tr');
+				for (var j = 0; j < rows.length; j++) {
+					var found = false;
 
-				found = removeSpacesCapitalsSpecialCharacters(rows[j].innerHTML).includes(removeSpacesCapitalsSpecialCharacters(filter));
-				if (found) {
-					rows[j].style.display = '';
-				} else {
-					rows[j].style.display = 'none';
+					found = removeSpacesCapitalsSpecialCharacters(rows[j].innerHTML).includes(removeSpacesCapitalsSpecialCharacters(filter));
+					if (found) {
+						rows[j].style.display = '';
+					} else {
+						rows[j].style.display = 'none';
+					}
 				}
 			}
+			//card view mode
+			else if (unitViewMode == 1) {
+				//for each card in unit cards, hide or display depending on whether it matches the filter
+				for (var j = 0; j < unitCards.length; j++) {
+					var found = false;
+					found = removeSpacesCapitalsSpecialCharacters(unitCards[j].innerHTML).includes(filter);
+					if (found) {
+						unitCards[j].style.display = '';
+					} else {
+						unitCards[j].style.display = 'none';
+					}
+				}
 
-		}
-		else {
-			//document.getElementById('unit_table').getElementsByTagName('tr')[i].getElementsByTagName('td').classList.Add('filterHidden');
-			document.getElementById('unit_table').getElementsByTagName('tr')[i].style.display = 'none';
+			}
+			else {
+				//document.getElementById('unit_table').getElementsByTagName('tr')[i].getElementsByTagName('td').classList.Add('filterHidden');
+				document.getElementById('unit_table').getElementsByTagName('tr')[i].style.display = 'none';
+			}
 		}
 	}
 }
@@ -1082,8 +1099,6 @@ function drawUnitTable() {
 				div.id = unitList[i].slug;
 				unit_table_cell.appendChild(div);
 				div.addEventListener('mouseover', unitMouseOver);
-				unit_table_cell.addEventListener('mouseover', unitMouseOver);
-
 
 				unit_table_cell.classList.add('unit_table_cell');
 				//if i is an alternate number
@@ -1728,16 +1743,16 @@ function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, buildi
 console.log(getColour(.5, 0, 1));
 
 var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
-var preMouseoverUnit = null;
+var prevMouseoverUnit = null;
 
 function unitMouseOverAndTapped(unit) {
 	if (!unit) return;
 	if (statsMode != 0) return; //exits if in deck compare mode for the stats view
-	if (preMouseoverUnit == unit) {
+	if (prevMouseoverUnit == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
 		return;
 	}
-	preMouseoverUnit = unit;
+	prevMouseoverUnit = unit;
 	//console.log(e.target.id);
 	//add a mouseOverSelected class to the unit row in the unit table using tableUnitRows
 	//remove the mouseOverSelected class from all other unit rows
@@ -1780,10 +1795,10 @@ function unitMouseOverAndTapped(unit) {
 		fetch(unit.videoturnaround)
 			.then(response => response.blob())
 			.then(blob => {
-				if (unit.name == preMouseoverUnit.name) {
+				if (unit.name == prevMouseoverUnit.name) {
 					playVideo = true;
 					video.src = URL.createObjectURL(blob);
-					console.log(unit.name + ' ' + preMouseoverUnit.name)
+					console.log(unit.name + ' ' + prevMouseoverUnit.name)
 				}
 			})
 			.then(() => {
@@ -2181,7 +2196,6 @@ function unitMouseOver(e) {
 	unitMouseOverAndTapped(unit);
 }
 unitMouseOverAndTapped(unitList[0]);
-
 /*
 deprecated, we now add the listener to the cell when its created
 //when a cell in the unit table is mouseover get the unit name from the cell and print to console

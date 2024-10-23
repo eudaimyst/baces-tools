@@ -209,9 +209,9 @@ option {
 
 .mouseOverSelected {
 	outline: inset;
-	outline-color: rgba(255, 221, 221, 0.651);
+	outline-color: rgba(255, 221, 221, 0.425);
 	outline-style: dotted;
-	outline-offset: -3px;
+	outline-offset: -1px;
 	outline-width: 1px;
 }
 
