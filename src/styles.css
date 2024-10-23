@@ -687,11 +687,6 @@ sup {
 	height: 8%;
 }
 
-#unit_view_card_btn {
-	color: grey;
-	border-color: grey;
-}
-
 .links_div {
 	flex: auto;
 	position: relative;

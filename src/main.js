@@ -779,6 +779,9 @@ const view_label = document.createElement('p');
 view_label.innerHTML = 'view: ';
 view_label.classList.add('header_element');
 unit_view_header.appendChild(view_label);
+
+var unitViewMode = 0; //0 = table 1 = card
+
 //table view button
 const unit_view_table_btn = document.createElement('button');
 unit_view_table_btn.innerHTML = 'table';
@@ -791,6 +794,24 @@ unit_view_card_btn.innerHTML = 'card';
 unit_view_card_btn.id = 'unit_view_card_btn';
 unit_view_card_btn.classList.add('header_element');
 unit_view_header.appendChild(unit_view_card_btn);
+
+//when table is selected set unitViewMode to 0
+unit_view_table_btn.onclick = function () {
+	unitViewMode = 0;
+	unit_view_table_btn.classList.add('selected');
+	unit_view_card_btn.classList.remove('selected');
+	redrawUnitContent();
+}
+unit_view_table_btn.classList.add('selected');
+//when card is selected set unitViewMode to 1
+unit_view_card_btn.onclick = function () {
+	unitViewMode = 1;
+	unit_view_card_btn.classList.add('selected');
+	unit_view_table_btn.classList.remove('selected');
+	redrawUnitContent();
+}
+
+
 
 //filter input box
 const unit_filter_input = document.createElement('input');
@@ -903,21 +924,15 @@ unit_filter_input.oninput = function () {
 //unitRows stores the rows of unit table by unit name so we can apply highlights later
 var tableUnitRows = {};
 
-//#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
-function redrawUnitContent() {
-
-	unit_content.innerHTML = '';
-	const excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
-	if (simpleStatsMode) {
-		//add to excludeKeys, the following: damage, damagea, dps, dpsa
-		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
-	}
-	else {
-		excludeKeys.push('dpsm', 'hp/100')
-	}
-	//for each object in unitsJson_base create a new unit passing the object
-	console.log('Redrawing Unit Content\n-----------------');
-	console.log(unitList);
+const excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
+if (simpleStatsMode) {
+	//add to excludeKeys, the following: damage, damagea, dps, dpsa
+	excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
+}
+else {
+	excludeKeys.push('dpsm', 'hp/100')
+}
+function drawUnitTable() {
 
 	//create a table element
 	var unit_table = document.createElement('table');
@@ -1152,6 +1167,26 @@ function redrawUnitContent() {
 
 	//attach the unit_table to the unit_content div
 	unit_content.appendChild(unit_table);
+}
+
+
+
+//#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
+function redrawUnitContent() {
+
+	unit_content.innerHTML = '';
+	//for each object in unitsJson_base create a new unit passing the object
+	console.log('Redrawing Unit Content\n-----------------');
+	console.log(unitList);
+
+	//if unitview mode == 0
+	if (unitViewMode == 0) {
+		drawUnitTable();
+	}
+	else {
+		drawUnitCards();
+	}
+
 
 }
 
