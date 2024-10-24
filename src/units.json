@@ -1161,7 +1161,7 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/assaultbot.png",
-    "Name": "Assault Bot",
+    "Name": "AssaultBot",
     "Type": "Ground",
     "Building": "Advanced Foundry",
     "Matter": 50,
@@ -1190,11 +1190,11 @@
   },
   {
     "image": "https://cdn.playbattleaces.com/images/icons/units/advancedbot.png",
-    "Name": "Advanced Bot",
+    "Name": "AdvancedBot",
     "Type": "Ground",
     "Building": "Advanced Foundry",
-    "Matter": 50,
-    "Energy": 0,
+    "Matter": 25,
+    "Energy": 25,
     "Supply": 1,
     "Health": 650,
     "Speed": 6,
