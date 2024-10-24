@@ -11,7 +11,7 @@ $buildScript = {
     Copy-Item -Path .\src\images\* -Destination .\dist\images -Recurse -Force
 
     # Run parcel build with no cache
-    parcel build --no-cache
+    parcel build --no-cache --public-url baces.tools
 }
 
 # Execute the build script
