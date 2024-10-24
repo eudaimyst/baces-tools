@@ -204,7 +204,7 @@ option {
 }
 
 .unit_table_cell_alt {
-	background-color: #bb222211;
+	background-color: #c5000017;
 }
 
 .mouseOverSelected {
@@ -580,7 +580,7 @@ sup {
 .deckSlotImage {
 	width: 100%;
 	height: 100%;
-	opacity: 80%;
+	opacity: 95%;
 	resize: none;
 }
 
