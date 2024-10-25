@@ -152,6 +152,7 @@ option {
 
 .unit_table {
 	width: 98%;
+	height: 0%;
 }
 
 .bgImgSelectDiv {
@@ -171,6 +172,7 @@ option {
 	text-align: center;
 
 }
+
 
 .unit_table_header_image {
 	width: 24px;

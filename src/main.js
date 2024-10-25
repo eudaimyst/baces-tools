@@ -10,6 +10,64 @@ import { units } from './units';
 
 var unitList = Object.values(units);
 
+//#region unit filter
+
+var filteredUnitList = []; //holds the list of units as updated by setFilter()
+//populate the filteredUnitList with all the units from unitList by default
+for (var i = 0; i < unitList.length; i++) {
+	filteredUnitList.push(unitList[i]);
+}
+
+//setFilter is called when the filter input text is updated
+function setFilter(filterString) {
+	filterString = removeSpacesCapitalsSpecialCharacters(filterString);
+	console.log('Filter set to ' + filterString);
+
+	filteredUnitList = []; //holds the list of units as updated by setFilter()
+	for (var i = 0; i < unitList.length; i++) {
+		if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filterString) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filterString) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filterString) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filterString) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filterString) ||
+			unitList[i].ability.toLowerCase().includes(filterString)
+		) {
+			filteredUnitList.push(unitList[i]);
+		}
+	}
+	redrawUnitContent();
+}
+//called when a deck building slot is clicked
+function setFilterBuilding(buildingString) {
+	filteredUnitList = []; //holds the list of units as updated by setFilter()
+	if (buildingString == 'wildfoundry') {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == 'foundry' ||
+				unitList[i].building == 'advancedfoundry'
+			) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
+	else if (buildingString == 'wildstarforge') {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == 'starforge' ||
+				unitList[i].building == 'advancedstarforge'
+			) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
+	else {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == buildingString) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
+	redrawUnitContent();
+}
+
 //#endregion
 
 //#region deck format
@@ -94,7 +152,7 @@ var deck2Slots = [];
 deckSlots.push(deck1Slots, deck2Slots);
 
 var slotBuildings = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge'];
-var slotBuildingFilters = ['core', 'foundry', 'advancedfoundry', 'foundry', 'core', 'starforge', 'advancedstarforge', 'starforge'];
+var slotBuildingFilters = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge'];
 
 var currentDeck = 0; //currentDeck defaults to 1 until deck 2 is selected
 
@@ -442,8 +500,8 @@ function createDeckSlots(container, deckID) {
 				//setFilter(slotBuildings[i]);
 				//set the filter input box to the name of the building
 				unit_filter_input.value = slotBuildingFilters[slotNumber];
+				setFilterBuilding(unit_filter_input.value)
 				//run the unit_filter input changed event
-				unit_filter_input.dispatchEvent(new Event('input'));
 			}
 			redrawDeckContent(deckID);
 		});
@@ -726,6 +784,7 @@ function addUnitToDeck(unit, deckID) {
 	console.log(decklen + '/8');
 	redrawDeckContent(deckID);
 	updateComparisonCharts();
+	redrawUnitContent();
 }
 
 //#endregion
@@ -858,81 +917,7 @@ unit_simple_stats_checkbox.addEventListener('change', function () {
 	redrawUnitContent();
 });
 
-/**
- *
-itbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 2 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 3 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 4 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 5 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 6 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-
-Amazon Q use this
-above is the console output, of the below code, instead of searching the text fo the innerHTML. I want to compare with the unit from the unitList to see if the filter text matches any of the unit data
- *
- * @param {*} filter
- */
-function setFilter(filter) {
-	filter = removeSpacesCapitalsSpecialCharacters(filter);
-	console.log('Filter set to ' + filter);
-	for (var i = 0; i < unitList.length; i++) {
-		if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filter) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filter) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filter) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filter) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filter) ||
-			unitList[i].ability.toLowerCase().includes(filter)
-		) {
-			//unit view mode
-			if (unitViewMode == 0) {
-				//unit_content_div.children[i].style.display = 'block';
-				//search the unit unit_table and hide the units which do not have values of strings which match the filter
-				var table = document.getElementById('unit_table');
-				var rows = table.getElementsByTagName('tr');
-				for (var j = 0; j < rows.length; j++) {
-					var found = false;
-
-					found = removeSpacesCapitalsSpecialCharacters(rows[j].innerHTML).includes(removeSpacesCapitalsSpecialCharacters(filter));
-					if (found) {
-						rows[j].style.display = '';
-					} else {
-						rows[j].style.display = 'none';
-					}
-				}
-			}
-			//card view mode
-			else if (unitViewMode == 1) {
-				//for each card in unit cards, hide or display depending on whether it matches the filter
-				for (var j = 0; j < unitCards.length; j++) {
-					var found = false;
-					found = removeSpacesCapitalsSpecialCharacters(unitCards[j].innerHTML).includes(filter);
-					if (found) {
-						unitCards[j].style.display = '';
-					} else {
-						unitCards[j].style.display = 'none';
-					}
-				}
-
-			}
-			else {
-				//document.getElementById('unit_table').getElementsByTagName('tr')[i].getElementsByTagName('td').classList.Add('filterHidden');
-				document.getElementById('unit_table').getElementsByTagName('tr')[i].style.display = 'none';
-			}
-		}
-	}
-}
-
+//when user inputs text into filter input element
 unit_filter_input.oninput = function () {
 	setFilter(unit_filter_input.value);
 };
@@ -1051,12 +1036,13 @@ function drawUnitTable() {
 	}
 
 	//this is the unit content table loop
-	for (let i = 0; i < unitList.length; i++) {
+	for (let i = 0; i < filteredUnitList.length; i++) {
+		var unit = filteredUnitList[i];
 		//create a table row element
 		var unit_table_row = document.createElement('tr');
-		unit_table_row.id = unitList[i].name;
+		unit_table_row.id = unit.name;
 		unit_table_row.classList.add('unit_table_row');
-		tableUnitRows[unitList[i].name] = unit_table_row;
+		tableUnitRows[unit.name] = unit_table_row;
 
 		//create a table cell element for each unit property
 		//add the unit property to the table cell
@@ -1064,13 +1050,13 @@ function drawUnitTable() {
 
 		//the first cell of each row, we will add a button to add the unit to the deck
 		var unit_table_cell = document.createElement('td');
-		unit_table_cell.id = unitList[i].name;
+		unit_table_cell.id = unit.name;
 		if (i % 2 == 0) {
 			unit_table_cell.classList.add('unit_table_cell_alt');
 		}
 		//add the unit property to the table cell
 		var div = document.createElement('div');
-		//div.innerHTML = unitList[i].name;
+		//div.innerHTML = unit.name;
 		unit_table_cell.appendChild(div);
 		unit_table_cell.classList.add('unit_table_cell');
 
@@ -1085,21 +1071,22 @@ function drawUnitTable() {
 		unit_table_cell.appendChild(table_add_unit_button);
 
 		table_add_unit_button.onclick = function () {
-			addUnitToDeck(unitList[i], currentDeck);
+			console.log(i + 'adding unit to deck: ' + filteredUnitList[i].name)
+			addUnitToDeck(filteredUnitList[i], currentDeck);
 		};
 
 		//add the cell to the row
 		unit_table_row.appendChild(unit_table_cell);
 
-		for (var [key, value] of Object.entries(unitList[i])) {
+		for (var [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
 				var div = document.createElement('div');
 				var unit_table_cell = document.createElement('td');
-				unit_table_cell.id = unitList[i].slug;
+				unit_table_cell.id = unit.slug;
 				if (simpleStatsMode) {
 					unit_table_cell.classList.add('simpleStatsPadding');
 				}
-				div.id = unitList[i].slug;
+				div.id = unit.slug;
 				unit_table_cell.appendChild(div);
 				div.addEventListener('mouseover', unitMouseOver);
 
@@ -1171,12 +1158,12 @@ function drawUnitTable() {
 					//for each child
 					for (let j = 0; j < div.children.length; j++) {
 						//div.children[j].addEventListener('mouseover', statRedrawMouseOver); --per cell mouseover
-						div.children[j].id = unitList[i].name;
+						div.children[j].id = unit.name;
 					}
 				};
 			}
 		}
-		//div.innerHTML = unitList[i].name;
+		//div.innerHTML = unit.name;
 		//unit_table_cell.add(div);
 
 		//create a table body element
@@ -1187,6 +1174,9 @@ function drawUnitTable() {
 	unit_content.appendChild(unit_table);
 }
 
+
+
+//#region unit-card-drawing
 var shortTypes = {
 	Air: 'A', Ground: 'G', 'Base Defense': 'B'
 }
@@ -1297,19 +1287,15 @@ function drawUnitCards() {
 	//add the container div to the unit_content div
 
 	//for each unit in the unit list create a card
-	for (let i = 0; i < unitList.length; i++) {
+	for (let i = 0; i < filteredUnitList.length; i++) {
 		//add the card body div to the card div
-		unit_card_container.appendChild(createUnitCard(unitList[i]));
+		unit_card_container.appendChild(createUnitCard(filteredUnitList[i]));
 	}
-
-
-
-
 
 	unit_content.appendChild(unit_card_container);
 }
 
-
+//#endregion
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
@@ -1317,6 +1303,21 @@ function redrawUnitContent() {
 	//for each object in unitsJson_base create a new unit passing the object
 	console.log('Redrawing Unit Content\n-----------------');
 	console.log(unitList);
+
+	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
+	//loop through current deck
+	//for each unit in the deck
+	//for each unit in the deck
+	for (let i = 0; i < decks[currentDeck].length; i++) {
+		//if the unit is in the unit list
+		if (decks[currentDeck][i]) console.log('looking for ' + decks[currentDeck][i].name + 'in deck ' + currentDeck);
+		if (filteredUnitList.includes(decks[currentDeck][i])) {
+			//remove the unit from the unit list
+			console.log('removing from filtered unitlist')
+			filteredUnitList.splice(filteredUnitList.indexOf(currentDeck[i]), 1);
+			console.log(filteredUnitList);
+		}
+	}
 
 	//if unitview mode == 0 draw table view
 	if (unitViewMode == 0) {
