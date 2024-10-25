@@ -10,66 +10,6 @@ import { units } from './units';
 
 var unitList = Object.values(units);
 
-//#region unit filter
-
-var filteredUnitList = []; //holds the list of units as updated by setFilter()
-//populate the filteredUnitList with all the units from unitList by default
-for (var i = 0; i < unitList.length; i++) {
-	filteredUnitList.push(unitList[i]);
-}
-
-//setFilter is called when the filter input text is updated
-function setFilter(filterString) {
-	filterString = removeSpacesCapitalsSpecialCharacters(filterString);
-	console.log('Filter set to ' + filterString);
-
-	filteredUnitList = []; //holds the list of units as updated by setFilter()
-	for (var i = 0; i < unitList.length; i++) {
-		if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filterString) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filterString) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filterString) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filterString) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filterString) ||
-			unitList[i].ability.toLowerCase().includes(filterString)
-		) {
-			filteredUnitList.push(unitList[i]);
-		}
-	}
-	redrawUnitContent();
-}
-//called when a deck building slot is clicked
-function setFilterBuilding(buildingString) {
-	filteredUnitList = []; //holds the list of units as updated by setFilter()
-	if (buildingString == 'wildfoundry') {
-		for (var i = 0; i < unitList.length; i++) {
-			if (unitList[i].building == 'foundry' ||
-				unitList[i].building == 'advancedfoundry'
-			) {
-				filteredUnitList.push(unitList[i]);
-			}
-		}
-	}
-	else if (buildingString == 'wildstarforge') {
-		for (var i = 0; i < unitList.length; i++) {
-			if (unitList[i].building == 'starforge' ||
-				unitList[i].building == 'advancedstarforge'
-			) {
-				filteredUnitList.push(unitList[i]);
-			}
-		}
-	}
-	else {
-		for (var i = 0; i < unitList.length; i++) {
-			if (unitList[i].building == buildingString) {
-				filteredUnitList.push(unitList[i]);
-			}
-		}
-	}
-	redrawUnitContent();
-}
-
-//#endregion
-
 //#region deck format
 
 
@@ -209,9 +149,23 @@ app.appendChild(stats_view);
 
 document.body.appendChild(wrapper);
 
+var deckButtons = []
+var deckContainers = []
+function setCurrentDeck(num) {
+	currentDeck = num;
+	var altNum
+	if (num == 0) altNum = 1;
+	else altNum = 0;
+	deckButtons[num].classList.add('selected');
+	deckButtons[altNum].classList.remove('selected');
+	deckContainers[num].classList.add('deckContainerActive');
+	deckContainers[altNum].classList.remove('deckContainerActive');
+	refreshNameInput();
+	repopulateFilteredUnitList();
+	redrawUnitContent();
+}
 
 //#region deck-header section of the deck view
-
 const deck1_button = document.createElement('button');
 deck1_button.innerHTML = 'Deck 1';
 deck1_button.id = 'deck1_button';
@@ -219,13 +173,7 @@ deck1_button.classList.add('header_element');
 deck_view_header.appendChild(deck1_button);
 //when deck 1 is pressed it should set current deck to 0
 deck1_button.addEventListener('click', function () {
-	currentDeck = 0;
-	deck1_button.classList.add('selected');
-	deck2_button.classList.remove('selected');
-	deckContainer.classList.add('deckContainerActive');
-	deck2Container.classList.remove('deckContainerActive');
-	refreshNameInput();
-
+	setCurrentDeck(0);
 });
 const deck2_button = document.createElement('button');
 deck2_button.innerHTML = 'Deck 2';
@@ -234,14 +182,10 @@ deck2_button.classList.add('header_element');
 deck_view_header.appendChild(deck2_button);
 //when deck 2 is pressed it should set current deck to 1
 deck2_button.addEventListener('click', function () {
-	currentDeck = 1;
-	deck2_button.classList.add('selected');
-	deck1_button.classList.remove('selected');
-	deck2Container.classList.add('deckContainerActive');
-	deckContainer.classList.remove('deckContainerActive');
-	refreshNameInput();
+	setCurrentDeck(1);
 });
 deck1_button.classList.add('selected');
+deckButtons.push(deck1_button, deck2_button);
 
 //clear button to clear the current deck
 const deck_clear_button = document.createElement('button');
@@ -406,6 +350,8 @@ deck2Container.addEventListener('click', function () {
 	refreshNameInput();
 });
 
+deckContainers.push(deckContainer, deck2Container); //for setting a current unit deck other than the header buttons
+
 //#tag slot-container
 
 function mouseOverUnit(deck, slotNumber) {
@@ -419,7 +365,16 @@ function mouseOverUnit(deck, slotNumber) {
 }
 function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 	var deck = decks[deckID];
-	console.log(deck[slotNumber]);
+	console.log('slotnumber: ' + slotNumber);
+
+	//Amazon Q: if unit is not in filteredUnitList, add it back to filteredUnitList
+	//if the unit is in the filteredUnitList, remove it from the filteredUnitList
+	filteredUnitList.push(deck[slotNumber])
+	//sort list by unit_header_sort.value
+	filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
+
+
+
 	if (deck[slotNumber]) {
 		console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
 		delete deck[slotNumber];
@@ -427,6 +382,7 @@ function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 		deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
 		if (updateCharts) updateComparisonCharts();
 	}
+	redrawUnitContent();
 }
 function removeAllUnitsFromDeck(deckID) {
 	for (var i = 0; i < 8; i++) {
@@ -435,6 +391,7 @@ function removeAllUnitsFromDeck(deckID) {
 	updateComparisonCharts(); deckNames[currentDeck] = '';
 
 	redrawDeckContent(deckID);
+	redrawUnitContent();
 }
 //
 function fillDeckWithUnits(deckID) {
@@ -442,7 +399,7 @@ function fillDeckWithUnits(deckID) {
 	//if the unit is not in the deck, add it to the deck
 	//check if unit is in the deck
 
-	unitList.forEach(unit => {
+	filteredUnitList.forEach(unit => {
 		if (unit.name != 'Kraken') addUnitToDeck(unit, deckID);
 	});
 
@@ -475,15 +432,17 @@ function createDeckSlots(container, deckID) {
 
 		//when div is mouseover, make it turn black, then return after mouseover
 		div.addEventListener('mouseover', function () {
-			this.style.backgroundColor = 'black';
+			//this.style.backgroundColor = 'black';
+			//set the background color to black, and fade it to transparent after 1s using css
+			this.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+			this.style.transition = 'background-color 0.5s';
+			this.style.cursor = 'pointer';
+
 			var slotNumber = this.id.slice(-1);
 			//get the deck ID of the current element
 			var deckID = this.parentElement.id.slice(-1);
 			var deck = decks[deckID];
-			mouseOverUnit(deck, slotNumber)
-			//get the deck ID of the current element
-			var deckID = this.parentElement.id.slice(-1);
-			var deck = decks[deckID];
+			setCurrentDeck(deckID)
 			mouseOverUnit(deck, slotNumber)
 		});
 
@@ -830,7 +789,7 @@ const sortOptions = [
 sortOptions.forEach((option) => {
 	addOptionsToTable(option[0], option[1])
 });
-sortUnits(unit_header_sort.value, unitList);
+filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
 
 unit_header_sort.id = 'unit_header_sort';
 unit_header_sort.classList.add('header_element');
@@ -881,6 +840,12 @@ unit_filter_input.type = 'text';
 unit_filter_input.id = 'unit_filter_input';
 unit_filter_input.placeholder = 'filter';
 unit_filter_input.classList.add('header_element');
+//when user inputs text into filter input element
+unit_filter_input.oninput = function () {
+	setFilter(unit_filter_input.value);
+	redrawUnitContent();
+};
+
 unit_view_header.appendChild(unit_filter_input);
 
 //filter clear button that clears the filter
@@ -917,13 +882,75 @@ unit_simple_stats_checkbox.addEventListener('change', function () {
 	redrawUnitContent();
 });
 
-//when user inputs text into filter input element
-unit_filter_input.oninput = function () {
-	setFilter(unit_filter_input.value);
-};
-
 
 //#endregion
+
+
+//#region unit filter
+
+var filteredUnitList = []; //holds the list of units as updated by setFilter()
+//populate the filteredUnitList with all the units from unitList by default
+function repopulateFilteredUnitList() {
+	filteredUnitList = [];
+	for (var i = 0; i < unitList.length; i++) {
+		filteredUnitList.push(unitList[i]);
+	}
+	setFilter(unit_filter_input.value);
+	filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
+}
+repopulateFilteredUnitList();
+
+//setFilter is called when the filter input text is updated
+function setFilter(filterString) {
+	filterString = removeSpacesCapitalsSpecialCharacters(filterString);
+	console.log('Filter set to ' + filterString);
+
+	filteredUnitList = []; //holds the list of units as updated by setFilter()
+	for (var i = 0; i < unitList.length; i++) {
+		if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filterString) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filterString) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filterString) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filterString) ||
+			removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filterString) ||
+			unitList[i].ability.toLowerCase().includes(filterString)
+		) {
+			filteredUnitList.push(unitList[i]);
+		}
+	}
+}
+//called when a deck building slot is clicked
+function setFilterBuilding(buildingString) {
+	filteredUnitList = []; //holds the list of units as updated by setFilter()
+	if (buildingString == 'wildfoundry') {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == 'foundry' ||
+				unitList[i].building == 'advancedfoundry'
+			) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
+	else if (buildingString == 'wildstarforge') {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == 'starforge' ||
+				unitList[i].building == 'advancedstarforge'
+			) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
+	else {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == buildingString) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
+	redrawUnitContent();
+}
+
+//#endregion
+
 
 //unitRows stores the rows of unit table by unit name so we can apply highlights later
 var tableUnitRows = {};
@@ -957,6 +984,7 @@ function drawUnitTable() {
 	unit_table_head.appendChild(unit_table_header);
 
 	//##tag unit-content-table-loop
+	//table header using the 2nd object in the object list
 	for (const [key] of Object.entries(unitList[1])) {
 		if (!excludeKeys.includes(key)) {
 			unit_table_header = document.createElement('th');
@@ -1299,10 +1327,11 @@ function drawUnitCards() {
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
+
 	unit_content.innerHTML = '';
 	//for each object in unitsJson_base create a new unit passing the object
 	console.log('Redrawing Unit Content\n-----------------');
-	console.log(unitList);
+	//console.log(filteredUnitList);
 
 	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
 	//loop through current deck
@@ -1314,8 +1343,9 @@ function redrawUnitContent() {
 		if (filteredUnitList.includes(decks[currentDeck][i])) {
 			//remove the unit from the unit list
 			console.log('removing from filtered unitlist')
-			filteredUnitList.splice(filteredUnitList.indexOf(currentDeck[i]), 1);
-			console.log(filteredUnitList);
+			filteredUnitList.splice(filteredUnitList.indexOf(decks[currentDeck][i]), 1);
+
+			//console.log(filteredUnitList);
 		}
 	}
 
@@ -1338,32 +1368,25 @@ redrawUnitContent(); //upon loading the page we redraw the UnitContentDiv once t
 //#region change-sort
 
 //sort units
-function sortUnits(value, unitlist) {
+function sortUnits(value, list) {
 	// Sort users (array of objects) by firstName in descending order
 	var sorted = undefined;
 	if (value == 'name' || value == 'manufacturer') {
-		sorted = sort(unitlist).asc((u) => u[value]);
+		sorted = sort(list).asc((u) => u[value]);
 	}
 	else {
-		sorted = sort(unitlist).desc((u) => u[value]);
+		sorted = sort(list).desc((u) => u[value]);
 	}
-	unitList = sorted;
-
-	//sort the units by the new option
-	//new function for sorting units
-	unitList = sorted;
+	return sorted;
 }
 
 
 unit_header_sort.onchange = function () {
-	//update the unit_content.innerHTML to the new sort by option
-	//unit_content.innerHTML = unit_header_sort.value;
 	//sort the units by the new option
 	//new function for sorting units
 	console.log(unit_header_sort.value);
-	sortUnits(unit_header_sort.value, unitList);
+	filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
 
-	//update the unit_content.innerHTML to the new sort by option
 	redrawUnitContent();
 };
 
