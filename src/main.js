@@ -435,7 +435,6 @@ function createDeckSlots(container, deckID) {
 			//this.style.backgroundColor = 'black';
 			//set the background color to black, and fade it to transparent after 1s using css
 			this.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-			this.style.transition = 'background-color 0.5s';
 			this.style.cursor = 'pointer';
 
 			var slotNumber = this.id.slice(-1);
@@ -448,6 +447,8 @@ function createDeckSlots(container, deckID) {
 
 		//if the mouse is clicked
 		div.addEventListener('click', function () {
+			this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+			this.style.transition = 'background-color 0.5s';
 			var slotNumber = this.id.slice(-1);
 			var deck = decks[deckID];
 			// remove the unit from the deck array
@@ -463,10 +464,6 @@ function createDeckSlots(container, deckID) {
 				//run the unit_filter input changed event
 			}
 			redrawDeckContent(deckID);
-		});
-
-		div.addEventListener('mouseout', function () {
-			this.style.backgroundColor = '';
 		});
 
 		deckSlotContainer.appendChild(div);
