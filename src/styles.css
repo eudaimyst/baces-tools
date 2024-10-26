@@ -152,6 +152,7 @@ option {
 
 .unit_table {
 	width: 98%;
+	height: 0%;
 }
 
 .bgImgSelectDiv {
@@ -171,6 +172,7 @@ option {
 	text-align: center;
 
 }
+
 
 .unit_table_header_image {
 	width: 24px;
@@ -207,7 +209,7 @@ option {
 	background-color: #c5000017;
 }
 
-.mouseOverSelected {
+.mouseOverHighlighted {
 	outline: inset;
 	outline-color: rgba(255, 221, 221, 0.425);
 	outline-style: dotted;
@@ -706,6 +708,7 @@ sup {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-evenly;
+	align-content: flex-start;
 	flex-basis: 97%;
 	gap: 2%;
 	width: 100%;

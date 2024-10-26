@@ -10,8 +10,6 @@ import { units } from './units';
 
 var unitList = Object.values(units);
 
-//#endregion
-
 //#region deck format
 
 
@@ -94,7 +92,7 @@ var deck2Slots = [];
 deckSlots.push(deck1Slots, deck2Slots);
 
 var slotBuildings = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge'];
-var slotBuildingFilters = ['core', 'foundry', 'advancedfoundry', 'foundry', 'core', 'starforge', 'advancedstarforge', 'starforge'];
+var slotBuildingFilters = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge'];
 
 var currentDeck = 0; //currentDeck defaults to 1 until deck 2 is selected
 
@@ -151,9 +149,23 @@ app.appendChild(stats_view);
 
 document.body.appendChild(wrapper);
 
+var deckButtons = []
+var deckContainers = []
+function setCurrentDeck(num) {
+	currentDeck = num;
+	var altNum
+	if (num == 0) altNum = 1;
+	else altNum = 0;
+	deckButtons[num].classList.add('selected');
+	deckButtons[altNum].classList.remove('selected');
+	deckContainers[num].classList.add('deckContainerActive');
+	deckContainers[altNum].classList.remove('deckContainerActive');
+	refreshNameInput();
+	repopulateFilteredUnitList();
+	redrawUnitContent();
+}
 
 //#region deck-header section of the deck view
-
 const deck1_button = document.createElement('button');
 deck1_button.innerHTML = 'Deck 1';
 deck1_button.id = 'deck1_button';
@@ -161,13 +173,7 @@ deck1_button.classList.add('header_element');
 deck_view_header.appendChild(deck1_button);
 //when deck 1 is pressed it should set current deck to 0
 deck1_button.addEventListener('click', function () {
-	currentDeck = 0;
-	deck1_button.classList.add('selected');
-	deck2_button.classList.remove('selected');
-	deckContainer.classList.add('deckContainerActive');
-	deck2Container.classList.remove('deckContainerActive');
-	refreshNameInput();
-
+	setCurrentDeck(0);
 });
 const deck2_button = document.createElement('button');
 deck2_button.innerHTML = 'Deck 2';
@@ -176,14 +182,10 @@ deck2_button.classList.add('header_element');
 deck_view_header.appendChild(deck2_button);
 //when deck 2 is pressed it should set current deck to 1
 deck2_button.addEventListener('click', function () {
-	currentDeck = 1;
-	deck2_button.classList.add('selected');
-	deck1_button.classList.remove('selected');
-	deck2Container.classList.add('deckContainerActive');
-	deckContainer.classList.remove('deckContainerActive');
-	refreshNameInput();
+	setCurrentDeck(1);
 });
 deck1_button.classList.add('selected');
+deckButtons.push(deck1_button, deck2_button);
 
 //clear button to clear the current deck
 const deck_clear_button = document.createElement('button');
@@ -348,6 +350,8 @@ deck2Container.addEventListener('click', function () {
 	refreshNameInput();
 });
 
+deckContainers.push(deckContainer, deck2Container); //for setting a current unit deck other than the header buttons
+
 //#tag slot-container
 
 function mouseOverUnit(deck, slotNumber) {
@@ -361,7 +365,16 @@ function mouseOverUnit(deck, slotNumber) {
 }
 function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 	var deck = decks[deckID];
-	console.log(deck[slotNumber]);
+	console.log('slotnumber: ' + slotNumber);
+
+	//Amazon Q: if unit is not in filteredUnitList, add it back to filteredUnitList
+	//if the unit is in the filteredUnitList, remove it from the filteredUnitList
+	filteredUnitList.push(deck[slotNumber])
+	//sort list by unit_header_sort.value
+	filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
+
+
+
 	if (deck[slotNumber]) {
 		console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
 		delete deck[slotNumber];
@@ -369,6 +382,7 @@ function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 		deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
 		if (updateCharts) updateComparisonCharts();
 	}
+	redrawUnitContent();
 }
 function removeAllUnitsFromDeck(deckID) {
 	for (var i = 0; i < 8; i++) {
@@ -377,6 +391,7 @@ function removeAllUnitsFromDeck(deckID) {
 	updateComparisonCharts(); deckNames[currentDeck] = '';
 
 	redrawDeckContent(deckID);
+	redrawUnitContent();
 }
 //
 function fillDeckWithUnits(deckID) {
@@ -384,7 +399,7 @@ function fillDeckWithUnits(deckID) {
 	//if the unit is not in the deck, add it to the deck
 	//check if unit is in the deck
 
-	unitList.forEach(unit => {
+	filteredUnitList.forEach(unit => {
 		if (unit.name != 'Kraken') addUnitToDeck(unit, deckID);
 	});
 
@@ -417,20 +432,23 @@ function createDeckSlots(container, deckID) {
 
 		//when div is mouseover, make it turn black, then return after mouseover
 		div.addEventListener('mouseover', function () {
-			this.style.backgroundColor = 'black';
+			//this.style.backgroundColor = 'black';
+			//set the background color to black, and fade it to transparent after 1s using css
+			this.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+			this.style.cursor = 'pointer';
+
 			var slotNumber = this.id.slice(-1);
 			//get the deck ID of the current element
 			var deckID = this.parentElement.id.slice(-1);
 			var deck = decks[deckID];
-			mouseOverUnit(deck, slotNumber)
-			//get the deck ID of the current element
-			var deckID = this.parentElement.id.slice(-1);
-			var deck = decks[deckID];
+			setCurrentDeck(deckID)
 			mouseOverUnit(deck, slotNumber)
 		});
 
 		//if the mouse is clicked
 		div.addEventListener('click', function () {
+			this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+			this.style.transition = 'background-color 0.5s';
 			var slotNumber = this.id.slice(-1);
 			var deck = decks[deckID];
 			// remove the unit from the deck array
@@ -442,14 +460,16 @@ function createDeckSlots(container, deckID) {
 				//setFilter(slotBuildings[i]);
 				//set the filter input box to the name of the building
 				unit_filter_input.value = slotBuildingFilters[slotNumber];
+				setFilter(unit_filter_input.value)
+				redrawUnitContent();
 				//run the unit_filter input changed event
-				unit_filter_input.dispatchEvent(new Event('input'));
 			}
 			redrawDeckContent(deckID);
 		});
-
-		div.addEventListener('mouseout', function () {
-			this.style.backgroundColor = '';
+		//event for mouse leaving
+		div.addEventListener('mouseleave', function () {
+			this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+			this.style.transition = 'background-color 0.5s';
 		});
 
 		deckSlotContainer.appendChild(div);
@@ -726,6 +746,7 @@ function addUnitToDeck(unit, deckID) {
 	console.log(decklen + '/8');
 	redrawDeckContent(deckID);
 	updateComparisonCharts();
+	redrawUnitContent();
 }
 
 //#endregion
@@ -749,9 +770,9 @@ const sortOptions = [
 	['Health', 'health'],
 	['Type', 'type'],
 	['Damage', 'damage'],
-	['Simple Damage', 'dpsm'],
 	['Air Damage', 'damagea'],
-	['DPS', 'dpsg'],
+	['Both DPS', 'dpsm'],
+	['Ground DPS', 'dpsg'],
 	['Air DPS', 'dpsa'],
 	['Speed', 'speed'],
 	['Range', 'range'],
@@ -771,7 +792,7 @@ const sortOptions = [
 sortOptions.forEach((option) => {
 	addOptionsToTable(option[0], option[1])
 });
-sortUnits(unit_header_sort.value, unitList);
+filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
 
 unit_header_sort.id = 'unit_header_sort';
 unit_header_sort.classList.add('header_element');
@@ -822,6 +843,12 @@ unit_filter_input.type = 'text';
 unit_filter_input.id = 'unit_filter_input';
 unit_filter_input.placeholder = 'filter';
 unit_filter_input.classList.add('header_element');
+//when user inputs text into filter input element
+unit_filter_input.oninput = function () {
+	setFilter(unit_filter_input.value);
+	redrawUnitContent();
+};
+
 unit_view_header.appendChild(unit_filter_input);
 
 //filter clear button that clears the filter
@@ -857,88 +884,103 @@ unit_simple_stats_checkbox.addEventListener('change', function () {
 	}
 	redrawUnitContent();
 });
+var hideUnavailMode = true;
+//hide unavailable units checkbox
+const hide_unavail_label = document.createElement('p');
+hide_unavail_label.innerHTML = 'hide unavail: ';
+hide_unavail_label.classList.add('header_element');
+unit_view_header.appendChild(hide_unavail_label);
+//unit_hide_unavailable_units_checkbox is a checkbox
+const hide_unavail_checkbox = document.createElement('input');
+hide_unavail_checkbox.type = 'checkbox';
+hide_unavail_checkbox.title = 'Hide unavailable units based on deck';
+unit_view_header.appendChild(hide_unavail_checkbox);
+//if checkbox is checked, hide unavailable units based on deck
+hide_unavail_checkbox.checked = true;
+hide_unavail_checkbox.addEventListener('change', function () {
+	if (hide_unavail_checkbox.checked) {
+		hideUnavailMode = true;
+	} else {
+		hideUnavailMode = false;
+	}
+	redrawUnitContent();
+});
 
-/**
- *
-itbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 2 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 3 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 4 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 5 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
-main.js:732 COMPARING column 0 of row 6 to 
-main.js:733 divdivbuttonclasstableaddunitbuttonbutton
-main.js:734 boo!
 
-Amazon Q use this
-above is the console output, of the below code, instead of searching the text fo the innerHTML. I want to compare with the unit from the unitList to see if the filter text matches any of the unit data
- *
- * @param {*} filter
- */
-function setFilter(filter) {
-	filter = removeSpacesCapitalsSpecialCharacters(filter);
-	console.log('Filter set to ' + filter);
+
+
+//#endregion
+
+
+//#region unit filter
+
+var filteredUnitList = []; //holds the list of units as updated by setFilter()
+//populate the filteredUnitList with all the units from unitList by default
+function repopulateFilteredUnitList() {
+	filteredUnitList = [];
 	for (var i = 0; i < unitList.length; i++) {
-		if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filter) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filter) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filter) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filter) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filter) ||
-			unitList[i].ability.toLowerCase().includes(filter)
-		) {
-			//unit view mode
-			if (unitViewMode == 0) {
-				//unit_content_div.children[i].style.display = 'block';
-				//search the unit unit_table and hide the units which do not have values of strings which match the filter
-				var table = document.getElementById('unit_table');
-				var rows = table.getElementsByTagName('tr');
-				for (var j = 0; j < rows.length; j++) {
-					var found = false;
+		filteredUnitList.push(unitList[i]);
+	}
+	setFilter(unit_filter_input.value);
+	filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
+}
+repopulateFilteredUnitList();
 
-					found = removeSpacesCapitalsSpecialCharacters(rows[j].innerHTML).includes(removeSpacesCapitalsSpecialCharacters(filter));
-					if (found) {
-						rows[j].style.display = '';
-					} else {
-						rows[j].style.display = 'none';
-					}
-				}
-			}
-			//card view mode
-			else if (unitViewMode == 1) {
-				//for each card in unit cards, hide or display depending on whether it matches the filter
-				for (var j = 0; j < unitCards.length; j++) {
-					var found = false;
-					found = removeSpacesCapitalsSpecialCharacters(unitCards[j].innerHTML).includes(filter);
-					if (found) {
-						unitCards[j].style.display = '';
-					} else {
-						unitCards[j].style.display = 'none';
-					}
-				}
+//setFilter is called when the filter input text is updated
+function setFilter(filterString) {
+	filterString = removeSpacesCapitalsSpecialCharacters(filterString);
+	console.log('Filter set to ' + filterString);
 
+	filteredUnitList = []; //holds the list of units as updated by setFilter()
+
+
+
+	if (filterString == 'wildfoundry') {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == 'foundry' ||
+				unitList[i].building == 'advancedfoundry'
+			) {
+				filteredUnitList.push(unitList[i]);
 			}
-			else {
-				//document.getElementById('unit_table').getElementsByTagName('tr')[i].getElementsByTagName('td').classList.Add('filterHidden');
-				document.getElementById('unit_table').getElementsByTagName('tr')[i].style.display = 'none';
+		}
+	}
+	else if (filterString == 'wildstarforge') {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == 'starforge' ||
+				unitList[i].building == 'advancedstarforge'
+			) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
+	else if (filterString == 'foundry' ||
+		filterString == 'starforge' ||
+		filterString == 'advancedfoundry' ||
+		filterString == 'advancedstarforge') {
+		for (var i = 0; i < unitList.length; i++) {
+			if (unitList[i].building == filterString) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
+	else {
+
+		for (var i = 0; i < unitList.length; i++) {
+			if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filterString) ||
+				removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filterString) ||
+				removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filterString) ||
+				removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filterString) ||
+				removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filterString) ||
+				unitList[i].ability.toLowerCase().includes(filterString)
+			) {
+				filteredUnitList.push(unitList[i]);
 			}
 		}
 	}
 }
 
-unit_filter_input.oninput = function () {
-	setFilter(unit_filter_input.value);
-};
-
-
 //#endregion
+
 
 //unitRows stores the rows of unit table by unit name so we can apply highlights later
 var tableUnitRows = {};
@@ -972,6 +1014,7 @@ function drawUnitTable() {
 	unit_table_head.appendChild(unit_table_header);
 
 	//##tag unit-content-table-loop
+	//table header using the 2nd object in the object list
 	for (const [key] of Object.entries(unitList[1])) {
 		if (!excludeKeys.includes(key)) {
 			unit_table_header = document.createElement('th');
@@ -1002,8 +1045,8 @@ function drawUnitTable() {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damage' + '.png';
 				img.classList.add('unit_table_header_image');
-				img.setAttribute('alt', 'DPS*10/m');
-				img.setAttribute('title', 'DPS*10/m');
+				img.setAttribute('alt', 'DPS/10');
+				img.setAttribute('title', 'DPS/10');
 				unit_table_header.appendChild(img);
 				unit_table_header.classList.add('unit_table_smalltext');
 			}
@@ -1051,12 +1094,13 @@ function drawUnitTable() {
 	}
 
 	//this is the unit content table loop
-	for (let i = 0; i < unitList.length; i++) {
+	for (let i = 0; i < filteredUnitList.length; i++) {
+		var unit = filteredUnitList[i];
 		//create a table row element
 		var unit_table_row = document.createElement('tr');
-		unit_table_row.id = unitList[i].name;
+		unit_table_row.id = unit.name;
 		unit_table_row.classList.add('unit_table_row');
-		tableUnitRows[unitList[i].name] = unit_table_row;
+		tableUnitRows[unit.name] = unit_table_row;
 
 		//create a table cell element for each unit property
 		//add the unit property to the table cell
@@ -1064,13 +1108,13 @@ function drawUnitTable() {
 
 		//the first cell of each row, we will add a button to add the unit to the deck
 		var unit_table_cell = document.createElement('td');
-		unit_table_cell.id = unitList[i].name;
+		unit_table_cell.id = unit.name;
 		if (i % 2 == 0) {
 			unit_table_cell.classList.add('unit_table_cell_alt');
 		}
 		//add the unit property to the table cell
 		var div = document.createElement('div');
-		//div.innerHTML = unitList[i].name;
+		//div.innerHTML = unit.name;
 		unit_table_cell.appendChild(div);
 		unit_table_cell.classList.add('unit_table_cell');
 
@@ -1085,23 +1129,28 @@ function drawUnitTable() {
 		unit_table_cell.appendChild(table_add_unit_button);
 
 		table_add_unit_button.onclick = function () {
-			addUnitToDeck(unitList[i], currentDeck);
+			console.log(i + 'adding unit to deck: ' + filteredUnitList[i].name)
+			addUnitToDeck(filteredUnitList[i], currentDeck);
 		};
+		table_add_unit_button.onmouseover = function () {
+			unitMouseOverAndTapped(filteredUnitList[i]);
+		};
+		//table_add_unit_button.addEventListener('mouseover', unitMouseOver);
 
 		//add the cell to the row
 		unit_table_row.appendChild(unit_table_cell);
+		unit_table_row.addEventListener('mouseover', unitMouseOver);
 
-		for (var [key, value] of Object.entries(unitList[i])) {
+		for (var [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
 				var div = document.createElement('div');
 				var unit_table_cell = document.createElement('td');
-				unit_table_cell.id = unitList[i].slug;
+				unit_table_cell.id = unit.slug;
 				if (simpleStatsMode) {
 					unit_table_cell.classList.add('simpleStatsPadding');
 				}
-				div.id = unitList[i].slug;
+				div.id = unit.slug;
 				unit_table_cell.appendChild(div);
-				div.addEventListener('mouseover', unitMouseOver);
 
 				unit_table_cell.classList.add('unit_table_cell');
 				//if i is an alternate number
@@ -1171,12 +1220,12 @@ function drawUnitTable() {
 					//for each child
 					for (let j = 0; j < div.children.length; j++) {
 						//div.children[j].addEventListener('mouseover', statRedrawMouseOver); --per cell mouseover
-						div.children[j].id = unitList[i].name;
+						div.children[j].id = unit.name;
 					}
 				};
 			}
 		}
-		//div.innerHTML = unitList[i].name;
+		//div.innerHTML = unit.name;
 		//unit_table_cell.add(div);
 
 		//create a table body element
@@ -1187,6 +1236,9 @@ function drawUnitTable() {
 	unit_content.appendChild(unit_table);
 }
 
+
+
+//#region unit-card-drawing
 var shortTypes = {
 	Air: 'A', Ground: 'G', 'Base Defense': 'B'
 }
@@ -1297,26 +1349,93 @@ function drawUnitCards() {
 	//add the container div to the unit_content div
 
 	//for each unit in the unit list create a card
-	for (let i = 0; i < unitList.length; i++) {
+	for (let i = 0; i < filteredUnitList.length; i++) {
 		//add the card body div to the card div
-		unit_card_container.appendChild(createUnitCard(unitList[i]));
+		unit_card_container.appendChild(createUnitCard(filteredUnitList[i]));
 	}
-
-
-
-
 
 	unit_content.appendChild(unit_card_container);
 }
 
-
+//#endregion
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
+
 
 	unit_content.innerHTML = '';
 	//for each object in unitsJson_base create a new unit passing the object
 	console.log('Redrawing Unit Content\n-----------------');
-	console.log(unitList);
+	//console.log(filteredUnitList);
+
+	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
+	//loop through current deck
+	//for each unit in the deck
+	//for each unit in the deck
+	if (hideUnavailMode == true) {
+		for (let i = 0; i < decks[currentDeck].length; i++) {
+			//if the unit is in the unit list
+			//if (decks[currentDeck][i]) console.log('looking for ' + decks[currentDeck][i].name + 'in deck ' + currentDeck);
+
+			if (filteredUnitList.includes(decks[currentDeck][i])) {
+				//remove the unit from the unit list
+				console.log('removing from filtered unitlist')
+				filteredUnitList.splice(filteredUnitList.indexOf(decks[currentDeck][i]), 1);
+
+				//console.log(filteredUnitList);
+			}
+		}
+		//AmazonQ:
+		//if decks[currentDeck][0] and decks[currentDeck][5] are both occupied
+		//then remove all units whose building key matches core from the filtered unit list
+		console.log(decks[currentDeck])
+		if (decks[currentDeck][0] && decks[currentDeck][4]) {
+			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
+			//remove all units whose building key matches core from the filtered unit list
+			filteredUnitList = filteredUnitList.filter((unit) => {
+				return unit.building != 'core';
+			});
+		};
+		//if decks[currentDeck][1] and decks[currentDeck][3] are both occupied
+		if (decks[currentDeck][1] && decks[currentDeck][3]) {
+			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
+			//remove all units whose building key matches foundry from the filtered unit list
+			filteredUnitList = filteredUnitList.filter((unit) => {
+				return unit.building != 'foundry';
+			});
+		};
+		if (decks[currentDeck][2] && decks[currentDeck][3]) {
+			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
+			//remove all units whose building key matches foundry from the filtered unit list
+			filteredUnitList = filteredUnitList.filter((unit) => {
+				return unit.building != 'advancedfoundry';
+			});
+		};
+		//if decks[currentDeck][1] and decks[currentDeck][3] are both occupied
+		if (decks[currentDeck][5] && decks[currentDeck][7]) {
+			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
+			//remove all units whose building key matches foundry from the filtered unit list
+			filteredUnitList = filteredUnitList.filter((unit) => {
+				return unit.building != 'starforge';
+			});
+		};
+		if (decks[currentDeck][6] && decks[currentDeck][7]) {
+			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
+			//remove all units whose building key matches foundry from the filtered unit list
+			filteredUnitList = filteredUnitList.filter((unit) => {
+				return unit.building != 'advancedstarforge';
+			});
+		};
+
+
+
+
+
+
+
+	} else {
+		//if hideUnavailMode is false, we need to add the units back to the unit list
+		repopulateFilteredUnitList()
+	}
 
 	//if unitview mode == 0 draw table view
 	if (unitViewMode == 0) {
@@ -1337,32 +1456,25 @@ redrawUnitContent(); //upon loading the page we redraw the UnitContentDiv once t
 //#region change-sort
 
 //sort units
-function sortUnits(value, unitlist) {
+function sortUnits(value, list) {
 	// Sort users (array of objects) by firstName in descending order
 	var sorted = undefined;
 	if (value == 'name' || value == 'manufacturer') {
-		sorted = sort(unitlist).asc((u) => u[value]);
+		sorted = sort(list).asc((u) => u[value]);
 	}
 	else {
-		sorted = sort(unitlist).desc((u) => u[value]);
+		sorted = sort(list).desc((u) => u[value]);
 	}
-	unitList = sorted;
-
-	//sort the units by the new option
-	//new function for sorting units
-	unitList = sorted;
+	return sorted;
 }
 
 
 unit_header_sort.onchange = function () {
-	//update the unit_content.innerHTML to the new sort by option
-	//unit_content.innerHTML = unit_header_sort.value;
 	//sort the units by the new option
 	//new function for sorting units
 	console.log(unit_header_sort.value);
-	sortUnits(unit_header_sort.value, unitList);
+	filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
 
-	//update the unit_content.innerHTML to the new sort by option
 	redrawUnitContent();
 };
 
@@ -1750,32 +1862,33 @@ var prevMouseoverUnit = null;
 
 function unitMouseOverAndTapped(unit) {
 	if (!unit) return;
-	if (statsMode != 0) return; //exits if in deck compare mode for the stats view
 	if (prevMouseoverUnit == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
 		return;
 	}
 	prevMouseoverUnit = unit;
 	//console.log(e.target.id);
-	//add a mouseOverSelected class to the unit row in the unit table using tableUnitRows
-	//remove the mouseOverSelected class from all other unit rows
+	//add a mouseOverHighlighted class to the unit row in the unit table using tableUnitRows
+	//remove the mouseOverHighlighted class from all other unit rows
 	if (unitViewMode == 0) //if in table view
 	{
 		for (var [key] of Object.entries(tableUnitRows)) {
-			tableUnitRows[key].classList.remove('mouseOverSelected');
+			tableUnitRows[key].classList.remove('mouseOverHighlighted');
 		}
-		tableUnitRows[unit.name].classList.add('mouseOverSelected');
+		tableUnitRows[unit.name].classList.add('mouseOverHighlighted');
 	}
 	else if (unitViewMode == 1) //if in card view mode
 	{
 		//for each unit in unitCards (these are divs), add the same classes above
 		for (var [key] of Object.entries(unitCards)) {
-			unitCards[key].classList.remove('mouseOverSelected');
+			unitCards[key].classList.remove('mouseOverHighlighted');
 		}
-		unitCards[unit.name].classList.add('mouseOverSelected');
+		unitCards[unit.name].classList.add('mouseOverHighlighted');
 	}
 	//get the unit from unit list by its name
 
+	//return if in stats mode After mouseover highlight class added above
+	if (statsMode != 0) return; //exits if in deck compare mode for the stats view
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
