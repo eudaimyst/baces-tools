@@ -460,10 +460,15 @@ function createDeckSlots(container, deckID) {
 				//setFilter(slotBuildings[i]);
 				//set the filter input box to the name of the building
 				unit_filter_input.value = slotBuildingFilters[slotNumber];
-				setFilterBuilding(unit_filter_input.value)
+				setFilter(unit_filter_input.value)
 				//run the unit_filter input changed event
 			}
 			redrawDeckContent(deckID);
+		});
+		//event for mouse leaving
+		div.addEventListener('mouseleave', function () {
+			this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+			this.style.transition = 'background-color 0.5s';
 		});
 
 		deckSlotContainer.appendChild(div);
@@ -903,22 +908,10 @@ function setFilter(filterString) {
 	console.log('Filter set to ' + filterString);
 
 	filteredUnitList = []; //holds the list of units as updated by setFilter()
-	for (var i = 0; i < unitList.length; i++) {
-		if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filterString) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filterString) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filterString) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filterString) ||
-			removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filterString) ||
-			unitList[i].ability.toLowerCase().includes(filterString)
-		) {
-			filteredUnitList.push(unitList[i]);
-		}
-	}
-}
-//called when a deck building slot is clicked
-function setFilterBuilding(buildingString) {
-	filteredUnitList = []; //holds the list of units as updated by setFilter()
-	if (buildingString == 'wildfoundry') {
+
+
+
+	if (filterString == 'wildfoundry') {
 		for (var i = 0; i < unitList.length; i++) {
 			if (unitList[i].building == 'foundry' ||
 				unitList[i].building == 'advancedfoundry'
@@ -927,7 +920,7 @@ function setFilterBuilding(buildingString) {
 			}
 		}
 	}
-	else if (buildingString == 'wildstarforge') {
+	else if (filterString == 'wildstarforge') {
 		for (var i = 0; i < unitList.length; i++) {
 			if (unitList[i].building == 'starforge' ||
 				unitList[i].building == 'advancedstarforge'
@@ -936,14 +929,30 @@ function setFilterBuilding(buildingString) {
 			}
 		}
 	}
-	else {
+	else if (filterString == 'foundry' ||
+		filterString == 'starforge' ||
+		filterString == 'advancedfoundry' ||
+		filterString == 'advancedstarforge') {
 		for (var i = 0; i < unitList.length; i++) {
-			if (unitList[i].building == buildingString) {
+			if (unitList[i].building == filterString) {
 				filteredUnitList.push(unitList[i]);
 			}
 		}
 	}
-	redrawUnitContent();
+	else {
+
+		for (var i = 0; i < unitList.length; i++) {
+			if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filterString) ||
+				removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filterString) ||
+				removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filterString) ||
+				removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filterString) ||
+				removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filterString) ||
+				unitList[i].ability.toLowerCase().includes(filterString)
+			) {
+				filteredUnitList.push(unitList[i]);
+			}
+		}
+	}
 }
 
 //#endregion

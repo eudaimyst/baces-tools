@@ -708,6 +708,7 @@ sup {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-evenly;
+	align-content: flex-start;
 	flex-basis: 97%;
 	gap: 2%;
 	width: 100%;
