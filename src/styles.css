@@ -209,7 +209,7 @@ option {
 	background-color: #c5000017;
 }
 
-.mouseOverSelected {
+.mouseOverHighlighted {
 	outline: inset;
 	outline-color: rgba(255, 221, 221, 0.425);
 	outline-style: dotted;

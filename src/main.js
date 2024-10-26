@@ -1131,9 +1131,14 @@ function drawUnitTable() {
 			console.log(i + 'adding unit to deck: ' + filteredUnitList[i].name)
 			addUnitToDeck(filteredUnitList[i], currentDeck);
 		};
+		table_add_unit_button.onmouseover = function () {
+			unitMouseOverAndTapped(filteredUnitList[i]);
+		};
+		//table_add_unit_button.addEventListener('mouseover', unitMouseOver);
 
 		//add the cell to the row
 		unit_table_row.appendChild(unit_table_cell);
+		unit_table_row.addEventListener('mouseover', unitMouseOver);
 
 		for (var [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
@@ -1145,7 +1150,6 @@ function drawUnitTable() {
 				}
 				div.id = unit.slug;
 				unit_table_cell.appendChild(div);
-				div.addEventListener('mouseover', unitMouseOver);
 
 				unit_table_cell.classList.add('unit_table_cell');
 				//if i is an alternate number
@@ -1857,32 +1861,33 @@ var prevMouseoverUnit = null;
 
 function unitMouseOverAndTapped(unit) {
 	if (!unit) return;
-	if (statsMode != 0) return; //exits if in deck compare mode for the stats view
 	if (prevMouseoverUnit == unit) {
 		//skip this if it's the same unit, to prevent duplicate loadings of the video for same unit
 		return;
 	}
 	prevMouseoverUnit = unit;
 	//console.log(e.target.id);
-	//add a mouseOverSelected class to the unit row in the unit table using tableUnitRows
-	//remove the mouseOverSelected class from all other unit rows
+	//add a mouseOverHighlighted class to the unit row in the unit table using tableUnitRows
+	//remove the mouseOverHighlighted class from all other unit rows
 	if (unitViewMode == 0) //if in table view
 	{
 		for (var [key] of Object.entries(tableUnitRows)) {
-			tableUnitRows[key].classList.remove('mouseOverSelected');
+			tableUnitRows[key].classList.remove('mouseOverHighlighted');
 		}
-		tableUnitRows[unit.name].classList.add('mouseOverSelected');
+		tableUnitRows[unit.name].classList.add('mouseOverHighlighted');
 	}
 	else if (unitViewMode == 1) //if in card view mode
 	{
 		//for each unit in unitCards (these are divs), add the same classes above
 		for (var [key] of Object.entries(unitCards)) {
-			unitCards[key].classList.remove('mouseOverSelected');
+			unitCards[key].classList.remove('mouseOverHighlighted');
 		}
-		unitCards[unit.name].classList.add('mouseOverSelected');
+		unitCards[unit.name].classList.add('mouseOverHighlighted');
 	}
 	//get the unit from unit list by its name
 
+	//return if in stats mode After mouseover highlight class added above
+	if (statsMode != 0) return; //exits if in deck compare mode for the stats view
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
