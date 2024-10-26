@@ -20,8 +20,8 @@ const buildingTiers = {
 
 function calcDPSM(unit) {
 	//damage per second per matter
-	if (unit.dpsg > unit.dpsa) return (unit.dpsg / unit.matter) * 10;
-	else return (unit.dpsa / unit.matter) * 10;
+	if (unit.dpsg > unit.dpsa) return (unit.dpsg / 10);
+	else return (unit.dpsa / 10);
 }
 
 
