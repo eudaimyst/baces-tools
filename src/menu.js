@@ -239,10 +239,16 @@ function updateBG(wrapper) {
 	else {
 		//if there is a value in image select
 		if (localStorage.getItem('bgImgSelect')) {
-			//set the background image to the value of the select element
-			wrapper.style.backgroundImage = 'url(' + localStorage.getItem('bgImgSelect') + ')';
-			//set the current option to the value of the select element
-			bgImgSelect.value = localStorage.getItem('bgImgSelect');
+			//if the background image is set to none, set the background color to black
+			if (localStorage.getItem('bgImgSelect') == 'none') {
+				wrapper.style.backgroundImage = 'none';
+			}
+			else {
+				//set the background image to the value of the select element
+				wrapper.style.backgroundImage = 'url(' + localStorage.getItem('bgImgSelect') + ')';
+				//set the current option to the value of the select element
+				bgImgSelect.value = localStorage.getItem('bgImgSelect');
+			}
 		}
 	}
 }
@@ -273,6 +279,15 @@ bgImgSelect.addEventListener('change', () => {
 const bgImgSelectText = document.createElement('p');
 bgImgSelectText.innerHTML = 'all artwork credit to <a href = "https://www.playbattleaces.com">playbattleaces.com</a >';
 bgImgSelectDiv.appendChild(bgImgSelectText);
+const plainBGButton = document.createElement('button');
+plainBGButton.innerHTML = 'plain bg';
+plainBGButton.classList.add('plainBGButton');
+bgImgSelectDiv.appendChild(plainBGButton);
+plainBGButton.addEventListener('click', () => {
+	document.getElementById('wrapper').style.backgroundImage = 'none';
+	bgImgSelect.value = 'none';
+	localStorage.setItem('bgImgSelect', 'none');
+});
 
 
 

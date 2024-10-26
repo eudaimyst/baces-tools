@@ -393,6 +393,7 @@ sup {
 	background-image: url('images/bg/19.jpg');
 	background-position: center center;
 	background-size: cover;
+	background-color: rgb(72, 77, 82);
 	border-width: 1px;
 	border-color: white;
 	top: 0px;
