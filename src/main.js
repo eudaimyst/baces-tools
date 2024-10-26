@@ -461,6 +461,7 @@ function createDeckSlots(container, deckID) {
 				//set the filter input box to the name of the building
 				unit_filter_input.value = slotBuildingFilters[slotNumber];
 				setFilter(unit_filter_input.value)
+				redrawUnitContent();
 				//run the unit_filter input changed event
 			}
 			redrawDeckContent(deckID);
