@@ -197,6 +197,8 @@ deck_view_header.appendChild(deck_clear_button);
 deck_clear_button.addEventListener('click', function () {
 	removeAllUnitsFromDeck(currentDeck);
 	refreshNameInput();
+	repopulateFilteredUnitList();
+	redrawUnitContent();
 });
 
 //fill deck button which tries to add units from the unit list in order until the deck is full
@@ -667,7 +669,7 @@ function calculateDeckStats(deckID) {
 					});
 				}
 			}
-			else stat_category_cells[deckID][key].innerHTML = stats[key];
+			else stat_category_cells[deckID][key].innerHTML = Math.round(stats[key]);
 		}
 	}
 	return stats;
@@ -1240,7 +1242,7 @@ function drawUnitTable() {
 
 //#region unit-card-drawing
 var shortTypes = {
-	Air: 'A', Ground: 'G', 'Base Defense': 'B'
+	Air: 'Air', Ground: 'Ground', 'Base Defense': 'Base Defense'
 }
 
 var unitCards = {};
@@ -1368,28 +1370,21 @@ function redrawUnitContent() {
 	//console.log(filteredUnitList);
 
 	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
-	//loop through current deck
-	//for each unit in the deck
-	//for each unit in the deck
 	if (hideUnavailMode == true) {
 		for (let i = 0; i < decks[currentDeck].length; i++) {
 			//if the unit is in the unit list
 			//if (decks[currentDeck][i]) console.log('looking for ' + decks[currentDeck][i].name + 'in deck ' + currentDeck);
-
 			if (filteredUnitList.includes(decks[currentDeck][i])) {
 				//remove the unit from the unit list
 				console.log('removing from filtered unitlist')
 				filteredUnitList.splice(filteredUnitList.indexOf(decks[currentDeck][i]), 1);
-
 				//console.log(filteredUnitList);
 			}
 		}
-		//AmazonQ:
 		//if decks[currentDeck][0] and decks[currentDeck][5] are both occupied
 		//then remove all units whose building key matches core from the filtered unit list
 		console.log(decks[currentDeck])
 		if (decks[currentDeck][0] && decks[currentDeck][4]) {
-			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
 			//remove all units whose building key matches core from the filtered unit list
 			filteredUnitList = filteredUnitList.filter((unit) => {
 				return unit.building != 'core';
@@ -1397,30 +1392,22 @@ function redrawUnitContent() {
 		};
 		//if decks[currentDeck][1] and decks[currentDeck][3] are both occupied
 		if (decks[currentDeck][1] && decks[currentDeck][3]) {
-			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
 			//remove all units whose building key matches foundry from the filtered unit list
 			filteredUnitList = filteredUnitList.filter((unit) => {
 				return unit.building != 'foundry';
 			});
 		};
 		if (decks[currentDeck][2] && decks[currentDeck][3]) {
-			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
-			//remove all units whose building key matches foundry from the filtered unit list
 			filteredUnitList = filteredUnitList.filter((unit) => {
 				return unit.building != 'advancedfoundry';
 			});
 		};
-		//if decks[currentDeck][1] and decks[currentDeck][3] are both occupied
 		if (decks[currentDeck][5] && decks[currentDeck][7]) {
-			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
-			//remove all units whose building key matches foundry from the filtered unit list
 			filteredUnitList = filteredUnitList.filter((unit) => {
 				return unit.building != 'starforge';
 			});
 		};
 		if (decks[currentDeck][6] && decks[currentDeck][7]) {
-			console.log("bjhoasfjklsdajfklasdjfmklasdfmaklwe");
-			//remove all units whose building key matches foundry from the filtered unit list
 			filteredUnitList = filteredUnitList.filter((unit) => {
 				return unit.building != 'advancedstarforge';
 			});

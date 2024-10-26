@@ -686,8 +686,9 @@ sup {
 }
 
 .deck_stats_img_small {
-	width: 8%;
-	height: 8%;
+	position: relative;
+	width: 6%;
+	height: 6%;
 }
 
 .links_div {
@@ -726,14 +727,14 @@ sup {
 	position: absolute;
 	left: 4%;
 	top: 12%;
-	color: white;
+	color: rgb(219, 219, 219);
 	margin: 0%;
 	width: 90%;
-	height: 10%;
+	overflow: visible;
 	border: solid;
 	border-width: 1px;
 	border-style: dashed;
-	border-color: rgb(77, 77, 77);
+	border-color: rgba(77, 77, 77, 0.342);
 	text-align: center;
 }
 
@@ -748,12 +749,14 @@ sup {
 
 .unit_card_image {
 	position: absolute;
+	opacity: 90%;
 	width: 70%;
 	left: 15%;
 	top: 30%;
 }
 
 .unit_card_building {
+	opacity: 90%;
 	position: absolute;
 	width: 40%;
 	right: 0%;
@@ -794,13 +797,16 @@ sup {
 
 .unit_card_type {
 	position: absolute;
-	left: 6%;
-	top: 23%;
-	color: rgb(204, 204, 204);
+	left: 10%;
+	top: 20%;
+	color: rgba(255, 255, 255, 0.507);
+	text-shadow: none;
 	width: 0%;
 	height: 10%;
-	font-style: italic;
+	font-variant: small-caps;
 	font-size: large;
+	text-wrap: nowrap;
+	transform: rotate(90deg);
 }
 
 .unit_card_trait {
