@@ -108,7 +108,7 @@ option {
 	background-color: rgba(0, 0, 0, 0.664);
 	box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.304);
 	right: 5px;
-	height: 4vmin;
+	height: 2vmax;
 	margin: 5px;
 	border-width: 1px;
 	border-radius: 5px;
@@ -131,7 +131,7 @@ option {
 	margin: 5px;
 	left: 0px;
 	right: 0px;
-	top: 4.6vmin;
+	top: 2.4vmax;
 	bottom: 2px;
 	border-width: 2px;
 	border-color: rgb(0, 0, 0);
@@ -141,7 +141,7 @@ option {
 }
 
 .header_element {
-	font-size: .8vw;
+	font-size: .7vmax;
 	padding: 0 .3vw 0 .3vw;
 	font-variant: all-small-caps;
 	font-style: bold;
