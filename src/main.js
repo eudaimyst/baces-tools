@@ -1010,16 +1010,17 @@ function drawUnitTable() {
 	var unit_table_body = document.createElement('tbody');
 	unit_table.appendChild(unit_table_body);
 	//create table header and add it to the table head
-	var unit_table_header = document.createElement('th');
-	unit_table_header.id = 'unit_table_header'
-	unit_table_header.innerHTML = 'add';
-	unit_table_head.appendChild(unit_table_header);
+	var unit_table_add_header = document.createElement('th');
+	unit_table_add_header.classList.add('unit_table_header');
+	unit_table_add_header.innerHTML = 'add';
+	unit_table_head.appendChild(unit_table_add_header);
+
 
 	//##tag unit-content-table-loop
 	//table header using the 2nd object in the object list
 	for (const [key] of Object.entries(unitList[1])) {
 		if (!excludeKeys.includes(key)) {
-			unit_table_header = document.createElement('th');
+			var unit_table_header = document.createElement('th');
 			unit_table_header.classList.add('unit_table_header');
 			//add some images to certain headers
 			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range') {
@@ -1057,6 +1058,7 @@ function drawUnitTable() {
 				img.src = 'images/stats/' + 'damage' + '.png';
 				img.classList.add('unit_table_header_image');
 				img.setAttribute('alt', 'ground dps');
+
 				img.setAttribute('title', 'ground dps');
 				unit_table_header.appendChild(img);
 				unit_table_header.innerHTML += '/s';
@@ -1127,7 +1129,7 @@ function drawUnitTable() {
 		table_add_unit_button.innerHTML = '+';
 		table_add_unit_button.classList.add('table_add_unit_button')
 		//add the button to the cell
-		unit_table_cell.classList.add('table_add_unit_button_cell')
+		unit_table_cell.classList.add('table_add_unit_button_cell');
 		unit_table_cell.appendChild(table_add_unit_button);
 
 		table_add_unit_button.onclick = function () {
@@ -1151,7 +1153,6 @@ function drawUnitTable() {
 				if (simpleStatsMode) {
 					unit_table_cell.classList.add('simpleStatsPadding');
 				}
-				div.id = unit.slug;
 				unit_table_cell.appendChild(div);
 
 				unit_table_cell.classList.add('unit_table_cell');
@@ -1168,20 +1169,20 @@ function drawUnitTable() {
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
 					img.classList.add('unit_table_image');
-					div.appendChild(img);
+					unit_table_cell.appendChild(img);
 				} else if (key == 'building') {
 					img.src = 'images/techtiers/' + value + '.svg';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
 					img.classList.add('unit_table_image_medium');
-					div.appendChild(img);
+					unit_table_cell.appendChild(img);
 				} else if (key == 'ability') {
 					if (value != '') {
 						img.src = 'images/abilities/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
 						img.classList.add('unit_table_image_medium');
-						div.appendChild(img);
+						unit_table_cell.appendChild(img);
 					}
 				} else if (key == 'manufacturer') {
 					if (value != '') {
@@ -1189,7 +1190,7 @@ function drawUnitTable() {
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
 						img.classList.add('unit_table_image_small');
-						div.appendChild(img);
+						unit_table_cell.appendChild(img);
 					}
 				} else if (key == 'traits') {
 					value.forEach(trait => {
@@ -1199,10 +1200,10 @@ function drawUnitTable() {
 							img.classList.add('unit_table_image_small');
 							img.setAttribute('alt', trait);
 							img.setAttribute('title', trait);
-							div.appendChild(img);
+							unit_table_cell.appendChild(img);
 						}
 						else {
-							div.innerHTML = value;
+							unit_table_cell.innerHTML = value;
 						}
 					});
 					unit_table_cell.classList.add('unit_table_cell_traits');
@@ -1211,20 +1212,12 @@ function drawUnitTable() {
 						//div.classList.add('unit_table_name_cell');
 
 					}
-					if (value != 0) div.innerHTML = value;
+					if (value != 0) unit_table_cell.innerHTML = value;
 				}
 
 				if (key == 'health' || key == 'damage' || key == 'speed' || key == 'range') {
 					unit_table_cell.classList.add('unit_table_cell_stats');
 				}
-				//if div has a child add mousover to child
-				else if (div.children.length > 0) {
-					//for each child
-					for (let j = 0; j < div.children.length; j++) {
-						//div.children[j].addEventListener('mouseover', statRedrawMouseOver); --per cell mouseover
-						div.children[j].id = unit.name;
-					}
-				};
 			}
 		}
 		//div.innerHTML = unit.name;

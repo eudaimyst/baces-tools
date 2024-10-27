@@ -4,6 +4,7 @@ body {
 	margin: 0;
 	padding: 0;
 	font-weight: normal;
+	font-size: .9vmax;
 	color: white;
 }
 
@@ -27,6 +28,8 @@ th {
 	font-variant: small-caps;
 	background-color: rgba(0, 0, 0, 0);
 	font-weight: 300;
+	overflow: visible;
+	text-wrap: nowrap;
 }
 
 
@@ -39,10 +42,6 @@ td {
 
 .simpleStatsPadding {
 	padding: 0 5px 0 5px;
-}
-
-tr {
-	height: 20px;
 }
 
 input {
@@ -59,18 +58,17 @@ input {
 
 button {
 	color: rgb(199, 199, 199);
-	color: rgb(199, 199, 199);
-	font-size: 14px;
 	font-variant: all-small-caps;
 	font-style: bold;
 	margin: 5px;
 	background-color: rgba(15, 15, 15, 0.37);
-	border-radius: 10px;
-	border-width: 1px;
-	border-style: double;
-	height: 60%;
+	border-radius: .5vmax;
+	border-width: .1vmax;
+	border-style: solid;
 	border-color: rgb(180, 180, 180);
-	overflow: hidden;
+	padding: .1vh .1vw;
+	text-wrap: nowrap;
+	overflow: visible;
 }
 
 button:hover {
@@ -85,10 +83,9 @@ button:active {
 select {
 	background-color: rgba(15, 15, 15, 0.37);
 	color: rgb(170, 155, 114);
-	border-radius: 10px;
-	border-width: 1px;
-	border-style: double;
-	height: 60%;
+	border-radius: .5vmax;
+	border-width: .1vmax;
+	border-style: solid;
 	border-color: rgb(180, 180, 180);
 }
 
@@ -111,7 +108,7 @@ option {
 	background-color: rgba(0, 0, 0, 0.664);
 	box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.304);
 	right: 5px;
-	height: 40px;
+	height: 2vmax;
 	margin: 5px;
 	border-width: 1px;
 	border-radius: 5px;
@@ -134,7 +131,7 @@ option {
 	margin: 5px;
 	left: 0px;
 	right: 0px;
-	top: 48px;
+	top: 2.4vmax;
 	bottom: 2px;
 	border-width: 2px;
 	border-color: rgb(0, 0, 0);
@@ -144,7 +141,8 @@ option {
 }
 
 .header_element {
-	font-size: small;
+	font-size: .7vmax;
+	padding: 0 .3vw 0 .3vw;
 	font-variant: all-small-caps;
 	font-style: bold;
 	margin: 2px;
@@ -164,49 +162,24 @@ option {
 }
 
 .unit_table_header {
-	font-size: 14px;
-	font-weight: 600;
+	font-size: 1.5vmin;
+	font-weight: 500;
 	color: rgb(214, 214, 214);
-	line-height: 10px;
-	height: 20px;
 	text-align: center;
-
-}
-
-
-.unit_table_header_image {
-	width: 24px;
-	height: 24px;
-}
-
-.unit_table_image {
-	width: 48px;
-	height: 48px;
-
-}
-
-.unit_table_image_medium {
-	width: 36px;
-	height: 36px;
-}
-
-.unit_table_image_small {
-	width: 28px;
-	height: 28px;
+	line-height: 1vmin;
+	height: 1vmin;
 }
 
 .unit_table_smalltext {
-	font-size: 9px;
+	font-size: 0.5vmax;
 }
 
 .unit_table_cell {
 	background-color: #88000011;
 	text-align: center;
 	text-shadow: 2px 2px 1px black;
-}
+	font-size: 1.5vmin;
 
-.unit_table_cell_alt {
-	background-color: #c5000017;
 }
 
 .mouseOverHighlighted {
@@ -217,21 +190,42 @@ option {
 	outline-width: 1px;
 }
 
+.unit_table_cell_alt {
+	background-color: #c5000017;
+}
+
+.unit_table_header_image {
+	height: 1.2vmax;
+}
+
+.unit_table_image {
+	height: 4vmin;
+	width: auto;
+}
+
+.unit_table_image_medium {
+	height: 3.5vmin;
+	width: auto;
+}
+
+.unit_table_image_small {
+	height: 2.5vmin;
+	width: auto;
+}
+
+
 .unit_table_cell_traits {
 	overflow-x: visible;
 }
 
 .table_add_unit_button {
 	font-style: bold;
-	font-size: 24px;
-	width: 48px;
-	height: 48px;
-	margin: 0 0 0 0;
-}
-
-.table_add_unit_button_cell {
-	padding: 0 5 0 0;
-	margin: 0 0 0 0;
+	font-size: 3vmin;
+	height: 4vmin;
+	width: 4vmin;
+	vertical-align: middle;
+	text-align: center;
+	padding: 0;
 }
 
 #unitStatsImg {
@@ -745,11 +739,12 @@ sup {
 	width: 140px;
 	height: 200px;
 	border-radius: 5%;
+	font-size: 16px
 }
 
 .unit_card_image {
 	position: absolute;
-	opacity: 90%;
+	opacity: 88%;
 	width: 70%;
 	left: 15%;
 	top: 30%;
@@ -758,7 +753,7 @@ sup {
 .unit_card_building {
 	opacity: 90%;
 	position: absolute;
-	width: 40%;
+	width: 30%;
 	right: 0%;
 	bottom: 2%;
 }
