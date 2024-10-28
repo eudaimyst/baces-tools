@@ -725,12 +725,12 @@
    "website": "https://www.playbattleaces.com/units/crusader"
  },
  {
-   "image": "https://cdn.playbattleaces.com/images/icons/units/heavyturret.png",
+   "image": "https://cdn.playbattleaces.com/images/icons/units/flakturret.png",
    "Name": "Flak Turret",
    "Type": "Base Defense",
    "Building": "Starforge",
-   "Matter": 200,
-   "Energy": 100,
+   "Matter": 125,
+   "Energy": 125,
    "Supply": 0,
    "Health": 5200,
    "Speed": 0,
@@ -747,11 +747,11 @@
    "Big": "",
    "Anti-Air": "Anti-Air",
    "Manufacturer": "IRON AND SONS",
-   "slug": "heavyturret",
-   "emoji": ":HeavyTurret:",
-   "videoTurnaround": "https://cdn.playbattleaces.com/videos/turnarounds/heavyturret.mp4",
-   "videoGameplay": "https://cdn.playbattleaces.com/videos/gameplay/heavyturret.mp4",
-   "website": "https://www.playbattleaces.com/units/heavyturret"
+   "slug": "flakturret",
+   "emoji": ":FlakTurret:",
+   "videoTurnaround": "https://cdn.playbattleaces.com/videos/turnarounds/flakturret.mp4",
+   "videoGameplay": "https://cdn.playbattleaces.com/videos/gameplay/flakturret.mp4",
+   "website": "https://www.playbattleaces.com/units/flakturret"
  },
  {
    "image": "https://cdn.playbattleaces.com/images/icons/units/mammoth.png",

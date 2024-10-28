@@ -1579,6 +1579,10 @@ stats_mode_select.addEventListener('change', function () {
 });
 
 //#endregion
+
+
+
+
 //#region stats-content
 
 
@@ -1620,10 +1624,22 @@ console.log('sorterd unit data')
 console.log('------------------------------')
 console.log(sortedUnitData)
 
+var unitStatsContainer = document.createElement('div');
+unitStatsContainer.id = 'unitStatsContainer';
+stats_content.appendChild(unitStatsContainer);
 
 var statsChartContainer = document.createElement('div');
 statsChartContainer.id = 'statsChartContainer';
-stats_content.appendChild(statsChartContainer);
+unitStatsContainer.appendChild(statsChartContainer);
+
+var unitOfficialLinkDiv = document.createElement('div');
+unitOfficialLinkDiv.id = 'unitOfficialLinkDiv';
+statsChartContainer.appendChild(unitOfficialLinkDiv);
+var unitOfficialLink = document.createElement('a');
+unitOfficialLink.id = 'unitOfficialLink';
+unitOfficialLinkDiv.appendChild(unitOfficialLink);
+unitOfficialLink.innerHTML = 'Official Link';
+unitOfficialLink.href = currentUnit.website;
 
 var statsUnitRankDiv = document.createElement('div');
 statsUnitRankDiv.id = 'statsUnitRankDiv';
@@ -1651,6 +1667,10 @@ function createStatsUnitDiv(label) {
 		statsUnitImg.src = 'images/techtiers/' + 'core' + '.svg';
 		statsUnitImg.classList.add('unitStatsBuildingImg')
 	}
+	else if (label == 'Ability') {
+		statsUnitImg.src = 'images/techtiers/' + 'core' + '.svg';
+		statsUnitImg.classList.add('unitStatsBuildingImg')
+	}
 	else {
 		statsUnitImg.src = 'images/resources/' + removeSpacesCapitalsSpecialCharacters(label) + '.svg';
 		statsUnitImg.classList.add('unitStatsResourceImg');
@@ -1670,12 +1690,14 @@ var statsUnitMatterDiv = createStatsUnitDiv('Matter');
 var statsUnitEnergyDiv = createStatsUnitDiv('Energy');
 var statsUnitBandwidthDiv = createStatsUnitDiv('Bandwidth');
 var statsUnitBuildingDiv = createStatsUnitDiv('Building');
+var statsUnitAbilityDiv = createStatsUnitDiv('Ability');
 
 
 statsUnitBottomContainer.appendChild(statsUnitBuildingDiv);
 statsUnitBottomContainer.appendChild(statsUnitMatterDiv);
 statsUnitBottomContainer.appendChild(statsUnitEnergyDiv);
 statsUnitBottomContainer.appendChild(statsUnitBandwidthDiv);
+statsUnitBottomContainer.appendChild(statsUnitAbilityDiv);
 
 var chartDivs = []
 var barCharts = []
@@ -1696,7 +1718,7 @@ stats_content.appendChild(video);
 stats_content.appendChild(videoblind);
 
 //#tag barChart definition
-function drawBarChart(label) {
+function statRankChart(label) {
 
 	var chartDiv = document.createElement('div');
 	chartDivs.push(chartDiv);
@@ -1781,14 +1803,14 @@ function drawBarChart(label) {
 }
 
 
-function drawAllBarCharts() {
+function drawAllStatRankChart() {
 	//instead of having each in strings, do it for each key in sorted unit data
 	for (var [key] of Object.entries(sortedUnitData)) {
 		//console.log(key);
-		drawBarChart(key);
+		statRankChart(key);
 	}
 }
-drawAllBarCharts();
+drawAllStatRankChart();
 
 function updateRank(label, unit) {
 	var rank = sortedUnitData[label].length - sortedUnitData[label].lastIndexOf(unit[label]);
@@ -1825,15 +1847,23 @@ function getColour(value, min, max) {
 	return color;
 }
 
-function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, building) {
+function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, building, ability) {
 	statsUnitName.innerHTML = name;
 	//get the div by its id
 	statsUnitMatterDiv.children[1].innerHTML = matter;
 	statsUnitEnergyDiv.children[1].innerHTML = energy;
 	statsUnitBandwidthDiv.children[1].innerHTML = bandwidth;
 	statsUnitBuildingDiv.children[0].src = 'images/techtiers/' + building + '.svg';
-
+	if (ability) {
+		//show the element
+		statsUnitAbilityDiv.children[0].style.display = 'block';
+		statsUnitAbilityDiv.children[0].src = 'images/abilities/' + ability + '.png';
+	} else {
+		//hide the element
+		statsUnitAbilityDiv.children[0].style.display = 'none';
+	}
 }
+
 
 console.log(getColour(.5, 0, 1));
 
@@ -1872,12 +1902,13 @@ function unitMouseOverAndTapped(unit) {
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
-	refreshStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building)
+	refreshStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building, unit.ability)
 
 
 	videoblind.style.opacity = 1
 	// periodically decrease the opacity of the video blind
 	var fadein;
+	unitOfficialLink.href = unit.website
 	fadein = setInterval(() => {
 		videoblind.style.opacity = videoblind.style.opacity -= .01
 		if (videoblind.style.opacity <= 0) clearInterval(fadein);
