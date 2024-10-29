@@ -1244,6 +1244,7 @@ function createUnitCard(unit) {
 	var unit_card = document.createElement('div');
 	//add a class to the card div
 	unit_card.classList.add('unit_card');
+	//
 	//when the unit is moused over, call the mouseover function to update the views
 	unit_card.addEventListener('mouseover', () => {
 		console.log(unit.name);
@@ -1315,12 +1316,10 @@ function createUnitCard(unit) {
 	}
 	unit_card.appendChild(unit_card_traits);
 	//create a div for the unit manufacturer
-	var unit_card_manufacturer = document.createElement('img');
+	var unit_card_manufacturer = document.createElement('div');
 	//if the manufacturer is not none
 	if (unit.manufacturer != 'none') {
-		unit_card_manufacturer.src = 'images/manuf/' + unit.manufacturer + '.png';
-		unit_card_manufacturer.alt = unit.manufacturer;
-		unit_card_manufacturer.title = unit.manufacturer;
+		unit_card_manufacturer.style.backgroundImage = 'url("images/manuf/' + unit.manufacturer + '.png")	';
 		unit_card_manufacturer.classList.add('unit_card_manufacturer');
 		unit_card.appendChild(unit_card_manufacturer);
 	}

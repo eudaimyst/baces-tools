@@ -739,7 +739,8 @@ sup {
 	width: 140px;
 	height: 200px;
 	border-radius: 5%;
-	font-size: 16px
+	font-size: 16px;
+	z-index: 0;
 }
 
 .unit_card_image {
@@ -817,8 +818,16 @@ sup {
 }
 
 .unit_card_manufacturer {
-	position: absolute;
-	width: 20%;
-	bottom: 2%;
-	left: 40%;
+	position: relative;
+	top: 83%;
+	bottom: 0%;
+	height: 10%;
+	width: 60%;
+	left: 10%;
+	opacity: 100%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	filter: blur(0.5px);
+	z-index: -1;
 }
