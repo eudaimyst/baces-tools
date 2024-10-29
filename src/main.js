@@ -1656,7 +1656,6 @@ unitOfficialLink.target = '_blank'
 const statsUnitName = document.createElement('div');
 statsUnitName.id = 'statsUnitName';
 statsUnitName.innerHTML = currentUnit.name;
-statsUnitBottomContainer.appendChild(statsUnitName);
 
 //using stats and matter div below as a template, make a function that creates such divs for other unit stats
 
@@ -1696,6 +1695,7 @@ var statsUnitAbilityDiv = createStatsUnitDiv('Ability');
 
 
 statsUnitBottomContainer.appendChild(statsUnitBuildingDiv);
+statsUnitBottomContainer.appendChild(statsUnitName);
 statsUnitBottomContainer.appendChild(statsUnitMatterDiv);
 statsUnitBottomContainer.appendChild(statsUnitEnergyDiv);
 statsUnitBottomContainer.appendChild(statsUnitBandwidthDiv);
@@ -1858,7 +1858,7 @@ function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, buildi
 	statsUnitBuildingDiv.children[0].src = 'images/techtiers/' + building + '.svg';
 	if (ability) {
 		//show the element
-		statsUnitAbilityDiv.children[0].style.display = 'block';
+		statsUnitAbilityDiv.children[0].style.display = 'inline';
 		statsUnitAbilityDiv.children[0].src = 'images/abilities/' + ability + '.png';
 	} else {
 		//hide the element
@@ -2293,7 +2293,7 @@ function refreshStatsContent() {
 		video.play();
 		stats_content.appendChild(videoblind);
 		stats_content.appendChild(statsUnitBottomContainer);
-		stats_content.appendChild(statsChartContainer);
+		//stats_content.appendChild(statsChartContainer);
 	}
 	if (statsMode == 1) {
 		if (compareMode == 0) {

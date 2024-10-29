@@ -228,39 +228,63 @@ option {
 	padding: 0;
 }
 
-#unitStatsImg {
-	width: 24px;
-	height: 24px;
-	transform: translate(0, 10%);
-}
-
-.unitStatsResourceImg {
-	width: 20px;
-	height: 20px;
-	transform: translate(0, 40%);
-}
-
-.unitStatsBuildingImg {
-	width: 40px;
-	height: 100%;
-	transform: translate(0, -5%);
+#stats_content {
+	position: absolute;
+	border-width: 5px;
+	border: none;
+	border-color: rgb(255, 255, 255);
+	overflow: hidden;
 }
 
 #statsUnitBottomContainer {
 	position: absolute;
 	display: flex;
 	flex-direction: row;
+	justify-content: left;
 	border-width: 1px;
-	border: none;
-	left: 10%;
-	bottom: 10%;
-	border-color: rgb(255, 255, 255);
+	height: 5vmin;
 	background-color: rgba(0, 0, 0, 0.5);
-	padding: 5px 25px 5px 25px;
-
+	left: 5vmin;
+	bottom: 2vmin;
 	z-index: 10;
-	font-size: x-large;
+	font-size: 2vmin;
 	font-variant: small-caps;
+}
+
+.statsUnitResourceContainer {
+	padding: .5vmin;
+	position: relative;
+	font-weight: 700;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: left;
+}
+
+.unitStatsResourceValue {
+	padding: .5vmin;
+}
+
+#statsUnitName {
+	justify-content: left;
+	font-weight: 600;
+	position: relative;
+	padding: 1vmin;
+	text-wrap: nowrap;
+	overflow: hidden;
+	padding: 1vmin 1vmin 1vmin 0vmin;
+}
+
+.unitStatsBuildingImg {
+	height: 3.5vmin;
+	width: 3.5vmin;
+	padding: .2vmin 0vmin 1vmin 0vmin;
+}
+
+.unitStatsResourceImg {
+	padding: .7vmin 0vmin 0vmin 0vmin;
+	height: 2.5vmin;
+	width: 2.5vmin;
 }
 
 #unitOfficialLinkDiv {
@@ -283,12 +307,22 @@ option {
 	color: rgb(255, 58, 58);
 }
 
-.statsUnitResourceContainer {
-	font-weight: 700;
-	color: red;
-	display: flex;
-	flex-direction: row;
-	padding: 0 0 0 20px;
+#unitVideo {
+	position: absolute;
+	min-height: 100%;
+	min-width: 100%;
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+	object-fit: cover;
+	z-index: 0;
+	border-width: 5px;
+	border: solid;
+	border-color: rgb(255, 255, 255);
+	/* Center the video */
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 #statsChartContainer {
@@ -361,24 +395,6 @@ sup {
 	font-size: 6px;
 	position: relative;
 	top: -0.5em;
-}
-
-
-#unitVideo {
-	position: absolute;
-	min-width: 50%;
-	min-height: 50%;
-	max-width: 150%;
-	max-height: 150%;
-	width: 100%;
-	top: -10%;
-	bottom: 10%;
-	overflow: hidden;
-	background-size: cover;
-	z-index: 0;
-	border-width: 1px;
-	border: none;
-	border-color: rgb(255, 255, 255);
 }
 
 .barchart {
@@ -552,10 +568,6 @@ sup {
 	overflow: hidden;
 }
 
-#stats_content {
-	display: flex;
-	flex-direction: row;
-}
 
 #unit_table_head {
 	position: sticky;
