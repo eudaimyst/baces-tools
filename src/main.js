@@ -1623,34 +1623,37 @@ console.log('sorterd unit data')
 console.log('------------------------------')
 console.log(sortedUnitData)
 
-var unitStatsContainer = document.createElement('div');
+const unitStatsContainer = document.createElement('div');
 unitStatsContainer.id = 'unitStatsContainer';
 stats_content.appendChild(unitStatsContainer);
 
-var statsChartContainer = document.createElement('div');
+
+
+const statsChartContainer = document.createElement('div');
 statsChartContainer.id = 'statsChartContainer';
 unitStatsContainer.appendChild(statsChartContainer);
 
-var unitOfficialLinkDiv = document.createElement('div');
-unitOfficialLinkDiv.id = 'unitOfficialLinkDiv';
-statsChartContainer.appendChild(unitOfficialLinkDiv);
-var unitOfficialLink = document.createElement('a');
-unitOfficialLink.id = 'unitOfficialLink';
-unitOfficialLinkDiv.appendChild(unitOfficialLink);
-unitOfficialLink.innerHTML = 'Official Link';
-unitOfficialLink.href = currentUnit.website;
-
-var statsUnitRankDiv = document.createElement('div');
+const statsUnitRankDiv = document.createElement('div');
 statsUnitRankDiv.id = 'statsUnitRankDiv';
 statsChartContainer.appendChild(statsUnitRankDiv);
 statsUnitRankDiv.innerHTML = 'Rank';
 
-var statsUnitBottomContainer = document.createElement('div');
+const statsUnitBottomContainer = document.createElement('div');
 statsUnitBottomContainer.id = 'statsUnitBottomContainer';
 statsUnitBottomContainer.innerHTML = '';
 stats_content.appendChild(statsUnitBottomContainer);
 
-var statsUnitName = document.createElement('div');
+const unitOfficialLinkDiv = document.createElement('div');
+unitOfficialLinkDiv.id = 'unitOfficialLinkDiv';
+stats_content.appendChild(unitOfficialLinkDiv);
+const unitOfficialLink = document.createElement('a');
+unitOfficialLink.id = 'unitOfficialLink';
+unitOfficialLinkDiv.appendChild(unitOfficialLink);
+unitOfficialLink.innerHTML = 'Official Unit Page';
+unitOfficialLink.href = currentUnit.website;
+unitOfficialLink.target = '_blank'
+
+const statsUnitName = document.createElement('div');
 statsUnitName.id = 'statsUnitName';
 statsUnitName.innerHTML = currentUnit.name;
 statsUnitBottomContainer.appendChild(statsUnitName);
@@ -2285,6 +2288,7 @@ function refreshStatsContent() {
 	};
 	if (statsMode == 0) {
 
+		stats_content.appendChild(unitOfficialLinkDiv);
 		stats_content.appendChild(video);
 		video.play();
 		stats_content.appendChild(videoblind);
