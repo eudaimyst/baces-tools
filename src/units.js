@@ -32,7 +32,7 @@ class Unit {
 			cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
 			var value = jsonImportedUnit[key];
 			if (value.constructor == String) {
-				if (cleanNameKey != 'emoji' && cleanNameKey != 'name' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'type') {
+				if (cleanNameKey != 'emoji' && cleanNameKey != 'name' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'website' && cleanNameKey != 'type') {
 					value = removeSpacesCapitalsSpecialCharacters(value);
 				}
 			}
