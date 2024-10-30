@@ -10,6 +10,7 @@ import { units } from './units';
 
 var unitList = Object.values(units);
 
+var statsUnit = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 //#region deck format
 
 
@@ -1540,7 +1541,7 @@ stats_button.addEventListener('click', function () {
 	stats_button.classList.add('selected');
 	compare_button.classList.remove('selected');
 	stats_mode_select.disabled = true;
-	refreshStatsContent()
+	refreshStatViewContent()
 });
 const compare_button = document.createElement('button');
 compare_button.innerHTML = 'compare';
@@ -1553,7 +1554,7 @@ compare_button.addEventListener('click', function () {
 	stats_button.classList.remove('selected');
 	compare_button.classList.add('selected');
 	stats_mode_select.disabled = false;
-	refreshStatsContent()
+	refreshStatViewContent()
 });
 stats_button.classList.add('selected');
 
@@ -1574,7 +1575,7 @@ stats_mode_select_options.forEach(function (option) {
 //when an option is selected, set compareMode to the selected index
 stats_mode_select.addEventListener('change', function () {
 	compareMode = stats_mode_select.selectedIndex;
-	refreshStatsContent()
+	refreshStatViewContent()
 });
 
 //#endregion
@@ -1623,29 +1624,54 @@ console.log('sorterd unit data')
 console.log('------------------------------')
 console.log(sortedUnitData)
 
-const unitStatsContainer = document.createElement('div');
-unitStatsContainer.id = 'unitStatsContainer';
-stats_content.appendChild(unitStatsContainer);
+const statsUnitRightContainer = document.createElement('div');
+statsUnitRightContainer.id = 'statsUnitRightContainer';
+stats_content.appendChild(statsUnitRightContainer);
 
+const statsUnitChartContainer = document.createElement('div');
+statsUnitChartContainer.id = 'statsUnitChartContainer';
+statsUnitRightContainer.appendChild(statsUnitChartContainer);
 
-
-const statsChartContainer = document.createElement('div');
-statsChartContainer.id = 'statsChartContainer';
-unitStatsContainer.appendChild(statsChartContainer);
-
-const statsUnitRankDiv = document.createElement('div');
+var statsUnitRankDiv = document.createElement('div');
 statsUnitRankDiv.id = 'statsUnitRankDiv';
-statsChartContainer.appendChild(statsUnitRankDiv);
-statsUnitRankDiv.innerHTML = 'Rank';
+statsUnitChartContainer.appendChild(statsUnitRankDiv);
+
+var statsUnitRankTextDivs = {}
+//for each label add a seperate div to statsUnitRankDiv
+//for each label in statsUnitconsole.log('statsUnit:', statsUnit); // Check content of statsUnit
+
+for (var i = 0; i < statsUnit.length; i++) {
+	var key = statsUnit[i];
+	var statsUnitRankTextDiv = document.createElement('div');
+	statsUnitRankTextDiv.classList.add('statsUnitRankTextDiv');
+	statsUnitRankTextDiv.textContent = key; // Use textContent
+
+	statsUnitRankDiv.appendChild(statsUnitRankTextDiv);
+
+	console.log('drawing unit ranks ' + key);
+	console.log('Appended:', statsUnitRankTextDiv);
+	console.log('To:', statsUnitRankDiv);
+	console.log('InnerHTML after appending: ', statsUnitRankDiv.innerHTML);
+
+	// Check if it's connected after appending
+	console.log('is connected after append?????? ' + statsUnitRankTextDiv.isConnected);
+
+	// Log children of the parent div
+	console.log('Children of statsUnitRankDiv:', statsUnitRankDiv.children);
+
+	// Optional: Add temporary style for visibility
+	statsUnitRankTextDiv.style.backgroundColor = 'lightblue';
+}
+
+// Final log after the loop
+console.log('Final InnerHTML of statsUnitRankDiv:', statsUnitRankDiv.innerHTML);
 
 const statsUnitBottomContainer = document.createElement('div');
 statsUnitBottomContainer.id = 'statsUnitBottomContainer';
 statsUnitBottomContainer.innerHTML = '';
-stats_content.appendChild(statsUnitBottomContainer);
 
 const unitOfficialLinkDiv = document.createElement('div');
 unitOfficialLinkDiv.id = 'unitOfficialLinkDiv';
-stats_content.appendChild(unitOfficialLinkDiv);
 const unitOfficialLink = document.createElement('a');
 unitOfficialLink.id = 'unitOfficialLink';
 unitOfficialLinkDiv.appendChild(unitOfficialLink);
@@ -1659,22 +1685,22 @@ statsUnitName.innerHTML = currentUnit.name;
 
 //using stats and matter div below as a template, make a function that creates such divs for other unit stats
 
-function createStatsUnitDiv(label) {
+function createStatsUnitBottomDiv(label) {
 	var statsUnitDiv = document.createElement('div');
-	statsUnitDiv.classList.add('statsUnitResourceContainer');
+	statsUnitDiv.classList.add('statsUnitResourceDiv');
 	var statsUnitImg = document.createElement('img');
 	//set the src of the img to the relevant label icon
 	if (label == 'Building') {
 		statsUnitImg.src = 'images/techtiers/' + 'core' + '.svg';
-		statsUnitImg.classList.add('unitStatsBuildingImg')
+		statsUnitImg.classList.add('statsUnitBuildingImg')
 	}
 	else if (label == 'Ability') {
 		statsUnitImg.src = 'images/techtiers/' + 'core' + '.svg';
-		statsUnitImg.classList.add('unitStatsBuildingImg')
+		statsUnitImg.classList.add('statsUnitBuildingImg')
 	}
 	else {
 		statsUnitImg.src = 'images/resources/' + removeSpacesCapitalsSpecialCharacters(label) + '.svg';
-		statsUnitImg.classList.add('unitStatsResourceImg');
+		statsUnitImg.classList.add('statsUnitResourceImg');
 	}
 
 	//add the img to the matterDivca
@@ -1682,16 +1708,16 @@ function createStatsUnitDiv(label) {
 	//add a text value to energy div for the units energy value
 	var statsUnitValue = document.createElement('div');
 	statsUnitValue.id = 'statsUnit' + label + 'Value';
-	statsUnitValue.classList.add('unitStatsResourceValue');
+	statsUnitValue.classList.add('statsUnitResourceValue');
 	statsUnitDiv.appendChild(statsUnitValue);
 	return statsUnitDiv;
 }
 
-var statsUnitMatterDiv = createStatsUnitDiv('Matter');
-var statsUnitEnergyDiv = createStatsUnitDiv('Energy');
-var statsUnitBandwidthDiv = createStatsUnitDiv('Bandwidth');
-var statsUnitBuildingDiv = createStatsUnitDiv('Building');
-var statsUnitAbilityDiv = createStatsUnitDiv('Ability');
+const statsUnitMatterDiv = createStatsUnitBottomDiv('Matter');
+const statsUnitEnergyDiv = createStatsUnitBottomDiv('Energy');
+const statsUnitBandwidthDiv = createStatsUnitBottomDiv('Bandwidth');
+const statsUnitBuildingDiv = createStatsUnitBottomDiv('Building');
+const statsUnitAbilityDiv = createStatsUnitBottomDiv('Ability');
 
 
 statsUnitBottomContainer.appendChild(statsUnitBuildingDiv);
@@ -1705,19 +1731,27 @@ var chartDivs = []
 var barCharts = []
 
 //video element
-var video = document.createElement('video');
+const video = document.createElement('video');
 //video source is the units videoTurnaround key
 video.src = unitList[1].videoturnaround;
 //set video to repeat
 video.loop = true;
 //crop the right 30% of the video
-var videoblind = document.createElement('div');
+const videoblind = document.createElement('div');
 videoblind.id = 'videoblind';
 videoblind.style = 'position: absolute; background-color: black; width: 100%; height: 100%;';
 
 video.id = 'unitVideo';
-stats_content.appendChild(video);
-stats_content.appendChild(videoblind);
+
+function refreshStatsUnit() {
+	stats_content.appendChild(unitOfficialLinkDiv);
+	stats_content.appendChild(video);
+	video.play();
+	stats_content.appendChild(videoblind);
+	stats_content.appendChild(statsUnitBottomContainer);
+	stats_content.appendChild(statsUnitRightContainer);
+}
+
 
 //#tag barChart definition
 function statRankChart(label) {
@@ -1725,17 +1759,15 @@ function statRankChart(label) {
 	var chartDiv = document.createElement('div');
 	chartDivs.push(chartDiv);
 	chartDiv.classList.add('chartDiv');
-	statsChartContainer.appendChild(chartDiv);
+	statsUnitChartContainer.appendChild(chartDiv);
 	var barChart = document.createElement('canvas');
-	//set barchart width to 100px
-	//barChart.width = 100;
 	barChart.classList.add('barchart');
 	chartDiv.appendChild(barChart);
 
 	//create an img element of the relevant label icon
 	var img = document.createElement('img');
 	img.src = 'images/stats/' + label + '.png';
-	img.id = 'unitStatsImg';
+	img.classList.add('statsUnitChartImages');
 	chartDiv.appendChild(img);
 
 
@@ -1754,6 +1786,9 @@ function statRankChart(label) {
 			}]
 		},
 		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			barPercentage: 2,
 			plugins: {
 				tooltip: {
 					enabled: false
@@ -1816,14 +1851,6 @@ drawAllStatRankChart();
 
 function updateRank(label, unit) {
 	var rank = sortedUnitData[label].length - sortedUnitData[label].lastIndexOf(unit[label]);
-	//if unit has no airdps ignore it its rank
-	//console.log(unit);
-	if ((label == 'dpsa' && unit['dpsa'] == '0') || (label == 'damagea' && unit['damagea'] == '0')) {
-		statsUnitRankDiv.innerHTML += '<br><br>';
-	}
-	else {
-		statsUnitRankDiv.innerHTML += '<span style="color:' + 'white' + '">' + unit[label] + '<br>' + rank + '<sup>' + getRankSuffix(rank) + '</sup></span><BR>';
-	}
 
 }
 //write a function to add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
@@ -1866,10 +1893,6 @@ function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, buildi
 	}
 }
 
-
-console.log(getColour(.5, 0, 1));
-
-var unitStats = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 var prevMouseoverUnit = null;
 
 function unitMouseOverAndTapped(unit) {
@@ -1953,8 +1976,7 @@ function unitMouseOverAndTapped(unit) {
 		updateChart(barCharts[key], key);
 	}
 	//update the ranks for each label for each unit stat
-	statsUnitRankDiv.innerHTML = '';
-	unitStats.forEach(function (label) {
+	statsUnit.forEach(function (label) {
 		updateRank(label, unit);
 	});
 }
@@ -1977,12 +1999,12 @@ var unitDeckStats = [];
 //get the unit deck stats from the deck div
 
 //add the correct format for unitDeckStats to be chartJS data
-console.log(unitDeckStats);
+//console.log(unitDeckStats);
 
 //create an example star chart in chartjs
 //const DATA_COUNT = 7;
 //const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
-var starchartUnitStats = ['health', 'damage', 'damagea', 'speed', 'range'];
+var starchartStatsUnit = ['health', 'damage', 'damagea', 'speed', 'range'];
 var starchartMinMax = {
 	health: [5350, 48000],
 	damage: [520, 3800],
@@ -1992,7 +2014,7 @@ var starchartMinMax = {
 }
 var starchartUnitData = [];
 const data = {
-	labels: starchartUnitStats,
+	labels: starchartStatsUnit,
 	datasets: [
 		{
 			data: [0, 0, 0, 0, 0],
@@ -2003,7 +2025,7 @@ const data = {
 	]
 };
 const data2 = {
-	labels: starchartUnitStats,
+	labels: starchartStatsUnit,
 	datasets: [
 		{
 			data: [0, 0, 0, 0, 0],
@@ -2091,18 +2113,18 @@ var deck1StatTotals = [];
 var deck2StatTotals = [0, 0, 0, 0, 0];
 function scaleDeckTotals(d, deckID) {
 	//deck count scale factor
-	starchartUnitStats.forEach(function (stat, index) {
+	starchartStatsUnit.forEach(function (stat, index) {
 		d[index] = doScaling(deckID, d[index], starchartMinMax[stat][0], starchartMinMax[stat][1]);
 	});
 }
 
 
 function updateDeckStatTotals(d, deckID) {
-	//for each label in unitStats, add the total of values of the stats for each unit in the deck
+	//for each label in statsUnit, add the total of values of the stats for each unit in the deck
 	console.log('totals array: ' + d)
 	console.log('deck ' + deckID)
 	console.log(decks[deckID]);
-	starchartUnitStats.forEach(function (label) {
+	starchartStatsUnit.forEach(function (label) {
 		var total = 0;
 		decks[deckID].forEach(function (unit) {
 			total += parseFloat(unit[label]);
@@ -2282,18 +2304,12 @@ function updateComparisonCharts() //called when a unit is added/removed from the
 	}
 }
 
-function refreshStatsContent() {
+function refreshStatViewContent() {
 	while (stats_content.firstChild) {
 		stats_content.removeChild(stats_content.firstChild);
 	};
 	if (statsMode == 0) {
-
-		stats_content.appendChild(unitOfficialLinkDiv);
-		stats_content.appendChild(video);
-		video.play();
-		stats_content.appendChild(videoblind);
-		stats_content.appendChild(statsUnitBottomContainer);
-		//stats_content.appendChild(statsChartContainer);
+		refreshStatsUnit();
 	}
 	if (statsMode == 1) {
 		if (compareMode == 0) {
@@ -2313,7 +2329,7 @@ function refreshStatsContent() {
 	}
 }
 
-refreshStatsContent()
+refreshStatViewContent()
 //#endregion
 
 var oldE = null
