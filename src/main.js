@@ -1645,22 +1645,10 @@ for (var i = 0; i < statsUnit.length; i++) {
 	var statsUnitRankTextDiv = document.createElement('div');
 	statsUnitRankTextDiv.classList.add('statsUnitRankTextDiv');
 	statsUnitRankTextDiv.textContent = key; // Use textContent
+	statsUnitRankTextDivs[key] = statsUnitRankTextDiv;
 
 	statsUnitRankDiv.appendChild(statsUnitRankTextDiv);
 
-	console.log('drawing unit ranks ' + key);
-	console.log('Appended:', statsUnitRankTextDiv);
-	console.log('To:', statsUnitRankDiv);
-	console.log('InnerHTML after appending: ', statsUnitRankDiv.innerHTML);
-
-	// Check if it's connected after appending
-	console.log('is connected after append?????? ' + statsUnitRankTextDiv.isConnected);
-
-	// Log children of the parent div
-	console.log('Children of statsUnitRankDiv:', statsUnitRankDiv.children);
-
-	// Optional: Add temporary style for visibility
-	statsUnitRankTextDiv.style.backgroundColor = 'lightblue';
 }
 
 // Final log after the loop
@@ -1756,19 +1744,19 @@ function refreshStatsUnit() {
 //#tag barChart definition
 function statRankChart(label) {
 
-	var chartDiv = document.createElement('div');
-	chartDivs.push(chartDiv);
-	chartDiv.classList.add('chartDiv');
-	statsUnitChartContainer.appendChild(chartDiv);
+	var statsUnitChartDiv = document.createElement('div');
+	chartDivs.push(statsUnitChartDiv);
+	statsUnitChartDiv.classList.add('statsUnitChartDiv');
+	statsUnitChartContainer.appendChild(statsUnitChartDiv);
 	var barChart = document.createElement('canvas');
 	barChart.classList.add('barchart');
-	chartDiv.appendChild(barChart);
+	statsUnitChartDiv.appendChild(barChart);
 
 	//create an img element of the relevant label icon
 	var img = document.createElement('img');
 	img.src = 'images/stats/' + label + '.png';
 	img.classList.add('statsUnitChartImages');
-	chartDiv.appendChild(img);
+	statsUnitChartDiv.appendChild(img);
 
 
 	var chart = new Chart(barChart, {
@@ -1895,6 +1883,9 @@ function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, buildi
 
 var prevMouseoverUnit = null;
 
+
+//#region unitMouseOverAndTapped here is the function which updates all the stat view divs when a unit is mouseOvered (either in deck or unit views)
+
 function unitMouseOverAndTapped(unit) {
 	if (!unit) return;
 	if (prevMouseoverUnit == unit) {
@@ -1928,6 +1919,20 @@ function unitMouseOverAndTapped(unit) {
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
 	refreshStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building, unit.ability)
+
+	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
+	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
+	for (var [key] of Object.entries(statsUnitRankTextDivs)) {
+		var rank = sortedUnitData[key].length - sortedUnitData[key].lastIndexOf(unit[key]);
+		if (unit[key] == 0) statsUnitRankTextDivs[key].innerHTML = 'N/A';
+		else {
+			statsUnitRankTextDivs[key].innerHTML = rank + getRankSuffix(rank);
+			//add the value of the key
+			statsUnitRankTextDivs[key].innerHTML += ' |<i> ' + unit[key];
+		}
+
+	}
+
 
 
 	videoblind.style.opacity = 1
@@ -1980,6 +1985,10 @@ function unitMouseOverAndTapped(unit) {
 		updateRank(label, unit);
 	});
 }
+
+
+//#endregion
+
 
 var statsComparisonChartContainer = document.createElement('div');
 statsComparisonChartContainer.classList.add('comparisonChartContainer');

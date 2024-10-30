@@ -332,7 +332,7 @@ option {
 	right: 1vmin;
 	bottom: 8vmin;
 	border-width: 1px;
-	border: solid;
+	border: none;
 	border-color: rgb(255, 255, 255);
 	background-color: rgba(0, 0, 0, 0.185);
 	z-index: 10;
@@ -350,8 +350,20 @@ option {
 	border-width: 1px;
 	border: none;
 	border-color: rgb(255, 0, 0);
-	background-color: rgba(0, 38, 255, 0.185);
+	background-color: rgba(0, 0, 0, 0.25);
 	z-index: 10;
+}
+
+.statsUnitChartDiv {
+	position: relative;
+	left: 2%;
+	background-color: rgba(0, 0, 0, 0.5);
+	height: 13%;
+	width: 98%;
+	border: none;
+	border-color: rgba(255, 255, 255, 0.479);
+	z-index: 10;
+	border-width: 1px;
 }
 
 #statsUnitRankDiv {
@@ -364,22 +376,11 @@ option {
 	left: 100%;
 	border: none;
 	border-width: 1px;
-	background-color: rgba(0, 128, 0, 0.274);
+	background-color: rgba(0, 0, 0, 0.25);
 	z-index: 10;
 }
 
 .statsUnitRankTextDiv {
-	position: absolute;
-	background-color: rgba(0, 0, 0, 0.5);
-	height: 13%;
-	width: 100%;
-	border: solid;
-	border-width: 1px;
-	border-color: rgba(0, 255, 34, 0.479);
-	z-index: 10;
-}
-
-.chartDiv {
 	position: relative;
 	left: 2%;
 	background-color: rgba(0, 0, 0, 0.5);
@@ -389,6 +390,10 @@ option {
 	border-color: rgba(255, 255, 255, 0.479);
 	z-index: 10;
 	border-width: 1px;
+	font-size: 1.5vmin;
+	font-weight: 600;
+	font-variant: small-caps;
+	line-height: 250%;
 }
 
 .barchart {
