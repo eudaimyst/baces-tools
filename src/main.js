@@ -1663,7 +1663,7 @@ unitOfficialLinkDiv.id = 'unitOfficialLinkDiv';
 const unitOfficialLink = document.createElement('a');
 unitOfficialLink.id = 'unitOfficialLink';
 unitOfficialLinkDiv.appendChild(unitOfficialLink);
-unitOfficialLink.innerHTML = 'Official Unit Page';
+unitOfficialLink.innerHTML = 'Official Unit Link';
 unitOfficialLink.href = currentUnit.website;
 unitOfficialLink.target = '_blank'
 
@@ -1756,6 +1756,8 @@ function statRankChart(label) {
 	var img = document.createElement('img');
 	img.src = 'images/stats/' + label + '.png';
 	img.classList.add('statsUnitChartImages');
+	//set img colour using getColour()
+	img.style.color = getColour(currentUnit, sortData[label], label);
 	statsUnitChartDiv.appendChild(img);
 
 
@@ -1769,7 +1771,7 @@ function statRankChart(label) {
 				label: label,
 				//data: [12, 19, 3, 5, 2, 3],
 				data: sortedUnitData[label],
-				backgroundColor: sortColors(currentUnit, sortData[label], label),
+				backgroundColor: getColour(currentUnit, sortData[label], label),
 				borderWidth: 0
 			}]
 		},
@@ -1837,10 +1839,6 @@ function drawAllStatRankChart() {
 }
 drawAllStatRankChart();
 
-function updateRank(label, unit) {
-	var rank = sortedUnitData[label].length - sortedUnitData[label].lastIndexOf(unit[label]);
-
-}
 //write a function to add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
 function getRankSuffix(rank) {
 	//if rank ends in 1
@@ -1857,11 +1855,26 @@ function getRankSuffix(rank) {
 function getColour(value, min, max) {
 	//set defaults for min and max to 0 and 50
 	//if min and max are not provided, use the min and max values of the data
-	if (min == undefined) min = Math.min(...sortedUnitData);
-	var red = Math.round((value - min) * 255 / (max - min));
-	var green = 255 - red;
-	var color = 'rgb(' + red + ', ' + green + ', 0)';
-	return color;
+	//return a vibrant colour gradient from green to yellow to orange to red
+	//if value is less than min, return red
+	if (value < min) return 'rgb(255, 0, 0)';
+	//if value is greater than max, return green
+	if (value > max) return 'rgb(0, 255, 0)';
+	//if value is between min and max, return a colour on the gradient
+	//calculate the percentage of the value between min and max
+	var percentage = (value - min) / (max - min);
+	//calculate the red and green values
+	var red = Math.round(255 * (1 - percentage));
+	//calculate the green value
+	var green = Math.round(255 * percentage);
+	//return the colour
+	//add yellow in a gradient if it is in the middle of red and green
+	if (percentage > 0.5) {
+		red = Math.round(255 * (1 - percentage));
+		green = Math.round(255 * (1 - percentage));
+	}
+	return 'rgb(' + red + ', ' + green + ', 0)';
+
 }
 
 function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, building, ability) {
@@ -1980,10 +1993,6 @@ function unitMouseOverAndTapped(unit) {
 	for (var [key] of Object.entries(sortedUnitData)) {
 		updateChart(barCharts[key], key);
 	}
-	//update the ranks for each label for each unit stat
-	statsUnit.forEach(function (label) {
-		updateRank(label, unit);
-	});
 }
 
 
@@ -2004,11 +2013,6 @@ traitsComparisonChartContainer.innerHTML = 'traitsComparisonChart';
 
 
 //#region statsComparisonChart "starchart", associated minmax and scaling functions
-var unitDeckStats = [];
-//get the unit deck stats from the deck div
-
-//add the correct format for unitDeckStats to be chartJS data
-//console.log(unitDeckStats);
 
 //create an example star chart in chartjs
 //const DATA_COUNT = 7;
