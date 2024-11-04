@@ -509,6 +509,12 @@ sup {
 	text-shadow: 2px 2px 1px black;
 }
 
+.rankchartsuperscript {
+	font-variant: small-caps;
+	font-size: smaller;
+	font-variant-position: super;
+}
+
 #toggleSidebarButton {
 	padding: 0 0 0 0;
 	margin: 0 0 0 0;

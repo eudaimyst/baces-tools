@@ -11,6 +11,7 @@ import { units } from './units';
 var unitList = Object.values(units);
 
 var statsUnit = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
+
 //#region deck format
 
 
@@ -78,25 +79,13 @@ function removeSpacesCapitalsSpecialCharacters(input) {
 }
 
 //#tag define-deck-contents
-//decks contain the unit objects
-var deck1Name = '';
-var deck2Name = '';
-var deckNames = [deck1Name, deck2Name];
-var decks = []
-var deck1Contents = [];
-var deck2Contents = [];
-decks.push(deck1Contents, deck2Contents);
-//decks slots contain the elements (divs) that are used to display the units in the deck
-var deckSlots = [];
-var deck1Slots = [];
-var deck2Slots = [];
-deckSlots.push(deck1Slots, deck2Slots);
-
+var decks = [[], []];
+var deckNames = ['', ''];
+var deckDivs = [[], []];
 var slotBuildings = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge'];
-var slotBuildingFilters = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge'];
+//decks slots contain the elements (divs) that are used to display the units in the deck
 
-var currentDeck = 0; //currentDeck defaults to 1 until deck 2 is selected
-
+var currentDeck = 0; // 0 = Deck 1, 1 = Deck 2
 
 //#region views-contents-headers definitions for all 3 views
 
@@ -145,8 +134,6 @@ app.appendChild(deck_view);
 app.appendChild(stats_view);
 
 //#endregion
-
-
 
 document.body.appendChild(wrapper);
 
@@ -381,8 +368,8 @@ function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 	if (deck[slotNumber]) {
 		console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
 		delete deck[slotNumber];
-		deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
-		deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
+		deckDivs[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
+		deckDivs[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
 		if (updateCharts) updateComparisonCharts();
 	}
 	redrawUnitContent();
@@ -419,7 +406,7 @@ function createDeckSlots(container, deckID) {
 	//create 8 square divs
 	for (var i = 0; i < 8; i++) {
 		var div = document.createElement('div');
-		deckSlots[deckID][i] = div
+		deckDivs[deckID][i] = div
 		div.classList.add('unit_deck_slot_div');
 		div.id = 'unit_deck_slot_div' + i;
 
@@ -462,7 +449,7 @@ function createDeckSlots(container, deckID) {
 				console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
 				//setFilter(slotBuildings[i]);
 				//set the filter input box to the name of the building
-				unit_filter_input.value = slotBuildingFilters[slotNumber];
+				unit_filter_input.value = slotBuildings[slotNumber];
 				setFilter(unit_filter_input.value)
 				redrawUnitContent();
 				//run the unit_filter input changed event
@@ -684,13 +671,13 @@ function redrawDeckContent(deckID) {
 	var deck = decks[deckID];
 	//deckEmojiText.innerHTML = ''
 	//for each deck1slot
-	deckSlots[deckID].forEach((slot, i) => {
+	deckDivs[deckID].forEach((slot, i) => {
 		slot.firstElementChild.src = 'images/techtiers/' + slotBuildings[i] + '.png';
 	});
 	deck.forEach((unit, i) => {
 		//deckEmojiText.innerHTML += unit.emoji + ' ';
 		//slot.innerHTML = deck[index].name;
-		deckSlots[deckID][i].firstElementChild.src = 'images/units/' + unit.slug + '.png';
+		deckDivs[deckID][i].firstElementChild.src = 'images/units/' + unit.slug + '.png';
 	});
 
 }
@@ -727,17 +714,17 @@ function addUnitToDeck(unit, deckID) {
 				if (slotBuildings[i] == unit.building) {
 					deck[i] = unit;
 
-					deckSlots[deckID][i].classList.add(deckClass);
+					deckDivs[deckID][i].classList.add(deckClass);
 					break;
 				}
 				else if (slotBuildings[i] == 'wildfoundry' && (unit.building == 'foundry' || unit.building == 'advancedfoundry')) {
 					deck[i] = unit;
-					deckSlots[deckID][i].classList.add(deckClass);
+					deckDivs[deckID][i].classList.add(deckClass);
 					break;
 				}
 				else if (slotBuildings[i] == 'wildstarforge' && (unit.building == 'starforge' || unit.building == 'advancedstarforge')) {
 					deck[i] = unit;
-					deckSlots[deckID][i].classList.add(deckClass);
+					deckDivs[deckID][i].classList.add(deckClass);
 					break;
 				}
 			}
@@ -984,6 +971,7 @@ function setFilter(filterString) {
 
 //#endregion
 
+//#region unit-content
 
 //unitRows stores the rows of unit table by unit name so we can apply highlights later
 var tableUnitRows = {};
@@ -1232,9 +1220,6 @@ function drawUnitTable() {
 	unit_content.appendChild(unit_table);
 }
 
-
-
-//#region unit-card-drawing
 var shortTypes = {
 	Air: 'Air', Ground: 'Ground', 'Base Defense': 'Base Defense'
 }
@@ -1353,6 +1338,7 @@ function drawUnitCards() {
 }
 
 //#endregion
+
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
@@ -1479,37 +1465,10 @@ function resize() {
 		stats_view.id = 'stats_view-v';
 	}
 }
+
 window.addEventListener('resize', resize);
 resize();
 //#endregion
-
-
-//console.log(wrapper);
-
-
-
-
-
-//const ctx = document.getElementById('myChart');
-
-//find the min and max value of each stat for all units in the unit list
-var minValues = [];
-var maxValues = [];
-
-for (const unit in unitList) {
-	for (var [key, value] of Object.entries(unit)) {
-		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
-			if (minValues[key] == undefined || value <= minValues[key]) {
-				minValues[key] = value;
-				if (key == 'speed') console.log(key, minValues[key]);
-			}
-			if (maxValues[key] == undefined || value > maxValues[key]) {
-				maxValues[key] = value;
-			}
-		}
-	}
-}
-
 
 function simpleSort(list, key, sortedArray) {
 
@@ -1524,8 +1483,6 @@ function simpleSort(list, key, sortedArray) {
 	});
 	return sortedList;
 }
-
-
 
 //#region stats-header
 var statsMode = 0 //0 = unit, 1 = compare
@@ -1579,9 +1536,6 @@ stats_mode_select.addEventListener('change', function () {
 });
 
 //#endregion
-
-
-
 
 //#region stats-content
 
@@ -1714,7 +1668,7 @@ statsUnitBottomContainer.appendChild(statsUnitMatterDiv);
 statsUnitBottomContainer.appendChild(statsUnitEnergyDiv);
 statsUnitBottomContainer.appendChild(statsUnitBandwidthDiv);
 statsUnitBottomContainer.appendChild(statsUnitAbilityDiv);
-
+4
 var chartDivs = []
 var barCharts = []
 
@@ -1742,6 +1696,25 @@ function refreshStatsUnit() {
 
 
 //#tag barChart definition
+
+
+var minValues = [];
+var maxValues = [];
+
+for (const unit in unitList) {
+	for (var [key, value] of Object.entries(unit)) {
+		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
+			if (minValues[key] == undefined || value <= minValues[key]) {
+				minValues[key] = value;
+				if (key == 'speed') console.log(key, minValues[key]);
+			}
+			if (maxValues[key] == undefined || value > maxValues[key]) {
+				maxValues[key] = value;
+			}
+		}
+	}
+}
+
 function statRankChart(label) {
 
 	var statsUnitChartDiv = document.createElement('div');
@@ -1829,26 +1802,28 @@ function statRankChart(label) {
 
 }
 
-
-function drawAllStatRankChart() {
-	//instead of having each in strings, do it for each key in sorted unit data
-	for (var [key] of Object.entries(sortedUnitData)) {
-		//console.log(key);
-		statRankChart(key);
-	}
+//draw stat rank charts
+for (var [key] of Object.entries(sortedUnitData)) {
+	//console.log(key);
+	statRankChart(key);
 }
-drawAllStatRankChart();
 
 //write a function to add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
 function getRankSuffix(rank) {
 	//if rank ends in 1
-	if (rank == 11 || rank == 12 || rank == 13) return 'th';
-	else if (rank % 10 == 1) return 'st';
+	var output = '';
+	if (rank == 11 || rank == 12 || rank == 13) output = 'th';
+	else if (rank % 10 == 1) output = 'st';
 	//if rank ends in 2
-	else if (rank % 10 == 2) return 'nd';
+	else if (rank % 10 == 2) output = 'nd';
 	//if rank ends in 3
-	else if (rank % 10 == 3) return 'rd';
-	else return 'th';
+	else if (rank % 10 == 3) output = 'rd';
+	else output = 'th';
+	//add a HTML span lement to adjust the size of the text before and after the output
+	var prespan = '<span class = "rankchartsuperscript">';
+	var postspan = '</span>';
+	output = prespan + output + postspan;
+	return output;
 }
 
 //create a function which returns a colour on a gradient scale from red to green based on the value
