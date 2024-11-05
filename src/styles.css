@@ -133,9 +133,6 @@ option {
 	right: 0px;
 	top: 2.4vmax;
 	bottom: 2px;
-	border-width: 2px;
-	border-color: rgb(0, 0, 0);
-	border-style: none;
 	overflow-x: hidden;
 	scrollbar-color: rgba(255, 255, 255, 0.281) rgba(12, 12, 12, 0.445);
 }
@@ -230,7 +227,6 @@ option {
 
 #stats_content {
 	position: absolute;
-	border-width: 5px;
 	border: none;
 	border-color: rgb(255, 255, 255);
 	overflow: hidden;
@@ -336,6 +332,43 @@ option {
 	border-color: rgb(255, 255, 255);
 	background-color: rgba(0, 0, 0, 0.185);
 	z-index: 10;
+}
+
+#statsUnitTraitsContainer {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	width: 45%;
+	top: 1vmin;
+	bottom: 1vmin;
+	left: 1vmin;
+	background-color: rgba(0, 0, 0, 0.25);
+	z-index: 10;
+	font-variant: small-caps;
+	font-size: small;
+}
+
+.statsUnitTypeDiv {
+	opacity: 80%;
+	height: 6vmin;
+	line-height: 5vmin;
+	font-stretch: expanded;
+	font-size: 3vmin;
+	font-weight: 800;
+}
+
+.statsUnitTraitsDiv {
+	display: flex;
+	align-items: center;
+	height: 5vmin;
+	line-height: 3vmin;
+}
+
+
+.statsUnitTraitImg {
+	width: 1.5vmax;
+	padding-left: 3;
 }
 
 #statsUnitChartContainer {
