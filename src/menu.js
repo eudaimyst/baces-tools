@@ -174,7 +174,7 @@ sidebar_content_div.appendChild(countdownDiv);
 const counDownDivCountdownText = document.createElement('p');
 counDownDivCountdownText.classList.add('countdown_text');
 countdownDiv.appendChild(counDownDivCountdownText);
-//get the remaining time in days hours minutes and secionds until the 6th of November, 12pm, PST American West Coast
+//get the remaining time in days hours minutes and secionds until the 6th of November, 12pm, PST American West Coast using an online time library
 //returns a string
 function getRemainingTime() {
 	const now = new Date();
@@ -185,7 +185,7 @@ function getRemainingTime() {
 	const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 	const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 	//return the remaining time in a string
-	return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+	return `${days + 1}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
 //set countdown div text to the remaining time using the function
