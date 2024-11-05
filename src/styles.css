@@ -263,18 +263,18 @@ option {
 
 #statsUnitName {
 	justify-content: left;
-	font-weight: 600;
+	font-size: 3vmin;
+	font-weight: 800;
 	position: relative;
-	padding: 1vmin;
 	text-wrap: nowrap;
 	overflow: hidden;
-	padding: 1vmin 1vmin 1vmin 0vmin;
+	padding-right: 1vmin;
+	padding-top: .2vmin;
 }
 
 .statsUnitBuildingImg {
 	height: 3.5vmin;
 	width: 3.5vmin;
-	padding: .2vmin 0vmin 1vmin 0vmin;
 }
 
 .statsUnitResourceImg {
@@ -346,23 +346,26 @@ option {
 	background-color: rgba(0, 0, 0, 0.25);
 	z-index: 10;
 	font-variant: small-caps;
-	font-size: small;
+	font-size: .8vmax;
 }
 
 .statsUnitTypeDiv {
 	opacity: 80%;
-	height: 6vmin;
+	height: 20vmin;
 	line-height: 5vmin;
-	font-stretch: expanded;
 	font-size: 3vmin;
 	font-weight: 800;
 }
 
 .statsUnitTraitsDiv {
+	opacity: 98%;
 	display: flex;
+	font-weight: 600;
 	align-items: center;
 	height: 5vmin;
 	line-height: 3vmin;
+	overflow: visible;
+	text-wrap: balance;
 }
 
 
@@ -423,8 +426,8 @@ option {
 	border-color: rgba(255, 255, 255, 0.479);
 	z-index: 10;
 	border-width: 1px;
-	font-size: 1.5vmin;
-	font-weight: 600;
+	font-size: 1.8vmin;
+	font-weight: 700;
 	font-variant: small-caps;
 	line-height: 250%;
 }

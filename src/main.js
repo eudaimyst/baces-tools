@@ -1167,13 +1167,11 @@ function drawUnitTable() {
 
 		for (var [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
-				var div = document.createElement('div');
 				var unit_table_cell = document.createElement('td');
 				unit_table_cell.id = unit.slug;
 				if (simpleStatsMode) {
 					unit_table_cell.classList.add('simpleStatsPadding');
 				}
-				unit_table_cell.appendChild(div);
 
 				unit_table_cell.classList.add('unit_table_cell');
 				//if i is an alternate number
@@ -1204,6 +1202,21 @@ function drawUnitTable() {
 						img.classList.add('unit_table_image_medium');
 						unit_table_cell.appendChild(img);
 					}
+					if (unit['traits'] == null) {
+						console.log(unit['name']);
+						if (unit['name'] == 'Raider') {
+							var unit_table_cell = document.createElement('td');
+							unit_table_cell.id = unit.slug;
+							if (i % 2 == 0) {
+								unit_table_cell.classList.add('unit_table_cell_alt');
+							}
+							if (simpleStatsMode) {
+								unit_table_cell.classList.add('simpleStatsPadding');
+							}
+							unit_table_cell.classList.add('unit_table_cell');
+							unit_table_row.appendChild(unit_table_cell);
+						}
+					}
 				} else if (key == 'manufacturer') {
 					if (value != '') {
 						img.src = 'images/manuf/' + value + '.png';
@@ -1221,9 +1234,6 @@ function drawUnitTable() {
 							img.setAttribute('alt', trait);
 							img.setAttribute('title', trait);
 							unit_table_cell.appendChild(img);
-						}
-						else {
-							unit_table_cell.innerHTML = value;
 						}
 					});
 					unit_table_cell.classList.add('unit_table_cell_traits');
@@ -1679,29 +1689,36 @@ statsUnitTraitsContainer.appendChild(statsUnitTraitCounteredByDiv);
 function updateTraitsContainer(_unit) {
 	statsUnitTypeDiv.textContent = _unit.type
 	//display traits as images
-	statsUnitTraitsDiv.textContent = 'traits: ';
-	_unit.traits.forEach(function (trait) {
-		var traitImg = document.createElement('img');
-		traitImg.classList.add('statsUnitTraitImg');
-		traitImg.src = 'images/traits/' + trait + '.png';
-		statsUnitTraitsDiv.appendChild(traitImg);
-	});
+	if (_unit.name == 'Raider') {
+		statsUnitTraitsDiv.textContent = 'traits: only attacks workers';
+		statsUnitTraitCountersDiv.textContent = 'counters: economy';
+		statsUnitTraitCounteredByDiv.textContent = 'countered by: scouting'
+	}
+	else {
+		statsUnitTraitsDiv.textContent = 'traits: ';
+		_unit.traits.forEach(function (trait) {
+			var traitImg = document.createElement('img');
+			traitImg.classList.add('statsUnitTraitImg');
+			traitImg.src = 'images/traits/' + trait + '.png';
+			statsUnitTraitsDiv.appendChild(traitImg);
+		});
 
-	statsUnitTraitCountersDiv.textContent = 'counters: ';
-	_unit.traitcounters.forEach(function (trait) {
-		var traitImg = document.createElement('img');
-		traitImg.classList.add('statsUnitTraitImg');
-		traitImg.src = 'images/traits/' + trait + '.png';
-		statsUnitTraitCountersDiv.appendChild(traitImg);
-	});
+		statsUnitTraitCountersDiv.textContent = 'counters: ';
+		_unit.traitcounters.forEach(function (trait) {
+			var traitImg = document.createElement('img');
+			traitImg.classList.add('statsUnitTraitImg');
+			traitImg.src = 'images/traits/' + trait + '.png';
+			statsUnitTraitCountersDiv.appendChild(traitImg);
+		});
 
-	statsUnitTraitCounteredByDiv.textContent = 'countered by: ';
-	_unit.traitcounteredby.forEach(function (trait) {
-		var traitImg = document.createElement('img');
-		traitImg.classList.add('statsUnitTraitImg');
-		traitImg.src = 'images/traits/' + trait + '.png';
-		statsUnitTraitCounteredByDiv.appendChild(traitImg);
-	});
+		statsUnitTraitCounteredByDiv.textContent = 'countered by: ';
+		_unit.traitcounteredby.forEach(function (trait) {
+			var traitImg = document.createElement('img');
+			traitImg.classList.add('statsUnitTraitImg');
+			traitImg.src = 'images/traits/' + trait + '.png';
+			statsUnitTraitCounteredByDiv.appendChild(traitImg);
+		});
+	}
 
 }
 
