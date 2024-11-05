@@ -734,59 +734,46 @@ sup {
 }
 
 .statDiv {
+	height: 15%;
 	font-variant: small-caps;
 	display: flex;
 	flex-direction: row;
-	width: 20%;
-	height: 10%;
-	padding: 4 0 4 0;
 	align-items: center;
 	justify-content: center;
-	border: dashed;
-	border-width: 1px;
-	border-color: rgba(255, 255, 255, 0.171);
 	background-color: rgba(0, 0, 0, 0.308);
 }
 
 .complexStatDiv {
 	justify-content: left;
 	width: 100%;
-	line-height: 100%;
-	height: 15%;
 }
 
 .resourceStatDiv {
 	width: 30%;
 }
 
+.unitStatDiv {
+	width: 25%;
+}
+
 .deck_stats_img {
-	width: 30%;
+	width: 1.5vmax;
 }
 
 .resourceStatImg {
-	width: 20%;
-}
-
-.deck_stats_img {
-	width: 30%;
+	width: 1.5vmax;
 }
 
 .deck_stats_img_ability {
-	position: relative;
-	width: 14%;
-	height: 14%;
+	width: 2vmax;
 }
 
 .deck_stats_img_traits {
-	position: relative;
-	width: 6%;
-	height: 6%;
+	width: 1vmax;
 }
 
 .deck_stats_img_manf {
-	position: relative;
-	width: 12%;
-	height: 12%;
+	width: 2vmax;
 }
 
 .links_div {

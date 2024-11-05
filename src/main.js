@@ -512,35 +512,36 @@ function createDeckStats(container) {
 	var stat_categories = ['matter', 'energy', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
 	var stat_category_divs = {} //stores the cells for each stat category to be updated
 
-	stat_categories.forEach(statCategory => {
+	stat_categories.forEach(cat => {
 		const statDiv = document.createElement('div')
 		statDiv.classList.add('statDiv');
-		stat_category_divs[statCategory] = valueDiv;
+		stat_category_divs[cat] = valueDiv;
 
-		if (statCategory == 'traits' || statCategory == 'ability') {
-			statDiv.innerText = statCategory;
+		if (cat == 'traits' || cat == 'ability') {
+			statDiv.innerText = cat + ': ';
 			statDiv.classList.add('complexStatDiv');
 		}
-		else if (statCategory == 'manufacturer') {
-			statDiv.innerText = 'manf.';
+		else if (cat == 'manufacturer') {
+			statDiv.innerText = 'manf: ';
 			statDiv.classList.add('complexStatDiv');
 		}
 		else {
 			var img = document.createElement('img');
-			if (statCategory == 'energy' || statCategory == 'matter' || statCategory == 'bandwidth') {
-				img.src = 'images/resources/' + statCategory + '.svg';
+			if (cat == 'energy' || cat == 'matter' || cat == 'bandwidth') {
+				img.src = 'images/resources/' + cat + '.svg';
 				statDiv.classList.add('resourceStatDiv');
 				img.classList.add('resourceStatImg');
 			}
 			else {
-				img.src = 'images/stats/' + statCategory + '.png';
+				img.src = 'images/stats/' + cat + '.png';
 				img.classList.add('deck_stats_img');
+				statDiv.classList.add('unitStatDiv');
 			}
 
 			statDiv.appendChild(img);
 		}
 		var valueDiv = document.createElement('div');
-		stat_category_divs[statCategory] = valueDiv;
+		stat_category_divs[cat] = valueDiv;
 		valueDiv.innerText = '';
 		statDiv.appendChild(valueDiv);
 		deck_stats_div.appendChild(statDiv);
@@ -695,7 +696,6 @@ function calculateDeckStats(deckID) {
 	return stats;
 }
 
-
 function redrawDeckContent(deckID) {
 	calculateDeckStats(deckID);
 	//iterate through deckslots
@@ -713,9 +713,6 @@ function redrawDeckContent(deckID) {
 	});
 
 }
-
-
-
 
 function addUnitToDeck(unit, deckID) {
 	var deck = decks[deckID];
