@@ -10,6 +10,31 @@ import { units } from './units';
 
 var unitList = Object.values(units);
 
+
+const minValues = [];
+const maxValues = [];
+
+console.log('minvalues', minValues);
+console.log('maxvalues', maxValues);
+
+//for each unit in unitlist
+for (var unit of unitList) {
+	console.log(unit);
+	for (var [key, value] of Object.entries(unit)) {
+		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
+			if (minValues[key] == undefined || value <= minValues[key]) {
+				minValues[key] = value;
+				if (key == 'speed') console.log(key, minValues[key]);
+			}
+			if (maxValues[key] == undefined || value > maxValues[key]) {
+				maxValues[key] = value;
+			}
+		}
+	}
+}
+console.log('minvalues', minValues);
+console.log('maxvalues', maxValues);
+
 var statsUnit = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
 
 //#region deck format
@@ -1559,18 +1584,60 @@ var sortData = {
 	dpsa: simpleSort(unitList, 'dpsa', sortedUnitData.dpsa),
 }
 
-function sortColors(unitName, data) {
-	var sortedColors = []
-	var color = 'white';
-	//color = unitStatColors[label];
+
+
+//returns a colour on a gradient scale from red to green based on the value
+function getColour(value, min, max) {
+	console.log('getColour:', value, min, max);
+	var red = 0;
+	var green = 0;
+	//if value is less than min, return red
+	if (value <= min) {
+		red = 255;
+		green = 0;
+	}
+	//if value is greater than max, return green
+	else if (value >= max) {
+		red = 0;
+		green = 255;
+	}
+	//if value is between min and max, return a colour between red and green
+	else {
+		red = 255 - Math.round((value - min) / (max - min) * 255);
+		green = Math.round((value - min) / (max - min) * 255);
+	}
+	console.log('FJSDKALFJKL;SADFJSKLADFJKLASDFJKLADSFJKLADSFJNMKLSADF');
+	console.log('rgb(' + red + ', ' + green + ', 0)')
+	return 'rgb(' + red + ', ' + green + ', 0)';
+
+}
+
+
+//data is sortdata for the label, 
+function sortColors(_unit, data, label) {
+	//get the unit by the unitName 
+	console.log('sortColors:', _unit, data, label);
+	console.log('huh?: ', _unit[label], minValues[label], maxValues[label]);
+	var color = getColour(_unit[label], minValues[label], maxValues[label]);
+	var sortedColors = [];
+
+	var rank = sortedUnitData[label].length - sortedUnitData[label].lastIndexOf(_unit[label]);
+
+	for (let i = 0; i < (sortedUnitData[label].length); i++) {
+		if (i < sortedUnitData[label].length - (rank - 1)) sortedColors.push(color);
+		else sortedColors.push('black');
+	}
+
 	data.forEach(function (unit) {
 		sortedColors.push(color)
-		if (unit == unitName) { //once we reaach the name of the unit we set color to black which pushes the rest of the units as black bars
+		if (unit == _unit) { //once we reaach the passed unit we set color to black which pushes the rest of the units as black bars
 			color = 'black'
 		}
 	});
+
 	return sortedColors
 }
+
 
 var currentUnit = 'crusader';
 
@@ -1670,7 +1737,7 @@ statsUnitBottomContainer.appendChild(statsUnitBandwidthDiv);
 statsUnitBottomContainer.appendChild(statsUnitAbilityDiv);
 4
 var chartDivs = []
-var barCharts = []
+var statRankBarCharts = []
 
 //video element
 const video = document.createElement('video');
@@ -1685,7 +1752,7 @@ videoblind.style = 'position: absolute; background-color: black; width: 100%; he
 
 video.id = 'unitVideo';
 
-function refreshStatsUnit() {
+function updateStatsUnit() {
 	stats_content.appendChild(unitOfficialLinkDiv);
 	stats_content.appendChild(video);
 	video.play();
@@ -1698,22 +1765,6 @@ function refreshStatsUnit() {
 //#tag barChart definition
 
 
-var minValues = [];
-var maxValues = [];
-
-for (const unit in unitList) {
-	for (var [key, value] of Object.entries(unit)) {
-		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
-			if (minValues[key] == undefined || value <= minValues[key]) {
-				minValues[key] = value;
-				if (key == 'speed') console.log(key, minValues[key]);
-			}
-			if (maxValues[key] == undefined || value > maxValues[key]) {
-				maxValues[key] = value;
-			}
-		}
-	}
-}
 
 function statRankChart(label) {
 
@@ -1744,7 +1795,7 @@ function statRankChart(label) {
 				label: label,
 				//data: [12, 19, 3, 5, 2, 3],
 				data: sortedUnitData[label],
-				backgroundColor: getColour(currentUnit, sortData[label], label),
+				backgroundColor: getColour(currentUnit.label, minValues[label], maxValues[label]), //TODO: GetColour is bugged, should be red to green based on value
 				borderWidth: 0
 			}]
 		},
@@ -1798,9 +1849,28 @@ function statRankChart(label) {
 		}
 	});
 
-	barCharts[label] = chart;
+	statRankBarCharts[label] = chart;
+
 
 }
+
+//write a function to update the chart data backgroundColor
+function updateStatRankChartColor(_unit, chart, label) {
+	console.log('flkjsadklfjasdklfasjlk')
+	console.log(_unit, chart, label)
+	console.log(maxValues);
+	chart.data.datasets[0].backgroundColor = sortColors(_unit, sortedUnitData[label], label);
+	chart.update();
+}
+
+//run updateStatRankChartColor on each label
+function updateStatRankChartColors(_unit) {
+	console.log('updating stat rank chart colors')
+	for (var [key] of Object.entries(sortedUnitData)) {
+		updateStatRankChartColor(_unit, statRankBarCharts[key], key);
+	}
+}
+
 
 //draw stat rank charts
 for (var [key] of Object.entries(sortedUnitData)) {
@@ -1808,7 +1878,7 @@ for (var [key] of Object.entries(sortedUnitData)) {
 	statRankChart(key);
 }
 
-//write a function to add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
+//add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
 function getRankSuffix(rank) {
 	//if rank ends in 1
 	var output = '';
@@ -1826,33 +1896,7 @@ function getRankSuffix(rank) {
 	return output;
 }
 
-//create a function which returns a colour on a gradient scale from red to green based on the value
-function getColour(value, min, max) {
-	//set defaults for min and max to 0 and 50
-	//if min and max are not provided, use the min and max values of the data
-	//return a vibrant colour gradient from green to yellow to orange to red
-	//if value is less than min, return red
-	if (value < min) return 'rgb(255, 0, 0)';
-	//if value is greater than max, return green
-	if (value > max) return 'rgb(0, 255, 0)';
-	//if value is between min and max, return a colour on the gradient
-	//calculate the percentage of the value between min and max
-	var percentage = (value - min) / (max - min);
-	//calculate the red and green values
-	var red = Math.round(255 * (1 - percentage));
-	//calculate the green value
-	var green = Math.round(255 * percentage);
-	//return the colour
-	//add yellow in a gradient if it is in the middle of red and green
-	if (percentage > 0.5) {
-		red = Math.round(255 * (1 - percentage));
-		green = Math.round(255 * (1 - percentage));
-	}
-	return 'rgb(' + red + ', ' + green + ', 0)';
-
-}
-
-function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, building, ability) {
+function updateStatsUnitBottomContainer(name, matter, energy, bandwidth, building, ability) {
 	statsUnitName.innerHTML = name;
 	//get the div by its id
 	statsUnitMatterDiv.children[1].innerHTML = matter;
@@ -1906,7 +1950,7 @@ function unitMouseOverAndTapped(unit) {
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
-	refreshStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building, unit.ability)
+	updateStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building, unit.ability)
 
 	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
 	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
@@ -1959,15 +2003,18 @@ function unitMouseOverAndTapped(unit) {
 			})
 	}
 	//update the colors in the bar charts based on the unit id
+	/**
 	function updateChart(chart, label) {
 		chart.data.datasets[0].data = sortedUnitData[label];
-		chart.data.datasets[0].backgroundColor = sortColors(unit.name, sortData[label], label);
+		chart.data.datasets[0].backgroundColor = sortColors(unit, sortData, label);
 		chart.update();
 	}
 	//update the charts
 	for (var [key] of Object.entries(sortedUnitData)) {
-		updateChart(barCharts[key], key);
-	}
+		updateChart(statRankBarCharts[key], key);
+	} */
+	console.log(unit);
+	updateStatRankChartColors(unit);
 }
 
 
@@ -2297,7 +2344,7 @@ function refreshStatViewContent() {
 		stats_content.removeChild(stats_content.firstChild);
 	};
 	if (statsMode == 0) {
-		refreshStatsUnit();
+		updateStatsUnit();
 	}
 	if (statsMode == 1) {
 		if (compareMode == 0) {
