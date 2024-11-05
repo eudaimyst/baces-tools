@@ -353,7 +353,7 @@ option {
 	opacity: 80%;
 	height: 20vmin;
 	line-height: 5vmin;
-	font-size: 3vmin;
+	font-size: 2.5vmin;
 	font-weight: 800;
 }
 
@@ -547,8 +547,8 @@ sup {
 
 .rankchartsuperscript {
 	font-variant: small-caps;
-	font-size: smaller;
-	font-variant-position: super;
+	font-size: x-small;
+	vertical-align: super;
 }
 
 #toggleSidebarButton {
@@ -771,10 +771,22 @@ sup {
 	width: 30%;
 }
 
-.deck_stats_img_small {
+.deck_stats_img_ability {
+	position: relative;
+	width: 14%;
+	height: 14%;
+}
+
+.deck_stats_img_traits {
 	position: relative;
 	width: 6%;
 	height: 6%;
+}
+
+.deck_stats_img_manf {
+	position: relative;
+	width: 12%;
+	height: 12%;
 }
 
 .links_div {

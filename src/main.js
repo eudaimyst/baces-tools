@@ -615,7 +615,7 @@ function calculateDeckStats(deckID) {
 						img.src = 'images/abilities/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('deck_stats_img_small');
+						img.classList.add('deck_stats_img_ability');
 						stat_category_cells[deckID][key].appendChild(img);
 					}
 				}
@@ -632,7 +632,7 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i][j] + '.png';
 								img.setAttribute('alt', stats[key][i][j]);
 								img.setAttribute('title', stats[key][i][j]);
-								img.classList.add('deck_stats_img_small');
+								img.classList.add('deck_stats_img_traits');
 								stat_category_cells[deckID][key].appendChild(img);
 							}
 						}
@@ -641,7 +641,7 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i] + '.png';
 								img.setAttribute('alt', stats[key][i]);
 								img.setAttribute('title', stats[key][i]);
-								img.classList.add('deck_stats_img_small');
+								img.classList.add('deck_stats_img_traits');
 								stat_category_cells[deckID][key].appendChild(img);
 							}
 						}
@@ -670,10 +670,10 @@ function calculateDeckStats(deckID) {
 				for (var i = 0; i < stats[key].length; i++) {
 					if (stats[key][i] != undefined && stats[key][i] != '') {
 						var img = document.createElement('img');
-						img.src = 'images/manuf/' + stats[key][i] + '.png';
+						img.src = 'images/manuf/uniforms/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('deck_stats_img_small');
+						img.classList.add('deck_stats_img_manf');
 						stat_category_cells[deckID][key].appendChild(img);
 					}
 
@@ -1563,7 +1563,7 @@ stats_mode_select.id = 'stats_mode_select';
 stats_mode_select.classList.add('header_element');
 stats_view_header.appendChild(stats_mode_select);
 //add option to stats mode select for stats, resources and traits
-var stats_mode_select_options = ['stats', 'resources', 'traits'];
+var stats_mode_select_options = ['stats', 'resources']; //todo: add trait comparison
 stats_mode_select_options.forEach(function (option) {
 	var option_element = document.createElement('option');
 	option_element.value = option;
@@ -1944,6 +1944,8 @@ for (var [key] of Object.entries(sortedUnitData)) {
 	statRankChart(key);
 }
 
+var prespan = '<span class = "rankchartsuperscript">';
+var postspan = '</span>';
 //add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
 function getRankSuffix(rank) {
 	//if rank ends in 1
@@ -1956,8 +1958,6 @@ function getRankSuffix(rank) {
 	else if (rank % 10 == 3) output = 'rd';
 	else output = 'th';
 	//add a HTML span lement to adjust the size of the text before and after the output
-	var prespan = '<span class = "rankchartsuperscript">';
-	var postspan = '</span>';
 	output = prespan + output + postspan;
 	return output;
 }
