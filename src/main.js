@@ -8,9 +8,42 @@ import { sidebar, updateBG } from './menu';
 
 import { units } from './units';
 
+
+const logging = false;
+function myLog(message) {
+	if (logging) console.log(message);
+}
+
+
 var unitList = Object.values(units);
 
+
+const minValues = [];
+const maxValues = [];
+
+myLog('minvalues', minValues);
+myLog('maxvalues', maxValues);
+
+//for each unit in unitlist
+for (var unit of unitList) {
+	myLog(unit);
+	for (var [key, value] of Object.entries(unit)) {
+		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
+			if (minValues[key] == undefined || value <= minValues[key]) {
+				minValues[key] = value;
+				if (key == 'speed') myLog(key, minValues[key]);
+			}
+			if (maxValues[key] == undefined || value > maxValues[key]) {
+				maxValues[key] = value;
+			}
+		}
+	}
+}
+myLog('minvalues', minValues);
+myLog('maxvalues', maxValues);
+
 var statsUnit = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
+
 //#region deck format
 
 
@@ -25,8 +58,8 @@ class SavedDeck {
 
 function fillSlotsFromDeck(deck, deckID) {
 	deck.deckList.forEach((unitSlug) => {
-		console.log(unitSlug)
-		console.log(units[unitSlug])
+		myLog(unitSlug)
+		myLog(units[unitSlug])
 		var unit = units[unitSlug];
 		addUnitToDeck(unit, deckID);
 	});
@@ -40,7 +73,7 @@ var testDeckData = new SavedDeck('North Performance',
 		'ballista',
 		'bulwark',
 		'heavyballista']);
-console.log(testDeckData);
+myLog(testDeckData);
 
 savedDecks.push(testDeckData);
 
@@ -78,25 +111,13 @@ function removeSpacesCapitalsSpecialCharacters(input) {
 }
 
 //#tag define-deck-contents
-//decks contain the unit objects
-var deck1Name = '';
-var deck2Name = '';
-var deckNames = [deck1Name, deck2Name];
-var decks = []
-var deck1Contents = [];
-var deck2Contents = [];
-decks.push(deck1Contents, deck2Contents);
-//decks slots contain the elements (divs) that are used to display the units in the deck
-var deckSlots = [];
-var deck1Slots = [];
-var deck2Slots = [];
-deckSlots.push(deck1Slots, deck2Slots);
-
+var decks = [[], []];
+var deckNames = ['', ''];
+var deckDivs = [[], []];
 var slotBuildings = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge'];
-var slotBuildingFilters = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core', 'starforge', 'advancedstarforge', 'wildstarforge'];
+//decks slots contain the elements (divs) that are used to display the units in the deck
 
-var currentDeck = 0; //currentDeck defaults to 1 until deck 2 is selected
-
+var currentDeck = 0; // 0 = Deck 1, 1 = Deck 2
 
 //#region views-contents-headers definitions for all 3 views
 
@@ -145,8 +166,6 @@ app.appendChild(deck_view);
 app.appendChild(stats_view);
 
 //#endregion
-
-
 
 document.body.appendChild(wrapper);
 
@@ -292,7 +311,7 @@ deck_view_header.appendChild(load_button);
 load_button.addEventListener('click', function () {
 	//load the selected deck into the current deck
 	//clear the current deck
-	console.log(savedDecks[selectedDeck]);
+	myLog(savedDecks[selectedDeck]);
 	deckNames[currentDeck] = savedDecks[selectedDeck].deckName;
 	decks[currentDeck] = [];
 	fillSlotsFromDeck(savedDecks[selectedDeck], currentDeck)
@@ -359,7 +378,7 @@ deckContainers.push(deckContainer, deck2Container); //for setting a current unit
 
 function mouseOverUnit(deck, slotNumber) {
 	if (deck[slotNumber]) {
-		console.log(slotNumber + ' mouseOver - ' + deck[slotNumber].name);
+		myLog(slotNumber + ' mouseOver - ' + deck[slotNumber].name);
 		//trigger the mouseover event
 		//get the unit from the unitlist by the unit name
 		var unit = unitList.find(unit => unit.name === deck[slotNumber].name);
@@ -368,7 +387,7 @@ function mouseOverUnit(deck, slotNumber) {
 }
 function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 	var deck = decks[deckID];
-	console.log('slotnumber: ' + slotNumber);
+	myLog('slotnumber: ' + slotNumber);
 
 	//Amazon Q: if unit is not in filteredUnitList, add it back to filteredUnitList
 	//if the unit is in the filteredUnitList, remove it from the filteredUnitList
@@ -379,10 +398,10 @@ function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 
 
 	if (deck[slotNumber]) {
-		console.log(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
+		myLog(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
 		delete deck[slotNumber];
-		deckSlots[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
-		deckSlots[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
+		deckDivs[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
+		deckDivs[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
 		if (updateCharts) updateComparisonCharts();
 	}
 	redrawUnitContent();
@@ -419,7 +438,7 @@ function createDeckSlots(container, deckID) {
 	//create 8 square divs
 	for (var i = 0; i < 8; i++) {
 		var div = document.createElement('div');
-		deckSlots[deckID][i] = div
+		deckDivs[deckID][i] = div
 		div.classList.add('unit_deck_slot_div');
 		div.id = 'unit_deck_slot_div' + i;
 
@@ -430,8 +449,8 @@ function createDeckSlots(container, deckID) {
 		img.setAttribute('title', 'deck slot' + i);
 		img.classList.add('deckSlotImage');
 		div.appendChild(img);
-		console.log("hello console" + i);
-		console.log(div.firstElementChild);
+		myLog("hello console" + i);
+		myLog(div.firstElementChild);
 
 		//when div is mouseover, make it turn black, then return after mouseover
 		div.addEventListener('mouseover', function () {
@@ -459,10 +478,10 @@ function createDeckSlots(container, deckID) {
 				removeUnitFromDeck(slotNumber, deckID, true);
 			}
 			else {
-				console.log(slotBuildings[slotNumber] + ' clicked, setting filter');
+				myLog(slotBuildings[slotNumber] + ' clicked, setting filter');
 				//setFilter(slotBuildings[i]);
 				//set the filter input box to the name of the building
-				unit_filter_input.value = slotBuildingFilters[slotNumber];
+				unit_filter_input.value = slotBuildings[slotNumber];
 				setFilter(unit_filter_input.value)
 				redrawUnitContent();
 				//run the unit_filter input changed event
@@ -493,35 +512,36 @@ function createDeckStats(container) {
 	var stat_categories = ['matter', 'energy', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
 	var stat_category_divs = {} //stores the cells for each stat category to be updated
 
-	stat_categories.forEach(statCategory => {
+	stat_categories.forEach(cat => {
 		const statDiv = document.createElement('div')
 		statDiv.classList.add('statDiv');
-		stat_category_divs[statCategory] = valueDiv;
+		stat_category_divs[cat] = valueDiv;
 
-		if (statCategory == 'traits' || statCategory == 'ability') {
-			statDiv.innerText = statCategory;
+		if (cat == 'traits' || cat == 'ability') {
+			statDiv.innerText = cat + ': ';
 			statDiv.classList.add('complexStatDiv');
 		}
-		else if (statCategory == 'manufacturer') {
-			statDiv.innerText = 'manf.';
+		else if (cat == 'manufacturer') {
+			statDiv.innerText = 'manf: ';
 			statDiv.classList.add('complexStatDiv');
 		}
 		else {
 			var img = document.createElement('img');
-			if (statCategory == 'energy' || statCategory == 'matter' || statCategory == 'bandwidth') {
-				img.src = 'images/resources/' + statCategory + '.svg';
+			if (cat == 'energy' || cat == 'matter' || cat == 'bandwidth') {
+				img.src = 'images/resources/' + cat + '.svg';
 				statDiv.classList.add('resourceStatDiv');
 				img.classList.add('resourceStatImg');
 			}
 			else {
-				img.src = 'images/stats/' + statCategory + '.png';
+				img.src = 'images/stats/' + cat + '.png';
 				img.classList.add('deck_stats_img');
+				statDiv.classList.add('unitStatDiv');
 			}
 
 			statDiv.appendChild(img);
 		}
 		var valueDiv = document.createElement('div');
-		stat_category_divs[statCategory] = valueDiv;
+		stat_category_divs[cat] = valueDiv;
 		valueDiv.innerText = '';
 		statDiv.appendChild(valueDiv);
 		deck_stats_div.appendChild(statDiv);
@@ -532,7 +552,7 @@ function createDeckStats(container) {
 
 	//on unit_deck_input update
 	deckEmojiText.onchange = function () {
-		console.log('unit_deck_input');
+		myLog('unit_deck_input');
 		redrawDeckContent();
 	};
 
@@ -548,8 +568,8 @@ var stat_category_cells2 = createDeckStats(deck2Container);
 stat_category_cells.push(stat_category_cells1)
 stat_category_cells.push(stat_category_cells2)
 
-console.log("STAT CATEGORY CELLS");
-console.log(stat_category_cells);
+myLog("STAT CATEGORY CELLS");
+myLog(stat_category_cells);
 
 //create 1 div to hold all the unit deck slots
 
@@ -572,7 +592,7 @@ function calculateDeckStats(deckID) {
 	};
 	for (var i = 0; i < deck.length; i++) {
 		if (deck[i] != undefined) {
-			console.log(deck[i]);
+			myLog(deck[i]);
 			for (var key in stats) {
 				if (deck[i][key] != undefined) {
 					if (key == 'ability' || key == 'type' || key == 'traits' || key == 'manufacturer') {
@@ -585,7 +605,7 @@ function calculateDeckStats(deckID) {
 	}
 	//stat_category_cells.range.innerHTML = 'test'
 	//for each stat set stat_category_cells['statname'].innerHTML to the correct stat
-	//console.log(stats);
+	//myLog(stats);
 	for (var key in stats) {
 		if (stat_category_cells[deckID][key] != undefined) {
 			stat_category_cells[deckID][key].innerHTML = '';
@@ -596,7 +616,7 @@ function calculateDeckStats(deckID) {
 						img.src = 'images/abilities/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('deck_stats_img_small');
+						img.classList.add('deck_stats_img_ability');
 						stat_category_cells[deckID][key].appendChild(img);
 					}
 				}
@@ -607,13 +627,13 @@ function calculateDeckStats(deckID) {
 						var img = document.createElement('img');
 						//we need to seperate traits if there are multiple
 						if (stats[key][i].length > 1) {
-							console.log(stats[key][i]);
+							myLog(stats[key][i]);
 							for (var j = 0; j < stats[key][i].length; j++) {
 								img = document.createElement('img');
 								img.src = 'images/traits/' + stats[key][i][j] + '.png';
 								img.setAttribute('alt', stats[key][i][j]);
 								img.setAttribute('title', stats[key][i][j]);
-								img.classList.add('deck_stats_img_small');
+								img.classList.add('deck_stats_img_traits');
 								stat_category_cells[deckID][key].appendChild(img);
 							}
 						}
@@ -622,7 +642,7 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i] + '.png';
 								img.setAttribute('alt', stats[key][i]);
 								img.setAttribute('title', stats[key][i]);
-								img.classList.add('deck_stats_img_small');
+								img.classList.add('deck_stats_img_traits');
 								stat_category_cells[deckID][key].appendChild(img);
 							}
 						}
@@ -651,10 +671,10 @@ function calculateDeckStats(deckID) {
 				for (var i = 0; i < stats[key].length; i++) {
 					if (stats[key][i] != undefined && stats[key][i] != '') {
 						var img = document.createElement('img');
-						img.src = 'images/manuf/' + stats[key][i] + '.png';
+						img.src = 'images/manuf/uniforms/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('deck_stats_img_small');
+						img.classList.add('deck_stats_img_manf');
 						stat_category_cells[deckID][key].appendChild(img);
 					}
 
@@ -676,7 +696,6 @@ function calculateDeckStats(deckID) {
 	return stats;
 }
 
-
 function redrawDeckContent(deckID) {
 	calculateDeckStats(deckID);
 	//iterate through deckslots
@@ -684,24 +703,21 @@ function redrawDeckContent(deckID) {
 	var deck = decks[deckID];
 	//deckEmojiText.innerHTML = ''
 	//for each deck1slot
-	deckSlots[deckID].forEach((slot, i) => {
+	deckDivs[deckID].forEach((slot, i) => {
 		slot.firstElementChild.src = 'images/techtiers/' + slotBuildings[i] + '.png';
 	});
 	deck.forEach((unit, i) => {
 		//deckEmojiText.innerHTML += unit.emoji + ' ';
 		//slot.innerHTML = deck[index].name;
-		deckSlots[deckID][i].firstElementChild.src = 'images/units/' + unit.slug + '.png';
+		deckDivs[deckID][i].firstElementChild.src = 'images/units/' + unit.slug + '.png';
 	});
 
 }
 
-
-
-
 function addUnitToDeck(unit, deckID) {
 	var deck = decks[deckID];
-	console.log('Adding unit to deck ' + deckID + ': ' + unit.name);
-	//console.log(unit);about:blank#blocked
+	myLog('Adding unit to deck ' + deckID + ': ' + unit.name);
+	//myLog(unit);about:blank#blocked
 	//add the unit name to the unit_deck_input text box
 	//unit_deck_input.value += unit.name + '\n';
 	//addToDeck(unitList[i]);
@@ -709,12 +725,12 @@ function addUnitToDeck(unit, deckID) {
 	var exists = false
 	//for each value in deck add +1 to decklen
 	deck.forEach((u) => {
-		console.log(u.name);
+		myLog(u.name);
 		if (u != undefined) {
 			decklen++;
 		}
 		if (u.name == unit.name) {
-			console.log('unit not added, already in deck');
+			myLog('unit not added, already in deck');
 			exists = true;
 		}
 	});
@@ -727,17 +743,17 @@ function addUnitToDeck(unit, deckID) {
 				if (slotBuildings[i] == unit.building) {
 					deck[i] = unit;
 
-					deckSlots[deckID][i].classList.add(deckClass);
+					deckDivs[deckID][i].classList.add(deckClass);
 					break;
 				}
 				else if (slotBuildings[i] == 'wildfoundry' && (unit.building == 'foundry' || unit.building == 'advancedfoundry')) {
 					deck[i] = unit;
-					deckSlots[deckID][i].classList.add(deckClass);
+					deckDivs[deckID][i].classList.add(deckClass);
 					break;
 				}
 				else if (slotBuildings[i] == 'wildstarforge' && (unit.building == 'starforge' || unit.building == 'advancedstarforge')) {
 					deck[i] = unit;
-					deckSlots[deckID][i].classList.add(deckClass);
+					deckDivs[deckID][i].classList.add(deckClass);
 					break;
 				}
 			}
@@ -745,8 +761,8 @@ function addUnitToDeck(unit, deckID) {
 
 		//deck.push(unit);
 	}
-	else console.log('deck limit reached');
-	console.log(decklen + '/8');
+	else myLog('deck limit reached');
+	myLog(decklen + '/8');
 	redrawDeckContent(deckID);
 	updateComparisonCharts();
 	redrawUnitContent();
@@ -914,7 +930,6 @@ hide_unavail_checkbox.addEventListener('change', function () {
 
 //#endregion
 
-
 //#region unit filter
 
 var filteredUnitList = []; //holds the list of units as updated by setFilter()
@@ -932,7 +947,7 @@ repopulateFilteredUnitList();
 //setFilter is called when the filter input text is updated
 function setFilter(filterString) {
 	filterString = removeSpacesCapitalsSpecialCharacters(filterString);
-	console.log('Filter set to ' + filterString);
+	myLog('Filter set to ' + filterString);
 
 	filteredUnitList = []; //holds the list of units as updated by setFilter()
 
@@ -984,14 +999,15 @@ function setFilter(filterString) {
 
 //#endregion
 
+//#region unit-content
 
 //unitRows stores the rows of unit table by unit name so we can apply highlights later
 var tableUnitRows = {};
 
-var excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
+var excludeKeys = [];
 
 function drawUnitTable() {
-	excludeKeys = ['attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
+	excludeKeys = ['traitcounters', 'traitcounteredby', 'attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
 	if (simpleStatsMode) {
 		//add to excludeKeys, the following: damage, damagea, dps, dpsa
 		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
@@ -1134,7 +1150,7 @@ function drawUnitTable() {
 		unit_table_cell.appendChild(table_add_unit_button);
 
 		table_add_unit_button.onclick = function () {
-			console.log(i + 'adding unit to deck: ' + filteredUnitList[i].name)
+			myLog(i + 'adding unit to deck: ' + filteredUnitList[i].name)
 			addUnitToDeck(filteredUnitList[i], currentDeck);
 		};
 		table_add_unit_button.onmouseover = function () {
@@ -1148,13 +1164,11 @@ function drawUnitTable() {
 
 		for (var [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
-				var div = document.createElement('div');
 				var unit_table_cell = document.createElement('td');
 				unit_table_cell.id = unit.slug;
 				if (simpleStatsMode) {
 					unit_table_cell.classList.add('simpleStatsPadding');
 				}
-				unit_table_cell.appendChild(div);
 
 				unit_table_cell.classList.add('unit_table_cell');
 				//if i is an alternate number
@@ -1185,6 +1199,21 @@ function drawUnitTable() {
 						img.classList.add('unit_table_image_medium');
 						unit_table_cell.appendChild(img);
 					}
+					if (unit['traits'] == null) {
+						console.log(unit['name']);
+						if (unit['name'] == 'Raider') {
+							var unit_table_cell = document.createElement('td');
+							unit_table_cell.id = unit.slug;
+							if (i % 2 == 0) {
+								unit_table_cell.classList.add('unit_table_cell_alt');
+							}
+							if (simpleStatsMode) {
+								unit_table_cell.classList.add('simpleStatsPadding');
+							}
+							unit_table_cell.classList.add('unit_table_cell');
+							unit_table_row.appendChild(unit_table_cell);
+						}
+					}
 				} else if (key == 'manufacturer') {
 					if (value != '') {
 						img.src = 'images/manuf/' + value + '.png';
@@ -1202,9 +1231,6 @@ function drawUnitTable() {
 							img.setAttribute('alt', trait);
 							img.setAttribute('title', trait);
 							unit_table_cell.appendChild(img);
-						}
-						else {
-							unit_table_cell.innerHTML = value;
 						}
 					});
 					unit_table_cell.classList.add('unit_table_cell_traits');
@@ -1232,9 +1258,6 @@ function drawUnitTable() {
 	unit_content.appendChild(unit_table);
 }
 
-
-
-//#region unit-card-drawing
 var shortTypes = {
 	Air: 'Air', Ground: 'Ground', 'Base Defense': 'Base Defense'
 }
@@ -1248,7 +1271,7 @@ function createUnitCard(unit) {
 	//
 	//when the unit is moused over, call the mouseover function to update the views
 	unit_card.addEventListener('mouseover', () => {
-		console.log(unit.name);
+		myLog(unit.name);
 		unitMouseOverAndTapped(unit);
 	});
 	//when the unit is clicked, add the unit to the deck
@@ -1303,7 +1326,7 @@ function createUnitCard(unit) {
 	var unit_card_traits = document.createElement('div');
 	unit_card_traits.classList.add('unit_card_traits');
 	//for each trait in the unit traits array
-	console.log(unit);
+	myLog(unit);
 	if (unit.traits) {
 		for (let i = 0; i < unit.traits.length; i++) {
 			//create a div for the trait
@@ -1353,30 +1376,31 @@ function drawUnitCards() {
 }
 
 //#endregion
+
 //#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
 function redrawUnitContent() {
 
 
 	unit_content.innerHTML = '';
 	//for each object in unitsJson_base create a new unit passing the object
-	console.log('Redrawing Unit Content\n-----------------');
-	//console.log(filteredUnitList);
+	myLog('Redrawing Unit Content\n-----------------');
+	//myLog(filteredUnitList);
 
 	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
 	if (hideUnavailMode == true) {
 		for (let i = 0; i < decks[currentDeck].length; i++) {
 			//if the unit is in the unit list
-			//if (decks[currentDeck][i]) console.log('looking for ' + decks[currentDeck][i].name + 'in deck ' + currentDeck);
+			//if (decks[currentDeck][i]) myLog('looking for ' + decks[currentDeck][i].name + 'in deck ' + currentDeck);
 			if (filteredUnitList.includes(decks[currentDeck][i])) {
 				//remove the unit from the unit list
-				console.log('removing from filtered unitlist')
+				myLog('removing from filtered unitlist')
 				filteredUnitList.splice(filteredUnitList.indexOf(decks[currentDeck][i]), 1);
-				//console.log(filteredUnitList);
+				//myLog(filteredUnitList);
 			}
 		}
 		//if decks[currentDeck][0] and decks[currentDeck][5] are both occupied
 		//then remove all units whose building key matches core from the filtered unit list
-		console.log(decks[currentDeck])
+		myLog(decks[currentDeck])
 		if (decks[currentDeck][0] && decks[currentDeck][4]) {
 			//remove all units whose building key matches core from the filtered unit list
 			filteredUnitList = filteredUnitList.filter((unit) => {
@@ -1452,7 +1476,7 @@ function sortUnits(value, list) {
 unit_header_sort.onchange = function () {
 	//sort the units by the new option
 	//new function for sorting units
-	console.log(unit_header_sort.value);
+	myLog(unit_header_sort.value);
 	filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
 
 	redrawUnitContent();
@@ -1465,7 +1489,7 @@ unit_header_sort.onchange = function () {
 
 //create a function that runs when the window is resized
 function resize() {
-	console.log('resized');
+	myLog('resized');
 	//get the width and height of the window
 	const width = window.innerWidth;
 	const height = window.innerHeight;
@@ -1479,37 +1503,10 @@ function resize() {
 		stats_view.id = 'stats_view-v';
 	}
 }
+
 window.addEventListener('resize', resize);
 resize();
 //#endregion
-
-
-//console.log(wrapper);
-
-
-
-
-
-//const ctx = document.getElementById('myChart');
-
-//find the min and max value of each stat for all units in the unit list
-var minValues = [];
-var maxValues = [];
-
-for (const unit in unitList) {
-	for (var [key, value] of Object.entries(unit)) {
-		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
-			if (minValues[key] == undefined || value <= minValues[key]) {
-				minValues[key] = value;
-				if (key == 'speed') console.log(key, minValues[key]);
-			}
-			if (maxValues[key] == undefined || value > maxValues[key]) {
-				maxValues[key] = value;
-			}
-		}
-	}
-}
-
 
 function simpleSort(list, key, sortedArray) {
 
@@ -1524,8 +1521,6 @@ function simpleSort(list, key, sortedArray) {
 	});
 	return sortedList;
 }
-
-
 
 //#region stats-header
 var statsMode = 0 //0 = unit, 1 = compare
@@ -1565,7 +1560,7 @@ stats_mode_select.id = 'stats_mode_select';
 stats_mode_select.classList.add('header_element');
 stats_view_header.appendChild(stats_mode_select);
 //add option to stats mode select for stats, resources and traits
-var stats_mode_select_options = ['stats', 'resources', 'traits'];
+var stats_mode_select_options = ['stats', 'resources']; //todo: add trait comparison
 stats_mode_select_options.forEach(function (option) {
 	var option_element = document.createElement('option');
 	option_element.value = option;
@@ -1579,9 +1574,6 @@ stats_mode_select.addEventListener('change', function () {
 });
 
 //#endregion
-
-
-
 
 //#region stats-content
 
@@ -1605,28 +1597,128 @@ var sortData = {
 	dpsa: simpleSort(unitList, 'dpsa', sortedUnitData.dpsa),
 }
 
-function sortColors(unitName, data) {
-	var sortedColors = []
-	var color = 'white';
-	//color = unitStatColors[label];
-	data.forEach(function (unit) {
+
+
+//returns a colour on a gradient scale from red to green based on the value
+function getColour(value, min, max) {
+	myLog('getColour:', value, min, max);
+	var red = 0;
+	var green = 0;
+	//if value is less than min, return red
+	if (value <= min) {
+		red = 255;
+		green = 0;
+	}
+	//if value is greater than max, return green
+	else if (value >= max) {
+		red = 0;
+		green = 255;
+	}
+	//if value is between min and max, return a colour between red and green
+	else {
+		red = 255 - Math.round((value - min) / (max - min) * 255);
+		green = Math.round((value - min) / (max - min) * 255);
+	}
+	myLog('FJSDKALFJKL;SADFJSKLADFJKLASDFJKLADSFJKLADSFJNMKLSADF');
+	myLog('rgb(' + red + ', ' + green + ', 0)')
+	return 'rgb(' + red + ', ' + green + ', 0)';
+
+}
+
+
+//data is sortdata for the label, 
+function sortColors(_unit, label) {
+	//get the unit by the unitName 
+	myLog('sortColors:', _unit, data, label);
+	myLog('huh?: ', _unit[label], minValues[label], maxValues[label]);
+	var color = getColour(_unit[label], minValues[label], maxValues[label]);
+	var sortedColors = [];
+
+	var rank = sortedUnitData[label].length - sortedUnitData[label].lastIndexOf(_unit[label]);
+
+	for (let i = 0; i < (sortedUnitData[label].length); i++) {
+		if (i < sortedUnitData[label].length - (rank - 1)) sortedColors.push(color);
+		else sortedColors.push('black');
+	}
+
+	sortedUnitData[label].forEach(function (unit) {
 		sortedColors.push(color)
-		if (unit == unitName) { //once we reaach the name of the unit we set color to black which pushes the rest of the units as black bars
+		if (unit == _unit) { //once we reaach the passed unit we set color to black which pushes the rest of the units as black bars
 			color = 'black'
 		}
 	});
+
 	return sortedColors
 }
 
+
 var currentUnit = 'crusader';
 
-console.log('sorterd unit data')
-console.log('------------------------------')
-console.log(sortedUnitData)
+myLog('sorterd unit data')
+myLog('------------------------------')
+myLog(sortedUnitData)
 
 const statsUnitRightContainer = document.createElement('div');
 statsUnitRightContainer.id = 'statsUnitRightContainer';
 stats_content.appendChild(statsUnitRightContainer);
+
+const statsUnitTraitsContainer = document.createElement('div');
+statsUnitTraitsContainer.id = 'statsUnitTraitsContainer';
+statsUnitRightContainer.appendChild(statsUnitTraitsContainer);
+
+var statsUnitTypeDiv = document.createElement('div');
+statsUnitTypeDiv.classList.add('statsUnitTypeDiv');
+statsUnitTypeDiv.textContent = 'test';
+statsUnitTraitsContainer.appendChild(statsUnitTypeDiv);
+
+var statsUnitTraitsDiv = document.createElement('div');
+statsUnitTraitsDiv.classList.add('statsUnitTraitsDiv');
+statsUnitTraitsContainer.appendChild(statsUnitTraitsDiv);
+
+var statsUnitTraitCountersDiv = document.createElement('div');
+statsUnitTraitCountersDiv.classList.add('statsUnitTraitsDiv');
+statsUnitTraitsContainer.appendChild(statsUnitTraitCountersDiv);
+
+var statsUnitTraitCounteredByDiv = document.createElement('div');
+statsUnitTraitCounteredByDiv.classList.add('statsUnitTraitsDiv');
+statsUnitTraitsContainer.appendChild(statsUnitTraitCounteredByDiv);
+
+function updateTraitsContainer(_unit) {
+	statsUnitTypeDiv.textContent = _unit.type
+	//display traits as images
+	if (_unit.name == 'Raider') {
+		statsUnitTraitsDiv.textContent = 'traits: only attacks workers';
+		statsUnitTraitCountersDiv.textContent = 'counters: economy';
+		statsUnitTraitCounteredByDiv.textContent = 'countered by: scouting'
+	}
+	else {
+		statsUnitTraitsDiv.textContent = 'traits: ';
+		_unit.traits.forEach(function (trait) {
+			var traitImg = document.createElement('img');
+			traitImg.classList.add('statsUnitTraitImg');
+			traitImg.src = 'images/traits/' + trait + '.png';
+			statsUnitTraitsDiv.appendChild(traitImg);
+		});
+
+		statsUnitTraitCountersDiv.textContent = 'counters: ';
+		_unit.traitcounters.forEach(function (trait) {
+			var traitImg = document.createElement('img');
+			traitImg.classList.add('statsUnitTraitImg');
+			traitImg.src = 'images/traits/' + trait + '.png';
+			statsUnitTraitCountersDiv.appendChild(traitImg);
+		});
+
+		statsUnitTraitCounteredByDiv.textContent = 'countered by: ';
+		_unit.traitcounteredby.forEach(function (trait) {
+			var traitImg = document.createElement('img');
+			traitImg.classList.add('statsUnitTraitImg');
+			traitImg.src = 'images/traits/' + trait + '.png';
+			statsUnitTraitCounteredByDiv.appendChild(traitImg);
+		});
+	}
+
+}
+
 
 const statsUnitChartContainer = document.createElement('div');
 statsUnitChartContainer.id = 'statsUnitChartContainer';
@@ -1638,7 +1730,7 @@ statsUnitChartContainer.appendChild(statsUnitRankDiv);
 
 var statsUnitRankTextDivs = {}
 //for each label add a seperate div to statsUnitRankDiv
-//for each label in statsUnitconsole.log('statsUnit:', statsUnit); // Check content of statsUnit
+//for each label in statsUnitmyLog('statsUnit:', statsUnit); // Check content of statsUnit
 
 for (var i = 0; i < statsUnit.length; i++) {
 	var key = statsUnit[i];
@@ -1652,7 +1744,7 @@ for (var i = 0; i < statsUnit.length; i++) {
 }
 
 // Final log after the loop
-console.log('Final InnerHTML of statsUnitRankDiv:', statsUnitRankDiv.innerHTML);
+myLog('Final InnerHTML of statsUnitRankDiv:', statsUnitRankDiv.innerHTML);
 
 const statsUnitBottomContainer = document.createElement('div');
 statsUnitBottomContainer.id = 'statsUnitBottomContainer';
@@ -1714,9 +1806,9 @@ statsUnitBottomContainer.appendChild(statsUnitMatterDiv);
 statsUnitBottomContainer.appendChild(statsUnitEnergyDiv);
 statsUnitBottomContainer.appendChild(statsUnitBandwidthDiv);
 statsUnitBottomContainer.appendChild(statsUnitAbilityDiv);
-
+4
 var chartDivs = []
-var barCharts = []
+var statRankBarCharts = []
 
 //video element
 const video = document.createElement('video');
@@ -1731,7 +1823,7 @@ videoblind.style = 'position: absolute; background-color: black; width: 100%; he
 
 video.id = 'unitVideo';
 
-function refreshStatsUnit() {
+function updateStatsUnit() {
 	stats_content.appendChild(unitOfficialLinkDiv);
 	stats_content.appendChild(video);
 	video.play();
@@ -1741,7 +1833,6 @@ function refreshStatsUnit() {
 }
 
 
-//#tag barChart definition
 function statRankChart(label) {
 
 	var statsUnitChartDiv = document.createElement('div');
@@ -1771,7 +1862,7 @@ function statRankChart(label) {
 				label: label,
 				//data: [12, 19, 3, 5, 2, 3],
 				data: sortedUnitData[label],
-				backgroundColor: getColour(currentUnit, sortData[label], label),
+				backgroundColor: getColour(currentUnit.label, minValues[label], maxValues[label]), //TODO: GetColour is bugged, should be red to green based on value
 				borderWidth: 0
 			}]
 		},
@@ -1825,59 +1916,50 @@ function statRankChart(label) {
 		}
 	});
 
-	barCharts[label] = chart;
+	statRankBarCharts[label] = chart;
+
 
 }
 
+//write a function to update the chart data backgroundColor
+function updateStatRankChartColor(_unit, chart, label) {
+	chart.data.datasets[0].backgroundColor = sortColors(_unit, label);
+	chart.update();
+}
 
-function drawAllStatRankChart() {
-	//instead of having each in strings, do it for each key in sorted unit data
+//run updateStatRankChartColor on each label
+function updateStatRankChartColors(_unit) {
 	for (var [key] of Object.entries(sortedUnitData)) {
-		//console.log(key);
-		statRankChart(key);
+		updateStatRankChartColor(_unit, statRankBarCharts[key], key);
 	}
 }
-drawAllStatRankChart();
 
-//write a function to add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
+
+//draw stat rank charts
+for (var [key] of Object.entries(sortedUnitData)) {
+	//myLog(key);
+	statRankChart(key);
+}
+
+var prespan = '<span class = "rankchartsuperscript">';
+var postspan = '</span>';
+//add 'st', 'nd', 'rd', 'th' to the rank based on the rank number
 function getRankSuffix(rank) {
 	//if rank ends in 1
-	if (rank == 11 || rank == 12 || rank == 13) return 'th';
-	else if (rank % 10 == 1) return 'st';
+	var output = '';
+	if (rank == 11 || rank == 12 || rank == 13) output = 'th';
+	else if (rank % 10 == 1) output = 'st';
 	//if rank ends in 2
-	else if (rank % 10 == 2) return 'nd';
+	else if (rank % 10 == 2) output = 'nd';
 	//if rank ends in 3
-	else if (rank % 10 == 3) return 'rd';
-	else return 'th';
+	else if (rank % 10 == 3) output = 'rd';
+	else output = 'th';
+	//add a HTML span lement to adjust the size of the text before and after the output
+	output = prespan + output + postspan;
+	return output;
 }
 
-//create a function which returns a colour on a gradient scale from red to green based on the value
-function getColour(value, min, max) {
-	//set defaults for min and max to 0 and 50
-	//if min and max are not provided, use the min and max values of the data
-	//return a vibrant colour gradient from green to yellow to orange to red
-	//if value is less than min, return red
-	if (value < min) return 'rgb(255, 0, 0)';
-	//if value is greater than max, return green
-	if (value > max) return 'rgb(0, 255, 0)';
-	//if value is between min and max, return a colour on the gradient
-	//calculate the percentage of the value between min and max
-	var percentage = (value - min) / (max - min);
-	//calculate the red and green values
-	var red = Math.round(255 * (1 - percentage));
-	//calculate the green value
-	var green = Math.round(255 * percentage);
-	//return the colour
-	//add yellow in a gradient if it is in the middle of red and green
-	if (percentage > 0.5) {
-		red = Math.round(255 * (1 - percentage));
-		green = Math.round(255 * (1 - percentage));
-	}
-	return 'rgb(' + red + ', ' + green + ', 0)';
-
-}
-
-function refreshStatsUnitBottomContainer(name, matter, energy, bandwidth, building, ability) {
+function updateStatsUnitBottomContainer(name, matter, energy, bandwidth, building, ability) {
 	statsUnitName.innerHTML = name;
 	//get the div by its id
 	statsUnitMatterDiv.children[1].innerHTML = matter;
@@ -1906,7 +1988,7 @@ function unitMouseOverAndTapped(unit) {
 		return;
 	}
 	prevMouseoverUnit = unit;
-	//console.log(e.target.id);
+	//myLog(e.target.id);
 	//add a mouseOverHighlighted class to the unit row in the unit table using tableUnitRows
 	//remove the mouseOverHighlighted class from all other unit rows
 	if (unitViewMode == 0) //if in table view
@@ -1931,7 +2013,6 @@ function unitMouseOverAndTapped(unit) {
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
-	refreshStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building, unit.ability)
 
 	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
 	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
@@ -1961,38 +2042,43 @@ function unitMouseOverAndTapped(unit) {
 	fetchAndPlay();
 	function fetchAndPlay() {
 		var playVideo = false
-		console.log('fetching ' + unit.videoturnaround)
+		myLog('fetching ' + unit.videoturnaround)
 		fetch(unit.videoturnaround)
 			.then(response => response.blob())
 			.then(blob => {
 				if (unit.name == prevMouseoverUnit.name) {
 					playVideo = true;
 					video.src = URL.createObjectURL(blob);
-					console.log(unit.name + ' ' + prevMouseoverUnit.name)
+					myLog(unit.name + ' ' + prevMouseoverUnit.name)
 				}
 			})
 			.then(() => {
 				if (playVideo) {
 					video.play();
 					// Video playback started ;)
-					console.log('video playback started for ' + unit.name)
+					myLog('video playback started for ' + unit.name)
 				}
 			})
 			.catch(() => {
 				// Video playback failed ;(
-				console.log('video playback failed')
+				myLog('video playback failed')
 			})
 	}
 	//update the colors in the bar charts based on the unit id
+	/**
 	function updateChart(chart, label) {
 		chart.data.datasets[0].data = sortedUnitData[label];
-		chart.data.datasets[0].backgroundColor = sortColors(unit.name, sortData[label], label);
+		chart.data.datasets[0].backgroundColor = sortColors(unit, sortData, label);
 		chart.update();
 	}
 	//update the charts
 	for (var [key] of Object.entries(sortedUnitData)) {
-		updateChart(barCharts[key], key);
-	}
+		updateChart(statRankBarCharts[key], key);
+	} */
+	myLog(unit);
+	updateStatsUnitBottomContainer(unit.name, unit.matter, unit.energy, unit.bandwidth, unit.building, unit.ability)
+	updateStatRankChartColors(unit);
+	updateTraitsContainer(unit);
 }
 
 
@@ -2112,12 +2198,12 @@ function doScaling(deckID, input, min, max) { //given an input value, and a mini
 	for (var i = 0; i < decks[deckID].length; i++) {
 		if (decks[deckID][i] != undefined) deckLength++;
 	}
-	console.log('deck ' + deckID + ' length:' + deckLength)
-	console.log('SF: ' + sf);
+	myLog('deck ' + deckID + ' length:' + deckLength)
+	myLog('SF: ' + sf);
 	var _min = min * sf
 	var _max = max * sf
 	var value = (input - _min) / (_max - _min);
-	console.log(input, min, max, value);
+	myLog(input, min, max, value);
 	if (value < 0) value = 0;
 	return value;
 }
@@ -2134,9 +2220,9 @@ function scaleDeckTotals(d, deckID) {
 
 function updateDeckStatTotals(d, deckID) {
 	//for each label in statsUnit, add the total of values of the stats for each unit in the deck
-	console.log('totals array: ' + d)
-	console.log('deck ' + deckID)
-	console.log(decks[deckID]);
+	myLog('totals array: ' + d)
+	myLog('deck ' + deckID)
+	myLog(decks[deckID]);
 	starchartStatsUnit.forEach(function (label) {
 		var total = 0;
 		decks[deckID].forEach(function (unit) {
@@ -2276,7 +2362,7 @@ function calculateTierValues() {
 			}
 		}
 	}
-	console.log(t1Totals, t2Totals, t3Totals)
+	myLog(t1Totals, t2Totals, t3Totals)
 	perDeck(0, t1Totals, t2Totals, t3Totals)
 	perDeck(1, t1Totals, t2Totals, t3Totals)
 	matterValues = [t1Totals[0], t2Totals[0], t3Totals[0], t1Totals[3], t2Totals[3], t3Totals[3]]
@@ -2302,7 +2388,7 @@ updateResourceCharts();
 //#region traitsComparisonChartContainer
 
 function updateTraitsChart() {
-	console.log('todo');
+	myLog('todo');
 }
 
 //#endregion
@@ -2322,7 +2408,7 @@ function refreshStatViewContent() {
 		stats_content.removeChild(stats_content.firstChild);
 	};
 	if (statsMode == 0) {
-		refreshStatsUnit();
+		updateStatsUnit();
 	}
 	if (statsMode == 1) {
 		if (compareMode == 0) {

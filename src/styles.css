@@ -133,9 +133,6 @@ option {
 	right: 0px;
 	top: 2.4vmax;
 	bottom: 2px;
-	border-width: 2px;
-	border-color: rgb(0, 0, 0);
-	border-style: none;
 	overflow-x: hidden;
 	scrollbar-color: rgba(255, 255, 255, 0.281) rgba(12, 12, 12, 0.445);
 }
@@ -230,7 +227,6 @@ option {
 
 #stats_content {
 	position: absolute;
-	border-width: 5px;
 	border: none;
 	border-color: rgb(255, 255, 255);
 	overflow: hidden;
@@ -267,18 +263,18 @@ option {
 
 #statsUnitName {
 	justify-content: left;
-	font-weight: 600;
+	font-size: 3vmin;
+	font-weight: 800;
 	position: relative;
-	padding: 1vmin;
 	text-wrap: nowrap;
 	overflow: hidden;
-	padding: 1vmin 1vmin 1vmin 0vmin;
+	padding-right: 1vmin;
+	padding-top: .2vmin;
 }
 
 .statsUnitBuildingImg {
 	height: 3.5vmin;
 	width: 3.5vmin;
-	padding: .2vmin 0vmin 1vmin 0vmin;
 }
 
 .statsUnitResourceImg {
@@ -338,6 +334,46 @@ option {
 	z-index: 10;
 }
 
+#statsUnitTraitsContainer {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	width: 45%;
+	top: 1vmin;
+	bottom: 1vmin;
+	left: 1vmin;
+	background-color: rgba(0, 0, 0, 0.25);
+	z-index: 10;
+	font-variant: small-caps;
+	font-size: .8vmax;
+}
+
+.statsUnitTypeDiv {
+	opacity: 80%;
+	height: 20vmin;
+	line-height: 5vmin;
+	font-size: 2.5vmin;
+	font-weight: 800;
+}
+
+.statsUnitTraitsDiv {
+	opacity: 98%;
+	display: flex;
+	font-weight: 600;
+	align-items: center;
+	height: 5vmin;
+	line-height: 3vmin;
+	overflow: visible;
+	text-wrap: balance;
+}
+
+
+.statsUnitTraitImg {
+	width: 1.5vmax;
+	padding-left: 3;
+}
+
 #statsUnitChartContainer {
 	position: absolute;
 	display: flex;
@@ -390,8 +426,8 @@ option {
 	border-color: rgba(255, 255, 255, 0.479);
 	z-index: 10;
 	border-width: 1px;
-	font-size: 1.5vmin;
-	font-weight: 600;
+	font-size: 1.8vmin;
+	font-weight: 700;
 	font-variant: small-caps;
 	line-height: 250%;
 }
@@ -507,6 +543,12 @@ sup {
 	color: rgba(255, 255, 255, 0.671);
 	font-weight: 600;
 	text-shadow: 2px 2px 1px black;
+}
+
+.rankchartsuperscript {
+	font-variant: small-caps;
+	font-size: x-small;
+	vertical-align: super;
 }
 
 #toggleSidebarButton {
@@ -692,47 +734,46 @@ sup {
 }
 
 .statDiv {
+	height: 15%;
 	font-variant: small-caps;
 	display: flex;
 	flex-direction: row;
-	width: 20%;
-	height: 10%;
-	padding: 4 0 4 0;
 	align-items: center;
 	justify-content: center;
-	border: dashed;
-	border-width: 1px;
-	border-color: rgba(255, 255, 255, 0.171);
 	background-color: rgba(0, 0, 0, 0.308);
 }
 
 .complexStatDiv {
 	justify-content: left;
 	width: 100%;
-	line-height: 100%;
-	height: 15%;
 }
 
 .resourceStatDiv {
 	width: 30%;
 }
 
+.unitStatDiv {
+	width: 25%;
+}
+
 .deck_stats_img {
-	width: 30%;
+	width: 1.5vmax;
 }
 
 .resourceStatImg {
-	width: 20%;
+	width: 1.5vmax;
 }
 
-.deck_stats_img {
-	width: 30%;
+.deck_stats_img_ability {
+	width: 2vmax;
 }
 
-.deck_stats_img_small {
-	position: relative;
-	width: 6%;
-	height: 6%;
+.deck_stats_img_traits {
+	width: 1vmax;
+}
+
+.deck_stats_img_manf {
+	width: 2vmax;
 }
 
 .links_div {

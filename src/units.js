@@ -25,6 +25,20 @@ function calcDPSM(unit) {
 }
 
 
+const traitCounters = {
+	big: 'splash',
+	splash: 'small',
+	small: 'antibig',
+	antibig: 'big',
+}
+
+const traitCounteredBy = {
+	big: 'antibig',
+	splash: 'big',
+	small: 'splash',
+	antibig: 'small',
+}
+
 class Unit {
 	constructor(jsonImportedUnit) {
 		Object.keys(jsonImportedUnit).forEach((key) => {
@@ -59,6 +73,21 @@ class Unit {
 		this['tier'] = buildingTiers[this['building']] || 0;
 		this['image'] = jsonImportedUnit.slug;
 		this['slug'] = jsonImportedUnit.slug;
+		this['traitcounters'] = []
+		this['traitcounteredby'] = []
+		//calculate traits this unit counters and traits that counter this unit
+		if (this.traits) {
+			//for each trait
+			for (let trait of this.traits) {
+				if (traitCounters[trait]) this.traitcounters.push(traitCounters[trait]);
+				if (trait == 'antiair') this.traitcounters.push('air');
+				if (traitCounteredBy[trait]) this.traitcounteredby.push(traitCounteredBy[trait]);
+				//if traitCounteredBy does not include air
+			}
+
+			if (this.dpsa < 10) this.traitcounteredby.push('air');
+			if (this.type == 'Air') this.traitcounteredby.push('antiair');
+		}
 	}
 }
 
