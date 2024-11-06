@@ -1003,7 +1003,8 @@
 		"pt": "Terra",
 		"cn": "地面",
 		"kr": "지상",
-		"jp": "地面"
+		"jp": "地面",
+		"de": "Boden"
 	},
 	"air": {
 		"en": "Air",
@@ -1013,7 +1014,8 @@
 		"pt": "Ar",
 		"cn": "空气",
 		"kr": "공기",
-		"jp": "空気"
+		"jp": "空気",
+		"de": "Luft"
 	},
 	"basedefense": {
 		"en": "Base Defense",
@@ -1023,7 +1025,8 @@
 		"pt": "Defesa de Base",
 		"cn": "基地防御",
 		"kr": "기지 방어",
-		"jp": "基地防衛"
+		"jp": "基地防衛",
+		"de": "Basisverteidigung"
 	},
 	"filter": {
 		"en": "Filter",
@@ -1033,7 +1036,8 @@
 		"pt": "Filtro",
 		"cn": "过滤器",
 		"kr": "필터",
-		"jp": "フィルター"
+		"jp": "フィルター",
+		"de": "Filter"
 	},
 	"image": {
 		"en": "Image",
@@ -1043,6 +1047,116 @@
 		"pt": "Imagem",
 		"cn": "图像",
 		"kr": "이미지",
-		"jp": "画像"
+		"jp": "画像",
+		"de": "Bild"
+	},
+	"random": {
+		"en": "Random",
+		"es": "Aleatorio",
+		"es-419": "Aleatorio",
+		"fr": "Aléatoire",
+		"pt": "Aleatório",
+		"cn": "随机",
+		"kr": "무작위",
+		"jp": "ランダム",
+		"de": "Zufällig"
+	},
+	"language": {
+		"en": "Language",
+		"es": "Idioma",
+		"es-419": "Idioma",
+		"fr": "Langue",
+		"pt": "Língua",
+		"cn": "语言",
+		"kr": "언어",
+		"jp": "言語",
+		"de": "Sprache"
+	},
+	"links": {
+		"en": "Links",
+		"es": "Enlaces",
+		"es-419": "Enlaces",
+		"fr": "Liens",
+		"pt": "Links",
+		"cn": "链接",
+		"kr": "링크",
+		"jp": "リンク",
+		"de": "Links"
+	},
+	"background": {
+		"en": "Background",
+		"es": "Fondo",
+		"es-419": "Fondo",
+		"fr": "Arrière-plan",
+		"pt": "Fundo",
+		"cn": "背景",
+		"kr": "배경",
+		"jp": "背景",
+		"de": "Hintergrund"
+	},
+	"plainbg": {
+		"en": "Plain Background",
+		"es": "Fondo Sencillo",
+		"es-419": "Fondo Sencillo",
+		"fr": "Arrière-plan Simple",
+		"pt": "Fundo Simples",
+		"cn": "简单背景",
+		"kr": "단순 배경",
+		"jp": "単純な背景",
+		"de": "Einfacher Hintergrund"
+	},
+	"languages": {
+		"en": "English",
+		"es": "Español",
+		"es-419": "Español(L)",
+		"fr": "Français",
+		"pt": "Português",
+		"cn": "中文",
+		"kr": "한국어",
+		"jp": "日本語",
+		"de": "Deutsch"
+	},
+	"unitLink": {
+		"en": "Official Unit Link",
+		"es": "Enlace Oficial de la Unidad",
+		"es-419": "Enlace Oficial de la Unidad",
+		"fr": "Lien Officiel de l'Unité",
+		"pt": "Link Oficial da Unidade",
+		"cn": "官方单位链接",
+		"kr": "공식 유닛 링크",
+		"jp": "公式ユニットリンク"
+	},
+	"raiderTraits": {
+		"en": "Only attacks workers",
+		"es": "Solo ataca a los trabajadores",
+		"es-419": "Solo ataca a los trabajadores",
+		"fr": "Attaque uniquement les travailleurs",
+		"pt": "Ataca apenas os trabalhadores",
+		"cn": "只攻击工人",
+		"kr": "근로자만 공격",
+		"jp": "作業者のみ攻撃",
+		"de": "Greift nur Arbeiter an"
+	},
+	"economy": {
+		"en": "Economy",
+		"es": "Economía",
+		"es-419": "Economía",
+		"fr": "Économie",
+		"pt": "Economia",
+		"cn": "经济",
+		"kr": "경제",
+		"jp": "経済",
+		"de": "Wirtschaft"
+	},
+	"scouting": {
+		"en": "Scouting",
+		"es": "Exploración",
+		"es-419": "Exploración",
+		"fr": "Exploration",
+		"pt": "Exploração",
+		"cn": "侦察",
+		"kr": "정찰",
+		"jp": "偵察",
+		"de": "Erkundung"
 	}
 }

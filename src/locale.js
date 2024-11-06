@@ -13,6 +13,8 @@ const localeList = [
 	'kr',
 	'pt'
 ]
+
+const languageLongNameList = locales.languages
 if (localStorage.getItem('locale') == null) localStorage.setItem('locale', defaultLocale)
 var currentLocale = localStorage.getItem('locale');
 
@@ -42,4 +44,4 @@ function getLocaleList() {
 	return localeList;
 }
 
-export { locale, setLocale, getLocale, getLocaleList };
+export { locale, setLocale, getLocale, getLocaleList, languageLongNameList };

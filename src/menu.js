@@ -1,5 +1,5 @@
 
-import { setLocale, getLocale, getLocaleList } from './locale';
+import { locale, setLocale, getLocale, getLocaleList, languageLongNameList } from './locale';
 
 const linkData = [{
 	name: 'Battle Aces Official Website',
@@ -147,7 +147,7 @@ expandMenu(false);
 
 //create a drop down to select a language
 const languageSelectDiv = document.createElement('div');
-languageSelectDiv.textContent = 'Language' + ': ';
+languageSelectDiv.textContent = locale('language') + ': ';
 languageSelectDiv.classList.add('languageSelectDiv');
 sidebar_content_div.appendChild(languageSelectDiv);
 const languageSelect = document.createElement('select');
@@ -163,7 +163,7 @@ function createLanguageOption(value, text) {
 //for each value in localeList
 var localeList = getLocaleList();
 for (let i = 0; i < localeList.length; i++) {
-	createLanguageOption(localeList[i], localeList[i]);
+	createLanguageOption(localeList[i], languageLongNameList[localeList[i]]);
 }
 //when a language is selected set hte locale
 languageSelect.addEventListener('change', () => {
@@ -179,7 +179,7 @@ sidebar_content_div.appendChild(linksDiv);
 
 const linksHeader = document.createElement('div');
 linksHeader.classList.add('links_header');
-linksHeader.innerHTML = 'Links';
+linksHeader.innerHTML = locale('links');
 linksDiv.appendChild(linksHeader);
 
 const linksContent = document.createElement('div');
@@ -287,7 +287,7 @@ function updateBG(wrapper) {
 //add a label for the random toggle
 const randomToggleLabel = document.createElement('label');
 randomToggleLabel.for = 'randomToggle';
-randomToggleLabel.innerHTML = 'Random';
+randomToggleLabel.innerHTML = locale('random');
 bgImgSelectDiv.appendChild(randomToggleLabel);
 //create an option element for each background image and append it to bgImgSelect
 function createOption(value, text) {
@@ -298,7 +298,7 @@ function createOption(value, text) {
 }
 //for each background image in the images/bg folder, create an option
 for (let i = 1; i <= 19; i++) {
-	createOption('images/bg/' + (20 - i) + '.jpg', 'Background ' + i);
+	createOption('images/bg/' + (20 - i) + '.jpg', locale('background') + ' ' + i);
 }
 //when the select element is changed, set the background image to the selected value
 bgImgSelect.addEventListener('change', () => {
@@ -312,7 +312,7 @@ const bgImgSelectText = document.createElement('p');
 bgImgSelectText.innerHTML = 'all artwork credit to <a href = "https://www.playbattleaces.com">playbattleaces.com</a >';
 bgImgSelectDiv.appendChild(bgImgSelectText);
 const plainBGButton = document.createElement('button');
-plainBGButton.innerHTML = 'plain bg';
+plainBGButton.innerHTML = locale('plainbg');
 plainBGButton.classList.add('plainBGButton');
 bgImgSelectDiv.appendChild(plainBGButton);
 plainBGButton.addEventListener('click', () => {

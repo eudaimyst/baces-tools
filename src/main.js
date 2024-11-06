@@ -423,7 +423,7 @@ function fillDeckWithUnits(deckID) {
 	//check if unit is in the deck
 
 	filteredUnitList.forEach(unit => {
-		if (unit.name != 'Kraken') addUnitToDeck(unit, deckID);
+		if (unit.name != 'kraken') addUnitToDeck(unit, deckID);
 	});
 
 	redrawDeckContent(deckID);
@@ -1202,7 +1202,7 @@ function drawUnitTable() {
 					}
 					if (unit['traits'] == null) {
 						console.log(unit['name']);
-						if (unit['name'] == 'Raider') {
+						if (unit['name'] == 'raider') {
 							var unit_table_cell = document.createElement('td');
 							unit_table_cell.id = unit.slug;
 							if (i % 2 == 0) {
@@ -1683,10 +1683,10 @@ statsUnitTraitsContainer.appendChild(statsUnitTraitCounteredByDiv);
 function updateTraitsContainer(_unit) {
 	statsUnitTypeDiv.textContent = locale(_unit.type)
 	//display traits as images
-	if (_unit.name == 'Raider') {
-		statsUnitTraitsDiv.textContent = 'traits: only attacks workers';
-		statsUnitTraitCountersDiv.textContent = 'counters: economy';
-		statsUnitTraitCounteredByDiv.textContent = 'countered by: scouting'
+	if (_unit.name == 'raider') {
+		statsUnitTraitsDiv.textContent = locale('traits') + ': ' + locale('raiderTraits');
+		statsUnitTraitCountersDiv.textContent = locale('counters') + ': ' + locale('economy');
+		statsUnitTraitCounteredByDiv.textContent = locale('counteredBy') + ': ' + locale('scouting');
 	}
 	else {
 		statsUnitTraitsDiv.textContent = locale('traits') + ': ';
@@ -1752,7 +1752,7 @@ unitOfficialLinkDiv.id = 'unitOfficialLinkDiv';
 const unitOfficialLink = document.createElement('a');
 unitOfficialLink.id = 'unitOfficialLink';
 unitOfficialLinkDiv.appendChild(unitOfficialLink);
-unitOfficialLink.innerHTML = 'Official Unit Link';
+unitOfficialLink.innerHTML = locale('unitLink');
 unitOfficialLink.href = currentUnit.website;
 unitOfficialLink.target = '_blank'
 
@@ -2171,10 +2171,7 @@ function createStarchart(id) {
 						maxTicksLimit: 10,
 					},
 					pointLabels: {
-						color: 'rgba(255, 255, 255, .8)',
-						font: {
-							size: 14
-						}
+						display: false
 					},
 					grid: {
 						circular: true,
