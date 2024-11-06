@@ -3,7 +3,7 @@
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import { sidebar, updateBG } from './menu';
-export { locale, setLocale, getLocale } from './locale';
+import { locale, setLocale, getLocale } from './locale';
 
 
 
@@ -188,7 +188,7 @@ function setCurrentDeck(num) {
 
 //#region deck-header section of the deck view
 const deck1_button = document.createElement('button');
-deck1_button.innerHTML = 'Deck 1';
+deck1_button.innerHTML = locale('deck1');
 deck1_button.id = 'deck1_button';
 deck1_button.classList.add('header_element');
 deck_view_header.appendChild(deck1_button);
@@ -197,7 +197,7 @@ deck1_button.addEventListener('click', function () {
 	setCurrentDeck(0);
 });
 const deck2_button = document.createElement('button');
-deck2_button.innerHTML = 'Deck 2';
+deck2_button.innerHTML = locale('deck2');
 deck2_button.id = 'deck2_button';
 deck2_button.classList.add('header_element');
 deck_view_header.appendChild(deck2_button);
@@ -210,7 +210,7 @@ deckButtons.push(deck1_button, deck2_button);
 
 //clear button to clear the current deck
 const deck_clear_button = document.createElement('button');
-deck_clear_button.innerHTML = 'clear';
+deck_clear_button.innerHTML = locale('clear');
 deck_clear_button.id = 'clear_button';
 deck_clear_button.classList.add('header_element');
 deck_view_header.appendChild(deck_clear_button);
@@ -224,7 +224,7 @@ deck_clear_button.addEventListener('click', function () {
 
 //fill deck button which tries to add units from the unit list in order until the deck is full
 const deck_fill_button = document.createElement('button');
-deck_fill_button.innerHTML = 'fill';
+deck_fill_button.innerHTML = locale('fill');
 deck_fill_button.id = 'fill_button';
 deck_fill_button.classList.add('header_element');
 deck_view_header.appendChild(deck_fill_button);
@@ -240,7 +240,7 @@ const name_input = document.createElement('input');
 name_input.id = 'name_input';
 name_input.classList.add('header_element');
 name_input.type = 'text';
-name_input.placeholder = 'Deck Name';
+name_input.placeholder = locale('deckName');
 deck_view_header.appendChild(name_input);
 //when the name input box is changed, update the deck name
 name_input.addEventListener('change', function () {
@@ -252,7 +252,7 @@ function refreshNameInput() {
 refreshNameInput();
 //save button:
 const save_button = document.createElement('button');
-save_button.innerHTML = 'save';
+save_button.innerHTML = locale('save');
 save_button.id = 'save_button';
 save_button.classList.add('header_element');
 deck_view_header.appendChild(save_button);
@@ -303,7 +303,7 @@ refreshDropdown();
 
 //load button:
 const load_button = document.createElement('button');
-load_button.innerHTML = 'load';
+load_button.innerHTML = locale('load');
 load_button.id = 'load_button';
 load_button.classList.add('header_element');
 deck_view_header.appendChild(load_button);
@@ -321,7 +321,7 @@ load_button.addEventListener('click', function () {
 
 //delete button:
 const delete_button = document.createElement('button');
-delete_button.innerHTML = 'delete';
+delete_button.innerHTML = locale('delete');
 delete_button.id = 'delete_button';
 delete_button.classList.add('header_element');
 deck_view_header.appendChild(delete_button);
@@ -519,11 +519,11 @@ function createDeckStats(container) {
 		stat_category_divs[cat] = valueDiv;
 
 		if (cat == 'traits' || cat == 'ability') {
-			statDiv.innerText = cat + ': ';
+			statDiv.innerText = locale(cat) + ': ';
 			statDiv.classList.add('complexStatDiv');
 		}
 		else if (cat == 'manufacturer') {
-			statDiv.innerText = 'manf: ';
+			statDiv.innerText = locale('shortManf') + ': ';
 			statDiv.classList.add('complexStatDiv');
 		}
 		else {
@@ -775,7 +775,7 @@ function addUnitToDeck(unit, deckID) {
 //#region unit-header
 //label
 const sort_label = document.createElement('div');
-sort_label.innerHTML = 'sort: ';
+sort_label.innerHTML = locale('sort') + ': ';
 sort_label.classList.add('header_element');
 unit_view_header.appendChild(sort_label);
 //create a dropdown selector for sorting
@@ -786,28 +786,28 @@ function addOptionsToTable(displayName, statName) {
 }
 //name, health, type, damage, air damage, dps, air dps, speed, range, matter, energy, bandwidth, skill, tech, tier, big, small, antibig, splash, antiair, manufacturer
 const sortOptions = [
-	['Name', 'name'],
-	['Health', 'health'],
-	['Type', 'type'],
-	['Damage', 'damage'],
-	['Air Damage', 'damagea'],
-	['Both DPS', 'dpsm'],
-	['Ground DPS', 'dpsg'],
-	['Air DPS', 'dpsa'],
-	['Speed', 'speed'],
-	['Range', 'range'],
-	['Matter', 'matter'],
-	['Energy', 'energy'],
-	['Bandwidth', 'bandwidth'],
-	['Skill', 'ability'],
-	['Tech', 'building'],
-	['Tier', 'tier'],
-	['Big', 'big'],
-	['Small', 'small'],
-	['Anti-Big', 'antibig'],
-	['Splash', 'splash'],
-	['Anti-Air', 'antiair'],
-	['Manufacturer', 'manufacturer']
+	[locale('name'), 'name'],
+	[locale('health'), 'health'],
+	[locale('type'), 'type'],
+	[locale('damage'), 'damage'],
+	[locale('airDamage'), 'damagea'],
+	[locale('combinedDPS'), 'dpsm'],
+	[locale('groundDPS'), 'dpsg'],
+	[locale('airDPS'), 'dpsa'],
+	[locale('speed'), 'speed'],
+	[locale('range'), 'range'],
+	[locale('matter'), 'matter'],
+	[locale('energy'), 'energy'],
+	[locale('bandwidth'), 'bandwidth'],
+	[locale('skill'), 'ability'],
+	[locale('tech'), 'building'],
+	[locale('tier'), 'tier'],
+	[locale('big'), 'big'],
+	[locale('small'), 'small'],
+	[locale('antiBig'), 'antibig'],
+	[locale('splash'), 'splash'],
+	[locale('antiAir'), 'antiair'],
+	[locale('manufacturer'), 'manufacturer']
 ];
 sortOptions.forEach((option) => {
 	addOptionsToTable(option[0], option[1])
@@ -819,7 +819,7 @@ unit_header_sort.classList.add('header_element');
 unit_view_header.appendChild(unit_header_sort);
 //label
 const view_label = document.createElement('p');
-view_label.innerHTML = 'view: ';
+view_label.innerHTML = locale('view') + ': ';
 view_label.classList.add('header_element');
 unit_view_header.appendChild(view_label);
 
@@ -827,13 +827,13 @@ var unitViewMode = 0; //0 = table 1 = card
 
 //table view button
 const unit_view_table_btn = document.createElement('button');
-unit_view_table_btn.innerHTML = 'table';
+unit_view_table_btn.innerHTML = locale('table');
 unit_view_table_btn.id = 'unit_view_table_btn';
 unit_view_table_btn.classList.add('header_element');
 unit_view_header.appendChild(unit_view_table_btn);
 //card view button
 const unit_view_card_btn = document.createElement('button');
-unit_view_card_btn.innerHTML = 'card';
+unit_view_card_btn.innerHTML = locale('card');
 unit_view_card_btn.id = 'unit_view_card_btn';
 unit_view_card_btn.classList.add('header_element');
 unit_view_header.appendChild(unit_view_card_btn);
@@ -861,7 +861,7 @@ unit_view_card_btn.onclick = function () {
 const unit_filter_input = document.createElement('input');
 unit_filter_input.type = 'text';
 unit_filter_input.id = 'unit_filter_input';
-unit_filter_input.placeholder = 'filter';
+unit_filter_input.placeholder = locale('filter');
 unit_filter_input.classList.add('header_element');
 //when user inputs text into filter input element
 unit_filter_input.oninput = function () {
@@ -873,7 +873,7 @@ unit_view_header.appendChild(unit_filter_input);
 
 //filter clear button that clears the filter
 const unit_filter_clear_btn = document.createElement('button');
-unit_filter_clear_btn.innerHTML = 'clear';
+unit_filter_clear_btn.innerHTML = locale('clear');
 unit_filter_clear_btn.id = 'unit_filter_clear_btn';
 unit_filter_clear_btn.classList.add('header_element');
 unit_view_header.appendChild(unit_filter_clear_btn);
@@ -884,7 +884,7 @@ unit_filter_clear_btn.onclick = function () {
 	unit_filter_input.dispatchEvent(new Event('input'));
 }
 const simple_stats_label = document.createElement('p');
-simple_stats_label.innerHTML = 'simple: ';
+simple_stats_label.innerHTML = locale('simple') + ': ';
 simple_stats_label.classList.add('header_element');
 unit_view_header.appendChild(simple_stats_label);
 //unit_simple_stats_checkbox is a checkbox
@@ -907,7 +907,7 @@ unit_simple_stats_checkbox.addEventListener('change', function () {
 var hideUnavailMode = true;
 //hide unavailable units checkbox
 const hide_unavail_label = document.createElement('p');
-hide_unavail_label.innerHTML = 'hide unavail: ';
+hide_unavail_label.innerHTML = locale('hideUnavail') + ': ';
 hide_unavail_label.classList.add('header_element');
 unit_view_header.appendChild(hide_unavail_label);
 //unit_hide_unavailable_units_checkbox is a checkbox
@@ -1030,7 +1030,7 @@ function drawUnitTable() {
 	//create table header and add it to the table head
 	var unit_table_add_header = document.createElement('th');
 	unit_table_add_header.classList.add('unit_table_header');
-	unit_table_add_header.innerHTML = 'add';
+	unit_table_add_header.innerHTML = locale('add');
 	unit_table_head.appendChild(unit_table_add_header);
 
 
@@ -1099,16 +1099,16 @@ function drawUnitTable() {
 				unit_table_header.appendChild(img);
 			} else if (key == 'image') {
 				key == 'tier';
-				unit_table_header.innerHTML = 'image';
+				unit_table_header.innerHTML = locale('image');
 				//no header name for images
 			} else if (key == 'ability') {
-				unit_table_header.innerHTML = 'skill';
+				unit_table_header.innerHTML = locale('ability');
 			} else if (key == 'manufacturer') {
-				unit_table_header.innerHTML = 'manf.';
+				unit_table_header.innerHTML = locale('shortManf');
 			} else if (key == 'building') {
-				unit_table_header.innerHTML = 'tech';
+				unit_table_header.innerHTML = locale('tech');
 			} else {
-				unit_table_header.innerHTML = key;
+				unit_table_header.innerHTML = locale(key);
 			}
 
 			unit_table_head.appendChild(unit_table_header);
@@ -1236,11 +1236,12 @@ function drawUnitTable() {
 					});
 					unit_table_cell.classList.add('unit_table_cell_traits');
 				} else {
-					if (key == 'name') {
+					if (key == 'name' || key == 'type') {
 						//div.classList.add('unit_table_name_cell');
+						unit_table_cell.innerHTML = locale(value)
 
 					}
-					if (value != 0) unit_table_cell.innerHTML = value;
+					else if (value != 0) unit_table_cell.innerHTML = value;
 				}
 
 				if (key == 'health' || key == 'damage' || key == 'speed' || key == 'range') {
@@ -1257,10 +1258,6 @@ function drawUnitTable() {
 
 	//attach the unit_table to the unit_content div
 	unit_content.appendChild(unit_table);
-}
-
-var shortTypes = {
-	Air: 'Air', Ground: 'Ground', 'Base Defense': 'Base Defense'
 }
 
 var unitCards = {};
@@ -1302,9 +1299,8 @@ function createUnitCard(unit) {
 	var unit_card_name = document.createElement('div');
 	unit_card_name.classList.add('unit_card_name');
 	unit_card_name.classList.add('unit_card_text');
-	unit_card_name.innerHTML = unit.name
+	unit_card_name.innerHTML = locale(unit.slug);
 	unit_card.appendChild(unit_card_name);
-	//create a video element using the unit.turnaround as a source and attack it to the body
 	//create a div for the unit image
 	var unit_card_image = document.createElement('img');
 	unit_card_image.src = 'images/units/' + unit.slug + '.png';
@@ -1349,7 +1345,7 @@ function createUnitCard(unit) {
 		unit_card.appendChild(unit_card_manufacturer);
 	}
 
-	unit_card_type.innerHTML = shortTypes[unit.type];
+	unit_card_type.innerHTML = locale(unit.type);
 	unit_card.appendChild(unit_card_type);
 
 
@@ -1527,7 +1523,7 @@ function simpleSort(list, key, sortedArray) {
 var statsMode = 0 //0 = unit, 1 = compare
 var compareMode = 0 //0= stats, 1 = resources, 2 = traits
 const stats_button = document.createElement('button');
-stats_button.innerHTML = 'unit';
+stats_button.innerHTML = locale('unit');
 stats_button.id = 'stats_button';
 stats_button.classList.add('header_element');
 stats_view_header.appendChild(stats_button);
@@ -1540,7 +1536,7 @@ stats_button.addEventListener('click', function () {
 	refreshStatViewContent()
 });
 const compare_button = document.createElement('button');
-compare_button.innerHTML = 'compare';
+compare_button.innerHTML = locale('compare');
 compare_button.id = 'compare_button';
 compare_button.classList.add('header_element');
 stats_view_header.appendChild(compare_button);
@@ -1561,7 +1557,7 @@ stats_mode_select.id = 'stats_mode_select';
 stats_mode_select.classList.add('header_element');
 stats_view_header.appendChild(stats_mode_select);
 //add option to stats mode select for stats, resources and traits
-var stats_mode_select_options = ['stats', 'resources']; //todo: add trait comparison
+var stats_mode_select_options = [locale('stats'), locale('resources')]; //todo: add trait comparison
 stats_mode_select_options.forEach(function (option) {
 	var option_element = document.createElement('option');
 	option_element.value = option;
@@ -1685,7 +1681,7 @@ statsUnitTraitCounteredByDiv.classList.add('statsUnitTraitsDiv');
 statsUnitTraitsContainer.appendChild(statsUnitTraitCounteredByDiv);
 
 function updateTraitsContainer(_unit) {
-	statsUnitTypeDiv.textContent = _unit.type
+	statsUnitTypeDiv.textContent = locale(_unit.type)
 	//display traits as images
 	if (_unit.name == 'Raider') {
 		statsUnitTraitsDiv.textContent = 'traits: only attacks workers';
@@ -1693,7 +1689,7 @@ function updateTraitsContainer(_unit) {
 		statsUnitTraitCounteredByDiv.textContent = 'countered by: scouting'
 	}
 	else {
-		statsUnitTraitsDiv.textContent = 'traits: ';
+		statsUnitTraitsDiv.textContent = locale('traits') + ': ';
 		_unit.traits.forEach(function (trait) {
 			var traitImg = document.createElement('img');
 			traitImg.classList.add('statsUnitTraitImg');
@@ -1701,7 +1697,7 @@ function updateTraitsContainer(_unit) {
 			statsUnitTraitsDiv.appendChild(traitImg);
 		});
 
-		statsUnitTraitCountersDiv.textContent = 'counters: ';
+		statsUnitTraitCountersDiv.textContent = locale('counters') + ': ';
 		_unit.traitcounters.forEach(function (trait) {
 			var traitImg = document.createElement('img');
 			traitImg.classList.add('statsUnitTraitImg');
@@ -1709,7 +1705,7 @@ function updateTraitsContainer(_unit) {
 			statsUnitTraitCountersDiv.appendChild(traitImg);
 		});
 
-		statsUnitTraitCounteredByDiv.textContent = 'countered by: ';
+		statsUnitTraitCounteredByDiv.textContent = locale('counteredBy') + ': ';
 		_unit.traitcounteredby.forEach(function (trait) {
 			var traitImg = document.createElement('img');
 			traitImg.classList.add('statsUnitTraitImg');
@@ -1762,7 +1758,7 @@ unitOfficialLink.target = '_blank'
 
 const statsUnitName = document.createElement('div');
 statsUnitName.id = 'statsUnitName';
-statsUnitName.innerHTML = currentUnit.name;
+statsUnitName.innerHTML = locale(currentUnit.name);
 
 //using stats and matter div below as a template, make a function that creates such divs for other unit stats
 
@@ -1961,7 +1957,7 @@ function getRankSuffix(rank) {
 }
 
 function updateStatsUnitBottomContainer(name, matter, energy, bandwidth, building, ability) {
-	statsUnitName.innerHTML = name;
+	statsUnitName.innerHTML = locale(name);
 	//get the div by its id
 	statsUnitMatterDiv.children[1].innerHTML = matter;
 	statsUnitEnergyDiv.children[1].innerHTML = energy;

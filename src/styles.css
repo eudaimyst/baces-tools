@@ -143,6 +143,7 @@ option {
 	font-variant: all-small-caps;
 	font-style: bold;
 	margin: 2px;
+	color: rgba(207, 207, 207, 0.699);
 }
 
 .unit_table {
