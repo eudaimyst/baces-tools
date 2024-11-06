@@ -3,7 +3,7 @@
 import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import { sidebar, updateBG } from './menu';
-import { locale, setLocale, getLocale } from './locale';
+import { locale } from './locale';
 
 
 

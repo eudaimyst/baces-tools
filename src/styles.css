@@ -427,10 +427,11 @@ option {
 	border-color: rgba(255, 255, 255, 0.479);
 	z-index: 10;
 	border-width: 1px;
-	font-size: 1.8vmin;
+	font-size: 1.5vmin;
 	font-weight: 700;
 	font-variant: small-caps;
 	line-height: 250%;
+	text-wrap: nowrap;
 }
 
 .barchart {
@@ -771,23 +772,25 @@ sup {
 }
 
 .deck_stats_img {
-	width: 1.5vmax;
+	width: 2vmin;
+	padding: .5vmin;
 }
 
 .resourceStatImg {
-	width: 1.5vmax;
+	width: 2vmin;
+	padding: .5vmin;
 }
 
 .deck_stats_img_ability {
-	width: 2vmax;
+	width: 4vmin;
 }
 
 .deck_stats_img_traits {
-	width: 1vmax;
+	width: 2vmin;
 }
 
 .deck_stats_img_manf {
-	width: 2vmax;
+	width: 3vmin;
 }
 
 .links_div {

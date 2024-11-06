@@ -1,5 +1,5 @@
 
-import { locale, setLocale, getLocale, getLocaleList } from './locale';
+import { setLocale, getLocale, getLocaleList } from './locale';
 
 const linkData = [{
 	name: 'Battle Aces Official Website',
@@ -147,6 +147,7 @@ expandMenu(false);
 
 //create a drop down to select a language
 const languageSelectDiv = document.createElement('div');
+languageSelectDiv.textContent = 'Language' + ': ';
 languageSelectDiv.classList.add('languageSelectDiv');
 sidebar_content_div.appendChild(languageSelectDiv);
 const languageSelect = document.createElement('select');
@@ -200,12 +201,13 @@ linksHeader.addEventListener('click', () => {
 //create a div for a countdown to the beta release date
 const countdownDiv = document.createElement('div');
 countdownDiv.classList.add('countdown_div');
-sidebar_content_div.appendChild(countdownDiv);
+//sidebar_content_div.appendChild(countdownDiv);
 const counDownDivCountdownText = document.createElement('p');
 counDownDivCountdownText.classList.add('countdown_text');
 countdownDiv.appendChild(counDownDivCountdownText);
 //get the remaining time in days hours minutes and secionds until the 6th of November, 12pm, PST American West Coast using an online time library
 //returns a string
+/**
 function getRemainingTime() {
 	const now = new Date();
 	const targetDate = new Date('2024-11-06T12:00:00Z');
@@ -218,11 +220,11 @@ function getRemainingTime() {
 	return `${days + 1}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
-//set countdown div text to the remaining time using the function
+// set countdown div text to the remaining time using the function
 setInterval(() => {
 	counDownDivCountdownText.innerHTML = 'Release Countdown (estimate):<br>Closed Beta 2: ' + getRemainingTime();
 }, 1000);
-
+*/
 //create a new div for setting the background image with a select element and append it to sidebar_content_div 
 const bgImgSelectDiv = document.createElement('div');
 bgImgSelectDiv.classList.add('bgImgSelectDiv');
