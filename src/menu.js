@@ -277,8 +277,12 @@ bgImgSelect.addEventListener('change', () => {
 });
 //add a final text box under the select element that says 'select a background image'
 const bgImgSelectText = document.createElement('p');
-bgImgSelectText.innerHTML = 'all artwork credit to <a href = "https://www.playbattleaces.com">playbattleaces.com</a >';
+bgImgSelectText.innerHTML = 'all artwork credit <a href = "https://www.playbattleaces.com">playbattleaces.com</a >';
+const bgImgSelectText2 = document.createElement('p');
+bgImgSelectText2.classList.add('menuWorkerUniformCredit')
+bgImgSelectText2.innerHTML = 'uniforms: <a href = "https://discord.com/channels/1187021578333073418/1248357473421758586/1253092940486803569">Sepic</a > on Discord';
 bgImgSelectDiv.appendChild(bgImgSelectText);
+bgImgSelectDiv.appendChild(bgImgSelectText2);
 const plainBGButton = document.createElement('button');
 plainBGButton.innerHTML = 'plain bg';
 plainBGButton.classList.add('plainBGButton');

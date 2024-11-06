@@ -443,6 +443,10 @@ option {
 
 }
 
+.menuWorkerUniformCredit {
+	font-size: 10px;
+}
+
 .comparisonChartContainer {
 	position: relative;
 	display: flex;
