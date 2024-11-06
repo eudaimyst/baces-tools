@@ -1,4 +1,5 @@
 
+import { locale, setLocale, getLocale, getLocaleList, languageLongNameList } from './locale';
 
 const linkData = [{
 	name: 'Battle Aces Official Website',
@@ -109,7 +110,8 @@ function expandMenu(expand) {
 	sidebarLogoImg.style.width = '100%';
 	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
 	if (expand) {
-		sidebar.style.width = '200px';
+		sidebar.classList.add('sidebar_expanded')
+		sidebar.classList.remove('sidebar_contracted')
 		// wrapper.style.marginLeft = '200px';
 		sidebar.appendChild(sidebar_title_div);
 		sidebar.appendChild(sidebar_content_div);
@@ -119,7 +121,8 @@ function expandMenu(expand) {
 			sidebar.removeChild(sidebar_title_v_div);
 		};
 	} else {
-		sidebar.style.width = '50px';
+		sidebar.classList.remove('sidebar_expanded')
+		sidebar.classList.add('sidebar_contracted')
 		// wrapper.style.marginLeft = '50px';
 		//if children exist
 		if (sidebar.children.length > 0) {
@@ -141,6 +144,34 @@ expandMenu(false);
 
 //#tag sidebar-content this is where everything in the sidebar goes
 
+
+//create a drop down to select a language
+const languageSelectDiv = document.createElement('div');
+languageSelectDiv.textContent = locale('language') + ': ';
+languageSelectDiv.classList.add('languageSelectDiv');
+sidebar_content_div.appendChild(languageSelectDiv);
+const languageSelect = document.createElement('select');
+languageSelect.classList.add('languageSelect');
+languageSelectDiv.appendChild(languageSelect);
+//create an option for each language in the localeData array
+function createLanguageOption(value, text) {
+	const languageSelectOption = document.createElement('option');
+	languageSelectOption.value = value;
+	languageSelectOption.innerHTML = text;
+	languageSelect.appendChild(languageSelectOption);
+}
+//for each value in localeList
+var localeList = getLocaleList();
+for (let i = 0; i < localeList.length; i++) {
+	createLanguageOption(localeList[i], languageLongNameList[localeList[i]]);
+}
+//when a language is selected set hte locale
+languageSelect.addEventListener('change', () => {
+	setLocale(languageSelect.value);
+	location.reload();
+});
+//set the current option to the current locale
+languageSelect.value = getLocale();
 //create a div which has a menu of links. The div should have a header, which can be clicked to expand, to show the links
 const linksDiv = document.createElement('div');
 linksDiv.classList.add('links_div');
@@ -148,7 +179,7 @@ sidebar_content_div.appendChild(linksDiv);
 
 const linksHeader = document.createElement('div');
 linksHeader.classList.add('links_header');
-linksHeader.innerHTML = 'Links';
+linksHeader.innerHTML = locale('links');
 linksDiv.appendChild(linksHeader);
 
 const linksContent = document.createElement('div');
@@ -170,12 +201,13 @@ linksHeader.addEventListener('click', () => {
 //create a div for a countdown to the beta release date
 const countdownDiv = document.createElement('div');
 countdownDiv.classList.add('countdown_div');
-sidebar_content_div.appendChild(countdownDiv);
+//sidebar_content_div.appendChild(countdownDiv);
 const counDownDivCountdownText = document.createElement('p');
 counDownDivCountdownText.classList.add('countdown_text');
 countdownDiv.appendChild(counDownDivCountdownText);
 //get the remaining time in days hours minutes and secionds until the 6th of November, 12pm, PST American West Coast using an online time library
 //returns a string
+/**
 function getRemainingTime() {
 	const now = new Date();
 	const targetDate = new Date('2024-11-06T12:00:00Z');
@@ -188,11 +220,11 @@ function getRemainingTime() {
 	return `${days + 1}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
-//set countdown div text to the remaining time using the function
+// set countdown div text to the remaining time using the function
 setInterval(() => {
 	counDownDivCountdownText.innerHTML = 'Release Countdown (estimate):<br>Closed Beta 2: ' + getRemainingTime();
 }, 1000);
-
+*/
 //create a new div for setting the background image with a select element and append it to sidebar_content_div 
 const bgImgSelectDiv = document.createElement('div');
 bgImgSelectDiv.classList.add('bgImgSelectDiv');
@@ -255,7 +287,7 @@ function updateBG(wrapper) {
 //add a label for the random toggle
 const randomToggleLabel = document.createElement('label');
 randomToggleLabel.for = 'randomToggle';
-randomToggleLabel.innerHTML = 'Random';
+randomToggleLabel.innerHTML = locale('random');
 bgImgSelectDiv.appendChild(randomToggleLabel);
 //create an option element for each background image and append it to bgImgSelect
 function createOption(value, text) {
@@ -266,7 +298,7 @@ function createOption(value, text) {
 }
 //for each background image in the images/bg folder, create an option
 for (let i = 1; i <= 19; i++) {
-	createOption('images/bg/' + (20 - i) + '.jpg', 'Background ' + i);
+	createOption('images/bg/' + (20 - i) + '.jpg', locale('background') + ' ' + i);
 }
 //when the select element is changed, set the background image to the selected value
 bgImgSelect.addEventListener('change', () => {
@@ -284,7 +316,7 @@ bgImgSelectText2.innerHTML = 'uniforms: <a href = "https://discord.com/channels/
 bgImgSelectDiv.appendChild(bgImgSelectText);
 bgImgSelectDiv.appendChild(bgImgSelectText2);
 const plainBGButton = document.createElement('button');
-plainBGButton.innerHTML = 'plain bg';
+plainBGButton.innerHTML = locale('plainbg');
 plainBGButton.classList.add('plainBGButton');
 bgImgSelectDiv.appendChild(plainBGButton);
 plainBGButton.addEventListener('click', () => {

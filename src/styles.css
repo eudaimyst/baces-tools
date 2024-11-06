@@ -143,6 +143,7 @@ option {
 	font-variant: all-small-caps;
 	font-style: bold;
 	margin: 2px;
+	color: rgba(207, 207, 207, 0.699);
 }
 
 .unit_table {
@@ -426,10 +427,11 @@ option {
 	border-color: rgba(255, 255, 255, 0.479);
 	z-index: 10;
 	border-width: 1px;
-	font-size: 1.8vmin;
+	font-size: 1.5vmin;
 	font-weight: 700;
 	font-variant: small-caps;
 	line-height: 250%;
+	text-wrap: nowrap;
 }
 
 .barchart {
@@ -461,10 +463,13 @@ option {
 }
 
 .starchart {
-	border: dashed;
+	border: none;
 	border-width: 1px;
 	border-color: rgba(192, 162, 81, 0.205);
 	width: 100px;
+	background-image: url('images/stats/starchartbg.png');
+	background-position: center;
+	background-size: cover;
 }
 
 sup {
@@ -508,6 +513,19 @@ sup {
 	background-color: rgba(8, 8, 10, 0.596);
 	box-shadow: 2px 2px 2px 1px rgb(0 0 0 / 20%);
 	;
+}
+
+.sidebar_contracted {
+	padding: 0;
+	width: 50px;
+	transition: width .1s;
+}
+
+.sidebar_expanded {
+	padding: .5vmin;
+	width: 200px;
+	transition: width .1s;
+
 }
 
 #sidebarLogoImg {
@@ -761,23 +779,25 @@ sup {
 }
 
 .deck_stats_img {
-	width: 1.5vmax;
+	width: 2vmin;
+	padding: .5vmin;
 }
 
 .resourceStatImg {
-	width: 1.5vmax;
+	width: 2vmin;
+	padding: .5vmin;
 }
 
 .deck_stats_img_ability {
-	width: 2vmax;
+	width: 4vmin;
 }
 
 .deck_stats_img_traits {
-	width: 1vmax;
+	width: 2vmin;
 }
 
 .deck_stats_img_manf {
-	width: 2vmax;
+	width: 3vmin;
 }
 
 .links_div {
