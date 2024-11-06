@@ -1,0 +1,585 @@
+{
+   "sort": [
+      {
+         "en": "sort",
+         "fr": "tri",
+         "de": "sortieren",
+         "es": "ordenar",
+         "pt": "classificar",
+         "jp": "並べ替え",
+         "cn": "排序",
+         "kr": "정렬",
+         "es-419": "ordenar"
+      }
+   ],
+   "view": [
+      {
+         "en": "view",
+         "fr": "vue",
+         "de": "ansicht",
+         "es": "ver",
+         "pt": "visualizar",
+         "jp": "表示",
+         "cn": "查看",
+         "kr": "보기",
+         "es-419": "ver"
+      }
+   ],
+   "simple": [
+      {
+         "en": "simple",
+         "fr": "simple",
+         "de": "simpel",
+         "es": "sencillo",
+         "pt": "simples",
+         "jp": "シンプル",
+         "cn": "简单",
+         "kr": "간단한",
+         "es-419": "sencillo"
+      }
+   ],
+   "hideUnavail": [
+      {
+         "en": "hide unavail",
+         "fr": "masquer indispo",
+         "de": "verbergen nicht verf",
+         "es": "ocultar no disponible",
+         "pt": "ocultar indisponível",
+         "jp": "非表示",
+         "cn": "隐藏不可用",
+         "kr": "숨기기",
+         "es-419": "ocultar no disponible"
+      }
+   ],
+   "name": [
+      {
+         "en": "Name",
+         "fr": "Nom",
+         "de": "Name",
+         "es": "nombre",
+         "pt": "nome",
+         "jp": "名前",
+         "cn": "名字",
+         "kr": "이름",
+         "es-419": "nombre"
+      }
+   ],
+   "shortManf": [
+      {
+         "en": "Manf.",
+         "fr": "Fabr.",
+         "de": "Herst.",
+         "es": "fabr.",
+         "pt": "fabr.",
+         "jp": "製造元",
+         "cn": "制造商",
+         "kr": "제조업체",
+         "es-419": "fabr."
+      }
+   ],
+   "type": [
+      {
+         "en": "Type",
+         "fr": "Type",
+         "de": "Typ",
+         "es": "tipo",
+         "pt": "tipo",
+         "jp": "タイプ",
+         "cn": "类型",
+         "kr": "유형",
+         "es-419": "tipo"
+      }
+   ],
+   "add": [
+      {
+         "en": "Add",
+         "fr": "Ajouter",
+         "de": "Hinzufügen",
+         "es": "añadir",
+         "pt": "adicionar",
+         "jp": "追加",
+         "cn": "添加",
+         "kr": "추가",
+         "es-419": "añadir"
+      }
+   ],
+   "skill": [
+      {
+         "en": "Skill",
+         "fr": "Compétence",
+         "de": "Fähigkeit",
+         "es": "habilidad",
+         "pt": "habilidade",
+         "jp": "スキル",
+         "cn": "技能",
+         "kr": "스킬",
+         "es-419": "habilidad"
+      },
+      {
+         "en": "Skill",
+         "fr": "Compétence",
+         "de": "Fähigkeit",
+         "es": "habilidad",
+         "pt": "habilidade",
+         "jp": "スキル",
+         "cn": "技能",
+         "kr": "스킬",
+         "es-419": "habilidad"
+      }
+   ],
+   "traits": [
+      {
+         "en": "Traits",
+         "fr": "Traits",
+         "de": "Eigenschaften",
+         "es": "rasgos",
+         "pt": "características",
+         "jp": "特性",
+         "cn": "特征",
+         "kr": "특성",
+         "es-419": "rasgos"
+      }
+   ],
+   "deck1": [
+      {
+         "en": "deck 1",
+         "fr": "deck 1",
+         "de": "Deck 1",
+         "es": "baraja 1",
+         "pt": "baralho 1",
+         "jp": "デッキ 1",
+         "cn": "卡组 1",
+         "kr": "덱 1",
+         "es-419": "baraja 1"
+      }
+   ],
+   "deck2": [
+      {
+         "en": "deck 2",
+         "fr": "deck 2",
+         "de": "Deck 2",
+         "es": "baraja 2",
+         "pt": "baralho 2",
+         "jp": "デッキ 2",
+         "cn": "卡组 2",
+         "kr": "덱 2",
+         "es-419": "baraja 2"
+      }
+   ],
+   "clear": [
+      {
+         "en": "clear",
+         "fr": "effacer",
+         "de": "löschen",
+         "es": "limpiar",
+         "pt": "limpar",
+         "jp": "クリア",
+         "cn": "清除",
+         "kr": "지우기",
+         "es-419": "limpiar"
+      }
+   ],
+   "fill": [
+      {
+         "en": "fill",
+         "fr": "remplir",
+         "de": "füllen",
+         "es": "llenar",
+         "pt": "preencher",
+         "jp": "埋める",
+         "cn": "填充",
+         "kr": "채우기",
+         "es-419": "llenar"
+      }
+   ],
+   "deckName": [
+      {
+         "en": "deck name",
+         "fr": "nom du deck",
+         "de": "Deckname",
+         "es": "nombre de baraja",
+         "pt": "nome do baralho",
+         "jp": "デッキ名",
+         "cn": "卡组名称",
+         "kr": "덱 이름",
+         "es-419": "nombre de baraja"
+      }
+   ],
+   "save": [
+      {
+         "en": "save",
+         "fr": "sauvegarder",
+         "de": "speichern",
+         "es": "guardar",
+         "pt": "salvar",
+         "jp": "保存",
+         "cn": "保存",
+         "kr": "저장",
+         "es-419": "guardar"
+      }
+   ],
+   "load": [
+      {
+         "en": "load",
+         "fr": "charger",
+         "de": "laden",
+         "es": "cargar",
+         "pt": "carregar",
+         "jp": "ロード",
+         "cn": "加载",
+         "kr": "불러오기",
+         "es-419": "cargar"
+      }
+   ],
+   "delete": [
+      {
+         "en": "delete",
+         "fr": "supprimer",
+         "de": "löschen",
+         "es": "eliminar",
+         "pt": "excluir",
+         "jp": "削除",
+         "cn": "删除",
+         "kr": "삭제",
+         "es-419": "eliminar"
+      }
+   ],
+   "unit": [
+      {
+         "en": "unit",
+         "fr": "unité",
+         "de": "Einheit",
+         "es": "unidad",
+         "pt": "unidade",
+         "jp": "ユニット",
+         "cn": "单位",
+         "kr": "단위",
+         "es-419": "unidad"
+      }
+   ],
+   "compare": [
+      {
+         "en": "compare",
+         "fr": "comparer",
+         "de": "vergleichen",
+         "es": "comparar",
+         "pt": "comparar",
+         "jp": "比較する",
+         "cn": "比较",
+         "kr": "비교",
+         "es-419": "comparar"
+      }
+   ],
+   "stats": [
+      {
+         "en": "stats",
+         "fr": "statistiques",
+         "de": "Statistiken",
+         "es": "estadísticas",
+         "pt": "estatísticas",
+         "jp": "ステータス",
+         "cn": "统计",
+         "kr": "통계",
+         "es-419": "estadísticas"
+      }
+   ],
+   "resources": [
+      {
+         "en": "resources",
+         "fr": "ressources",
+         "de": "Ressourcen",
+         "es": "recursos",
+         "pt": "recursos",
+         "jp": "リソース",
+         "cn": "资源",
+         "kr": "자원",
+         "es-419": "recursos"
+      }
+   ],
+   "counters": [
+      {
+         "en": "counters",
+         "fr": "comptes",
+         "de": "Zähler",
+         "es": "contadores",
+         "pt": "contadores",
+         "jp": "カウンター",
+         "cn": "计数器",
+         "kr": "카운터",
+         "es-419": "contadores"
+      }
+   ],
+   "counteredBy": [
+      {
+         "en": "countered by",
+         "fr": "compté par",
+         "de": "gekontert von",
+         "es": "contrarrestado por",
+         "pt": "contrarrestado por",
+         "jp": "カウンターされる",
+         "cn": "被对抗",
+         "kr": "카운터",
+         "es-419": "contrarrestado por"
+      }
+   ],
+   "damage": [
+      {
+         "en": "Damage",
+         "fr": "Dégâts",
+         "de": "Schaden",
+         "es": "daño",
+         "pt": "dano",
+         "jp": "ダメージ",
+         "cn": "伤害",
+         "kr": "피해",
+         "es-419": "daño"
+      }
+   ],
+   "airDamage": [
+      {
+         "en": "Air damage",
+         "fr": "dégâts d'air",
+         "de": "Luftschaden",
+         "es": "daño aéreo",
+         "pt": "dano aéreo",
+         "jp": "空中ダメージ",
+         "cn": "空中伤害",
+         "kr": "공중 피해",
+         "es-419": "daño aéreo"
+      }
+   ],
+   "combinedDPS": [
+      {
+         "en": "Combined DPS",
+         "fr": "DPS combiné",
+         "de": "kombinierter DPS",
+         "es": "DPS combinado",
+         "pt": "DPS combinado",
+         "jp": "総合DPS",
+         "cn": "综合DPS",
+         "kr": "종합 DPS",
+         "es-419": "DPS combinado"
+      }
+   ],
+   "groundDPS": [
+      {
+         "en": "Ground DPS",
+         "fr": "DPS au sol",
+         "de": "Bodenschaden",
+         "es": "DPS terrestre",
+         "pt": "DPS terrestre",
+         "jp": "地上DPS",
+         "cn": "地面DPS",
+         "kr": "지상 DPS",
+         "es-419": "DPS terrestre"
+      }
+   ],
+   "airDPS": [
+      {
+         "en": "Air DPS",
+         "fr": "DPS aérien",
+         "de": "Luft DPS",
+         "es": "DPS aéreo",
+         "pt": "DPS aéreo",
+         "jp": "空中DPS",
+         "cn": "空中DPS",
+         "kr": "공중 DPS",
+         "es-419": "DPS aéreo"
+      }
+   ],
+   "speed": [
+      {
+         "en": "Speed",
+         "fr": "Vitesse",
+         "de": "Geschwindigkeit",
+         "es": "velocidad",
+         "pt": "velocidade",
+         "jp": "速度",
+         "cn": "速度",
+         "kr": "속도",
+         "es-419": "velocidad"
+      }
+   ],
+   "range": [
+      {
+         "en": "Range",
+         "fr": "Portée",
+         "de": "Reichweite",
+         "es": "alcance",
+         "pt": "alcance",
+         "jp": "範囲",
+         "cn": "范围",
+         "kr": "범위",
+         "es-419": "alcance"
+      }
+   ],
+   "matter": [
+      {
+         "en": "Matter",
+         "fr": "Matière",
+         "de": "Material",
+         "es": "materia",
+         "pt": "matéria",
+         "jp": "物質",
+         "cn": "物质",
+         "kr": "물질",
+         "es-419": "materia"
+      }
+   ],
+   "energy": [
+      {
+         "en": "Energy",
+         "fr": "Énergie",
+         "de": "Energie",
+         "es": "energía",
+         "pt": "energia",
+         "jp": "エネルギー",
+         "cn": "能量",
+         "kr": "에너지",
+         "es-419": "energía"
+      }
+   ],
+   "bandwidth": [
+      {
+         "en": "Bandwidth",
+         "fr": "Bande passante",
+         "de": "Bandbreite",
+         "es": "ancho de banda",
+         "pt": "largura de banda",
+         "jp": "帯域幅",
+         "cn": "带宽",
+         "kr": "대역폭",
+         "es-419": "ancho de banda"
+      }
+   ],
+   "tech": [
+      {
+         "en": "Tech",
+         "fr": "Technologie",
+         "de": "Technik",
+         "es": "tecnología",
+         "pt": "tecnologia",
+         "jp": "テクノロジー",
+         "cn": "技术",
+         "kr": "기술",
+         "es-419": "tecnología"
+      }
+   ],
+   "tier": [
+      {
+         "en": "Tier",
+         "fr": "Niveau",
+         "de": "Stufe",
+         "es": "nivel",
+         "pt": "nível",
+         "jp": "層",
+         "cn": "层",
+         "kr": "티어",
+         "es-419": "nivel"
+      }
+   ],
+   "big": [
+      {
+         "en": "Big",
+         "fr": "Gros",
+         "de": "Groß",
+         "es": "grande",
+         "pt": "grande",
+         "jp": "大",
+         "cn": "大",
+         "kr": "큰",
+         "es-419": "grande"
+      }
+   ],
+   "small": [
+      {
+         "en": "Small",
+         "fr": "Petit",
+         "de": "Klein",
+         "es": "pequeño",
+         "pt": "pequeno",
+         "jp": "小",
+         "cn": "小",
+         "kr": "작은",
+         "es-419": "pequeño"
+      }
+   ],
+   "antiBig": [
+      {
+         "en": "Anti-Big",
+         "fr": "Anti-Gros",
+         "de": "Anti-Groß",
+         "es": "anti-grande",
+         "pt": "anti-grande",
+         "jp": "アンチビッグ",
+         "cn": "反大",
+         "kr": "대형방어",
+         "es-419": "anti-grande"
+      }
+   ],
+   "splash": [
+      {
+         "en": "Splash",
+         "fr": "Éclaboussure",
+         "de": "Spritzschaden",
+         "es": "salpicadura",
+         "pt": "salpico",
+         "jp": "スプラッシュ",
+         "cn": "飞溅",
+         "kr": "스플래시",
+         "es-419": "salpicadura"
+      }
+   ],
+   "antiAir": [
+      {
+         "en": "Anti-Air",
+         "fr": "Anti-Air",
+         "de": "Anti-Luft",
+         "es": "antiaéreo",
+         "pt": "antiaéreo",
+         "jp": "対空",
+         "cn": "反空中",
+         "kr": "대공",
+         "es-419": "antiaéreo"
+      }
+   ],
+   "manufacturer": [
+      {
+         "en": "Manufacturer",
+         "fr": "Fabricant",
+         "de": "Hersteller",
+         "es": "fabricante",
+         "pt": "fabricante",
+         "jp": "製造元",
+         "cn": "制造商",
+         "kr": "제조업체",
+         "es-419": "fabricante"
+      }
+   ],
+   "table": [
+      {
+         "en": "Table",
+         "fr": "Tableau",
+         "de": "Tabelle",
+         "es": "tabla",
+         "pt": "tabela",
+         "jp": "テーブル",
+         "cn": "表",
+         "kr": "테이블",
+         "es-419": "tabla"
+      }
+   ],
+   "card": [
+      {
+         "en": "Card",
+         "fr": "Carte",
+         "de": "Karte",
+         "es": "carta",
+         "pt": "carta",
+         "jp": "カード",
+         "cn": "卡",
+         "kr": "카드",
+         "es-419": "carta"
+      }
+   ]
+}
