@@ -507,6 +507,19 @@ sup {
 	;
 }
 
+.sidebar_contracted {
+	padding: 0;
+	width: 50px;
+	transition: width .1s;
+}
+
+.sidebar_expanded {
+	padding: .5vmin;
+	width: 200px;
+	transition: width .1s;
+
+}
+
 #sidebarLogoImg {
 	width: 100%;
 	opacity: 100%;

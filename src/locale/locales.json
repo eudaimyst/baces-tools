@@ -386,14 +386,14 @@
 	},
 	"tech": {
 		"en": "Tech",
-		"fr": "Technologie",
+		"fr": "Tech",
 		"de": "Technik",
-		"es": "tecnología",
-		"pt": "tecnologia",
+		"es": "tecno.",
+		"pt": "tecno.",
 		"jp": "テクノロジー",
 		"cn": "技术",
 		"kr": "기술",
-		"es-419": "tecnología"
+		"es-419": "tecno."
 	},
 	"tier": {
 		"en": "Tier",
@@ -512,7 +512,8 @@
 		"fr": "Crabe",
 		"pt": "Caranguejo",
 		"cn": "钳甲蟹",
-		"kr": "크랩"
+		"kr": "크랩",
+		"de": "Krabbe"
 	},
 	"hunter": {
 		"en": "Hunter",
@@ -521,7 +522,8 @@
 		"fr": "Chasseur",
 		"pt": "Caçador",
 		"cn": "猎手",
-		"kr": "헌터"
+		"kr": "헌터",
+		"de": "Jäger"
 	},
 	"recall": {
 		"en": "Recall",
@@ -530,7 +532,8 @@
 		"fr": "Rappeleur",
 		"pt": "Evocador",
 		"cn": "瞬返者",
-		"kr": "리콜"
+		"kr": "리콜",
+		"de": "Rückruf"
 	},
 	"scorpion": {
 		"en": "Scorpion",
@@ -539,7 +542,8 @@
 		"fr": "Scorpion",
 		"pt": "Escorpião",
 		"cn": "钢刃蝎",
-		"kr": "스콜피온"
+		"kr": "스콜피온",
+		"de": "Skorpion"
 	},
 	"beetle": {
 		"en": "Beetle",
@@ -548,7 +552,8 @@
 		"fr": "Scarabée",
 		"pt": "Besouro",
 		"cn": "铁甲卫士",
-		"kr": "비틀"
+		"kr": "비틀",
+		"de": "Käfer"
 	},
 	"blink": {
 		"en": "Blink",
@@ -557,7 +562,8 @@
 		"fr": "Téléporteur",
 		"pt": "Errático",
 		"cn": "闪跃者",
-		"kr": "블링크"
+		"kr": "블링크",
+		"de": "Teleporter"
 	},
 	"gunbot": {
 		"en": "Gunbot",
@@ -566,7 +572,8 @@
 		"fr": "Bot minigun",
 		"pt": "Guarda Motriz",
 		"cn": "枪火战甲",
-		"kr": "건봇"
+		"kr": "건봇",
+		"de": "Geschütz-Bot"
 	},
 	"missilebot": {
 		"en": "Missilebot",
@@ -575,7 +582,8 @@
 		"fr": "Bot missile",
 		"pt": "Lançador",
 		"cn": "制导战甲",
-		"kr": "미사일봇"
+		"kr": "미사일봇",
+		"de": "Raketen-Bot"
 	},
 	"wasp": {
 		"en": "Wasp",
@@ -584,7 +592,8 @@
 		"fr": "Guêpe",
 		"pt": "Vespa",
 		"cn": "小旋蜂",
-		"kr": "와스프"
+		"kr": "와스프",
+		"de": "Wespe"
 	},
 	"hornet": {
 		"en": "Hornet",
@@ -593,7 +602,8 @@
 		"fr": "Frelon",
 		"pt": "Marimbondo",
 		"cn": "小钻蜂",
-		"kr": "호넷"
+		"kr": "호넷",
+		"de": "Hornisse"
 	},
 	"knight": {
 		"en": "Knight",
@@ -602,7 +612,8 @@
 		"fr": "Chevalier",
 		"pt": "Cavaleiro",
 		"cn": "骑士",
-		"kr": "나이트"
+		"kr": "나이트",
+		"de": "Ritter"
 	},
 	"crossbow": {
 		"en": "Crossbow",
@@ -611,7 +622,8 @@
 		"fr": "Arbalète",
 		"pt": "Besta",
 		"cn": "十字弓",
-		"kr": "크로스보우"
+		"kr": "크로스보우",
+		"de": "Armbrust"
 	},
 	"ballista": {
 		"en": "Ballista",
@@ -620,7 +632,8 @@
 		"fr": "Baliste",
 		"pt": "Balista",
 		"cn": "弩炮",
-		"kr": "발리스타"
+		"kr": "발리스타",
+		"de": "Balliste"
 	},
 	"kingcrab": {
 		"en": "King Crab",
@@ -629,7 +642,8 @@
 		"fr": "Crabe royal",
 		"pt": "Caranguejo-real",
 		"cn": "钢甲巨蟹",
-		"kr": "킹크랩"
+		"kr": "킹크랩",
+		"de": "Königskrabbe"
 	},
 	"crusader": {
 		"en": "Crusader",
@@ -638,16 +652,18 @@
 		"fr": "Croisé",
 		"pt": "Cruzado",
 		"cn": "泰坦圣骑",
-		"kr": "크루세이더"
+		"kr": "크루세이더",
+		"de": "Kreuzritter"
 	},
 	"bomber": {
-		"en": "Bomber",
-		"es": "Detonabot",
-		"es-419": "Detonabot",
-		"fr": "Détonabot",
-		"pt": "Bombardeiro",
-		"cn": "炸弹",
-		"kr": "바머"
+		"en": "Bomber 💥",
+		"es": "Detonabot 💥",
+		"es-419": "Detonabot 💥",
+		"fr": "Détonabot 💥",
+		"pt": "Bombardeiro 💥",
+		"cn": "炸弹 💥",
+		"kr": "바머 💥",
+		"de": "Bomber 💥"
 	},
 	"shocker": {
 		"en": "Shocker",
@@ -656,7 +672,8 @@
 		"fr": "Électriseur",
 		"pt": "Voltaico",
 		"cn": "震荡者",
-		"kr": "쇼커"
+		"kr": "쇼커",
+		"de": "Schocker"
 	},
 	"mortar": {
 		"en": "Mortar",
@@ -665,7 +682,8 @@
 		"fr": "Mortier",
 		"pt": "Morteiro",
 		"cn": "迫击炮",
-		"kr": "모르타르"
+		"kr": "모르타르",
+		"de": "Mörser"
 	},
 	"destroyer": {
 		"en": "Destroyer",
@@ -674,7 +692,8 @@
 		"fr": "Destroyer",
 		"pt": "Destruidor",
 		"cn": "歼灭者",
-		"kr": "디스트로이어"
+		"kr": "디스트로이어",
+		"de": "Vernichter"
 	},
 	"raider": {
 		"en": "Raider",
@@ -683,7 +702,8 @@
 		"fr": "Pillard",
 		"pt": "Saqueador",
 		"cn": "掠夺者",
-		"kr": "레이더"
+		"kr": "레이더",
+		"de": "Räuber"
 	},
 	"turret": {
 		"en": "Turret",
@@ -692,7 +712,8 @@
 		"fr": "Tourelle",
 		"pt": "Sentinela",
 		"cn": "炮塔",
-		"kr": "터릿"
+		"kr": "터릿",
+		"de": "Geschützturm"
 	},
 	"butterfly": {
 		"en": "Butterfly",
@@ -701,7 +722,8 @@
 		"fr": "Papillon",
 		"pt": "Borboleta",
 		"cn": "蝶影",
-		"kr": "버터플라이"
+		"kr": "버터플라이",
+		"de": "Schmetterling"
 	},
 	"dragonfly": {
 		"en": "Dragonfly",
@@ -710,7 +732,8 @@
 		"fr": "Libellule",
 		"pt": "Libélula",
 		"cn": "蜻锋影",
-		"kr": "드래곤플라이"
+		"kr": "드래곤플라이",
+		"de": "Libelle"
 	},
 	"falcon": {
 		"en": "Falcon",
@@ -719,7 +742,8 @@
 		"fr": "Faucon",
 		"pt": "Falcão",
 		"cn": "猎鹰",
-		"kr": "팔콘"
+		"kr": "팔콘",
+		"de": "Falke"
 	},
 	"airship": {
 		"en": "Airship",
@@ -728,7 +752,8 @@
 		"fr": "Drone",
 		"pt": "Aeronave",
 		"cn": "浮游舰",
-		"kr": "에어쉽"
+		"kr": "에어쉽",
+		"de": "Luftdrohne"
 	},
 	"mammoth": {
 		"en": "Mammoth",
@@ -737,7 +762,8 @@
 		"fr": "Mammouth",
 		"pt": "Mamute",
 		"cn": "铁甲巨象",
-		"kr": "매머드"
+		"kr": "매머드",
+		"de": "Mammut"
 	},
 	"stinger": {
 		"en": "Stinger",
@@ -746,7 +772,8 @@
 		"fr": "Dard",
 		"pt": "Ferrão",
 		"cn": "毒刺",
-		"kr": "스팅어"
+		"kr": "스팅어",
+		"de": "Stachel"
 	},
 	"flakturret": {
 		"en": "Flak Turret",
@@ -755,7 +782,8 @@
 		"fr": "Tourelle antiaérienne",
 		"pt": "Sentinela antiaérea",
 		"cn": "高射炮塔",
-		"kr": "플락 터릿"
+		"kr": "플락 터릿",
+		"de": "Flakturm"
 	},
 	"heavyballista": {
 		"en": "Heavy Ballista",
@@ -764,7 +792,8 @@
 		"fr": "Baliste lourde",
 		"pt": "Balista Pesada",
 		"cn": "重装弩炮",
-		"kr": "헤비 발리스타"
+		"kr": "헤비 발리스타",
+		"de": "Schwere Balliste"
 	},
 	"gargantua": {
 		"en": "Gargantua",
@@ -773,7 +802,8 @@
 		"fr": "Gargantua",
 		"pt": "Gargantua",
 		"cn": "巨人",
-		"kr": "가르간투아"
+		"kr": "가르간투아",
+		"de": "Gargantua"
 	},
 	"valkyrie": {
 		"en": "Valkyrie",
@@ -782,7 +812,8 @@
 		"fr": "Valkyrie",
 		"pt": "Valkíria",
 		"cn": "女武神",
-		"kr": "발키리"
+		"kr": "발키리",
+		"de": "Walküre"
 	},
 	"sniper": {
 		"en": "Sniper",
@@ -791,7 +822,8 @@
 		"fr": "Sniper",
 		"pt": "Atirador de elite",
 		"cn": "狙击手",
-		"kr": "스나이퍼"
+		"kr": "스나이퍼",
+		"de": "Sniper"
 	},
 	"recallshocker": {
 		"en": "Recall Shocker",
@@ -800,7 +832,8 @@
 		"fr": "Rappeleur Électrisant",
 		"pt": "Recall Voltaico",
 		"cn": "瞬返震荡者",
-		"kr": "리콜 쇼커"
+		"kr": "리콜 쇼커",
+		"de": "Rückrufer-Schocker"
 	},
 	"recallhunter": {
 		"en": "Recall Hunter",
@@ -809,7 +842,8 @@
 		"fr": "Rappeleur Chasseur",
 		"pt": "Recall Caçador",
 		"cn": "瞬返猎人",
-		"kr": "리콜 헌터"
+		"kr": "리콜 헌터",
+		"de": "Rückrufer-Jäger"
 	},
 	"predator": {
 		"en": "Predator",
@@ -818,7 +852,8 @@
 		"fr": "Prédateur",
 		"pt": "Predador",
 		"cn": "捕食者",
-		"kr": "프레데터"
+		"kr": "프레데터",
+		"de": "Räuber"
 	},
 	"locust": {
 		"en": "Locust",
@@ -827,7 +862,8 @@
 		"fr": "Sauterelle",
 		"pt": "Gafanhoto",
 		"cn": "蝗虫",
-		"kr": "로커스트"
+		"kr": "로커스트",
+		"de": "Heuschrecke"
 	},
 	"kraken": {
 		"en": "Kraken",
@@ -836,16 +872,18 @@
 		"fr": "Kraken",
 		"pt": "Kraken",
 		"cn": "克拉肯",
-		"kr": "크라켄"
+		"kr": "크라켄",
+		"de": "Kraken"
 	},
 	"katbus": {
-		"en": "Katbus",
-		"es": "Katbus",
-		"es-419": "Katbus",
-		"fr": "Katbus",
-		"pt": "Katbus",
-		"cn": "猫巴士",
-		"kr": "캣버스"
+		"en": "Katbus 😻",
+		"es": "Katbus 😻",
+		"es-419": "Katbus 😻",
+		"fr": "Katbus 😻",
+		"pt": "Katbus 😻",
+		"cn": "猫巴士 😻",
+		"kr": "캣버스 😻",
+		"de": "Katzendrohne 😻"
 	},
 	"heavyhunter": {
 		"en": "Heavy Hunter",
@@ -854,7 +892,8 @@
 		"fr": "Chasseur Lourd",
 		"pt": "Caçador Pesado",
 		"cn": "重型猎人",
-		"kr": "헤비 헌터"
+		"kr": "헤비 헌터",
+		"de": "Schwerer Jäger"
 	},
 	"behemoth": {
 		"en": "Behemoth",
@@ -863,7 +902,8 @@
 		"fr": "Béhémoth",
 		"pt": "Béhemoth",
 		"cn": "巨兽",
-		"kr": "비헤모스"
+		"kr": "비헤모스",
+		"de": "Behemoth"
 	},
 	"advancedblink": {
 		"en": "Advanced Blink",
@@ -872,7 +912,8 @@
 		"fr": "Téléportation Avancée",
 		"pt": "Piscar Avançado",
 		"cn": "高级闪跃",
-		"kr": "고급 블링크"
+		"kr": "고급 블링크",
+		"de": "Verbesserter Teleporter"
 	},
 	"advanceddestroyer": {
 		"en": "Advanced Destroyer",
@@ -881,7 +922,8 @@
 		"fr": "Destructeur Avancé",
 		"pt": "Destruidor Avançado",
 		"cn": "高级歼灭者",
-		"kr": "고급 디스트로이어"
+		"kr": "고급 디스트로이어",
+		"de": "Verbesserter Vernichter"
 	},
 	"advancedrecall": {
 		"en": "Advanced Recall",
@@ -890,7 +932,8 @@
 		"fr": "Rappel Avancé",
 		"pt": "Recall Avançado",
 		"cn": "高级瞬返",
-		"kr": "고급 리콜"
+		"kr": "고급 리콜",
+		"de": "Verbesserter Rückruf"
 	},
 	"advancedbot": {
 		"en": "Advanced Bot",
@@ -899,7 +942,8 @@
 		"fr": "Robot Avancé",
 		"pt": "Bot Avançado",
 		"cn": "高级机器人",
-		"kr": "고급 봇"
+		"kr": "고급 봇",
+		"de": "Verbesserter Bot"
 	},
 	"artillery": {
 		"en": "Artillery",
@@ -908,7 +952,8 @@
 		"fr": "Artillerie",
 		"pt": "Artilharia",
 		"cn": "炮兵",
-		"kr": "포병"
+		"kr": "포병",
+		"de": "Artillerie"
 	},
 	"assaultbot": {
 		"en": "Assault Bot",
@@ -917,7 +962,8 @@
 		"fr": "Robot d'assaut",
 		"pt": "Bot de Assalto",
 		"cn": "突击机器人",
-		"kr": "어썰트 봇"
+		"kr": "어썰트 봇",
+		"de": "Sturm-Bot"
 	},
 	"bulwark": {
 		"en": "Bulwark",
@@ -926,7 +972,8 @@
 		"fr": "Bastion",
 		"pt": "Baluarte",
 		"cn": "防御堡垒",
-		"kr": "불워크"
+		"kr": "불워크",
+		"de": "Bollwerk"
 	},
 	"swiftshocker": {
 		"en": "Swift Shocker",
@@ -935,7 +982,8 @@
 		"fr": "Rappeleur Rapide",
 		"pt": "Electrobot Ágil",
 		"cn": "迅捷震荡者",
-		"kr": "스위프트 쇼커"
+		"kr": "스위프트 쇼커",
+		"de": "Schneller Schocker"
 	},
 	"blinkhunter": {
 		"en": "Blink Hunter",
@@ -944,7 +992,8 @@
 		"fr": "Chasseur de Téléportation",
 		"pt": "Caçador de Piscar",
 		"cn": "闪跃猎人",
-		"kr": "블링크 헌터"
+		"kr": "블링크 헌터",
+		"de": "Teleporter-Jäger"
 	},
 	"ground": {
 		"en": "Ground",

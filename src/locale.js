@@ -2,10 +2,19 @@ import locales from './locale/locales.json';
 
 
 const defaultLocale = 'en'
-
+const localeList = [
+	'en',
+	'cn',
+	'fr',
+	'de',
+	'es',
+	'es-419',
+	'jp',
+	'kr',
+	'pt'
+]
 if (localStorage.getItem('locale') == null) localStorage.setItem('locale', defaultLocale)
 var currentLocale = localStorage.getItem('locale');
-currentLocale = 'cn'; //for testing
 
 //create locale function which takes a string and returns a translated string from a json file
 function locale(key) {
@@ -29,5 +38,8 @@ function getLocale() {
 	return currentLocale;
 }
 
+function getLocaleList() {
+	return localeList;
+}
 
-export { locale, setLocale, getLocale };
+export { locale, setLocale, getLocale, getLocaleList };

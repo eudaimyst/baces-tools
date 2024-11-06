@@ -1,4 +1,5 @@
 
+import { locale, setLocale, getLocale, getLocaleList } from './locale';
 
 const linkData = [{
 	name: 'Battle Aces Official Website',
@@ -109,7 +110,8 @@ function expandMenu(expand) {
 	sidebarLogoImg.style.width = '100%';
 	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
 	if (expand) {
-		sidebar.style.width = '200px';
+		sidebar.classList.add('sidebar_expanded')
+		sidebar.classList.remove('sidebar_contracted')
 		// wrapper.style.marginLeft = '200px';
 		sidebar.appendChild(sidebar_title_div);
 		sidebar.appendChild(sidebar_content_div);
@@ -119,7 +121,8 @@ function expandMenu(expand) {
 			sidebar.removeChild(sidebar_title_v_div);
 		};
 	} else {
-		sidebar.style.width = '50px';
+		sidebar.classList.remove('sidebar_expanded')
+		sidebar.classList.add('sidebar_contracted')
 		// wrapper.style.marginLeft = '50px';
 		//if children exist
 		if (sidebar.children.length > 0) {
@@ -141,6 +144,33 @@ expandMenu(false);
 
 //#tag sidebar-content this is where everything in the sidebar goes
 
+
+//create a drop down to select a language
+const languageSelectDiv = document.createElement('div');
+languageSelectDiv.classList.add('languageSelectDiv');
+sidebar_content_div.appendChild(languageSelectDiv);
+const languageSelect = document.createElement('select');
+languageSelect.classList.add('languageSelect');
+languageSelectDiv.appendChild(languageSelect);
+//create an option for each language in the localeData array
+function createLanguageOption(value, text) {
+	const languageSelectOption = document.createElement('option');
+	languageSelectOption.value = value;
+	languageSelectOption.innerHTML = text;
+	languageSelect.appendChild(languageSelectOption);
+}
+//for each value in localeList
+var localeList = getLocaleList();
+for (let i = 0; i < localeList.length; i++) {
+	createLanguageOption(localeList[i], localeList[i]);
+}
+//when a language is selected set hte locale
+languageSelect.addEventListener('change', () => {
+	setLocale(languageSelect.value);
+	location.reload();
+});
+//set the current option to the current locale
+languageSelect.value = getLocale();
 //create a div which has a menu of links. The div should have a header, which can be clicked to expand, to show the links
 const linksDiv = document.createElement('div');
 linksDiv.classList.add('links_div');
