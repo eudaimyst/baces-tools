@@ -140,9 +140,17 @@ var unitContentOutOfDate = true;
 if (unitContentOutOfDate) {
 	var outOfDateBanner = document.createElement('div');
 	outOfDateBanner.classList.add('outOfDateBanner');
-	outOfDateBanner.textContent = 'Update 10/11/24: Unit stats are out of date as of closed beta 2, official stats will be available in a future game update';
+	outOfDateBanner.textContent = locale("statsOutdated");
 	//make the banner the will width of the parent div and only the height of the text
 	unit_view.appendChild(outOfDateBanner);
+	//make the div a clickable link to 
+	//when the div is clicked, open the link in a new tab
+	outOfDateBanner.addEventListener('click', function () {
+		window.open('https://www.reddit.com/r/BattleAces/comments/1gly8hp/balance_update_tomorrow_118/', '_blank');
+	});
+	//change the icon cursor the standard hyperlink cursor
+	//make the banner text bold
+	outOfDateBanner.style.cursor = 'pointer';
 }
 
 
