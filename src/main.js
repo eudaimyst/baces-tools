@@ -133,6 +133,19 @@ unit_content.classList.add('view_content');
 unit_content.id = 'unit_content';
 unit_view.appendChild(unit_content);
 
+
+//add a banner that says the unit content is out of date
+//if the unit content is out of date
+var unitContentOutOfDate = true;
+if (unitContentOutOfDate) {
+	var outOfDateBanner = document.createElement('div');
+	outOfDateBanner.classList.add('outOfDateBanner');
+	outOfDateBanner.textContent = 'Update 10/11/24: Unit stats are out of date as of closed beta 2, official stats will be available in a future game update';
+	//make the banner the will width of the parent div and only the height of the text
+	unit_view.appendChild(outOfDateBanner);
+}
+
+
 const deck_view = document.createElement('div');
 deck_view.id = 'deck_view-h';
 deck_view.classList.add('view');
