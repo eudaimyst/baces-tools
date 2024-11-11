@@ -960,3 +960,8 @@ sup {
 	transform: translate(0, -75%);
 	text-decoration: underline;
 }
+
+.socials_img {
+	width: 1.5vmin;
+	padding: 0 0 0 10;
+}

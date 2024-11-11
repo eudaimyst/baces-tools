@@ -17,14 +17,17 @@ const linkData = [{
 	name: 'Crablab.gg',
 	url: 'https://crablab.gg/'
 }, {
-	name: 'Battle Aces Stats',
-	url: 'https://battle-aces-stats.com'
-}, {
 	name: 'SimpleAces',
 	url: 'https://jackiefae.github.io/simpleaces.html'
 }, {
+	name: "Empress' Stat Sheet *NEW*",
+	url: 'https://docs.google.com/spreadsheets/d/14bXhjgwADAZbQT-u2X1wj4SF_5uf6C43BsGCa9tFHdo/edit?pli=1&gid=0#gid=0'
+}, {
 	name: 'BA by Conqueror',
 	url: 'https://docs.google.com/spreadsheets/d/1Y5sro2kxbDu2fCmKHcKmEFuzjpDd8SsFaifKDFY1SIg/edit?gid=0#gid=0'
+}, {
+	name: 'Battle Aces Stats *DEFUNCT*',
+	url: 'https://battle-aces-stats.com'
 }
 ]
 
@@ -344,7 +347,40 @@ function advertisement() {
 	return adsDiv;
 }
 
+function socials() {
+	const socialsDiv = document.createElement('div');
+	socialsDiv.classList.add('socials_div');
+	socialsDiv.textContent = 'feedback welcome:';
+	//add a clickable image link
+	const discordImg = document.createElement('img');
+	discordImg.src = 'images/feedback/discord.png';
+	discordImg.classList.add('socials_img');
+	//add a link to the socials image
+	discordImg.addEventListener('click', () => {
+		window.open('https://discord.gg/KUC223kV', '_blank');
+	});
+	//make hover icon
+	discordImg.addEventListener('mouseover', () => {
+		discordImg.style.cursor = 'pointer';
+	});
 
+	const emailImg = document.createElement('img');
+	emailImg.src = 'images/feedback/email.png';
+	emailImg.classList.add('socials_img');
+	//add a link to the socials image
+	emailImg.addEventListener('click', () => {
+		window.open('mailto: baces.tools@gmail.com', '_blank');
+	});
+	//make hover icon
+	emailImg.addEventListener('mouseover', () => {
+		emailImg.style.cursor = 'pointer';
+	});
+
+	socialsDiv.appendChild(discordImg);
+	socialsDiv.appendChild(emailImg);
+	return socialsDiv;
+}
+sidebar_content_div.appendChild(socials());
 
 
 export { sidebar, advertisement, updateBG };
