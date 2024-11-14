@@ -25,9 +25,6 @@ const linkData = [{
 }, {
 	name: 'BA by Conqueror',
 	url: 'https://docs.google.com/spreadsheets/d/1Y5sro2kxbDu2fCmKHcKmEFuzjpDd8SsFaifKDFY1SIg/edit?gid=0#gid=0'
-}, {
-	name: 'Battle Aces Stats *DEFUNCT*',
-	url: 'https://battle-aces-stats.com'
 }
 ]
 

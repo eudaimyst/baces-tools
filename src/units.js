@@ -42,9 +42,9 @@ const traitCounteredBy = {
 class Unit {
 	constructor(jsonImportedUnit) {
 		Object.keys(jsonImportedUnit).forEach((key) => {
-			var cleanNameKey = key;
-			cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
+			var cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
 			var value = jsonImportedUnit[key];
+			if (value == null) return;
 			if (value.constructor == String) {
 				if (cleanNameKey != 'emoji' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'website') {
 					value = removeSpacesCapitalsSpecialCharacters(value);
@@ -54,8 +54,9 @@ class Unit {
 				this['bandwidth'] = value;
 			} else if (cleanNameKey == 'damageg') {
 				this['damage'] = value;
-			} else {
-				this[cleanNameKey] = value;
+			}
+			else {
+				this[cleanNameKey] = value
 				//calculations after dpsa for table column order purposes
 				if (cleanNameKey == 'dpsa') this['dpsm'] = Math.floor(calcDPSM(this));
 				else if (cleanNameKey == 'health') this['hp/100'] = Math.floor(this.health / 100);
@@ -68,7 +69,20 @@ class Unit {
 			}
 		}
 		);
-		//instead of 
+
+		//after all has been imported, add the missing stats
+		//for each key
+		for (let key of Object.keys(this)) {
+			if (key == 'target1' && this[key] == 'air') {
+				this.damagea = Math.floor(this.multi1 * this.damage)
+			} else if (key == 'target2' && this[key] == 'air') {
+				this.damagea = Math.floor(this.multi2 * this.damage)
+			} else if (key == 'target3' && this[key] == 'air') {
+				this.damagea = Math.floor(this.multi3 * this.damage)
+			}
+		}
+		if (this.dpsg == undefined) this.dpsg = Math.round(this.damage / this.attackrate)
+		if (this.dpsa == undefined && this.damagea != null) this.dpsa = Math.round(this.damagea / this.attackrate);
 
 		this['tier'] = buildingTiers[this['building']] || 0;
 		this['image'] = jsonImportedUnit.slug;

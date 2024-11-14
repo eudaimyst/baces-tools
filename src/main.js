@@ -142,7 +142,7 @@ if (unitContentOutOfDate) {
 	outOfDateBanner.classList.add('outOfDateBanner');
 	outOfDateBanner.textContent = locale("statsOutdated");
 	//make the banner the will width of the parent div and only the height of the text
-	unit_view.appendChild(outOfDateBanner);
+	//unit_view.appendChild(outOfDateBanner);
 	//make the div a clickable link to 
 	//when the div is clicked, open the link in a new tab
 	outOfDateBanner.addEventListener('click', function () {
@@ -1029,10 +1029,10 @@ var tableUnitRows = {};
 var excludeKeys = [];
 
 function drawUnitTable() {
-	excludeKeys = ['traitcounters', 'traitcounteredby', 'attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
+	excludeKeys = ['multi1', 'multi2', 'multi3', 'target1', 'target2', 'target3', 'traitcounters', 'traitcounteredby', 'attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
 	if (simpleStatsMode) {
 		//add to excludeKeys, the following: damage, damagea, dps, dpsa
-		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
+		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health',);
 	}
 	else {
 		excludeKeys.push('dpsm', 'hp/100')
