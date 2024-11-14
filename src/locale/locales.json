@@ -1,14 +1,6 @@
 {
 	"statsOutdated": {
-		"en": "Unit stats are out of date as of closed beta 2, official stats will be available in a future game update.",
-		"es": "Las estadísticas de las unidades están desactualizadas desde la beta cerrada 2; las estadísticas oficiales estarán disponibles en una actualización futura del juego.",
-		"es-419": "Las estadísticas de las unidades están desactualizadas desde la beta cerrada 2; las estadísticas oficiales estarán disponibles en una próxima actualización del juego.",
-		"fr": "Les statistiques des unités sont obsolètes depuis la bêta fermée 2; les statistiques officielles seront disponibles dans une future mise à jour du jeu.",
-		"pt": "As estatísticas das unidades estão desatualizadas desde a beta fechada 2; as estatísticas oficiais estarão disponíveis em uma atualização futura do jogo.",
-		"cn": "截至封闭测试版2，单位统计数据已过期，官方统计数据将在未来的游戏更新中提供。",
-		"kr": "유닛 통계는 클로즈 베타 2 이후로 구식이며, 공식 통계는 향후 게임 업데이트에서 제공될 예정입니다.",
-		"jp": "クローズドベータ2時点でユニットのステータスは古くなっており、公式のステータスは将来のゲームアップデートで提供される予定です。",
-		"de": "Die Einheitenstatistiken sind seit der Closed Beta 2 veraltet, offizielle Statistiken werden in einem zukünftigen Spiel-Update verfügbar sein."
+		"en": "Currently updating stats, shaln't be much longer."
 	},
 	"sort": {
 		"en": "sort",
