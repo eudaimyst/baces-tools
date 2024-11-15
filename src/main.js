@@ -4,20 +4,14 @@ import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import { sidebar, updateBG } from './menu';
 import { locale } from './locale';
-
-
-
 import { units } from './units';
 
-
-const logging = false;
+const logging = true;
 function myLog(message) {
 	if (logging) console.log(message);
 }
 
-
 var unitList = Object.values(units);
-
 
 const minValues = [];
 const maxValues = [];
@@ -29,7 +23,7 @@ myLog('maxvalues', maxValues);
 for (var unit of unitList) {
 	myLog(unit);
 	for (var [key, value] of Object.entries(unit)) {
-		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dpsg' || key == 'dpsa') {
+		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dps' || key == 'dpsa') {
 			if (minValues[key] == undefined || value <= minValues[key]) {
 				minValues[key] = value;
 				if (key == 'speed') myLog(key, minValues[key]);
@@ -43,7 +37,7 @@ for (var unit of unitList) {
 myLog('minvalues', minValues);
 myLog('maxvalues', maxValues);
 
-var statsUnit = ['health', 'damage', 'damagea', 'speed', 'range', 'dpsg', 'dpsa'];
+var statsUnit = ['health', 'damage', 'damagea', 'speed', 'range', 'dps', 'dpsa'];
 
 //#region deck format
 
@@ -142,7 +136,7 @@ if (unitContentOutOfDate) {
 	outOfDateBanner.classList.add('outOfDateBanner');
 	outOfDateBanner.textContent = locale("statsOutdated");
 	//make the banner the will width of the parent div and only the height of the text
-	unit_view.appendChild(outOfDateBanner);
+	//unit_view.appendChild(outOfDateBanner);
 	//make the div a clickable link to 
 	//when the div is clicked, open the link in a new tab
 	outOfDateBanner.addEventListener('click', function () {
@@ -620,7 +614,7 @@ function calculateDeckStats(deckID) {
 					if (key == 'ability' || key == 'type' || key == 'traits' || key == 'manufacturer') {
 						stats[key].push(deck[i][key]);
 					}
-					else stats[key] += deck[i][key];
+					else stats[key] += Number(deck[i][key]);
 				}
 			}
 		}
@@ -633,7 +627,7 @@ function calculateDeckStats(deckID) {
 			stat_category_cells[deckID][key].innerHTML = '';
 			if (key == 'ability') {
 				for (var i = 0; i < stats[key].length; i++) {
-					if (stats[key][i] != undefined && (stats[key][i] != '')) {
+					if (stats[key][i] != undefined && (stats[key][i] != ' ')) {
 						var img = document.createElement('img');
 						img.src = 'images/abilities/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
@@ -812,8 +806,8 @@ const sortOptions = [
 	[locale('type'), 'type'],
 	[locale('damage'), 'damage'],
 	[locale('airDamage'), 'damagea'],
-	[locale('combinedDPS'), 'dpsm'],
-	[locale('groundDPS'), 'dpsg'],
+	[locale('combinedDPS'), 'simpledamage'],
+	[locale('groundDPS'), 'dps'],
 	[locale('airDPS'), 'dpsa'],
 	[locale('speed'), 'speed'],
 	[locale('range'), 'range'],
@@ -1029,13 +1023,13 @@ var tableUnitRows = {};
 var excludeKeys = [];
 
 function drawUnitTable() {
-	excludeKeys = ['traitcounters', 'traitcounteredby', 'attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
+	excludeKeys = ['multi1', 'multi2', 'multi3', 'target1', 'target2', 'target3', 'traitcounters', 'traitcounteredby', 'attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
 	if (simpleStatsMode) {
-		//add to excludeKeys, the following: damage, damagea, dps, dpsa
-		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health');
+		//add to excludeKeys, the following: damageg, damagea, dps, dpsa
+		excludeKeys.push('damage', 'speed', 'damagea', 'dps', 'dpsa', 'health');
 	}
 	else {
-		excludeKeys.push('dpsm', 'hp/100')
+		excludeKeys.push('simplespeed', 'simpledamage', 'hp / 100')
 	}
 	//create a table element
 	var unit_table = document.createElement('table');
@@ -1057,12 +1051,12 @@ function drawUnitTable() {
 
 	//##tag unit-content-table-loop
 	//table header using the 2nd object in the object list
-	for (const [key] of Object.entries(unitList[1])) {
+	for (const [key] of Object.entries(unitList[0])) {
 		if (!excludeKeys.includes(key)) {
 			var unit_table_header = document.createElement('th');
 			unit_table_header.classList.add('unit_table_header');
 			//add some images to certain headers
-			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range') {
+			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'simplespeed' || key == 'range') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + key + '.png';
 				img.classList.add('unit_table_header_image');
@@ -1083,7 +1077,7 @@ function drawUnitTable() {
 				img.setAttribute('title', 'Health/100');
 				unit_table_header.appendChild(img);
 				unit_table_header.classList.add('unit_table_smalltext');
-			} else if (key == 'dpsm') {
+			} else if (key == 'simpledamage') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damage' + '.png';
 				img.classList.add('unit_table_header_image');
@@ -1092,7 +1086,7 @@ function drawUnitTable() {
 				unit_table_header.appendChild(img);
 				unit_table_header.classList.add('unit_table_smalltext');
 			}
-			else if (key == 'dpsg') {
+			else if (key == 'dps') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damage' + '.png';
 				img.classList.add('unit_table_header_image');
@@ -1184,6 +1178,7 @@ function drawUnitTable() {
 		unit_table_row.appendChild(unit_table_cell);
 		unit_table_row.addEventListener('mouseover', unitMouseOver);
 
+		console.log('drawing row for unit', unit);
 		for (var [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
 				var unit_table_cell = document.createElement('td');
@@ -1214,7 +1209,7 @@ function drawUnitTable() {
 					img.classList.add('unit_table_image_medium');
 					unit_table_cell.appendChild(img);
 				} else if (key == 'ability') {
-					if (value != '') {
+					if (value != ' ') {
 						img.src = 'images/abilities/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
@@ -1245,24 +1240,34 @@ function drawUnitTable() {
 						unit_table_cell.appendChild(img);
 					}
 				} else if (key == 'traits') {
-					value.forEach(trait => {
-						if (trait != 'none') {
-							var img = document.createElement('img');
-							img.src = 'images/traits/' + trait + '.png';
-							img.classList.add('unit_table_image_small');
-							img.setAttribute('alt', trait);
-							img.setAttribute('title', trait);
-							unit_table_cell.appendChild(img);
-						}
-					});
+					if (value) {
+						value.forEach(trait => {
+							if (trait != 'none') {
+								var img = document.createElement('img');
+								img.src = 'images/traits/' + trait + '.png';
+								img.classList.add('unit_table_image_small');
+								img.setAttribute('alt', trait);
+								img.setAttribute('title', trait);
+								unit_table_cell.appendChild(img);
+							}
+						});
+					}
 					unit_table_cell.classList.add('unit_table_cell_traits');
 				} else {
-					if (key == 'name' || key == 'type') {
-						//div.classList.add('unit_table_name_cell');
+					if (key == 'name') {
 						unit_table_cell.innerHTML = locale(value)
-
+					} else if (key == 'type') {
+						//if not simple stats
+						if (!simpleStatsMode) {
+							if (value == 'ground') unit_table_cell.innerHTML = locale('shortGround');
+							if (value == 'air') unit_table_cell.innerHTML = locale('shortAir');
+						}
+						else unit_table_cell.innerHTML = locale(value);
 					}
-					else if (value != 0) unit_table_cell.innerHTML = value;
+					else {
+						console.log(unit.name + ' key: ' + key + ' value: ' + value)
+						unit_table_cell.innerHTML = value;
+					}
 				}
 
 				if (key == 'health' || key == 'damage' || key == 'speed' || key == 'range') {
@@ -1402,7 +1407,7 @@ function redrawUnitContent() {
 	unit_content.innerHTML = '';
 	//for each object in unitsJson_base create a new unit passing the object
 	myLog('Redrawing Unit Content\n-----------------');
-	//myLog(filteredUnitList);
+	myLog(filteredUnitList);
 
 	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
 	if (hideUnavailMode == true) {
@@ -1602,7 +1607,7 @@ var sortedUnitData = {
 	damagea: [],
 	speed: [],
 	range: [],
-	dpsg: [],
+	dps: [],
 	dpsa: [],
 }
 var sortData = {
@@ -1611,7 +1616,7 @@ var sortData = {
 	damagea: simpleSort(unitList, 'damagea', sortedUnitData.damagea),
 	speed: simpleSort(unitList, 'speed', sortedUnitData.speed),
 	range: simpleSort(unitList, 'range', sortedUnitData.range),
-	dpsg: simpleSort(unitList, 'dpsg', sortedUnitData.dpsg),
+	dps: simpleSort(unitList, 'dps', sortedUnitData.dps),
 	dpsa: simpleSort(unitList, 'dpsa', sortedUnitData.dpsa),
 }
 
@@ -1619,7 +1624,7 @@ var sortData = {
 
 //returns a colour on a gradient scale from red to green based on the value
 function getColour(value, min, max) {
-	myLog('getColour:', value, min, max);
+	//myLog('getColour:', value, min, max);
 	var red = 0;
 	var green = 0;
 	//if value is less than min, return red
@@ -1637,8 +1642,8 @@ function getColour(value, min, max) {
 		red = 255 - Math.round((value - min) / (max - min) * 255);
 		green = Math.round((value - min) / (max - min) * 255);
 	}
-	myLog('FJSDKALFJKL;SADFJSKLADFJKLASDFJKLADSFJKLADSFJNMKLSADF');
-	myLog('rgb(' + red + ', ' + green + ', 0)')
+	//myLog('FJSDKALFJKL;SADFJSKLADFJKLASDFJKLADSFJKLADSFJNMKLSADF');
+	//myLog('rgb(' + red + ', ' + green + ', 0)')
 	return 'rgb(' + red + ', ' + green + ', 0)';
 
 }
@@ -1647,8 +1652,8 @@ function getColour(value, min, max) {
 //data is sortdata for the label, 
 function sortColors(_unit, label) {
 	//get the unit by the unitName 
-	myLog('sortColors:', _unit, data, label);
-	myLog('huh?: ', _unit[label], minValues[label], maxValues[label]);
+	//myLog('sortColors:', _unit, data, label);
+	//myLog('huh?: ', _unit[label], minValues[label], maxValues[label]);
 	var color = getColour(_unit[label], minValues[label], maxValues[label]);
 	var sortedColors = [];
 
@@ -1719,20 +1724,24 @@ function updateTraitsContainer(_unit) {
 		});
 
 		statsUnitTraitCountersDiv.textContent = locale('counters') + ': ';
-		_unit.traitcounters.forEach(function (trait) {
-			var traitImg = document.createElement('img');
-			traitImg.classList.add('statsUnitTraitImg');
-			traitImg.src = 'images/traits/' + trait + '.png';
-			statsUnitTraitCountersDiv.appendChild(traitImg);
-		});
+		if (_unit.traitcounters) {
+			_unit.traitcounters.forEach(function (trait) {
+				var traitImg = document.createElement('img');
+				traitImg.classList.add('statsUnitTraitImg');
+				traitImg.src = 'images/traits/' + trait + '.png';
+				statsUnitTraitCountersDiv.appendChild(traitImg);
+			});
+		}
 
 		statsUnitTraitCounteredByDiv.textContent = locale('counteredBy') + ': ';
-		_unit.traitcounteredby.forEach(function (trait) {
-			var traitImg = document.createElement('img');
-			traitImg.classList.add('statsUnitTraitImg');
-			traitImg.src = 'images/traits/' + trait + '.png';
-			statsUnitTraitCounteredByDiv.appendChild(traitImg);
-		});
+		if (_unit.traitcounteredby) {
+			_unit.traitcounteredby.forEach(function (trait) {
+				var traitImg = document.createElement('img');
+				traitImg.classList.add('statsUnitTraitImg');
+				traitImg.src = 'images/traits/' + trait + '.png';
+				statsUnitTraitCounteredByDiv.appendChild(traitImg);
+			});
+		}
 	}
 
 }
@@ -1912,7 +1921,7 @@ function statRankChart(label) {
 					},
 					max: function () {
 						if (label == 'health') return 13000;
-						else if (label == 'dpsg') return 1800;
+						else if (label == 'dps') return 1800;
 						else if (label == 'dpsa') return 800;
 						else return maxValues[label];
 					},
@@ -1984,7 +1993,7 @@ function updateStatsUnitBottomContainer(name, matter, energy, bandwidth, buildin
 	statsUnitEnergyDiv.children[1].innerHTML = energy;
 	statsUnitBandwidthDiv.children[1].innerHTML = bandwidth;
 	statsUnitBuildingDiv.children[0].src = 'images/techtiers/' + building + '.svg';
-	if (ability) {
+	if (ability != ' ') {
 		//show the element
 		statsUnitAbilityDiv.children[0].style.display = 'inline';
 		statsUnitAbilityDiv.children[0].src = 'images/abilities/' + ability + '.png';

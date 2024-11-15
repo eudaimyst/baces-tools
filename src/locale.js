@@ -20,8 +20,8 @@ var currentLocale = localStorage.getItem('locale');
 
 //create locale function which takes a string and returns a translated string from a json file
 function locale(key) {
-	console.log('locale key: ' + key + ' locale: ' + currentLocale)
-	console.log(locales);
+	//console.log('locale key: ' + key + ' locale: ' + currentLocale)
+	//console.log(locales);
 	if (locales[key] == undefined) {
 		return '$' + key;
 	}

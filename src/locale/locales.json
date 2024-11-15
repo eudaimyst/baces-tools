@@ -1020,6 +1020,28 @@
 		"jp": "空気",
 		"de": "Luft"
 	},
+	"shortGround": {
+		"en": "G",
+		"es": "T",
+		"es-419": "T",
+		"fr": "S",
+		"pt": "T",
+		"cn": "地面",
+		"kr": "지상",
+		"jp": "地面",
+		"de": "B"
+	},
+	"shortAir": {
+		"en": "A",
+		"es": "A",
+		"es-419": "A",
+		"fr": "A",
+		"pt": "A",
+		"cn": "空气",
+		"kr": "공기",
+		"jp": "空気",
+		"de": "L"
+	},
 	"basedefense": {
 		"en": "Base Defense",
 		"es": "Defensa de Base",
