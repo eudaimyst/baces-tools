@@ -20,11 +20,11 @@ const linkData = [{
 	name: 'SimpleAces',
 	url: 'https://jackiefae.github.io/simpleaces.html'
 }, {
+	name: 'BA Units',
+	url: 'https://baunits.com'
+}, {
 	name: "Empress' Stat Sheet",
 	url: 'https://docs.google.com/spreadsheets/d/14bXhjgwADAZbQT-u2X1wj4SF_5uf6C43BsGCa9tFHdo/edit?pli=1&gid=0#gid=0'
-}, {
-	name: 'BA Units **New**',
-	url: 'https://baunits.com'
 }, {
 	name: 'BA by Conqueror',
 	url: 'https://docs.google.com/spreadsheets/d/1Y5sro2kxbDu2fCmKHcKmEFuzjpDd8SsFaifKDFY1SIg/edit?gid=0#gid=0'
