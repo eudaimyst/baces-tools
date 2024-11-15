@@ -10,7 +10,7 @@ import { locale } from './locale';
 import { units } from './units';
 
 
-const logging = false;
+const logging = true;
 function myLog(message) {
 	if (logging) console.log(message);
 }
@@ -1031,11 +1031,11 @@ var excludeKeys = [];
 function drawUnitTable() {
 	excludeKeys = ['multi1', 'multi2', 'multi3', 'target1', 'target2', 'target3', 'traitcounters', 'traitcounteredby', 'attackrate', 'tier', 'splash', 'small', 'big', 'antiair', 'antibig', 'slug', 'videoturnaround', 'videogameplay', 'emoji', 'website'];
 	if (simpleStatsMode) {
-		//add to excludeKeys, the following: damage, damagea, dps, dpsa
-		excludeKeys.push('damage', 'damagea', 'dpsg', 'dpsa', 'health',);
+		//add to excludeKeys, the following: damageg, damagea, dps, dpsa
+		excludeKeys.push('damageg', 'damagea', 'dpsg', 'dpsa', 'health');
 	}
 	else {
-		excludeKeys.push('dpsm', 'hp/100')
+		excludeKeys.push('damagecomb', 'hp/100')
 	}
 	//create a table element
 	var unit_table = document.createElement('table');
@@ -1083,7 +1083,7 @@ function drawUnitTable() {
 				img.setAttribute('title', 'Health/100');
 				unit_table_header.appendChild(img);
 				unit_table_header.classList.add('unit_table_smalltext');
-			} else if (key == 'dpsm') {
+			} else if (key == 'simpledmg') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damage' + '.png';
 				img.classList.add('unit_table_header_image');
@@ -1257,12 +1257,20 @@ function drawUnitTable() {
 					});
 					unit_table_cell.classList.add('unit_table_cell_traits');
 				} else {
-					if (key == 'name' || key == 'type') {
-						//div.classList.add('unit_table_name_cell');
+					if (key == 'name') {
 						unit_table_cell.innerHTML = locale(value)
-
+					} else if (key == 'type') {
+						//if not simple stats
+						if (!simpleStatsMode) {
+							if (value == 'ground') unit_table_cell.innerHTML = locale('shortGround');
+							if (value == 'air') unit_table_cell.innerHTML = locale('shortAir');
+						}
+						else unit_table_cell.innerHTML = locale(value);
 					}
-					else if (value != 0) unit_table_cell.innerHTML = value;
+					else {
+						if (value == null || value == undefined) value = 'Z';
+						unit_table_cell.innerHTML = value;
+					}
 				}
 
 				if (key == 'health' || key == 'damage' || key == 'speed' || key == 'range') {
@@ -1402,7 +1410,7 @@ function redrawUnitContent() {
 	unit_content.innerHTML = '';
 	//for each object in unitsJson_base create a new unit passing the object
 	myLog('Redrawing Unit Content\n-----------------');
-	//myLog(filteredUnitList);
+	myLog(filteredUnitList);
 
 	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
 	if (hideUnavailMode == true) {
@@ -1619,7 +1627,7 @@ var sortData = {
 
 //returns a colour on a gradient scale from red to green based on the value
 function getColour(value, min, max) {
-	myLog('getColour:', value, min, max);
+	//myLog('getColour:', value, min, max);
 	var red = 0;
 	var green = 0;
 	//if value is less than min, return red
@@ -1637,8 +1645,8 @@ function getColour(value, min, max) {
 		red = 255 - Math.round((value - min) / (max - min) * 255);
 		green = Math.round((value - min) / (max - min) * 255);
 	}
-	myLog('FJSDKALFJKL;SADFJSKLADFJKLASDFJKLADSFJKLADSFJNMKLSADF');
-	myLog('rgb(' + red + ', ' + green + ', 0)')
+	//myLog('FJSDKALFJKL;SADFJSKLADFJKLASDFJKLADSFJKLADSFJNMKLSADF');
+	//myLog('rgb(' + red + ', ' + green + ', 0)')
 	return 'rgb(' + red + ', ' + green + ', 0)';
 
 }
@@ -1647,8 +1655,8 @@ function getColour(value, min, max) {
 //data is sortdata for the label, 
 function sortColors(_unit, label) {
 	//get the unit by the unitName 
-	myLog('sortColors:', _unit, data, label);
-	myLog('huh?: ', _unit[label], minValues[label], maxValues[label]);
+	//myLog('sortColors:', _unit, data, label);
+	//myLog('huh?: ', _unit[label], minValues[label], maxValues[label]);
 	var color = getColour(_unit[label], minValues[label], maxValues[label]);
 	var sortedColors = [];
 
@@ -1719,20 +1727,24 @@ function updateTraitsContainer(_unit) {
 		});
 
 		statsUnitTraitCountersDiv.textContent = locale('counters') + ': ';
-		_unit.traitcounters.forEach(function (trait) {
-			var traitImg = document.createElement('img');
-			traitImg.classList.add('statsUnitTraitImg');
-			traitImg.src = 'images/traits/' + trait + '.png';
-			statsUnitTraitCountersDiv.appendChild(traitImg);
-		});
+		if (_unit.traitcounters) {
+			_unit.traitcounters.forEach(function (trait) {
+				var traitImg = document.createElement('img');
+				traitImg.classList.add('statsUnitTraitImg');
+				traitImg.src = 'images/traits/' + trait + '.png';
+				statsUnitTraitCountersDiv.appendChild(traitImg);
+			});
+		}
 
 		statsUnitTraitCounteredByDiv.textContent = locale('counteredBy') + ': ';
-		_unit.traitcounteredby.forEach(function (trait) {
-			var traitImg = document.createElement('img');
-			traitImg.classList.add('statsUnitTraitImg');
-			traitImg.src = 'images/traits/' + trait + '.png';
-			statsUnitTraitCounteredByDiv.appendChild(traitImg);
-		});
+		if (_unit.traitcounteredby) {
+			_unit.traitcounteredby.forEach(function (trait) {
+				var traitImg = document.createElement('img');
+				traitImg.classList.add('statsUnitTraitImg');
+				traitImg.src = 'images/traits/' + trait + '.png';
+				statsUnitTraitCounteredByDiv.appendChild(traitImg);
+			});
+		}
 	}
 
 }

@@ -18,10 +18,12 @@ const buildingTiers = {
 
 
 
-function calcDPSM(unit) {
+function simpleDmg(unit) {
 	//damage per second per matter
-	if (unit.dpsg > unit.dpsa) return (unit.dpsg / 10);
-	else return (unit.dpsa / 10);
+	if (unit.dpsa) {
+		if (unit.dpsa > unit.dpsg) return (Math.round(unit.dpsa / 10));
+	}
+	return (Math.round(unit.dpsg / 10))
 }
 
 
@@ -38,6 +40,8 @@ const traitCounteredBy = {
 	small: 'splash',
 	antibig: 'small',
 }
+
+const keyOrder = ['image', 'name', 'type', 'building', 'matter', 'energy', 'bandwidth', 'health', 'hp/100', 'speed', 'range', 'simpledamage', 'damage', 'damagea', 'dps', 'dpsa', 'ability', 'traits', 'manufacturer']
 
 class Unit {
 	constructor(jsonImportedUnit) {
@@ -58,8 +62,7 @@ class Unit {
 			else {
 				this[cleanNameKey] = value
 				//calculations after dpsa for table column order purposes
-				if (cleanNameKey == 'dpsa') this['dpsm'] = Math.floor(calcDPSM(this));
-				else if (cleanNameKey == 'health') this['hp/100'] = Math.floor(this.health / 100);
+				if (cleanNameKey == 'health') this['hp/100'] = Math.floor(this.health / 100);
 			}
 			if (value == 'splash' || value == 'small' || value == 'antibig' || value == 'big' || value == 'antiair') {
 				if (this.traits == undefined) {
@@ -67,22 +70,19 @@ class Unit {
 				}
 				this.traits.push(value);
 			}
-		}
-		);
+		});
 
 		//after all has been imported, add the missing stats
 		//for each key
 		for (let key of Object.keys(this)) {
 			if (key == 'target1' && this[key] == 'air') {
-				this.damagea = Math.floor(this.multi1 * this.damage)
+				this['damagea'] = Math.floor(this.multi1 * this.damage)
 			} else if (key == 'target2' && this[key] == 'air') {
-				this.damagea = Math.floor(this.multi2 * this.damage)
+				this['damagea'] = Math.floor(this.multi2 * this.damage)
 			} else if (key == 'target3' && this[key] == 'air') {
-				this.damagea = Math.floor(this.multi3 * this.damage)
+				this['damagea'] = Math.floor(this.multi3 * this.damage)
 			}
 		}
-		if (this.dpsg == undefined) this.dpsg = Math.round(this.damage / this.attackrate)
-		if (this.dpsa == undefined && this.damagea != null) this.dpsa = Math.round(this.damagea / this.attackrate);
 
 		this['tier'] = buildingTiers[this['building']] || 0;
 		this['image'] = jsonImportedUnit.slug;
@@ -103,10 +103,32 @@ class Unit {
 			if (this.type == 'Air') this.traitcounteredby.push('antiair');
 		}
 	}
+};
+
+
+//to order the keys correctly using the keyOrder we create a new object using the data of the unit
+class UnitOrdered {
+	constructor(unit) {
+		//for each key in keyOrder
+		for (let key of keyOrder) {
+			//if the unit has the key
+			console.log('adding', key, unit[key])
+			console.log(unit)
+			if (unit[key]) {
+				//add the key and value to the new object
+				this[key] = unit[key];
+			}
+		}
+
+	}
 }
 
+
+
+
 const units = importedUnits.reduce((obj, unit) => {
-	obj[unit.slug] = new Unit(unit);
+	var tempUnit = new Unit(unit); //pre sorted units
+	obj[unit.slug] = new UnitOrdered(tempUnit);
 	return obj;
 }, {});
 
