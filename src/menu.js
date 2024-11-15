@@ -334,16 +334,8 @@ function advertisement() {
 	//create a div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
 	const adsDiv = document.createElement('div');
 	adsDiv.classList.add('ads_div');
-	adsDiv.innerHTML = '💸🤑';
-	adsDiv.style.textAlign = 'center';
-	adsDiv.style.fontWeight = 'bold';
-	adsDiv.style.color = 'gold';
-	adsDiv.style.textShadow = '0 0 10px black';
-	adsDiv.style.top = '50%';
-	//line spacing small
-	adsDiv.style.lineHeight = '.5';
-
-	adsDiv.style.fontSize = '60px';
+	adsDiv.innerHTML = 'Note: Only bonus damage for ANTI-AIR units are shown currently. Will work on adding the other bonus damages';
+	adsDiv.style.margin = '5px';
 	return adsDiv;
 }
 
@@ -382,6 +374,7 @@ function socials() {
 }
 sidebar_content_div.appendChild(socials());
 
+sidebar_content_div.appendChild(advertisement());
 
 export { sidebar, advertisement, updateBG };
 
