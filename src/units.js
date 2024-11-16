@@ -81,13 +81,13 @@ class Unit {
 			var found = false
 			for (let key of Object.keys(this)) {
 				if (key == 'target1' && (this[key] == 'air' || this[key] == 'bigair' || this.antiair == 'antiair')) {
-					this['damagea'] = Math.round((this.multi1 * this.damage) || this.damage)
+					this['damagea'] = Math.round(this.damage + (this.multi1 * this.damage) || this.damage)
 					found = true;
 				} else if (key == 'target2' && (this[key] == 'air' || this[key] == 'bigair' || this.antiair == 'antiair')) {
-					this['damagea'] = Math.round((this.multi2 * this.damage) || this.damage)
+					this['damagea'] = Math.round(this.damage + (this.multi2 * this.damage) || this.damage)
 					found = true;
 				} else if (key == 'target3' && (this[key] == 'air' || this[key] == 'bigair' || this.antiair == 'antiair')) {
-					this['damagea'] = Math.round((this.multi3 * this.damage) || this.damage)
+					this['damagea'] = Math.round(this.damage + (this.multi3 * this.damage) || this.damage)
 					found = true;
 				}
 			}
