@@ -16,9 +16,6 @@ const buildingTiers = {
 	'advancedstarforge': 3,
 }
 
-
-
-
 const traitCounters = {
 	big: 'splash',
 	splash: 'small',
@@ -77,7 +74,7 @@ class Unit {
 		//for each key
 		if (this.name == 'advancedblink') this['damagea'] = Math.floor(this['damage'] * .5)
 		else {
-			console.log('testair1 ' + this.name)
+			//console.log('testair1 ' + this.name)
 			var found = false
 			for (let key of Object.keys(this)) {
 				if (key == 'target1' && (this[key] == 'air' || this[key] == 'bigair' || this.antiair == 'antiair')) {
@@ -91,13 +88,13 @@ class Unit {
 					found = true;
 				}
 			}
-			console.log('testair1 ' + found + this['damagea'])
+			//console.log('testair1 ' + found + this['damagea'])
 			if (!found) {
 				if (this['antiair'] == 'antiair') this['damagea'] = this['damage']
 				else this['damagea'] = '0';
 			}
 		}
-		console.log('testAIR', this['name'], this['dpsa'])
+		//console.log('testAIR', this['name'], this['dpsa'])
 
 		//calculate dps (damage / attackrate), dpsa (damagea / attackrate)
 
@@ -114,8 +111,8 @@ class Unit {
 		var simpDam
 		if (this['dpsa'] > this['dps']) simpDam = Math.round(this.dpsa / 10);
 		else simpDam = (Math.round(this['dps'] / 10))
-		console.log('testing simpledamage ' + this.name + this.dps + simpDam);
-		console.log(this.dpsa, this.dpsg);
+		//console.log('testing simpledamage ' + this.name + this.dps + simpDam);
+		//console.log(this.dpsa, this.dpsg);
 		if (this.name == 'bomber') this.simpledamage = this.damage / 10;
 		else this.simpledamage = simpDam;
 
@@ -147,8 +144,8 @@ class UnitOrdered {
 		//for each key in keyOrder
 		for (let key of keyOrder) {
 			//if the unit has the key
-			console.log('adding', key, unit[key])
-			console.log(unit)
+			//console.log('adding', key, unit[key])
+			//console.log(unit)
 			if (unit[key]) {
 				//add the key and value to the new object
 				this[key] = unit[key];

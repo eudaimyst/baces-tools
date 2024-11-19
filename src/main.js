@@ -6,7 +6,7 @@ import { sidebar, updateBG } from './menu';
 import { locale } from './locale';
 import { units } from './units';
 
-const logging = true;
+const logging = false;
 function myLog(message) {
 	if (logging) console.log(message);
 }
@@ -1178,7 +1178,7 @@ function drawUnitTable() {
 		unit_table_row.appendChild(unit_table_cell);
 		unit_table_row.addEventListener('mouseover', unitMouseOver);
 
-		console.log('drawing row for unit', unit);
+		myLog('drawing row for unit', unit);
 		for (var [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
 				var unit_table_cell = document.createElement('td');
@@ -1265,7 +1265,7 @@ function drawUnitTable() {
 						else unit_table_cell.innerHTML = locale(value);
 					}
 					else {
-						console.log(unit.name + ' key: ' + key + ' value: ' + value)
+						myLog(unit.name + ' key: ' + key + ' value: ' + value)
 						unit_table_cell.innerHTML = value;
 					}
 				}

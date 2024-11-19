@@ -373,8 +373,9 @@ function socials() {
 	return socialsDiv;
 }
 sidebar_content_div.appendChild(socials());
-
 sidebar_content_div.appendChild(advertisement());
+console.log("sidebarlog")
+console.log(sidebar_content_div)
 
 export { sidebar, advertisement, updateBG };
 
