@@ -46,7 +46,7 @@ class Unit {
 				return;
 			}
 			if (value.constructor == String) {
-				if (cleanNameKey != 'emoji' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'website') {
+				if (cleanNameKey != 'emoji' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'website' && cleanNameKey != 'speed') {
 					value = removeSpacesCapitalsSpecialCharacters(value);
 				}
 			}
