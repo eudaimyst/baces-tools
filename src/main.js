@@ -16,9 +16,6 @@ var unitList = Object.values(units);
 const minValues = [];
 const maxValues = [];
 
-myLog('minvalues', minValues);
-myLog('maxvalues', maxValues);
-
 //for each unit in unitlist
 for (var unit of unitList) {
 	myLog(unit);
@@ -26,10 +23,14 @@ for (var unit of unitList) {
 		if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'range' || key == 'dps' || key == 'dpsa') {
 			if (minValues[key] == undefined || value <= minValues[key]) {
 				minValues[key] = value;
-				if (key == 'speed') myLog(key, minValues[key]);
+				//if (key == 'speed') myLog(key, minValues[key]);
 			}
 			if (maxValues[key] == undefined || value > maxValues[key]) {
-				maxValues[key] = value;
+
+				if (key == 'health') maxValues[key] = 13000;
+				else if (key == 'dps') maxValues[key] = 1800;
+				else if (key == 'dpsa') maxValues[key] = 800;
+				else maxValues[key] = value;
 			}
 		}
 	}
@@ -37,7 +38,7 @@ for (var unit of unitList) {
 myLog('minvalues', minValues);
 myLog('maxvalues', maxValues);
 
-var statsUnit = ['health', 'damage', 'damagea', 'speed', 'range', 'dps', 'dpsa'];
+var statsUnit = ['health', 'speed', 'range', 'damage', 'dps', 'damagea', 'dpsa'];
 
 //#region deck format
 
@@ -1603,11 +1604,11 @@ stats_mode_select.addEventListener('change', function () {
 
 var sortedUnitData = {
 	health: [],
-	damage: [],
-	damagea: [],
 	speed: [],
 	range: [],
+	damage: [],
 	dps: [],
+	damagea: [],
 	dpsa: [],
 }
 var sortData = {
@@ -1624,6 +1625,7 @@ var sortData = {
 
 //returns a colour on a gradient scale from red to green based on the value
 function getColour(value, min, max) {
+	if (value <= 0 || value == null) return 'black';
 	//myLog('getColour:', value, min, max);
 	var red = 0;
 	var green = 0;
@@ -1770,8 +1772,6 @@ for (var i = 0; i < statsUnit.length; i++) {
 
 }
 
-// Final log after the loop
-myLog('Final InnerHTML of statsUnitRankDiv:', statsUnitRankDiv.innerHTML);
 
 const statsUnitBottomContainer = document.createElement('div');
 statsUnitBottomContainer.id = 'statsUnitBottomContainer';
@@ -1875,7 +1875,7 @@ function statRankChart(label) {
 	img.src = 'images/stats/' + label + '.png';
 	img.classList.add('statsUnitChartImages');
 	//set img colour using getColour()
-	img.style.color = getColour(currentUnit, sortData[label], label);
+	img.style.color = getColour(currentUnit, sortData[label], maxValues[label]);
 	statsUnitChartDiv.appendChild(img);
 
 
@@ -2045,7 +2045,7 @@ function unitMouseOverAndTapped(unit) {
 	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
 	for (var [key] of Object.entries(statsUnitRankTextDivs)) {
 		var rank = sortedUnitData[key].length - sortedUnitData[key].lastIndexOf(unit[key]);
-		if (unit[key] == 0) statsUnitRankTextDivs[key].innerHTML = 'N/A';
+		if (unit[key] == 0) statsUnitRankTextDivs[key].innerHTML = '';
 		else {
 			statsUnitRankTextDivs[key].innerHTML = rank + getRankSuffix(rank);
 			//add the value of the key
