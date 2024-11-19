@@ -105,8 +105,8 @@ class Unit {
 		else this['dpsa'] = '0';
 		if (this.name == 'bomber') this.dps = this.damage;
 
-		this['simplespeed'] = Math.round(this.speed) || '0';
-		this['speed'] = Math.round(this.speed * 10) / 10;
+		this['simplespeed'] = Math.round(Number(this.speed)) || '0';
+		this['speed'] = Math.round(Number(this.speed) * 10) / 10;
 
 		var simpDam
 		if (this['dpsa'] > this['dps']) simpDam = Math.round(this.dpsa / 10);
