@@ -1030,7 +1030,7 @@ function drawUnitTable() {
 		excludeKeys.push('damage', 'speed', 'damagea', 'dps', 'dpsa', 'health');
 	}
 	else {
-		excludeKeys.push('simplespeed', 'simpledamage', 'hp / 100')
+		excludeKeys.push('simplespeed', 'simpledamage', 'hp/100')
 	}
 	//create a table element
 	var unit_table = document.createElement('table');

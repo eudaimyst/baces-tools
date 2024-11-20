@@ -23,7 +23,9 @@
 		"chart.js": "^4.4.4",
 		"chat.js": "^1.0.2",
 		"fast-sort": "^3.4.0",
+		"jsdom": "^25.0.1",
 		"pixi.js": "^8.1.6",
+		"puppeteer": "^23.8.0",
 		"table-sort-js": "^1.21.0"
 	}
 }
