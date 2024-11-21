@@ -1,5 +1,6 @@
 [
 	{
+		"leaderboard_id": 52,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/advancedblink.png",
 		"Name": "Advanced Blink",
 		"Type": "Ground",
@@ -32,6 +33,7 @@
 		"website": "https://www.playbattleaces.com/units/advancedblink"
 	},
 	{
+		"leaderboard_id": 85,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/advanceddestroyer.png",
 		"Name": "Advanced Destroyer",
 		"Type": "Ground",
@@ -40,7 +42,7 @@
 		"Energy": 125,
 		"Supply": 5,
 		"Health": 600,
-		"Speed": "5.24",
+		"Speed": "5,24",
 		"Range": 23,
 		"Damage": 700,
 		"Attack Rate": 3,
@@ -64,6 +66,7 @@
 		"website": "https://www.playbattleaces.com/units/advanceddestroyer"
 	},
 	{
+		"leaderboard_id": 61,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/advancedrecall.png",
 		"Name": "Advanced Recall",
 		"Type": "Ground",
@@ -96,6 +99,7 @@
 		"website": "https://www.playbattleaces.com/units/advancedrecall"
 	},
 	{
+		"leaderboard_id": 37,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/advancedbot.png",
 		"Name": "Advancedbot",
 		"Type": "Ground",
@@ -128,6 +132,7 @@
 		"website": "https://www.playbattleaces.com/units/advancedbot"
 	},
 	{
+		"leaderboard_id": 72,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/airship.png",
 		"Name": "Airship",
 		"Type": "Air",
@@ -160,6 +165,7 @@
 		"website": "https://www.playbattleaces.com/units/airship"
 	},
 	{
+		"leaderboard_id": 49,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/artillery.png",
 		"Name": "Artillery",
 		"Type": "Ground",
@@ -192,6 +198,7 @@
 		"website": "https://www.playbattleaces.com/units/artillery"
 	},
 	{
+		"leaderboard_id": 39,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/assaultbot.png",
 		"Name": "Assaultbot",
 		"Type": "Ground",
@@ -224,6 +231,7 @@
 		"website": "https://www.playbattleaces.com/units/assaultbot"
 	},
 	{
+		"leaderboard_id": 76,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/ballista.png",
 		"Name": "Ballista",
 		"Type": "Ground",
@@ -256,6 +264,7 @@
 		"website": "https://www.playbattleaces.com/units/ballista"
 	},
 	{
+		"leaderboard_id": 24,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/beetle.png",
 		"Name": "Beetle",
 		"Type": "Ground",
@@ -288,6 +297,7 @@
 		"website": "https://www.playbattleaces.com/units/beetle"
 	},
 	{
+		"leaderboard_id": 57,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/behemoth.png",
 		"Name": "Behemoth",
 		"Type": "Ground",
@@ -320,6 +330,7 @@
 		"website": "https://www.playbattleaces.com/units/behemoth"
 	},
 	{
+		"leaderboard_id": 42,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/blink.png",
 		"Name": "Blink",
 		"Type": "Ground",
@@ -352,6 +363,7 @@
 		"website": "https://www.playbattleaces.com/units/blink"
 	},
 	{
+		"leaderboard_id": 35,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/blinkhunter.png",
 		"Name": "Blink Hunter",
 		"Type": "Ground",
@@ -384,8 +396,9 @@
 		"website": "https://www.playbattleaces.com/units/blinkhunter"
 	},
 	{
+		"leaderboard_id": 8,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/bomber.png",
-		"Name": "Bomber 徴",
+		"Name": "Bomber",
 		"Type": "Ground",
 		"Building": "Foundry",
 		"Matter": 50,
@@ -416,6 +429,7 @@
 		"website": "https://www.playbattleaces.com/units/bomber"
 	},
 	{
+		"leaderboard_id": 47,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/bulwark.png",
 		"Name": "Bulwark",
 		"Type": "Air",
@@ -448,6 +462,7 @@
 		"website": "https://www.playbattleaces.com/units/bulwark"
 	},
 	{
+		"leaderboard_id": 73,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/butterfly.png",
 		"Name": "Butterfly",
 		"Type": "Air",
@@ -480,8 +495,9 @@
 		"website": "https://www.playbattleaces.com/units/butterfly"
 	},
 	{
+		"leaderboard_id": 75,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/crab.png",
-		"Name": "Crab ｦ¢",
+		"Name": "Crab",
 		"Type": "Ground",
 		"Building": "Core",
 		"Matter": 100,
@@ -512,6 +528,7 @@
 		"website": "https://www.playbattleaces.com/units/crab"
 	},
 	{
+		"leaderboard_id": 84,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/crossbow.png",
 		"Name": "Crossbow",
 		"Type": "Ground",
@@ -544,6 +561,7 @@
 		"website": "https://www.playbattleaces.com/units/crossbow"
 	},
 	{
+		"leaderboard_id": 17,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/crusader.png",
 		"Name": "Crusader",
 		"Type": "Ground",
@@ -576,6 +594,7 @@
 		"website": "https://www.playbattleaces.com/units/crusader"
 	},
 	{
+		"leaderboard_id": 58,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/destroyer.png",
 		"Name": "Destroyer",
 		"Type": "Ground",
@@ -608,6 +627,7 @@
 		"website": "https://www.playbattleaces.com/units/destroyer"
 	},
 	{
+		"leaderboard_id": 11,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/dragonfly.png",
 		"Name": "Dragonfly",
 		"Type": "Air",
@@ -640,6 +660,7 @@
 		"website": "https://www.playbattleaces.com/units/dragonfly"
 	},
 	{
+		"leaderboard_id": 13,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/falcon.png",
 		"Name": "Falcon",
 		"Type": "Air",
@@ -672,6 +693,7 @@
 		"website": "https://www.playbattleaces.com/units/falcon"
 	},
 	{
+		"leaderboard_id": 86,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/flakturret.png",
 		"Name": "Flak Turret",
 		"Type": "Base Defense",
@@ -704,6 +726,7 @@
 		"website": "https://www.playbattleaces.com/units/flakturret"
 	},
 	{
+		"leaderboard_id": 1,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/gargantua.png",
 		"Name": "Gargantua",
 		"Type": "Ground",
@@ -736,6 +759,7 @@
 		"website": "https://www.playbattleaces.com/units/gargantua"
 	},
 	{
+		"leaderboard_id": 77,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/gunbot.png",
 		"Name": "Gunbot",
 		"Type": "Ground",
@@ -768,6 +792,7 @@
 		"website": "https://www.playbattleaces.com/units/gunbot"
 	},
 	{
+		"leaderboard_id": 38,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/heavyballista.png",
 		"Name": "Heavy Ballista",
 		"Type": "Ground",
@@ -800,6 +825,7 @@
 		"website": "https://www.playbattleaces.com/units/heavyballista"
 	},
 	{
+		"leaderboard_id": 53,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/heavyhunter.png",
 		"Name": "Heavy Hunter",
 		"Type": "Ground",
@@ -832,6 +858,7 @@
 		"website": "https://www.playbattleaces.com/units/heavyhunter"
 	},
 	{
+		"leaderboard_id": 25,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/hornet.png",
 		"Name": "Hornet",
 		"Type": "Ground",
@@ -864,6 +891,7 @@
 		"website": "https://www.playbattleaces.com/units/hornet"
 	},
 	{
+		"leaderboard_id": 74,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/hunter.png",
 		"Name": "Hunter",
 		"Type": "Ground",
@@ -896,8 +924,9 @@
 		"website": "https://www.playbattleaces.com/units/hunter"
 	},
 	{
+		"leaderboard_id": 29,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/katbus.png",
-		"Name": "Katbus 仆",
+		"Name": "Katbus",
 		"Type": "Air",
 		"Building": "Advanced Starforge",
 		"Matter": 250,
@@ -928,6 +957,7 @@
 		"website": "https://www.playbattleaces.com/units/katbus"
 	},
 	{
+		"leaderboard_id": 80,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/kingcrab.png",
 		"Name": "King Crab",
 		"Type": "Ground",
@@ -960,6 +990,7 @@
 		"website": "https://www.playbattleaces.com/units/kingcrab"
 	},
 	{
+		"leaderboard_id": 83,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/knight.png",
 		"Name": "Knight",
 		"Type": "Ground",
@@ -992,6 +1023,7 @@
 		"website": "https://www.playbattleaces.com/units/knight"
 	},
 	{
+		"leaderboard_id": 48,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/kraken.png",
 		"Name": "Kraken",
 		"Type": "Air",
@@ -1024,6 +1056,7 @@
 		"website": "https://www.playbattleaces.com/units/kraken"
 	},
 	{
+		"leaderboard_id": 54,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/locust.png",
 		"Name": "Locust",
 		"Type": "Air",
@@ -1056,6 +1089,7 @@
 		"website": "https://www.playbattleaces.com/units/locust"
 	},
 	{
+		"leaderboard_id": 51,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/mammoth.png",
 		"Name": "Mammoth",
 		"Type": "Ground",
@@ -1088,6 +1122,7 @@
 		"website": "https://www.playbattleaces.com/units/mammoth"
 	},
 	{
+		"leaderboard_id": 6,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/missilebot.png",
 		"Name": "Missilebot",
 		"Type": "Ground",
@@ -1120,6 +1155,7 @@
 		"website": "https://www.playbattleaces.com/units/missilebot"
 	},
 	{
+		"leaderboard_id": 9,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/mortar.png",
 		"Name": "Mortar",
 		"Type": "Ground",
@@ -1152,6 +1188,7 @@
 		"website": "https://www.playbattleaces.com/units/mortar"
 	},
 	{
+		"leaderboard_id": 14,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/predator.png",
 		"Name": "Predator",
 		"Type": "Ground",
@@ -1184,6 +1221,7 @@
 		"website": "https://www.playbattleaces.com/units/predator"
 	},
 	{
+		"leaderboard_id": 28,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/raider.png",
 		"Name": "Raider",
 		"Type": "Ground",
@@ -1216,6 +1254,7 @@
 		"website": "https://www.playbattleaces.com/units/raider"
 	},
 	{
+		"leaderboard_id": 34,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/recall.png",
 		"Name": "Recall",
 		"Type": "Ground",
@@ -1248,6 +1287,7 @@
 		"website": "https://www.playbattleaces.com/units/recall"
 	},
 	{
+		"leaderboard_id": 40,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/recallhunter.png",
 		"Name": "Recall Hunter",
 		"Type": "Ground",
@@ -1280,6 +1320,7 @@
 		"website": "https://www.playbattleaces.com/units/recallhunter"
 	},
 	{
+		"leaderboard_id": 68,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/recallshocker.png",
 		"Name": "Recall Shocker",
 		"Type": "Ground",
@@ -1312,6 +1353,7 @@
 		"website": "https://www.playbattleaces.com/units/recallshocker"
 	},
 	{
+		"leaderboard_id": 27,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/scorpion.png",
 		"Name": "Scorpion",
 		"Type": "Ground",
@@ -1344,6 +1386,7 @@
 		"website": "https://www.playbattleaces.com/units/scorpion"
 	},
 	{
+		"leaderboard_id": 41,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/shocker.png",
 		"Name": "Shocker",
 		"Type": "Ground",
@@ -1376,6 +1419,7 @@
 		"website": "https://www.playbattleaces.com/units/shocker"
 	},
 	{
+		"leaderboard_id": 32,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/sniper.png",
 		"Name": "Sniper",
 		"Type": "Ground",
@@ -1408,6 +1452,7 @@
 		"website": "https://www.playbattleaces.com/units/sniper"
 	},
 	{
+		"leaderboard_id": 70,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/stinger.png",
 		"Name": "Stinger",
 		"Type": "Ground",
@@ -1440,6 +1485,7 @@
 		"website": "https://www.playbattleaces.com/units/stinger"
 	},
 	{
+		"leaderboard_id": 64,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/swiftshocker.png",
 		"Name": "Swift Shocker",
 		"Type": "Ground",
@@ -1472,6 +1518,7 @@
 		"website": "https://www.playbattleaces.com/units/swiftshocker"
 	},
 	{
+		"leaderboard_id": 20,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/turret.png",
 		"Name": "Turret",
 		"Type": "Base Defense",
@@ -1504,6 +1551,7 @@
 		"website": "https://www.playbattleaces.com/units/turret"
 	},
 	{
+		"leaderboard_id": 30,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/valkyrie.png",
 		"Name": "Valkyrie",
 		"Type": "Air",
@@ -1536,6 +1584,7 @@
 		"website": "https://www.playbattleaces.com/units/valkyrie"
 	},
 	{
+		"leaderboard_id": 2,
 		"image": "https://cdn.playbattleaces.com/images/icons/units/wasp.png",
 		"Name": "Wasp",
 		"Type": "Ground",
