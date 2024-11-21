@@ -115,7 +115,7 @@ document.body.appendChild(wrapper);
 //label
 const sort_label = document.createElement('div');
 sort_label.innerHTML = locale('sort') + ': ';
-sort_label.classList.add('header_element');
+sort_label.classList.add('headerElement');
 unit_view_header.appendChild(sort_label);
 //create a dropdown selector for sorting
 const unit_header_sort = document.createElement('select');
@@ -154,12 +154,12 @@ sortOptions.forEach((option) => {
 filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
 
 unit_header_sort.id = 'unit_header_sort';
-unit_header_sort.classList.add('header_element');
+unit_header_sort.classList.add('headerElement');
 unit_view_header.appendChild(unit_header_sort);
 //label
 const view_label = document.createElement('p');
 view_label.innerHTML = locale('view') + ': ';
-view_label.classList.add('header_element');
+view_label.classList.add('headerElement');
 unit_view_header.appendChild(view_label);
 
 var unitViewMode = 0; //0 = table 1 = card
@@ -168,13 +168,13 @@ var unitViewMode = 0; //0 = table 1 = card
 const unit_view_table_btn = document.createElement('button');
 unit_view_table_btn.innerHTML = locale('table');
 unit_view_table_btn.id = 'unit_view_table_btn';
-unit_view_table_btn.classList.add('header_element');
+unit_view_table_btn.classList.add('headerElement');
 unit_view_header.appendChild(unit_view_table_btn);
 //card view button
 const unit_view_card_btn = document.createElement('button');
 unit_view_card_btn.innerHTML = locale('card');
 unit_view_card_btn.id = 'unit_view_card_btn';
-unit_view_card_btn.classList.add('header_element');
+unit_view_card_btn.classList.add('headerElement');
 unit_view_header.appendChild(unit_view_card_btn);
 
 //when table is selected set unitViewMode to 0
@@ -201,7 +201,7 @@ const unit_filter_input = document.createElement('input');
 unit_filter_input.type = 'text';
 unit_filter_input.id = 'unit_filter_input';
 unit_filter_input.placeholder = locale('filter');
-unit_filter_input.classList.add('header_element');
+unit_filter_input.classList.add('headerElement');
 //when user inputs text into filter input element
 unit_filter_input.oninput = function () {
 	setFilter(unit_filter_input.value);
@@ -214,7 +214,7 @@ unit_view_header.appendChild(unit_filter_input);
 const unit_filter_clear_btn = document.createElement('button');
 unit_filter_clear_btn.innerHTML = locale('clear');
 unit_filter_clear_btn.id = 'unit_filter_clear_btn';
-unit_filter_clear_btn.classList.add('header_element');
+unit_filter_clear_btn.classList.add('headerElement');
 unit_view_header.appendChild(unit_filter_clear_btn);
 unit_filter_clear_btn.onclick = function () {
 	//clear the filter
@@ -224,7 +224,7 @@ unit_filter_clear_btn.onclick = function () {
 }
 const simple_stats_label = document.createElement('p');
 simple_stats_label.innerHTML = locale('simple') + ': ';
-simple_stats_label.classList.add('header_element');
+simple_stats_label.classList.add('headerElement');
 unit_view_header.appendChild(simple_stats_label);
 //unit_simple_stats_checkbox is a checkbox
 const unit_simple_stats_checkbox = document.createElement('input');
@@ -247,7 +247,7 @@ var hideUnavailMode = true;
 //hide unavailable units checkbox
 const hide_unavail_label = document.createElement('p');
 hide_unavail_label.innerHTML = locale('hideUnavail') + ': ';
-hide_unavail_label.classList.add('header_element');
+hide_unavail_label.classList.add('headerElement');
 unit_view_header.appendChild(hide_unavail_label);
 //unit_hide_unavailable_units_checkbox is a checkbox
 const hide_unavail_checkbox = document.createElement('input');
@@ -875,7 +875,7 @@ var compareMode = 0 //0= stats, 1 = resources, 2 = traits
 const stats_button = document.createElement('button');
 stats_button.innerHTML = locale('unit');
 stats_button.id = 'stats_button';
-stats_button.classList.add('header_element');
+stats_button.classList.add('headerElement');
 stats_view_header.appendChild(stats_button);
 //when button is pressed set current mode to unit
 stats_button.addEventListener('click', function () {
@@ -888,7 +888,7 @@ stats_button.addEventListener('click', function () {
 const compare_button = document.createElement('button');
 compare_button.innerHTML = locale('compare');
 compare_button.id = 'compare_button';
-compare_button.classList.add('header_element');
+compare_button.classList.add('headerElement');
 stats_view_header.appendChild(compare_button);
 //when deck 2 is pressed it should set current deck to 1
 compare_button.addEventListener('click', function () {
@@ -904,7 +904,7 @@ stats_button.classList.add('selected');
 const stats_mode_select = document.createElement('select');
 stats_mode_select.disabled = true;
 stats_mode_select.id = 'stats_mode_select';
-stats_mode_select.classList.add('header_element');
+stats_mode_select.classList.add('headerElement');
 stats_view_header.appendChild(stats_mode_select);
 //add option to stats mode select for stats, resources and traits
 var stats_mode_select_options = [locale('stats'), locale('resources')]; //todo: add trait comparison
