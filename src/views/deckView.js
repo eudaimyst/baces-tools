@@ -10,6 +10,7 @@ import leaderboardData from '../leaderboard.json';
 
 
 var savedDecks = []
+var leaderboardDecks = []
 
 class SavedDeck {
 	constructor(deckName, deckList) {
@@ -50,6 +51,8 @@ function saveNewDeck(deckName, deck) {
 
 //load savedDecks from localStorage
 function loadSavedDecks() {
+	//clear the localStorage savedDecks for testing
+	localStorage.removeItem('savedDecks');
 	var savedDecksJSON = localStorage.getItem('savedDecks');
 	if (savedDecksJSON) {
 		savedDecks = JSON.parse(savedDecksJSON);
@@ -115,9 +118,8 @@ function loadLeaderboardDecks() {
 			//convert the unit id to a slug
 			units[j] = convertUnitIdToSlug(unitIds[j]);
 		}
-		var newDeck = new SavedDeck(leader1[i].player + ' 1v1 ' + leader1[i].ranking, units);
+		leaderboardDecks.push(new SavedDeck(leader1[i].player + ' 1v1 ' + leader1[i].ranking, units));
 		//add the new deck to the savedDecks array
-		savedDecks.push(newDeck);
 	}
 	for (var i = 0; i < leader2.length; i++) { //change 3 to leader1.length
 		console.log('importing leader deck ' + leader2[i].player);
@@ -131,9 +133,8 @@ function loadLeaderboardDecks() {
 			//convert the unit id to a slug
 			units[j] = convertUnitIdToSlug(unitIds[j]);
 		}
-		var newDeck = new SavedDeck(leader2[i].player + ' 2v2 ' + leader2[i].ranking, units);
 		//add the new deck to the savedDecks array
-		savedDecks.push(newDeck);
+		leaderboardDecks.push(new SavedDeck(leader2[i].player + ' 2v2 ' + leader2[i].ranking, units));
 	}
 
 }
@@ -242,7 +243,7 @@ decklistDropdown.id = 'decklistDropdown';
 decklistDropdown.classList.add('headerElement');
 deckViewHeader.appendChild(decklistDropdown);
 
-var selectedDeck = 0;
+var selectedDeckToLoad = 0;
 //for each deck in the deckLists array, add an option to select that deck in the dropdown, using the decks name
 const refreshDropdown = () => {
 	decklistDropdown.innerHTML = '';
@@ -253,11 +254,27 @@ const refreshDropdown = () => {
 		decklistDropdown.appendChild(option);
 		//when the option is selected, set the selected deck to the index of the selected option
 		decklistDropdown.addEventListener('change', function () {
-			selectedDeck = decklistDropdown.selectedIndex;
+			selectedDeckToLoad = decklistDropdown.selectedIndex;
+		});
+	});
+	leaderboardDecks.forEach((deck) => {
+		var option = document.createElement('option');
+		option.value = deck.deckName;
+		option.innerHTML = deck.deckName;
+		decklistDropdown.appendChild(option);
+		//when the option is selected, set the selected deck to the index of the selected option
+		decklistDropdown.addEventListener('change', function () {
+			selectedDeckToLoad = decklistDropdown.selectedIndex;
 		});
 	});
 }
 refreshDropdown();
+
+//when an option is selected in the decklist dropdown, load the selected deck
+
+decklistDropdown.addEventListener('change', function () {
+	loadDeck();
+});
 
 
 const deckSearchInput = () => {
@@ -276,22 +293,27 @@ const deckSearchInput = () => {
 
 deckViewHeader.appendChild(deckSearchInput());
 
-//load button:
-const deckLoadBtn = createHeaderButton('load', 'deck_load_btn', function () {
-	//load the selected deck into the current deck
+function loadDeck() {
+	//load the selected deck into the current deck'
+	var deckToLoad;
+	if (savedDecks[selectedDeckToLoad]) deckToLoad = savedDecks[selectedDeckToLoad];
+	//the selectedDeckToLoad is the index of the option in the dropdown, and leaderboard is listed after saved decks so minus that index by how many saved decks there are
+	else if (leaderboardDecks[selectedDeckToLoad - savedDecks.length]) deckToLoad = leaderboardDecks[selectedDeckToLoad - savedDecks.length];
 	//clear the current deck
-	myLog(savedDecks[selectedDeck]);
-	deckNames[currentDeck] = savedDecks[selectedDeck].deckName;
+	//myLog(savedDecks[selectedDeck]);
+	deckNames[currentDeck] = deckToLoad.deckName;
 	decks[currentDeck] = [];
-	fillSlotsFromDeck(savedDecks[selectedDeck], currentDeck)
+	fillSlotsFromDeck(deckToLoad, currentDeck)
 	refreshNameInput(currentDeck);
-})
-deckViewHeader.appendChild(deckLoadBtn);
+}
 
+//load button:
+const deckLoadBtn = createHeaderButton('load', 'deck_load_btn', loadDeck)
+deckViewHeader.appendChild(deckLoadBtn);
 
 //delete button:
 const deckDeleteBtn = createHeaderButton('delete', 'deck_delete_btn', function () {
-	savedDecks.splice(selectedDeck, 1);
+	savedDecks.splice(selectedDeckToLoad, 1);
 	localStorage.setItem('savedDecks', JSON.stringify(savedDecks));
 	refreshDropdown();
 });
@@ -378,11 +400,11 @@ const createDeckSaveBtn = (deckId) => {
 			return;
 		}
 		//save the current deck as a new deck (name, deck
-		saveNewDeck(nameInputs[deckId].value, decks[deckId]);
+		saveNewDeck(nameInputs[deckId].value, decks[deckId]); //this saves the deck to the array
 		refreshDropdown();
 		//clear the name input box
 		//store the decks in local storage
-		localStorage.setItem('savedDecks', JSON.stringify(savedDecks));
+		localStorage.setItem('savedDecks', JSON.stringify(savedDecks));//this saves the deck to local storage
 	});
 	return deckSaveBtn;
 }

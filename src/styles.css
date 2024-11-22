@@ -676,7 +676,6 @@ sup {
 }
 
 #deck_content {
-	padding: 10 0 10 0;
 	background-color: rgba(5, 1, 66, 0.685);
 	border: dotted;
 	border-width: 0px;
@@ -703,7 +702,7 @@ sup {
 	border-color: rgb(2, 1, 90);
 	border-width: 1px;
 	border-style: solid;
-	overflow-y: auto;
+	overflow-y: hidden;
 	overflow-x: hidden;
 }
 

@@ -502,8 +502,8 @@ function drawUnitTable() {
 		unit_table_row.appendChild(unit_table_cell);
 		unit_table_row.addEventListener('mouseover', unitMouseOver);
 
-		myLog('drawing row for unit', unit);
-		for (var [key, value] of Object.entries(unit)) {
+		console.log('drawing row for unit', unit);
+		for (const [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
 				var unit_table_cell = document.createElement('td');
 				unit_table_cell.id = unit.slug;
@@ -590,7 +590,7 @@ function drawUnitTable() {
 					}
 					else {
 						myLog(unit.name + ' key: ' + key + ' value: ' + value)
-						unit_table_cell.innerHTML = value;
+						unit_table_cell.innerHTML = value || '0';
 					}
 				}
 
@@ -1455,11 +1455,11 @@ traitsComparisonChartContainer.innerHTML = 'traitsComparisonChart';
 //const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
 var starchartStatsUnit = ['health', 'damage', 'damagea', 'speed', 'range'];
 var starchartMinMax = {
-	health: [5350, 48000],
-	damage: [520, 3800],
+	health: [5350, 64100],
+	damage: [485, 4600],
 	damagea: [0, 2000],
-	speed: [30, 93],
-	range: [13, 134]
+	speed: [26, 95],
+	range: [13, 142]
 }
 var starchartUnitData = [];
 const data = {
@@ -1567,13 +1567,14 @@ function scaleDeckTotals(d, deckID) {
 
 function updateDeckStatTotals(d, deckID) {
 	//for each label in statsUnit, add the total of values of the stats for each unit in the deck
-	myLog('totals array: ' + d)
+	console.log('totals array: ' + d)
+	console.log(d);
 	myLog('deck ' + deckID)
 	myLog(decks[deckID]);
 	starchartStatsUnit.forEach(function (label) {
 		var total = 0;
 		decks[deckID].forEach(function (unit) {
-			total += parseFloat(unit[label]);
+			total += (parseFloat(unit[label]) || 0);
 		});
 		d.push(total);
 	});
