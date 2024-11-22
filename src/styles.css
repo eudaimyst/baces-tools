@@ -696,7 +696,7 @@ sup {
 .deckContainer {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
+	justify-content: center;
 	width: 45%;
 	height: 95%;
 	border-color: rgb(2, 1, 90);
