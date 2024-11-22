@@ -87,6 +87,7 @@ select {
 	border-width: .1vmax;
 	border-style: solid;
 	border-color: rgb(180, 180, 180);
+	font-variant-caps: all-small-caps;
 }
 
 option {
@@ -153,6 +154,10 @@ option {
 
 .bgImgSelectDiv {
 	margin-top: 20%;
+}
+
+.plainBGButton {
+	margin-left: 0%;
 }
 
 .countdown_div {
@@ -445,8 +450,10 @@ option {
 
 }
 
-.menuWorkerUniformCredit {
-	font-size: 10px;
+.menuCredits {
+	font-size: 11px;
+	margin: 0 0 5 0;
+
 }
 
 .comparisonChartContainer {
@@ -696,7 +703,7 @@ sup {
 .deckContainer {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
+	justify-content: center;
 	width: 45%;
 	height: 95%;
 	border-color: rgb(2, 1, 90);
@@ -773,7 +780,7 @@ sup {
 
 .deck_stats_div {
 	font-weight: 350;
-	font-size: 16px;
+	font-size: 1.5vmin;
 	line-height: 80%;
 	width: 98%;
 	height: 50%;
@@ -820,15 +827,16 @@ sup {
 }
 
 .deck_stats_img_ability {
-	width: 4vmin;
+	width: 7%;
 }
 
 .deck_stats_img_traits {
-	width: 2vmin;
+	width: 5.8%;
 }
 
 .deck_stats_img_manf {
-	width: 3vmin;
+	position: relative;
+	width: 7%;
 }
 
 .links_div {

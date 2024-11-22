@@ -53,7 +53,7 @@ function saveNewDeck(deckName, deck) {
 //load savedDecks from localStorage
 function loadSavedDecks() {
 	//clear the localStorage savedDecks for testing
-	localStorage.removeItem('savedDecks');
+	//localStorage.removeItem('savedDecks');
 	var savedDecksJSON = localStorage.getItem('savedDecks');
 	if (savedDecksJSON) {
 		savedDecks = JSON.parse(savedDecksJSON);
