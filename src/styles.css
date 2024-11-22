@@ -137,8 +137,8 @@ option {
 	scrollbar-color: rgba(255, 255, 255, 0.281) rgba(12, 12, 12, 0.445);
 }
 
-.header_element {
-	font-size: .7vmax;
+.headerElement {
+	font-size: 1.3vmin;
 	padding: 0 .3vw 0 .3vw;
 	font-variant: all-small-caps;
 	font-style: bold;
@@ -676,7 +676,6 @@ sup {
 }
 
 #deck_content {
-	padding: 10 0 10 0;
 	background-color: rgba(5, 1, 66, 0.685);
 	border: dotted;
 	border-width: 0px;
@@ -686,7 +685,6 @@ sup {
 	justify-content: space-evenly;
 	overflow: hidden;
 }
-
 
 .deckSlotImage {
 	width: 100%;
@@ -699,17 +697,50 @@ sup {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
-	width: 40%;
-	height: 100%;
+	width: 45%;
+	height: 95%;
 	border-color: rgb(2, 1, 90);
 	border-width: 1px;
 	border-style: solid;
-	overflow-y: auto;
+	overflow-y: hidden;
 	overflow-x: hidden;
 }
 
 .deckContainerActive {
-	border-color: rgb(192, 162, 81);
+	border-color: rgb(192, 162, 81, .5);
+}
+
+.deckSaveClearBtn {
+	width: fit-content;
+
+	font-size: 1.3vmin;
+	padding: 0 .3vw 0 .3vw;
+	font-variant: all-small-caps;
+	font-style: bold;
+	margin: 2px;
+	color: rgba(207, 207, 207, 0.699);
+}
+
+.deckNameDiv {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+
+.deckNameInput {
+	width: 63%;
+	font-size: 1.3vmin;
+	padding: 0 .3vw 0 .3vw;
+	font-variant: all-small-caps;
+	font-style: bold;
+	margin: 2px;
+	color: rgba(207, 207, 207, 0.699);
+}
+
+#decklistDropdown {
+	min-width: 15vmin;
+	max-width: 18vmin;
 }
 
 .deckSlotContainer {
@@ -723,7 +754,7 @@ sup {
 	flex-wrap: wrap;
 }
 
-.unit_deck_slot_div {
+.unitDeckSlotDiv {
 	width: 19%;
 	border-color: rgba(2, 0, 36, 0.781);
 	border-width: 2px;
