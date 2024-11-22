@@ -314,10 +314,13 @@ bgImgSelect.addEventListener('change', () => {
 const bgImgSelectText = document.createElement('p');
 bgImgSelectText.innerHTML = 'all artwork credit <a href = "https://www.playbattleaces.com">playbattleaces.com</a >';
 const bgImgSelectText2 = document.createElement('p');
-bgImgSelectText2.classList.add('menuWorkerUniformCredit')
-bgImgSelectText2.innerHTML = 'uniforms: <a href = "https://discord.com/channels/1187021578333073418/1248357473421758586/1253092940486803569">Sepic</a > on Discord';
-bgImgSelectDiv.appendChild(bgImgSelectText);
-bgImgSelectDiv.appendChild(bgImgSelectText2);
+bgImgSelectText2.classList.add('menuCredits')
+bgImgSelectText2.innerHTML = 'uniforms: <a href = "https://discord.com/channels/1187021578333073418/1248357473421758586/1253092940486803569">Sepic</a >';
+const bgImgSelectText3 = document.createElement('p');
+bgImgSelectText3.classList.add('menuCredits')
+bgImgSelectText3.innerHTML = 'scraper: <a href = "https://github.com/Zaokret/battle-aces">Zaokret</a >';
+
+
 const plainBGButton = document.createElement('button');
 plainBGButton.innerHTML = locale('plainbg');
 plainBGButton.classList.add('plainBGButton');
@@ -327,7 +330,9 @@ plainBGButton.addEventListener('click', () => {
 	bgImgSelect.value = 'none';
 	localStorage.setItem('bgImgSelect', 'none');
 });
-
+bgImgSelectDiv.appendChild(bgImgSelectText);
+bgImgSelectDiv.appendChild(bgImgSelectText2);
+bgImgSelectDiv.appendChild(bgImgSelectText3);
 
 
 function advertisement() {
