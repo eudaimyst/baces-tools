@@ -192,6 +192,7 @@ linksDiv.appendChild(linksContent);
 linkData.forEach((link) => {
 	const linkElement = document.createElement('a');
 	linkElement.href = link.url;
+	linkElement.target = '_blank';
 	linkElement.innerHTML = link.name + '<br>';
 	linksContent.appendChild(linkElement);
 });
@@ -312,13 +313,13 @@ bgImgSelect.addEventListener('change', () => {
 });
 //add a final text box under the select element that says 'select a background image'
 const bgImgSelectText = document.createElement('p');
-bgImgSelectText.innerHTML = 'all artwork credit <a href = "https://www.playbattleaces.com">playbattleaces.com</a >';
+bgImgSelectText.innerHTML = 'all artwork credit <a href = "https://www.playbattleaces.com" target="_blank"> playbattleaces.com</a > ';
 const bgImgSelectText2 = document.createElement('p');
 bgImgSelectText2.classList.add('menuCredits')
-bgImgSelectText2.innerHTML = 'uniforms: <a href = "https://discord.com/channels/1187021578333073418/1248357473421758586/1253092940486803569">Sepic</a >';
+bgImgSelectText2.innerHTML = 'uniforms: <a href = "https://discord.com/channels/1187021578333073418/1248357473421758586/1253092940486803569 target="_blank">Sepic</a >';
 const bgImgSelectText3 = document.createElement('p');
 bgImgSelectText3.classList.add('menuCredits')
-bgImgSelectText3.innerHTML = 'scraper: <a href = "https://github.com/Zaokret/battle-aces">Zaokret</a >';
+bgImgSelectText3.innerHTML = 'scraper: <a href = "https://github.com/Zaokret/battle-aces target="_blank">Zaokret</a >';
 
 
 const plainBGButton = document.createElement('button');
