@@ -1,10 +1,10 @@
 /* eslint-disable no-redeclare */
 
-import { myLog, createHeaderButton } from '../utils'
+import { myLog, createButton, createHeaderButton } from '../utils'
 import { locale } from '../locale';
-import { units } from '../units';
+import { units, unitList } from '../units';
 //import { sort } from 'fast-sort';
-
+import leaderboardData from '../leaderboard.json';
 
 //#region deck format
 
@@ -56,6 +56,88 @@ function loadSavedDecks() {
 	}
 }
 loadSavedDecks();
+
+function convertUnitIdToSlug(unitID) { //given a unit id, get the corresponding unit slug from the unit.json file
+	//search through the unit.json list and return the unit.slug of the unti with the correct unit.id
+	//for each unit in the unit.json file
+	//console.log('converting id ' + unitID)
+	//console.log(units)
+	//for each unit in the units object
+	for (var unit in units) {
+		//if the unit.id is equal to the unitID
+		//console.log('no match', unit, units[unit]['leaderboardid'], unitID)
+		if (Number(units[unit]['leaderboardid']) == Number(unitID)) {
+			//return the unit.slug
+			console.log('match found!', unit, units[unit]['leaderboardid'], unitID)
+			return units[unit].slug;
+		}
+	}
+
+}
+
+function loadLeaderboardDecks() {
+	//load the decks from the leaderboard.json file:
+	//example leaderboard json entry:
+	/**   "leaderboardData1": [
+	{
+		"player": "GOStephano",
+		"ranking": "10045",
+		"units": "2, 35, 41, 13, 32, 29, 58, 51"
+	},
+	{
+		"player": "trigger",
+		"ranking": "10004",
+		"units": "75, 35, 58, 73, 32, 30, 9, 51"
+	},
+	{
+		"player": "͡° ͜ʖ°͡",
+		"ranking": "9878",
+		"units": "34, 40, 17, 11, 77, 29, 41, 61"
+	},
+	]*/
+	//parse the json file leaderboard.json
+
+	//for each entry in the leaderboardData array
+	const leader1 = leaderboardData['leaderboardData1'];
+	const leader2 = leaderboardData['leaderboardData2'];
+	//create a new SavedDeck object
+	//for each deck in leader1
+	//console.log('leaderboard1')
+	for (var i = 0; i < leader1.length; i++) { //change 3 to leader1.length
+		console.log('importing leader deck ' + leader1[i].player);
+		//for each unit in leaderboardData[i].units
+		const units = [];
+		//split leader1[i].units by commas and remove spaces
+		const unitIds = leader1[i].units.split(', ');
+		//console.log(unitIds)
+
+		for (var j = 0; j < unitIds.length; j++) {
+			//convert the unit id to a slug
+			units[j] = convertUnitIdToSlug(unitIds[j]);
+		}
+		var newDeck = new SavedDeck(leader1[i].player + ' 1v1 ' + leader1[i].ranking, units);
+		//add the new deck to the savedDecks array
+		savedDecks.push(newDeck);
+	}
+	for (var i = 0; i < leader2.length; i++) { //change 3 to leader1.length
+		console.log('importing leader deck ' + leader2[i].player);
+		//for each unit in leaderboardData[i].units
+		const units = [];
+		//split leader1[i].units by commas and remove spaces
+		const unitIds = leader2[i].units.split(', ');
+		//console.log(unitIds)
+
+		for (var j = 0; j < unitIds.length; j++) {
+			//convert the unit id to a slug
+			units[j] = convertUnitIdToSlug(unitIds[j]);
+		}
+		var newDeck = new SavedDeck(leader2[i].player + ' 2v2 ' + leader2[i].ranking, units);
+		//add the new deck to the savedDecks array
+		savedDecks.push(newDeck);
+	}
+
+}
+loadLeaderboardDecks();
 //if there are no saved decks, save the testDeckData
 if (savedDecks.length == 0) {
 	savedDecks.push(testDeckData)
@@ -70,7 +152,6 @@ var redrawUnitContent
 var unitMouseOverAndTapped
 var updateComparisonCharts
 var filteredUnitList
-var unitList
 var sortUnits
 var unit_header_sort
 var unit_filter_input
@@ -82,7 +163,7 @@ function decksInit(repop, redraw, unitHover, updateChart, _filteredUnitlist, uni
 	unitMouseOverAndTapped = unitHover
 	updateComparisonCharts = updateChart
 	filteredUnitList = _filteredUnitlist;
-	unitList = unitlist;
+	//unitList = unitlist;
 	sortUnits = sortunits;
 	unit_header_sort = uhs;
 	unit_filter_input = ufi;
@@ -98,11 +179,8 @@ var slotBuildings = ['core', 'foundry', 'advancedfoundry', 'wildfoundry', 'core'
 //decks slots contain the elements (divs) that are used to display the units in the deck
 
 var currentDeck = 0; // 0 = Deck 1, 1 = Deck 2
-
-
-const deckButtons = []
-
-const deckContainers = []
+const deckButtons = [] //button elements for deck 1 and deck 2
+const deckContainers = [] //container div elements for each deck
 
 
 function setCurrentDeck(num) {
@@ -145,15 +223,6 @@ const deck2Btn = createHeaderButton('deck2', 'deck2_btn', function () {
 deckViewHeader.appendChild(deck2Btn);
 deckButtons.push(deck1Btn, deck2Btn);
 
-//clear button to clear the current deck
-const deckClearBtn = createHeaderButton('clear', 'deck_clear_btn', function () {
-	removeAllUnitsFromDeck(currentDeck);
-	refreshNameInput();
-	repopulateFilteredUnitList();
-	redrawUnitContent();
-})
-deckViewHeader.appendChild(deckClearBtn);
-
 //fill deck button which tries to add units from the unit list in order until the deck is full
 const deckFillBtn = createHeaderButton('fill', 'deck_fill_btn', function () {
 	fillDeckWithUnits(currentDeck);
@@ -162,44 +231,10 @@ const deckFillBtn = createHeaderButton('fill', 'deck_fill_btn', function () {
 deckViewHeader.appendChild(deckFillBtn);
 
 //Deck header elements: deck1 button, deck 2 button, deck name input box, save button, dropdown, load button, delete button
-//deck name input box:
-const nameInput = document.createElement('input');
-nameInput.id = 'name_input';
-nameInput.classList.add('headerElement');
-nameInput.type = 'text';
-nameInput.placeholder = locale('deckName');
-deckViewHeader.appendChild(nameInput);
-//when the name input box is changed, update the deck name
-nameInput.addEventListener('change', function () {
-	deckNames[currentDeck] = nameInput.value;
-});
-function refreshNameInput() {
-	nameInput.value = deckNames[currentDeck];
-}
-refreshNameInput();
+
+/**
 //save button:
-const deckSaveBtn = createHeaderButton('save', 'deck_save_btn', function () {
-	//save the current deck as a new deck
-	if (nameInput.value == '') {
-		alert('Deck must have a name to be saved');
-		return;
-	}
-	if (savedDecks.find((deck) => deck.deckName == nameInput.value)) {
-		alert('Deck name already exists');
-		return;
-	}
-	if (decks[currentDeck].length != 8) {
-		alert('Deck incomplete');
-		return;
-	}
-	//save the current deck as a new deck (name, deck
-	saveNewDeck(nameInput.value, decks[currentDeck]);
-	refreshDropdown();
-	//clear the name input box
-	//store the decks in local storage
-	localStorage.setItem('savedDecks', JSON.stringify(savedDecks));
-})
-deckViewHeader.appendChild(deckSaveBtn);
+ */
 
 //decklist dropdown:
 const decklistDropdown = document.createElement('select');
@@ -224,6 +259,23 @@ const refreshDropdown = () => {
 }
 refreshDropdown();
 
+
+const deckSearchInput = () => {
+	//deck name input box:
+	const searchInput = document.createElement('input');
+	searchInput.id = 'deckSearchInput';
+	searchInput.classList.add('headerElement');
+	searchInput.type = 'text';
+	searchInput.placeholder = locale('search');
+	//when the name input box is changed, update the deck name
+	searchInput.change = function () {
+	};
+
+	return searchInput
+}
+
+deckViewHeader.appendChild(deckSearchInput());
+
 //load button:
 const deckLoadBtn = createHeaderButton('load', 'deck_load_btn', function () {
 	//load the selected deck into the current deck
@@ -232,7 +284,7 @@ const deckLoadBtn = createHeaderButton('load', 'deck_load_btn', function () {
 	deckNames[currentDeck] = savedDecks[selectedDeck].deckName;
 	decks[currentDeck] = [];
 	fillSlotsFromDeck(savedDecks[selectedDeck], currentDeck)
-	refreshNameInput();
+	refreshNameInput(currentDeck);
 })
 deckViewHeader.appendChild(deckLoadBtn);
 
@@ -251,16 +303,19 @@ deckViewHeader.appendChild(deckDeleteBtn);
 
 //#tag deck-container 
 //create a function that uses the code below to allow for calling a function to create new deck containers
-const createNewDeckContainer = (className) => {
+const createNewDeckContainer = (className, deckId) => {
 	var deckContainer = document.createElement('div');
 	deckContainer.classList.add(className);
 	deckContainer.classList.add('deckContainer');
+	deckContainer.onclick = function () {
+		selectDeck(deckId);
+	};
 	deck_content.appendChild(deckContainer);
 	return deckContainer;
 }
 
 const selectDeck = (deckId) => {
-	refreshNameInput();
+	refreshNameInput(currentDeck);
 	currentDeck = deckId
 	deckButtons[deckId].classList.add('selected');
 	deckButtons[1 - deckId].classList.remove('selected');
@@ -268,22 +323,84 @@ const selectDeck = (deckId) => {
 	deckContainers[1 - deckId].classList.remove('deckContainerActive');
 }
 
-var deck1Container = createNewDeckContainer('deck1Container');
+var deck1Container = createNewDeckContainer('deck1Container', 0);
 deckContainers.push(deck1Container);
-//when deck container is clicked, set it as the current deck
-deck1Container.click = function () {
-	selectDeck(0);
-};
-
-var deck2Container = createNewDeckContainer('deck2Container');
+const deck1ContNameDiv = document.createElement('div');
+deck1ContNameDiv.classList.add('deckNameDiv');
+deck1Container.appendChild(deck1ContNameDiv);
+var deck2Container = createNewDeckContainer('deck2Container', 1);
 deckContainers.push(deck2Container);
-//when deck container is clicked, set it as the current deck
-deck2Container.click = function () {
-	selectDeck(1);
-};
+const deck2ContNameDiv = document.createElement('div');
+deck2ContNameDiv.classList.add('deckNameDiv');
+deck2Container.appendChild(deck2ContNameDiv);
+
+const nameInputs = []
+const createNameInput = (deckId) => {
+	//deck name input box:
+	const nameInput = document.createElement('input');
+	nameInput.id = 'name_input' + deckId;
+	nameInput.classList.add('deckNameInput');
+	nameInput.type = 'text';
+	nameInput.placeholder = locale('deckName');
+	//when the name input box is changed, update the deck name
+	nameInput.change = function () {
+		deckNames[deckId] = nameInput.value;
+	};
+
+	return nameInput
+}
 
 selectDeck(0); //sets the initial selected deck
 
+nameInputs[0] = (createNameInput(0))
+deck1ContNameDiv.appendChild(nameInputs[0]);
+nameInputs[1] = (createNameInput(1))
+deck2ContNameDiv.appendChild(nameInputs[1]);
+
+function refreshNameInput(deckId) {
+	if (nameInputs[deckId]) nameInputs[deckId].value = deckNames[deckId];
+}
+refreshNameInput(0);
+
+const createDeckSaveBtn = (deckId) => {
+	const deckSaveBtn = createButton('save', 'deckSaveClearBtn', function () {
+		//save the current deck as a new deck
+		if (nameInputs[deckId].value == '') {
+			alert('Deck must have a name to be saved');
+			return;
+		}
+		if (savedDecks.find((deck) => deck.deckName == nameInputs[deckId].value)) {
+			alert('Deck name already exists');
+			return;
+		}
+		if (decks[currentDeck].length != 8) {
+			alert('Deck incomplete');
+			return;
+		}
+		//save the current deck as a new deck (name, deck
+		saveNewDeck(nameInputs[deckId].value, decks[deckId]);
+		refreshDropdown();
+		//clear the name input box
+		//store the decks in local storage
+		localStorage.setItem('savedDecks', JSON.stringify(savedDecks));
+	});
+	return deckSaveBtn;
+}
+
+deck1ContNameDiv.appendChild(createDeckSaveBtn(0));
+deck2ContNameDiv.appendChild(createDeckSaveBtn(1));
+
+const createDeckClearBtn = (deckId) => {
+	const deckClearBtn = createButton('clear', 'deckSaveClearBtn', function () {
+		removeAllUnitsFromDeck(deckId);
+		refreshNameInput(deckId);
+		repopulateFilteredUnitList();
+		redrawUnitContent();
+	});
+	return deckClearBtn;
+}
+deck1ContNameDiv.appendChild(createDeckClearBtn(0));
+deck2ContNameDiv.appendChild(createDeckClearBtn(1));
 
 //#tag slot-container
 

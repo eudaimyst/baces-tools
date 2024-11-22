@@ -7,13 +7,18 @@ function myLog(message) {
 }
 
 
-function createHeaderButton(localeString, id, onclick) {
+function createButton(localeString, classname, onclick) {
 	const button = document.createElement('button');
 	button.innerHTML = locale(localeString);
-	button.id = id;
-	button.classList.add('headerElement');
+	button.classList.add(classname);
 	button.onclick = onclick;
 	return button;
 }
 
-export { myLog, createHeaderButton }
+function createHeaderButton(localeString, id, onclick) {
+	const button = createButton(localeString, 'headerElement', onclick)
+	button.id = id;
+	return button;
+}
+
+export { myLog, createHeaderButton, createButton }

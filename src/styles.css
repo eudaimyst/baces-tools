@@ -682,11 +682,10 @@ sup {
 	border-width: 0px;
 	display: flex;
 	flex-direction: row;
-	align-items: flex-end;
+	align-items: center;
 	justify-content: space-evenly;
 	overflow: hidden;
 }
-
 
 .deckSlotImage {
 	width: 100%;
@@ -699,8 +698,8 @@ sup {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
-	width: 40%;
-	height: 90%;
+	width: 45%;
+	height: 95%;
 	border-color: rgb(2, 1, 90);
 	border-width: 1px;
 	border-style: solid;
@@ -709,7 +708,28 @@ sup {
 }
 
 .deckContainerActive {
-	border-color: rgb(192, 162, 81);
+	border-color: rgb(192, 162, 81, .5);
+}
+
+.deckSaveClearBtn {
+	width: fit-content;
+
+	font-size: 1.3vmin;
+	padding: 0 .3vw 0 .3vw;
+	font-variant: all-small-caps;
+	font-style: bold;
+	margin: 2px;
+	color: rgba(207, 207, 207, 0.699);
+}
+
+.deckNameInput {
+	width: 63%;
+	font-size: 1.3vmin;
+	padding: 0 .3vw 0 .3vw;
+	font-variant: all-small-caps;
+	font-style: bold;
+	margin: 2px;
+	color: rgba(207, 207, 207, 0.699);
 }
 
 .deckSlotContainer {
