@@ -731,6 +731,11 @@ sup {
 	color: rgba(207, 207, 207, 0.699);
 }
 
+#decklistDropdown {
+	min-width: 15vmin;
+	max-width: 18vmin;
+}
+
 .deckSlotContainer {
 	width: 100%;
 	height: fit-content;

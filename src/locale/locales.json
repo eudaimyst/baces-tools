@@ -35,6 +35,17 @@
 		"kr": "간단한",
 		"es-419": "sencillo"
 	},
+	"search": {
+		"en": "search",
+		"fr": "recherche",
+		"de": "suche",
+		"es": "buscar",
+		"pt": "pesquisar",
+		"jp": "検索",
+		"cn": "搜索",
+		"kr": "검색",
+		"es-419": "buscar"
+	},
 	"hideUnavail": {
 		"en": "hide unavail",
 		"fr": "masquer indispo",

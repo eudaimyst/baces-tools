@@ -10,6 +10,7 @@ import leaderboardData from '../leaderboard.json';
 
 
 var savedDecks = []
+var filteredDecks = []
 var leaderboardDecks = []
 
 class SavedDeck {
@@ -246,27 +247,44 @@ deckViewHeader.appendChild(decklistDropdown);
 var selectedDeckToLoad = 0;
 //for each deck in the deckLists array, add an option to select that deck in the dropdown, using the decks name
 const refreshDropdown = () => {
+	//remove all options from the decklist dropdown
 	decklistDropdown.innerHTML = '';
-	savedDecks.forEach((deck) => {
-		var option = document.createElement('option');
-		option.value = deck.deckName;
-		option.innerHTML = deck.deckName;
-		decklistDropdown.appendChild(option);
-		//when the option is selected, set the selected deck to the index of the selected option
-		decklistDropdown.addEventListener('change', function () {
-			selectedDeckToLoad = decklistDropdown.selectedIndex;
+
+	if (filteredDecks.length > 0) {
+		filteredDecks.forEach((deck) => {
+			var option = document.createElement('option');
+			option.value = deck.deckName;
+			option.innerHTML = deck.deckName;
+			decklistDropdown.appendChild(option);
+			//when the option is selected, set the selected deck to the index of the selected option
+			decklistDropdown.addEventListener('change', function () {
+				selectedDeckToLoad = decklistDropdown.selectedIndex;
+			});
 		});
-	});
-	leaderboardDecks.forEach((deck) => {
-		var option = document.createElement('option');
-		option.value = deck.deckName;
-		option.innerHTML = deck.deckName;
-		decklistDropdown.appendChild(option);
-		//when the option is selected, set the selected deck to the index of the selected option
-		decklistDropdown.addEventListener('change', function () {
-			selectedDeckToLoad = decklistDropdown.selectedIndex;
+		selectedDeckToLoad = 0;
+	}
+	else {
+		savedDecks.forEach((deck) => {
+			var option = document.createElement('option');
+			option.value = deck.deckName;
+			option.innerHTML = deck.deckName;
+			decklistDropdown.appendChild(option);
+			//when the option is selected, set the selected deck to the index of the selected option
+			decklistDropdown.addEventListener('change', function () {
+				selectedDeckToLoad = decklistDropdown.selectedIndex;
+			});
 		});
-	});
+		leaderboardDecks.forEach((deck) => {
+			var option = document.createElement('option');
+			option.value = deck.deckName;
+			option.innerHTML = deck.deckName;
+			decklistDropdown.appendChild(option);
+			//when the option is selected, set the selected deck to the index of the selected option
+			decklistDropdown.addEventListener('change', function () {
+				selectedDeckToLoad = decklistDropdown.selectedIndex;
+			});
+		});
+	}
 }
 refreshDropdown();
 
@@ -284,22 +302,36 @@ const deckSearchInput = () => {
 	searchInput.classList.add('headerElement');
 	searchInput.type = 'text';
 	searchInput.placeholder = locale('search');
-	//when the name input box is changed, update the deck name
-	searchInput.change = function () {
+	//when the search input box is updated, filter the available unit decks by the search term
+	searchInput.oninput = function () {
+		//combine savedDecks and leaderboardDecks into one array
+		console.log(searchInput.value)
+		filteredDecks = []
+		const combDecks = savedDecks.concat(leaderboardDecks);
+		filteredDecks = combDecks.filter((deck) => {
+			return deck.deckName.toLowerCase().includes(searchInput.value.toLowerCase());
+		});
+		console.log(filteredDecks)
+		refreshDropdown();
 	};
 
 	return searchInput
 }
-
-deckViewHeader.appendChild(deckSearchInput());
+const deckSearchInputElement = deckSearchInput()
+console.log('deck search', deckSearchInputElement)
+deckViewHeader.appendChild(deckSearchInputElement);
 
 function loadDeck() {
 	//load the selected deck into the current deck'
 	var deckToLoad;
-	if (savedDecks[selectedDeckToLoad]) deckToLoad = savedDecks[selectedDeckToLoad];
-	//the selectedDeckToLoad is the index of the option in the dropdown, and leaderboard is listed after saved decks so minus that index by how many saved decks there are
-	else if (leaderboardDecks[selectedDeckToLoad - savedDecks.length]) deckToLoad = leaderboardDecks[selectedDeckToLoad - savedDecks.length];
-	//clear the current deck
+	if (filteredDecks.length > 0) {
+		deckToLoad = filteredDecks[selectedDeckToLoad];
+	}
+	else {
+		if (savedDecks[selectedDeckToLoad]) deckToLoad = savedDecks[selectedDeckToLoad];
+		//the selectedDeckToLoad is the index of the option in the dropdown, and leaderboard is listed after saved decks so minus that index by how many saved decks there are
+		else if (leaderboardDecks[selectedDeckToLoad - savedDecks.length]) deckToLoad = leaderboardDecks[selectedDeckToLoad - savedDecks.length];
+	}
 	//myLog(savedDecks[selectedDeck]);
 	deckNames[currentDeck] = deckToLoad.deckName;
 	decks[currentDeck] = [];
