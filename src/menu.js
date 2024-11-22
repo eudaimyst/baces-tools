@@ -335,13 +335,13 @@ bgImgSelectDiv.appendChild(bgImgSelectText2);
 bgImgSelectDiv.appendChild(bgImgSelectText3);
 
 
-function advertisement() {
+function information() {
 	//create a div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
-	const adsDiv = document.createElement('div');
-	adsDiv.classList.add('ads_div');
-	adsDiv.innerHTML = 'Note: Only bonus damage for ANTI-AIR units are shown currently. Will work on adding the other bonus damages';
-	adsDiv.style.margin = '5px';
-	return adsDiv;
+	const infoDiv = document.createElement('div');
+	infoDiv.classList.add('info_div');
+	infoDiv.innerHTML = 'Note: Only bonus damage for ANTI-AIR units are shown currently. Will work on adding the other bonus damages';
+	infoDiv.style.margin = '5px';
+	return infoDiv;
 }
 
 function socials() {
@@ -378,11 +378,11 @@ function socials() {
 	return socialsDiv;
 }
 sidebar_content_div.appendChild(socials());
-sidebar_content_div.appendChild(advertisement());
+sidebar_content_div.appendChild(information());
 console.log("sidebarlog")
 console.log(sidebar_content_div)
 
-export { sidebar, advertisement, updateBG };
+export { sidebar, updateBG };
 
 
 
