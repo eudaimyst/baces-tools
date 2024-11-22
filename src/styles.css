@@ -721,6 +721,13 @@ sup {
 	color: rgba(207, 207, 207, 0.699);
 }
 
+.deckNameDiv {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+
 .deckNameInput {
 	width: 63%;
 	font-size: 1.3vmin;
