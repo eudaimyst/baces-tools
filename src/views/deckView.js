@@ -72,7 +72,7 @@ function convertUnitIdToSlug(unitID) { //given a unit id, get the corresponding 
 		//console.log('no match', unit, units[unit]['leaderboardid'], unitID)
 		if (Number(units[unit]['leaderboardid']) == Number(unitID)) {
 			//return the unit.slug
-			console.log('match found!', unit, units[unit]['leaderboardid'], unitID)
+			//console.log('match found!', unit, units[unit]['leaderboardid'], unitID)
 			return units[unit].slug;
 		}
 	}
@@ -108,7 +108,7 @@ function loadLeaderboardDecks() {
 	//for each deck in leader1
 	//console.log('leaderboard1')
 	for (var i = 0; i < leader1.length; i++) { //change 3 to leader1.length
-		console.log('importing leader deck ' + leader1[i].player);
+		//console.log('importing leader deck ' + leader1[i].player);
 		//for each unit in leaderboardData[i].units
 		const units = [];
 		//split leader1[i].units by commas and remove spaces
@@ -123,7 +123,7 @@ function loadLeaderboardDecks() {
 		//add the new deck to the savedDecks array
 	}
 	for (var i = 0; i < leader2.length; i++) { //change 3 to leader1.length
-		console.log('importing leader deck ' + leader2[i].player);
+		//console.log('importing leader deck ' + leader2[i].player);
 		//for each unit in leaderboardData[i].units
 		const units = [];
 		//split leader1[i].units by commas and remove spaces
@@ -305,20 +305,20 @@ const deckSearchInput = () => {
 	//when the search input box is updated, filter the available unit decks by the search term
 	searchInput.oninput = function () {
 		//combine savedDecks and leaderboardDecks into one array
-		console.log(searchInput.value)
+		//console.log(searchInput.value)
 		filteredDecks = []
 		const combDecks = savedDecks.concat(leaderboardDecks);
 		filteredDecks = combDecks.filter((deck) => {
 			return deck.deckName.toLowerCase().includes(searchInput.value.toLowerCase());
 		});
-		console.log(filteredDecks)
+		//console.log(filteredDecks)
 		refreshDropdown();
 	};
 
 	return searchInput
 }
 const deckSearchInputElement = deckSearchInput()
-console.log('deck search', deckSearchInputElement)
+//console.log('deck search', deckSearchInputElement)
 deckViewHeader.appendChild(deckSearchInputElement);
 
 function loadDeck() {

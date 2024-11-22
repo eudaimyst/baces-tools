@@ -502,7 +502,7 @@ function drawUnitTable() {
 		unit_table_row.appendChild(unit_table_cell);
 		unit_table_row.addEventListener('mouseover', unitMouseOver);
 
-		console.log('drawing row for unit', unit);
+		//console.log('drawing row for unit', unit);
 		for (const [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
 				var unit_table_cell = document.createElement('td');
@@ -541,7 +541,7 @@ function drawUnitTable() {
 						unit_table_cell.appendChild(img);
 					}
 					if (unit['traits'] == null) {
-						console.log(unit['name']);
+						//console.log(unit['name']);
 						if (unit['name'] == 'raider') {
 							var unit_table_cell = document.createElement('td');
 							unit_table_cell.id = unit.slug;
@@ -1567,8 +1567,8 @@ function scaleDeckTotals(d, deckID) {
 
 function updateDeckStatTotals(d, deckID) {
 	//for each label in statsUnit, add the total of values of the stats for each unit in the deck
-	console.log('totals array: ' + d)
-	console.log(d);
+	//console.log('totals array: ' + d)
+	//console.log(d);
 	myLog('deck ' + deckID)
 	myLog(decks[deckID]);
 	starchartStatsUnit.forEach(function (label) {
