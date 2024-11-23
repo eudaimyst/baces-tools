@@ -99,10 +99,11 @@ option {
 	position: absolute;
 	border-width: 1px;
 	border-color: rgba(0, 0, 0, 0.322);
+	border-color: rgb(255, 255, 255);
 	border-style: solid;
 	border-radius: 5px;
 	box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.304);
-	overflow: hidden;
+	overflow: auto;
 }
 
 .view_header {
@@ -122,7 +123,7 @@ option {
 }
 
 
-.view_content {
+.viewContent {
 	border-radius: 5px;
 	display: flex;
 	justify-content: space-evenly;
@@ -600,16 +601,20 @@ sup {
 	height: 80%;
 }
 
-#unit_view-h {
+#unitView-h {
 	overflow: auto;
 	margin: 3px;
 	right: 50%;
 	left: 0px;
 	top: 0px;
 	bottom: 0px;
+	border: solid;
+	border-color: black;
+	border-width: 2px;
 }
 
-#deck_view-h {
+#deckView-h {
+	position: absolute;
 	margin: 3px;
 	left: 50%;
 	top: 0px;
@@ -617,7 +622,7 @@ sup {
 	bottom: 50%;
 }
 
-#stats_view-h {
+#statsView-h {
 	margin: 3px;
 	left: 50%;
 	top: 50%;
@@ -626,7 +631,7 @@ sup {
 	overflow: hidden;
 }
 
-#unit_view-v {
+#unitView-v {
 	overflow: auto;
 	margin: 0;
 	left: 0;
@@ -641,7 +646,7 @@ sup {
 }
 
 
-#deck_view-v {
+#deckView-v {
 	margin: 0;
 	height: 29.5%;
 	left: 0;
@@ -654,7 +659,7 @@ sup {
 	top: 40%;
 }
 
-#stats_view-v {
+#statsView-v {
 	margin: 0;
 	margin: 0;
 	height: 30%;
@@ -690,7 +695,7 @@ sup {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-evenly;
-	overflow: hidden;
+	overflow: visible;
 }
 
 .deckSlotImage {

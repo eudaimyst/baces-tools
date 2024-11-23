@@ -6,6 +6,7 @@ import { myLog, removeSpacesCapitalsSpecialCharacters } from '../utils';
 import { unitList } from '../units';
 
 
+
 var unitMouseOverAndTapped
 var unitMouseOver
 
@@ -755,4 +756,17 @@ unitHeaderSort.onchange = function () {
 //#endregion
 
 
-export { unitView, unitViewMode, tableUnitRows, unitCards, unitsInit, repopulateFilteredUnitList, redrawUnitContent, filteredUnitList, sortUnits, setFilter, unitHeaderSort, unitFilterInput }
+export {
+	unitView,
+	unitViewMode,
+	tableUnitRows,
+	unitCards,
+	unitsInit,
+	repopulateFilteredUnitList,
+	redrawUnitContent,
+	filteredUnitList,
+	sortUnits,
+	setFilter,
+	unitHeaderSort,
+	unitFilterInput
+}

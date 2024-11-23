@@ -4,6 +4,7 @@ import { myLog, createButton, createHeaderButton } from '../utils'
 import { locale } from '../locale';
 import { units, unitList } from '../units';
 import { redrawUnitContent } from './unitView';
+import { updateComparisonCharts } from './statsView'
 //import { sort } from 'fast-sort';
 import leaderboardData from '../leaderboard.json';
 
@@ -152,17 +153,15 @@ if (savedDecks.length == 0) {
 
 var repopulateFilteredUnitList
 var unitMouseOverAndTapped
-var updateComparisonCharts
 var filteredUnitList
 var sortUnits
 var unit_header_sort
 var unit_filter_input
 var setFilter
 //called by main to pass required functions
-function decksInit(repop, redraw, unitHover, updateChart, _filteredUnitlist, unitlist, sortunits, uhs, ufi, setfilter) {
+function decksInit(repop, redraw, unitHover, _filteredUnitlist, unitlist, sortunits, uhs, ufi, setfilter) {
 	repopulateFilteredUnitList = repop;
 	unitMouseOverAndTapped = unitHover
-	updateComparisonCharts = updateChart
 	filteredUnitList = _filteredUnitlist;
 	//unitList = unitlist;
 	sortUnits = sortunits;

@@ -177,4 +177,13 @@ const units = importedUnits.reduce((obj, unit) => {
 const unitList = Object.values(units);
 
 
-export { units, unitList };
+
+var currentUnit = unitList[0];
+function getCurrentUnit() {
+	return currentUnit;
+}
+function setCurrentUnit(unit) {
+	currentUnit = unit;
+}
+
+export { units, unitList, getCurrentUnit, setCurrentUnit };
