@@ -20,5 +20,10 @@ function createHeaderButton(localeString, id, onclick) {
 	button.id = id;
 	return button;
 }
-
-export { myLog, createHeaderButton, createButton }
+function removeSpacesCapitalsSpecialCharacters(input) {
+	if (typeof input !== 'string') {
+		input = String(input);
+	}
+	return input.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+}
+export { myLog, createHeaderButton, createButton, removeSpacesCapitalsSpecialCharacters }

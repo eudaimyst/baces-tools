@@ -4,7 +4,7 @@ import { sort } from 'fast-sort';
 import Chart from 'chart.js/auto';
 import { sidebar, updateBG } from './menu';
 import { deckView, decks, decksInit } from './views/deckView';
-import { unitView, unitViewMode, tableUnitRows, unitCards, unitsInit, repopulateFilteredUnitList, redrawUnitContent, filteredUnitList, sortUnits, setFilter, unitHeaderSort, unitFilterInput } from './views/unitView';
+import { redrawUnitContent, unitView, unitViewMode, tableUnitRows, unitCards, unitsInit, repopulateFilteredUnitList, filteredUnitList, sortUnits, setFilter, unitHeaderSort, unitFilterInput } from './views/unitView';
 import { locale } from './locale';
 import { units } from './units';
 import { myLog } from './utils'
@@ -443,7 +443,7 @@ video.id = 'unitVideo';
 function updateStatsUnit() {
 	stats_content.appendChild(unitOfficialLinkDiv);
 	stats_content.appendChild(video);
-	video.play();
+	//video.play();
 	stats_content.appendChild(videoblind);
 	stats_content.appendChild(statsUnitBottomContainer);
 	stats_content.appendChild(statsUnitRightContainer);
@@ -631,8 +631,6 @@ function unitMouseOverAndTapped(unit) {
 
 	//statsUnitName.innerHTML = e.target.id + '   ' + unit.matter + ' ' + unit.energy;
 	//do the same as above, but add the matter and energy images before the values
-
-	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
 	//for each key in statsUnitRankTextDivs, update the divs value to the units rank
 	for (var [key] of Object.entries(statsUnitRankTextDivs)) {
 		var rank = sortedUnitData[key].length - sortedUnitData[key].lastIndexOf(unit[key]);
@@ -657,7 +655,6 @@ function unitMouseOverAndTapped(unit) {
 	}, 40);
 	//get the unit from unit list by its name
 	//update the video source
-	fetchAndPlay();
 	function fetchAndPlay() {
 		var playVideo = false
 		myLog('fetching ' + unit.videoturnaround)
@@ -682,6 +679,7 @@ function unitMouseOverAndTapped(unit) {
 				myLog('video playback failed')
 			})
 	}
+	fetchAndPlay();
 	//update the colors in the bar charts based on the unit id
 	/**
 	function updateChart(chart, label) {
@@ -803,8 +801,6 @@ function createStarchart(id) {
 		}
 	}));
 }
-createStarchart(0);
-createStarchart(1);
 
 function doScaling(deckID, input, min, max) { //given an input value, and a minimum and maximum, return a float such that  then the value is at the minimum value 0 is the returned value and when the value is at the maximum value 1 is the max
 	var sf = (.125) * decks[deckID].length; //scale factor\
@@ -995,7 +991,6 @@ function updateResourceCharts() {
 	resourceChart.data.datasets[2].data = bandwidthValues;
 	resourceChart.update();
 }
-updateResourceCharts();
 
 
 
@@ -1044,7 +1039,6 @@ function refreshStatViewContent() {
 	}
 }
 
-refreshStatViewContent()
 //#endregion
 
 var oldE = null
@@ -1056,7 +1050,6 @@ function unitMouseOver(e) {
 	currentUnit = e.target.id;
 	unitMouseOverAndTapped(unit);
 }
-unitMouseOverAndTapped(unitList[0]);
 /*
 deprecated, we now add the listener to the cell when its created
 //when a cell in the unit table is mouseover get the unit name from the cell and print to console
@@ -1067,6 +1060,12 @@ for (var i = 0; i < unit_table.length; i++) {
 	*/
 
 
+decksInit(repopulateFilteredUnitList, unitMouseOverAndTapped, updateComparisonCharts, filteredUnitList, unitList, sortUnits, unitHeaderSort, unitFilterInput, setFilter);
+unitsInit(unitMouseOverAndTapped, unitMouseOver);
 
-unitsInit(unitList, removeSpacesCapitalsSpecialCharacters, unitMouseOverAndTapped, unitMouseOver, decks, unitFilterInput);
-decksInit(repopulateFilteredUnitList, redrawUnitContent, unitMouseOverAndTapped, updateComparisonCharts, filteredUnitList, unitList, sortUnits, unitHeaderSort, unitFilterInput, setFilter);
+redrawUnitContent();
+unitMouseOverAndTapped(unitList[0]);
+createStarchart(0);
+createStarchart(1);
+updateResourceCharts();
+refreshStatViewContent()

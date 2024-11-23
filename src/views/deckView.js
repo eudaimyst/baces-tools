@@ -3,6 +3,7 @@
 import { myLog, createButton, createHeaderButton } from '../utils'
 import { locale } from '../locale';
 import { units, unitList } from '../units';
+import { redrawUnitContent } from './unitView';
 //import { sort } from 'fast-sort';
 import leaderboardData from '../leaderboard.json';
 
@@ -150,7 +151,6 @@ if (savedDecks.length == 0) {
 
 
 var repopulateFilteredUnitList
-var redrawUnitContent
 var unitMouseOverAndTapped
 var updateComparisonCharts
 var filteredUnitList
@@ -161,7 +161,6 @@ var setFilter
 //called by main to pass required functions
 function decksInit(repop, redraw, unitHover, updateChart, _filteredUnitlist, unitlist, sortunits, uhs, ufi, setfilter) {
 	repopulateFilteredUnitList = repop;
-	redrawUnitContent = redraw;
 	unitMouseOverAndTapped = unitHover
 	updateComparisonCharts = updateChart
 	filteredUnitList = _filteredUnitlist;

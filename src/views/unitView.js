@@ -1,22 +1,17 @@
+/* eslint-disable no-redeclare */
 import { locale } from '../locale';
 import { sort } from 'fast-sort';
-import { addUnitToDeck, currentDeck } from './deckView';
-import { myLog } from '../utils'
+import { addUnitToDeck, decks, currentDeck } from './deckView';
+import { myLog, removeSpacesCapitalsSpecialCharacters } from '../utils';
+import { unitList } from '../units';
 
 
-var unitList
-var removeSpacesCapitalsSpecialCharacters
 var unitMouseOverAndTapped
 var unitMouseOver
-var decks
 
-const unitsInit = (_unitList, _removeSpacesCapitalsSpecialCharacters, _unitMouseOverAndTapped, _unitMouseOver, _decks) => {
-	unitList = _unitList;
-	myLog = _myLog;
-	removeSpacesCapitalsSpecialCharacters = _removeSpacesCapitalsSpecialCharacters;
+const unitsInit = (_unitMouseOverAndTapped, _unitMouseOver) => {
 	unitMouseOverAndTapped = _unitMouseOverAndTapped;
 	unitMouseOver = _unitMouseOver;
-	decks = _decks;
 }
 
 const unitView = document.createElement('div');
@@ -297,6 +292,7 @@ function drawUnitTable() {
 
 	//##tag unit-content-table-loop
 	//table header using the 2nd object in the object list
+	console.log(unitList);
 	for (const [key] of Object.entries(unitList[0])) {
 		if (!excludeKeys.includes(key)) {
 			var unit_table_header = document.createElement('th');
@@ -657,6 +653,7 @@ function redrawUnitContent() {
 
 	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
 	if (hideUnavailMode == true) {
+		console.log(decks)
 		for (let i = 0; i < decks[currentDeck].length; i++) {
 			//if the unit is in the unit list
 			//if (decks[currentDeck][i]) myLog('looking for ' + decks[currentDeck][i].name + 'in deck ' + currentDeck);
