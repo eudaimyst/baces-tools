@@ -199,16 +199,16 @@ function setCurrentDeck(num) {
 	redrawUnitContent();
 }
 
-const deck_view = document.createElement('div');
-deck_view.id = 'deck_view-h';
-deck_view.classList.add('view');
+const deckView = document.createElement('div');
+deckView.id = 'deck_view-h';
+deckView.classList.add('view');
 const deckViewHeader = document.createElement('div');
 deckViewHeader.classList.add('view_header');
-deck_view.appendChild(deckViewHeader);
+deckView.appendChild(deckViewHeader);
 const deck_content = document.createElement('div');
 deck_content.classList.add('view_content');
 deck_content.id = 'deck_content';
-deck_view.appendChild(deck_content);
+deckView.appendChild(deck_content);
 
 //make a constructor for header button
 
@@ -865,4 +865,4 @@ decksInit(repopulateFilteredUnitList,
 	setFilter
 )
 
-export { deck_view, addUnitToDeck, currentDeck, decks, decksInit };
+export { deckView, addUnitToDeck, currentDeck, decks, decksInit };
