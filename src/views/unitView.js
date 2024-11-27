@@ -10,6 +10,7 @@ var unitMouseOver
 
 const unitsInit = (UnitMouseOver) => {
 	unitMouseOver = UnitMouseOver;
+	redrawContent();
 }
 
 const unitView = makeDiv('view', 'unitView-h')
@@ -17,7 +18,7 @@ const unitViewHeader = makeDiv('viewHeader', 'unitHeader', unitView);
 const unitContent = makeDiv('viewContent', 'unitContent', unitView)
 
 
-//#region unit-header
+//#region header
 //label
 const sortLabel = makeDiv('headerElement', 'sortLabel', unitViewHeader)
 sortLabel.innerHTML = locale('sort') + ': ';
@@ -497,7 +498,8 @@ function drawUnitCards() {
 
 //#endregion
 
-//#region redrawContent expensive function: draws unit content div, iterates unitList for display
+//#region redrawContent
+//expensive function: draws unit content div, iterates unitList for display
 function redrawContent() {
 
 
@@ -509,6 +511,7 @@ function redrawContent() {
 	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
 	if (hideUnavailMode == true) {
 		console.log(decks)
+		if (!decks) return
 		for (let i = 0; i < decks[currentDeck].length; i++) {
 			//if the unit is in the unit list
 			//if (decks[currentDeck][i]) myLog('looking for ' + decks[currentDeck][i].name + 'in deck ' + currentDeck);
@@ -583,6 +586,7 @@ unitHeaderSort.onchange = function () {
 
 //#endregion
 
+redrawContent();
 
 export {
 	unitView,
@@ -591,11 +595,11 @@ export {
 	unitCards,
 	unitsInit,
 	repopulateFilteredUnitList,
-	redrawContent as redrawUnitContent,
 	filteredUnitList,
 	setFilteredUnitList,
 	sortUnits,
 	setFilter,
 	unitHeaderSort,
-	unitFilterInput
+	unitFilterInput,
+	redrawContent as redrawUnitContent
 }

@@ -613,6 +613,18 @@ sup {
 	border-width: 2px;
 }
 
+#stratView-h {
+	overflow: auto;
+	margin: 3px;
+	right: 0;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	border: solid;
+	border-color: black;
+	border-width: 2px;
+}
+
 #deckView-h {
 	position: absolute;
 	margin: 3px;

@@ -872,6 +872,7 @@ var bandwidthValues = []
 //calculate tier values based off the total matter, energy and bandwidth for units in each tier
 //add units in the deck with tier 1 and push their matter, energy and bandwidth values to the respective arrays
 function calculateTierValues() {
+	if (!decks) return;
 	//for each unit in the deck, add its tier values to the respective arrays
 	var t1Totals = [0, 0, 0, 0, 0, 0];
 	var t2Totals = [0, 0, 0, 0, 0, 0];
@@ -965,5 +966,12 @@ function refreshStatViewContent() {
 }
 
 //#endregion
+
+
+unitMouseOverAndTapped(unitList[0]);
+createStarchart(0);
+createStarchart(1);
+updateResourceCharts();
+refreshStatViewContent();
 
 export { statsView, updateComparisonCharts, unitMouseOverAndTapped, createStarchart, updateResourceCharts, refreshStatViewContent }

@@ -60,14 +60,21 @@ toggleSidebarButtonImg.classList.add('sidebarBtnImg');
 toggleSidebarButton.appendChild(toggleSidebarButtonImg);
 
 
-const deckBuilderButton = document.createElement('button');
-deckBuilderButton.id = 'toggleSidebarButton';
-sidebar.appendChild(deckBuilderButton);
+const deckBuilderBtn = document.createElement('button');
+deckBuilderBtn.id = 'toggleSidebarButton';
+sidebar.appendChild(deckBuilderBtn);
 //create a button image and add it to the toggleSidebarButton
 const deckBuilderButtonImg = document.createElement('img');
 deckBuilderButtonImg.src = 'images/pageicons/deckbuilder.png';
 deckBuilderButtonImg.classList.add('sidebarBtnImg');
-deckBuilderButton.appendChild(deckBuilderButtonImg);
+deckBuilderBtn.appendChild(deckBuilderButtonImg);
+
+deckBuilderBtn.addEventListener('click', () => {
+	// Update the fragment identifier
+	window.location.hash = 'deckbuilder';
+
+	console.log('URL updated to:', window.location.href);
+});
 
 const stratPlannerBtn = document.createElement('button');
 stratPlannerBtn.id = 'toggleSidebarButton';
@@ -77,6 +84,13 @@ const stratPlannerImg = document.createElement('img');
 stratPlannerImg.src = 'images/pageicons/resources.png';
 stratPlannerImg.classList.add('sidebarBtnImg');
 stratPlannerBtn.appendChild(stratPlannerImg);
+
+stratPlannerBtn.addEventListener('click', () => {
+	// Update the fragment identifier
+	window.location.hash = 'stratplanner';
+
+	console.log('URL updated to:', window.location.href);
+});
 
 var sidebarActive = true;
 const sidebarTitleDiv = document.createElement('div');

@@ -11,7 +11,6 @@ import leaderboardData from '../leaderboard.json';
 
 //#region deck format
 
-
 var savedDecks = []
 var filteredDecks = []
 var leaderboardDecks = []
