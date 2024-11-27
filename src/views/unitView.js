@@ -2,44 +2,27 @@
 import { locale } from '../locale';
 import { sort } from 'fast-sort';
 import { addUnitToDeck, decks, currentDeck } from './deckView';
-import { myLog, removeSpacesCapitalsSpecialCharacters } from '../utils';
+import { myLog, cleanText, makeDiv, makeDropDown, makeP, makeHeaderBtn, makeInput } from '../utils';
+import { unitMouseOverAndTapped } from './statsView';
 import { unitList } from '../units';
 
-
-
-var unitMouseOverAndTapped
 var unitMouseOver
 
-const unitsInit = (_unitMouseOverAndTapped, _unitMouseOver) => {
-	unitMouseOverAndTapped = _unitMouseOverAndTapped;
-	unitMouseOver = _unitMouseOver;
+const unitsInit = (UnitMouseOver) => {
+	unitMouseOver = UnitMouseOver;
 }
 
-const unitView = document.createElement('div');
-unitView.id = 'unit_view-h';
-unitView.classList.add('view');
-const unitViewHeader = document.createElement('div');
-unitViewHeader.classList.add('view_header');
-unitView.appendChild(unitViewHeader);
-const unitContent = document.createElement('div');
-unitContent.classList.add('view_content');
-unitContent.id = 'unit_content';
-unitView.appendChild(unitContent);
+const unitView = makeDiv('view', 'unitView-h')
+const unitViewHeader = makeDiv('viewHeader', 'unitHeader', unitView);
+const unitContent = makeDiv('viewContent', 'unitContent', unitView)
 
 
 //#region unit-header
 //label
-const sortLabel = document.createElement('div');
+const sortLabel = makeDiv('headerElement', 'sortLabel', unitViewHeader)
 sortLabel.innerHTML = locale('sort') + ': ';
-sortLabel.classList.add('headerElement');
-unitViewHeader.appendChild(sortLabel);
 //create a dropdown selector for sorting
-const unitHeaderSort = document.createElement('select');
-//add an option called test
-function addOptionsToTable(displayName, statName) {
-	unitHeaderSort.add(new Option(displayName, statName));
-}
-//name, health, type, damage, air damage, dps, air dps, speed, range, matter, energy, bandwidth, skill, tech, tier, big, small, antibig, splash, antiair, manufacturer
+
 const sortOptions = [
 	[locale('name'), 'name'],
 	[locale('health'), 'health'],
@@ -64,125 +47,85 @@ const sortOptions = [
 	[locale('antiAir'), 'antiair'],
 	[locale('manufacturer'), 'manufacturer']
 ];
-sortOptions.forEach((option) => {
-	addOptionsToTable(option[0], option[1])
-});
+const unitHeaderSort = makeDropDown('unitHeaderSort', 'headerElement', unitViewHeader, sortOptions)
+
 filteredUnitList = sortUnits(unitHeaderSort.value, filteredUnitList);
 
-unitHeaderSort.id = 'unit_header_sort';
-unitHeaderSort.classList.add('headerElement');
-unitViewHeader.appendChild(unitHeaderSort);
 //label
-const view_label = document.createElement('p');
-view_label.innerHTML = locale('view') + ': ';
-view_label.classList.add('headerElement');
-unitViewHeader.appendChild(view_label);
+makeP('headerElement', 'viewLabel', unitViewHeader, locale('view') + ': ')
 
 var unitViewMode = 0; //0 = table 1 = card
+function setUnitViewMode(i) {
+	unitViewMode = i;
+}
 
 //table view button
-const unit_view_table_btn = document.createElement('button');
-unit_view_table_btn.innerHTML = locale('table');
-unit_view_table_btn.id = 'unit_view_table_btn';
-unit_view_table_btn.classList.add('headerElement');
-unitViewHeader.appendChild(unit_view_table_btn);
-//card view button
-const unit_view_card_btn = document.createElement('button');
-unit_view_card_btn.innerHTML = locale('card');
-unit_view_card_btn.id = 'unit_view_card_btn';
-unit_view_card_btn.classList.add('headerElement');
-unitViewHeader.appendChild(unit_view_card_btn);
-
-//when table is selected set unitViewMode to 0
-unit_view_table_btn.onclick = function () {
-	unitViewMode = 0;
-	unit_view_table_btn.classList.add('selected');
-	unit_view_card_btn.classList.remove('selected');
-	redrawUnitContent();
-}
-unit_view_table_btn.classList.add('selected');
-//when card is selected set unitViewMode to 1
-unit_view_card_btn.onclick = function () {
-	unitViewMode = 1;
-	unit_view_card_btn.classList.add('selected');
-	unit_view_table_btn.classList.remove('selected');
-	redrawUnitContent();
-}
-//unit_view_card_btn.classList.add('selected');
-
-
-
-//filter input box
-const unitFilterInput = document.createElement('input');
-unitFilterInput.type = 'text';
-unitFilterInput.id = 'unit_filter_input';
-unitFilterInput.placeholder = locale('filter');
-unitFilterInput.classList.add('headerElement');
-//when user inputs text into filter input element
-unitFilterInput.oninput = function () {
-	setFilter(unitFilterInput.value);
-	redrawUnitContent();
-};
-
-unitViewHeader.appendChild(unitFilterInput);
-
-//filter clear button that clears the filter
-const unit_filter_clear_btn = document.createElement('button');
-unit_filter_clear_btn.innerHTML = locale('clear');
-unit_filter_clear_btn.id = 'unit_filter_clear_btn';
-unit_filter_clear_btn.classList.add('headerElement');
-unitViewHeader.appendChild(unit_filter_clear_btn);
-unit_filter_clear_btn.onclick = function () {
-	//clear the filter
-	unitFilterInput.value = '';
-	//run the unit_filter input changed event
-	unitFilterInput.dispatchEvent(new Event('input'));
-}
-const simple_stats_label = document.createElement('p');
-simple_stats_label.innerHTML = locale('simple') + ': ';
-simple_stats_label.classList.add('headerElement');
-unitViewHeader.appendChild(simple_stats_label);
-//unit_simple_stats_checkbox is a checkbox
-const unit_simple_stats_checkbox = document.createElement('input');
-unit_simple_stats_checkbox.type = 'checkbox';
-unitViewHeader.appendChild(unit_simple_stats_checkbox);
-//if checkbox is checked, hide the advanced stats
-unit_simple_stats_checkbox.checked = true;
-var simpleStatsMode = true;
-//mouseover /alt text for the checkbox
-unit_simple_stats_checkbox.title = 'Simple Health/Damage NOT to scale';
-unit_simple_stats_checkbox.addEventListener('change', function () {
-	if (unit_simple_stats_checkbox.checked) {
-		simpleStatsMode = true;
-	} else {
-		simpleStatsMode = false;
-	}
+const unitViewTableBtn = makeHeaderBtn('table', 'unitViewTableBtn', function () {
+	setUnitViewMode(0);
+	unitViewTableBtn.classList.add('selected');
+	unitViewCardBtn.classList.remove('selected');
 	redrawUnitContent();
 });
-var hideUnavailMode = true;
+
+//card view button
+const unitViewCardBtn = makeHeaderBtn('card', 'unitViewTableBtn', function () {
+	setUnitViewMode(1);
+	unitViewCardBtn.classList.add('selected');
+	unitViewTableBtn.classList.remove('selected');
+	redrawUnitContent();
+});
+
+unitViewHeader.appendChild(unitViewTableBtn);
+unitViewHeader.appendChild(unitViewCardBtn);
+
+//filter input box
+const unitFilterInput = makeInput('headerElement', 'unitFilterInput', unitViewHeader, 'text', locale('filter'), function () {
+	setFilter(unitFilterInput.value);
+	redrawUnitContent();
+})
+
+//filter clear button that clears the filter
+const unitFilterClearBtn = makeHeaderBtn('clear', 'unitFilterClearBtn', function () {
+	//clear the filter
+	unitFilterInput.value = '';
+	//run the unitFilter input changed event
+	unitFilterInput.dispatchEvent(new Event('input'));
+});
+unitViewHeader.appendChild(unitFilterClearBtn);
+
+makeP('headerElement', 'simpleStatsLabel', unitViewHeader, locale('simple') + ': ')
+
+//simple stats checkbox
+var simpleStatsMode = true;
+const unitSimpleStatsCheckbox = makeInput('headerElement', 'unitSimpleStatsCheckbox', unitViewHeader, 'checkbox', locale('filter'), null, function () {
+	if (unitSimpleStatsCheckbox.checked) {
+		simpleStatsMode = true;
+	}
+	else {
+		simpleStatsMode = false;
+	};
+	redrawUnitContent();
+})
+
+unitSimpleStatsCheckbox.checked = true;
+unitSimpleStatsCheckbox.title = 'Simple Health/Damage NOT to scale';
+
 //hide unavailable units checkbox
-const hide_unavail_label = document.createElement('p');
-hide_unavail_label.innerHTML = locale('hideUnavail') + ': ';
-hide_unavail_label.classList.add('headerElement');
-unitViewHeader.appendChild(hide_unavail_label);
-//unit_hide_unavailable_units_checkbox is a checkbox
-const hide_unavail_checkbox = document.createElement('input');
-hide_unavail_checkbox.type = 'checkbox';
-hide_unavail_checkbox.title = 'Hide unavailable units based on deck';
-unitViewHeader.appendChild(hide_unavail_checkbox);
-//if checkbox is checked, hide unavailable units based on deck
-hide_unavail_checkbox.checked = true;
-hide_unavail_checkbox.addEventListener('change', function () {
-	if (hide_unavail_checkbox.checked) {
+var hideUnavailMode = true;
+makeP('headerElement', 'hideUnavailLabel', unitViewHeader, locale('hideUnavail') + ': ')
+//unitHideUnavailableUnitsCheckbox is a checkbox
+
+const hideUnavailCheckbox = makeInput('headerElement', 'unitHideUnavailableUnitsCheckbox', unitViewHeader, 'checkbox', locale('filter'), null, function () {
+	if (hideUnavailCheckbox.checked) {
 		hideUnavailMode = true;
 	} else {
 		hideUnavailMode = false;
 	}
 	redrawUnitContent();
 });
-
-
-
+hideUnavailCheckbox.checked = true;
+hideUnavailCheckbox.title = 'Hide unavailable units based on deck';
+unitViewHeader.appendChild(hideUnavailCheckbox);
 
 //#endregion
 
@@ -204,7 +147,7 @@ repopulateFilteredUnitList();
 
 //setFilter is called when the filter input text is updated
 function setFilter(filterString) {
-	filterString = removeSpacesCapitalsSpecialCharacters(filterString);
+	filterString = cleanText(filterString);
 	myLog('Filter set to ' + filterString);
 
 	filteredUnitList = []; //holds the list of units as updated by setFilter()
@@ -242,11 +185,11 @@ function setFilter(filterString) {
 	else {
 
 		for (var i = 0; i < unitList.length; i++) {
-			if (removeSpacesCapitalsSpecialCharacters(unitList[i].name).includes(filterString) ||
-				removeSpacesCapitalsSpecialCharacters(unitList[i].building).includes(filterString) ||
-				removeSpacesCapitalsSpecialCharacters(unitList[i].type).includes(filterString) ||
-				removeSpacesCapitalsSpecialCharacters(unitList[i].traits).includes(filterString) ||
-				removeSpacesCapitalsSpecialCharacters(unitList[i].manufacturer).includes(filterString) ||
+			if (cleanText(unitList[i].name).includes(filterString) ||
+				cleanText(unitList[i].building).includes(filterString) ||
+				cleanText(unitList[i].type).includes(filterString) ||
+				cleanText(unitList[i].traits).includes(filterString) ||
+				cleanText(unitList[i].manufacturer).includes(filterString) ||
 				unitList[i].ability.toLowerCase().includes(filterString)
 			) {
 				filteredUnitList.push(unitList[i]);
@@ -274,21 +217,21 @@ function drawUnitTable() {
 		excludeKeys.push('simplespeed', 'simpledamage', 'hp/100')
 	}
 	//create a table element
-	var unit_table = document.createElement('table');
-	unit_table.id = 'unit_table';
-	unit_table.classList.add('unit_table');
+	var unitTable = document.createElement('table');
+	unitTable.id = 'unitTable';
+	unitTable.classList.add('unitTable');
 	//add table head
-	var unit_table_head = document.createElement('thead');
-	unit_table_head.id = 'unit_table_head'
-	unit_table.appendChild(unit_table_head);
+	var unitTableHead = document.createElement('thead');
+	unitTableHead.id = 'unitTableHead'
+	unitTable.appendChild(unitTableHead);
 	//add table body
-	var unit_table_body = document.createElement('tbody');
-	unit_table.appendChild(unit_table_body);
+	var unitTableBody = document.createElement('tbody');
+	unitTable.appendChild(unitTableBody);
 	//create table header and add it to the table head
-	var unit_table_add_header = document.createElement('th');
-	unit_table_add_header.classList.add('unit_table_header');
-	unit_table_add_header.innerHTML = locale('add');
-	unit_table_head.appendChild(unit_table_add_header);
+	var unitTableAddHeader = document.createElement('th');
+	unitTableAddHeader.classList.add('unitTableHeader');
+	unitTableAddHeader.innerHTML = locale('add');
+	unitTableHead.appendChild(unitTableAddHeader);
 
 
 	//##tag unit-content-table-loop
@@ -296,13 +239,13 @@ function drawUnitTable() {
 	console.log(unitList);
 	for (const [key] of Object.entries(unitList[0])) {
 		if (!excludeKeys.includes(key)) {
-			var unit_table_header = document.createElement('th');
-			unit_table_header.classList.add('unit_table_header');
+			var unitTableHeader = document.createElement('th');
+			unitTableHeader.classList.add('unitTableHeader');
 			//add some images to certain headers
 			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'simplespeed' || key == 'range') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + key + '.png';
-				img.classList.add('unit_table_header_image');
+				img.classList.add('unitTableHeaderImage');
 				if (key == 'damagea') {
 					img.setAttribute('alt', 'Air Damage');
 					img.setAttribute('title', 'Air Damage');
@@ -311,65 +254,65 @@ function drawUnitTable() {
 					img.setAttribute('alt', key);
 					img.setAttribute('title', key);
 				}
-				unit_table_header.appendChild(img);
+				unitTableHeader.appendChild(img);
 			} else if (key == 'hp/100') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'health' + '.png';
-				img.classList.add('unit_table_header_image');
+				img.classList.add('unitTableHeaderImage');
 				img.setAttribute('alt', 'Health/100');
 				img.setAttribute('title', 'Health/100');
-				unit_table_header.appendChild(img);
-				unit_table_header.classList.add('unit_table_smalltext');
+				unitTableHeader.appendChild(img);
+				unitTableHeader.classList.add('unitTableSmalltext');
 			} else if (key == 'simpledamage') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damage' + '.png';
-				img.classList.add('unit_table_header_image');
+				img.classList.add('unitTableHeaderImage');
 				img.setAttribute('alt', 'DPS/10');
 				img.setAttribute('title', 'DPS/10');
-				unit_table_header.appendChild(img);
-				unit_table_header.classList.add('unit_table_smalltext');
+				unitTableHeader.appendChild(img);
+				unitTableHeader.classList.add('unitTableSmalltext');
 			}
 			else if (key == 'dps') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damage' + '.png';
-				img.classList.add('unit_table_header_image');
+				img.classList.add('unitTableHeaderImage');
 				img.setAttribute('alt', 'ground dps');
 
 				img.setAttribute('title', 'ground dps');
-				unit_table_header.appendChild(img);
-				unit_table_header.innerHTML += '/s';
-				unit_table_header.classList.add('unit_table_smalltext');
+				unitTableHeader.appendChild(img);
+				unitTableHeader.innerHTML += '/s';
+				unitTableHeader.classList.add('unitTableSmalltext');
 			} else if (key == 'dpsa') {
 				var img = document.createElement('img');
 				img.src = 'images/stats/' + 'damagea' + '.png';
-				img.classList.add('unit_table_header_image');
+				img.classList.add('unitTableHeaderImage');
 				img.setAttribute('alt', 'air dps');
 				img.setAttribute('title', ' air dps');
-				unit_table_header.appendChild(img);
-				unit_table_header.innerHTML += '/s';
-				unit_table_header.classList.add('unit_table_smalltext');
+				unitTableHeader.appendChild(img);
+				unitTableHeader.innerHTML += '/s';
+				unitTableHeader.classList.add('unitTableSmalltext');
 			} else if (key == 'matter' || key == 'energy' || key == 'bandwidth') {
 				var img = document.createElement('img');
 				img.src = 'images/resources/' + key + '.svg';
-				img.classList.add('unit_table_header_image');
+				img.classList.add('unitTableHeaderImage');
 				img.setAttribute('alt', key);
 				img.setAttribute('title', key);
-				unit_table_header.appendChild(img);
+				unitTableHeader.appendChild(img);
 			} else if (key == 'image') {
 				key == 'tier';
-				unit_table_header.innerHTML = locale('image');
+				unitTableHeader.innerHTML = locale('image');
 				//no header name for images
 			} else if (key == 'ability') {
-				unit_table_header.innerHTML = locale('ability');
+				unitTableHeader.innerHTML = locale('ability');
 			} else if (key == 'manufacturer') {
-				unit_table_header.innerHTML = locale('shortManf');
+				unitTableHeader.innerHTML = locale('shortManf');
 			} else if (key == 'building') {
-				unit_table_header.innerHTML = locale('tech');
+				unitTableHeader.innerHTML = locale('tech');
 			} else {
-				unit_table_header.innerHTML = locale(key);
+				unitTableHeader.innerHTML = locale(key);
 			}
 
-			unit_table_head.appendChild(unit_table_header);
+			unitTableHead.appendChild(unitTableHeader);
 		}
 	}
 
@@ -377,101 +320,101 @@ function drawUnitTable() {
 	for (let i = 0; i < filteredUnitList.length; i++) {
 		var unit = filteredUnitList[i];
 		//create a table row element
-		var unit_table_row = document.createElement('tr');
-		unit_table_row.id = unit.name;
-		unit_table_row.classList.add('unit_table_row');
-		tableUnitRows[unit.name] = unit_table_row;
+		var unitTableRow = document.createElement('tr');
+		unitTableRow.id = unit.name;
+		unitTableRow.classList.add('unitTableRow');
+		tableUnitRows[unit.name] = unitTableRow;
 
 		//create a table cell element for each unit property
 		//add the unit property to the table cell
 		//for each key in the current unit
 
 		//the first cell of each row, we will add a button to add the unit to the deck
-		var unit_table_cell = document.createElement('td');
-		unit_table_cell.id = unit.name;
+		var unitTableCell = document.createElement('td');
+		unitTableCell.id = unit.name;
 		if (i % 2 == 0) {
-			unit_table_cell.classList.add('unit_table_cell_alt');
+			unitTableCell.classList.add('unitTableCellAlt');
 		}
 		//add the unit property to the table cell
 		var div = document.createElement('div');
 		//div.innerHTML = unit.name;
-		unit_table_cell.appendChild(div);
-		unit_table_cell.classList.add('unit_table_cell');
+		unitTableCell.appendChild(div);
+		unitTableCell.classList.add('unitTableCell');
 
-		//#tag table_add_unit_button
+		//#tag tableAddUnitButton
 		//add the button
-		var table_add_unit_button = document.createElement('button');
+		var tableAddUnitButton = document.createElement('button');
 		//add text to the button
-		table_add_unit_button.innerHTML = '+';
-		table_add_unit_button.classList.add('table_add_unit_button')
+		tableAddUnitButton.innerHTML = '+';
+		tableAddUnitButton.classList.add('tableAddUnitButton')
 		//add the button to the cell
-		unit_table_cell.classList.add('table_add_unit_button_cell');
-		unit_table_cell.appendChild(table_add_unit_button);
+		unitTableCell.classList.add('tableAddUnitButtonCell');
+		unitTableCell.appendChild(tableAddUnitButton);
 
-		table_add_unit_button.onclick = function () {
+		tableAddUnitButton.onclick = function () {
 			myLog(i + 'adding unit to deck: ' + filteredUnitList[i].name)
 			addUnitToDeck(filteredUnitList[i], currentDeck);
 		};
-		table_add_unit_button.onmouseover = function () {
+		tableAddUnitButton.onmouseover = function () {
 			unitMouseOverAndTapped(filteredUnitList[i]);
 		};
-		//table_add_unit_button.addEventListener('mouseover', unitMouseOver);
+		//tableAddUnitButton.addEventListener('mouseover', unitMouseOver);
 
 		//add the cell to the row
-		unit_table_row.appendChild(unit_table_cell);
-		unit_table_row.addEventListener('mouseover', unitMouseOver);
+		unitTableRow.appendChild(unitTableCell);
+		unitTableRow.addEventListener('mouseover', unitMouseOver);
 
 		//console.log('drawing row for unit', unit);
 		for (const [key, value] of Object.entries(unit)) {
 			if (!excludeKeys.includes(key)) {
-				var unit_table_cell = document.createElement('td');
-				unit_table_cell.id = unit.slug;
+				var unitTableCell = document.createElement('td');
+				unitTableCell.id = unit.slug;
 				if (simpleStatsMode) {
-					unit_table_cell.classList.add('simpleStatsPadding');
+					unitTableCell.classList.add('simpleStatsPadding');
 				}
 
-				unit_table_cell.classList.add('unit_table_cell');
+				unitTableCell.classList.add('unitTableCell');
 				//if i is an alternate number
 				if (i % 2 == 0) {
-					unit_table_cell.classList.add('unit_table_cell_alt');
+					unitTableCell.classList.add('unitTableCellAlt');
 				}
 
-				unit_table_row.appendChild(unit_table_cell);
+				unitTableRow.appendChild(unitTableCell);
 
 				var img = document.createElement('img');
 				if (key == 'image') {
 					img.src = 'images/units/' + value + '.png';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
-					img.classList.add('unit_table_image');
-					unit_table_cell.appendChild(img);
+					img.classList.add('unitTableImage');
+					unitTableCell.appendChild(img);
 				} else if (key == 'building') {
 					img.src = 'images/techtiers/' + value + '.svg';
 					img.setAttribute('alt', value);
 					img.setAttribute('title', value);
-					img.classList.add('unit_table_image_medium');
-					unit_table_cell.appendChild(img);
+					img.classList.add('unitTableImageMedium');
+					unitTableCell.appendChild(img);
 				} else if (key == 'ability') {
 					if (value != ' ') {
 						img.src = 'images/abilities/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
-						img.classList.add('unit_table_image_medium');
-						unit_table_cell.appendChild(img);
+						img.classList.add('unitTableImageMedium');
+						unitTableCell.appendChild(img);
 					}
 					if (unit['traits'] == null) {
 						//console.log(unit['name']);
 						if (unit['name'] == 'raider') {
-							var unit_table_cell = document.createElement('td');
-							unit_table_cell.id = unit.slug;
+							var unitTableCell = document.createElement('td');
+							unitTableCell.id = unit.slug;
 							if (i % 2 == 0) {
-								unit_table_cell.classList.add('unit_table_cell_alt');
+								unitTableCell.classList.add('unitTableCellAlt');
 							}
 							if (simpleStatsMode) {
-								unit_table_cell.classList.add('simpleStatsPadding');
+								unitTableCell.classList.add('simpleStatsPadding');
 							}
-							unit_table_cell.classList.add('unit_table_cell');
-							unit_table_row.appendChild(unit_table_cell);
+							unitTableCell.classList.add('unitTableCell');
+							unitTableRow.appendChild(unitTableCell);
 						}
 					}
 				} else if (key == 'manufacturer') {
@@ -479,8 +422,8 @@ function drawUnitTable() {
 						img.src = 'images/manuf/' + value + '.png';
 						img.setAttribute('alt', value);
 						img.setAttribute('title', value);
-						img.classList.add('unit_table_image_small');
-						unit_table_cell.appendChild(img);
+						img.classList.add('unitTableImageSmall');
+						unitTableCell.appendChild(img);
 					}
 				} else if (key == 'traits') {
 					if (value) {
@@ -488,157 +431,157 @@ function drawUnitTable() {
 							if (trait != 'none') {
 								var img = document.createElement('img');
 								img.src = 'images/traits/' + trait + '.png';
-								img.classList.add('unit_table_image_small');
+								img.classList.add('unitTableImageSmall');
 								img.setAttribute('alt', trait);
 								img.setAttribute('title', trait);
-								unit_table_cell.appendChild(img);
+								unitTableCell.appendChild(img);
 							}
 						});
 					}
-					unit_table_cell.classList.add('unit_table_cell_traits');
+					unitTableCell.classList.add('unitTableCellTraits');
 				} else {
 					if (key == 'name') {
-						unit_table_cell.innerHTML = locale(value)
+						unitTableCell.innerHTML = locale(value)
 					} else if (key == 'type') {
 						//if not simple stats
 						if (!simpleStatsMode) {
-							if (value == 'ground') unit_table_cell.innerHTML = locale('shortGround');
-							if (value == 'air') unit_table_cell.innerHTML = locale('shortAir');
+							if (value == 'ground') unitTableCell.innerHTML = locale('shortGround');
+							if (value == 'air') unitTableCell.innerHTML = locale('shortAir');
 						}
-						else unit_table_cell.innerHTML = locale(value);
+						else unitTableCell.innerHTML = locale(value);
 					}
 					else {
 						myLog(unit.name + ' key: ' + key + ' value: ' + value)
-						unit_table_cell.innerHTML = value || '0';
+						unitTableCell.innerHTML = value || '0';
 					}
 				}
 
 				if (key == 'health' || key == 'damage' || key == 'speed' || key == 'range') {
-					unit_table_cell.classList.add('unit_table_cell_stats');
+					unitTableCell.classList.add('unitTableCellStats');
 				}
 			}
 		}
 		//div.innerHTML = unit.name;
-		//unit_table_cell.add(div);
+		//unitTableCell.add(div);
 
 		//create a table body element
-		unit_table_body.appendChild(unit_table_row);
+		unitTableBody.appendChild(unitTableRow);
 	}
 
-	//attach the unit_table to the unit_content div
-	unitContent.appendChild(unit_table);
+	//attach the unitTable to the unitContent div
+	unitContent.appendChild(unitTable);
 }
 
 var unitCards = {};
 function createUnitCard(unit) {
 	//create a card div
-	var unit_card = document.createElement('div');
+	var unitCard = document.createElement('div');
 	//add a class to the card div
-	unit_card.classList.add('unit_card');
+	unitCard.classList.add('unitCard');
 	//
 	//when the unit is moused over, call the mouseover function to update the views
-	unit_card.addEventListener('mouseover', () => {
+	unitCard.addEventListener('mouseover', () => {
 		myLog(unit.name);
 		unitMouseOverAndTapped(unit);
 	});
 	//when the unit is clicked, add the unit to the deck
-	unit_card.addEventListener('click', () => {
+	unitCard.addEventListener('click', () => {
 		addUnitToDeck(unit, currentDeck);
 	});
 
 	//matter
-	var unit_card_matter = document.createElement('div');
-	unit_card_matter.classList.add('unit_card_matter');
-	unit_card_matter.classList.add('unit_card_text');
-	unit_card_matter.innerHTML = unit.matter
-	unit_card.appendChild(unit_card_matter);
+	var unitCardMatter = document.createElement('div');
+	unitCardMatter.classList.add('unitCardMatter');
+	unitCardMatter.classList.add('unitCardText');
+	unitCardMatter.innerHTML = unit.matter
+	unitCard.appendChild(unitCardMatter);
 	//bandwidth
-	var unit_card_bandwidth = document.createElement('div');
-	unit_card_bandwidth.classList.add('unit_card_text');
-	unit_card_bandwidth.classList.add('unit_card_bandwidth');
-	unit_card_bandwidth.innerHTML = unit.bandwidth
-	unit_card.appendChild(unit_card_bandwidth);
+	var unitCardBandwidth = document.createElement('div');
+	unitCardBandwidth.classList.add('unitCardText');
+	unitCardBandwidth.classList.add('unitCardBandwidth');
+	unitCardBandwidth.innerHTML = unit.bandwidth
+	unitCard.appendChild(unitCardBandwidth);
 	//energy
-	var unit_card_energy = document.createElement('div');
-	unit_card_energy.classList.add('unit_card_energy');
-	unit_card_energy.classList.add('unit_card_text');
-	unit_card_energy.innerHTML = unit.energy;
-	unit_card.appendChild(unit_card_energy);
+	var unitCardEnergy = document.createElement('div');
+	unitCardEnergy.classList.add('unitCardEnergy');
+	unitCardEnergy.classList.add('unitCardText');
+	unitCardEnergy.innerHTML = unit.energy;
+	unitCard.appendChild(unitCardEnergy);
 
-	var unit_card_name = document.createElement('div');
-	unit_card_name.classList.add('unit_card_name');
-	unit_card_name.classList.add('unit_card_text');
-	unit_card_name.innerHTML = locale(unit.slug);
-	unit_card.appendChild(unit_card_name);
+	var unitCardName = document.createElement('div');
+	unitCardName.classList.add('unitCardName');
+	unitCardName.classList.add('unitCardText');
+	unitCardName.innerHTML = locale(unit.slug);
+	unitCard.appendChild(unitCardName);
 	//create a div for the unit image
-	var unit_card_image = document.createElement('img');
-	unit_card_image.src = 'images/units/' + unit.slug + '.png';
-	unit_card_image.alt = unit.name;
-	unit_card_image.title = unit.name;
-	unit_card_image.classList.add('unit_card_image');
-	unit_card.appendChild(unit_card_image);
+	var unitCardImage = document.createElement('img');
+	unitCardImage.src = 'images/units/' + unit.slug + '.png';
+	unitCardImage.alt = unit.name;
+	unitCardImage.title = unit.name;
+	unitCardImage.classList.add('unitCardImage');
+	unitCard.appendChild(unitCardImage);
 	//create a div for the unit building
-	var unit_card_building = document.createElement('img');
-	unit_card_building.src = 'images/techtiers/' + unit.building + '.svg';
-	unit_card_building.alt = unit.building;
-	unit_card_building.title = unit.building;
-	unit_card_building.classList.add('unit_card_building');
-	unit_card.appendChild(unit_card_building);
+	var unitCardBuilding = document.createElement('img');
+	unitCardBuilding.src = 'images/techtiers/' + unit.building + '.svg';
+	unitCardBuilding.alt = unit.building;
+	unitCardBuilding.title = unit.building;
+	unitCardBuilding.classList.add('unitCardBuilding');
+	unitCard.appendChild(unitCardBuilding);
 	//create a div for the unit type
-	var unit_card_type = document.createElement('div');
-	unit_card_type.classList.add('unit_card_type');
-	unit_card_type.classList.add('unit_card_text');
+	var unitCardType = document.createElement('div');
+	unitCardType.classList.add('unitCardType');
+	unitCardType.classList.add('unitCardText');
 	//create a div for the unit traits
-	var unit_card_traits = document.createElement('div');
-	unit_card_traits.classList.add('unit_card_traits');
+	var unitCardTraits = document.createElement('div');
+	unitCardTraits.classList.add('unitCardTraits');
 	//for each trait in the unit traits array
 	myLog(unit);
 	if (unit.traits) {
 		for (let i = 0; i < unit.traits.length; i++) {
 			//create a div for the trait
-			var unit_card_trait = document.createElement('img');
-			unit_card_trait.src = 'images/traits/' + unit.traits[i] + '.png';
-			unit_card_trait.alt = unit.traits[i];
-			unit_card_trait.title = unit.traits[i];
-			unit_card_trait.classList.add('unit_card_trait');
-			unit_card_traits.appendChild(unit_card_trait);
+			var unitCardTrait = document.createElement('img');
+			unitCardTrait.src = 'images/traits/' + unit.traits[i] + '.png';
+			unitCardTrait.alt = unit.traits[i];
+			unitCardTrait.title = unit.traits[i];
+			unitCardTrait.classList.add('unitCardTrait');
+			unitCardTraits.appendChild(unitCardTrait);
 		}
 	}
-	unit_card.appendChild(unit_card_traits);
+	unitCard.appendChild(unitCardTraits);
 	//create a div for the unit manufacturer
-	var unit_card_manufacturer = document.createElement('div');
+	var unitCardManufacturer = document.createElement('div');
 	//if the manufacturer is not none
 	if (unit.manufacturer != 'none') {
-		unit_card_manufacturer.style.backgroundImage = 'url("images/manuf/' + unit.manufacturer + '.png")	';
-		unit_card_manufacturer.classList.add('unit_card_manufacturer');
-		unit_card.appendChild(unit_card_manufacturer);
+		unitCardManufacturer.style.backgroundImage = 'url("images/manuf/' + unit.manufacturer + '.png")	';
+		unitCardManufacturer.classList.add('unitCardManufacturer');
+		unitCard.appendChild(unitCardManufacturer);
 	}
 
-	unit_card_type.innerHTML = locale(unit.type);
-	unit_card.appendChild(unit_card_type);
+	unitCardType.innerHTML = locale(unit.type);
+	unitCard.appendChild(unitCardType);
 
 
 
 	//name
 
-	unitCards[unit.name] = unit_card;
-	return unit_card
+	unitCards[unit.name] = unitCard;
+	return unitCard
 }
 
 function drawUnitCards() {
 	//create a container div
-	var unit_card_container = document.createElement('div');
+	var unitCardContainer = document.createElement('div');
 	//add a class to the container div
-	unit_card_container.id = 'unit_card_container';
-	//add the container div to the unit_content div
+	unitCardContainer.id = 'unitCardContainer';
+	//add the container div to the unitContent div
 
 	//for each unit in the unit list create a card
 	for (let i = 0; i < filteredUnitList.length; i++) {
 		//add the card body div to the card div
-		unit_card_container.appendChild(createUnitCard(filteredUnitList[i]));
+		unitCardContainer.appendChild(createUnitCard(filteredUnitList[i]));
 	}
 
-	unitContent.appendChild(unit_card_container);
+	unitContent.appendChild(unitCardContainer);
 }
 
 //#endregion
@@ -648,7 +591,7 @@ function redrawUnitContent() {
 
 
 	unitContent.innerHTML = '';
-	//for each object in unitsJson_base create a new unit passing the object
+	//for each object in unitsJsonBase create a new unit passing the object
 	myLog('Redrawing Unit Content\n-----------------');
 	myLog(filteredUnitList);
 
@@ -754,7 +697,9 @@ unitHeaderSort.onchange = function () {
 
 
 //#endregion
-
+function setFilteredUnitList(value) {
+	filteredUnitList = value
+}
 
 export {
 	unitView,
@@ -765,6 +710,7 @@ export {
 	repopulateFilteredUnitList,
 	redrawUnitContent,
 	filteredUnitList,
+	setFilteredUnitList,
 	sortUnits,
 	setFilter,
 	unitHeaderSort,

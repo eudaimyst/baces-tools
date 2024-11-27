@@ -1,8 +1,8 @@
 //create 3 divs called unitView, deckView and statsView, and a wrapper to contain them
 
 import { sidebar, updateBG } from './menu';
-import { deckView, decksInit } from './views/deckView';
-import { redrawUnitContent, unitView, unitsInit, repopulateFilteredUnitList, filteredUnitList, sortUnits, setFilter, unitHeaderSort, unitFilterInput } from './views/unitView';
+import { deckView } from './views/deckView';
+import { redrawUnitContent, unitView, unitsInit } from './views/unitView';
 import { locale } from './locale';
 import { units, setCurrentUnit } from './units';
 import { myLog } from './utils';
@@ -33,7 +33,7 @@ if (unitContentOutOfDate) {
 	//make the div a clickable link to 
 	//when the div is clicked, open the link in a new tab
 	outOfDateBanner.addEventListener('click', function () {
-		window.open('https://www.reddit.com/r/BattleAces/comments/1gly8hp/balance_update_tomorrow_118/', '_blank');
+		window.open('https://www.reddit.com/r/BattleAces/comments/1gly8hp/balanceUpdateTomorrow_118/', '_blank');
 	});
 	//change the icon cursor the standard hyperlink cursor
 	//make the banner text bold
@@ -91,15 +91,14 @@ function unitMouseOver(e) {
 /*
 deprecated, we now add the listener to the cell when its created
 //when a cell in the unit table is mouseover get the unit name from the cell and print to console
-var unit_table = document.getElementsByClassName('unit_table_name_cell');
-for (var i = 0; i < unit_table.length; i++) {
-	unit_table[i].addEventListener('mouseover', statRedrawMouseOver);
+var unitTable = document.getElementsByClassName('unitTableNameCell');
+for (var i = 0; i < unitTable.length; i++) {
+	unitTable[i].addEventListener('mouseover', statRedrawMouseOver);
 }
 	*/
 
 
-decksInit(repopulateFilteredUnitList, unitMouseOverAndTapped, filteredUnitList, unitList, sortUnits, unitHeaderSort, unitFilterInput, setFilter);
-unitsInit(unitMouseOverAndTapped, unitMouseOver);
+unitsInit(unitMouseOver);
 
 redrawUnitContent();
 unitMouseOverAndTapped(unitList[0]);

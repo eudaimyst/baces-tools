@@ -5,7 +5,7 @@ import { unitViewMode, tableUnitRows, unitCards } from './unitView';
 import { decks } from './deckView';
 import { locale } from '../locale';
 import { unitList, getCurrentUnit } from '../units';
-import { myLog, removeSpacesCapitalsSpecialCharacters } from '../utils';
+import { myLog, cleanText } from '../utils';
 
 //in some places I'm using this, in others I'm using keys of unit objects or stat labels
 var unitStatLabelNames = ['health', 'speed', 'range', 'damage', 'dps', 'damagea', 'dpsa'];
@@ -28,61 +28,61 @@ const statsView = document.createElement('div');
 statsView.id = 'statsView-h';
 statsView.classList.add('view');
 const statsViewHeader = document.createElement('div');
-statsViewHeader.classList.add('view_header');
+statsViewHeader.classList.add('viewHeader');
 statsView.appendChild(statsViewHeader);
 const statsContent = document.createElement('div');
 statsContent.classList.add('viewContent');
-statsContent.id = 'stats_content';
+statsContent.id = 'statsContent';
 statsView.appendChild(statsContent);
 
 //#region stats-header
 var statsMode = 0 //0 = unit, 1 = compare
 var compareMode = 0 //0= stats, 1 = resources, 2 = traits
-const stats_button = document.createElement('button');
-stats_button.innerHTML = locale('unit');
-stats_button.id = 'stats_button';
-stats_button.classList.add('headerElement');
-statsViewHeader.appendChild(stats_button);
+const statsButton = document.createElement('button');
+statsButton.innerHTML = locale('unit');
+statsButton.id = 'statsButton';
+statsButton.classList.add('headerElement');
+statsViewHeader.appendChild(statsButton);
 //when button is pressed set current mode to unit
-stats_button.addEventListener('click', function () {
+statsButton.addEventListener('click', function () {
 	statsMode = 0
-	stats_button.classList.add('selected');
-	compare_button.classList.remove('selected');
-	stats_mode_select.disabled = true;
+	statsButton.classList.add('selected');
+	compareButton.classList.remove('selected');
+	statsModeSelect.disabled = true;
 	refreshStatViewContent()
 });
-const compare_button = document.createElement('button');
-compare_button.innerHTML = locale('compare');
-compare_button.id = 'compare_button';
-compare_button.classList.add('headerElement');
-statsViewHeader.appendChild(compare_button);
+const compareButton = document.createElement('button');
+compareButton.innerHTML = locale('compare');
+compareButton.id = 'compareButton';
+compareButton.classList.add('headerElement');
+statsViewHeader.appendChild(compareButton);
 //when deck 2 is pressed it should set current deck to 1
-compare_button.addEventListener('click', function () {
+compareButton.addEventListener('click', function () {
 	statsMode = 1;
-	stats_button.classList.remove('selected');
-	compare_button.classList.add('selected');
-	stats_mode_select.disabled = false;
+	statsButton.classList.remove('selected');
+	compareButton.classList.add('selected');
+	statsModeSelect.disabled = false;
 	refreshStatViewContent()
 });
-stats_button.classList.add('selected');
+statsButton.classList.add('selected');
 
 //dropdown to choose between stats, resource and traits comparison modes
-const stats_mode_select = document.createElement('select');
-stats_mode_select.disabled = true;
-stats_mode_select.id = 'stats_mode_select';
-stats_mode_select.classList.add('headerElement');
-statsViewHeader.appendChild(stats_mode_select);
+const statsModeSelect = document.createElement('select');
+statsModeSelect.disabled = true;
+statsModeSelect.id = 'statsModeSelect';
+statsModeSelect.classList.add('headerElement');
+statsViewHeader.appendChild(statsModeSelect);
 //add option to stats mode select for stats, resources and traits
-var stats_mode_select_options = [locale('stats'), locale('resources')]; //todo: add trait comparison
-stats_mode_select_options.forEach(function (option) {
-	var option_element = document.createElement('option');
-	option_element.value = option;
-	option_element.innerHTML = option;
-	stats_mode_select.appendChild(option_element);
+var statsModeSelectOptions = [locale('stats'), locale('resources')]; //todo: add trait comparison
+statsModeSelectOptions.forEach(function (option) {
+	var optionElement = document.createElement('option');
+	optionElement.value = option;
+	optionElement.innerHTML = option;
+	statsModeSelect.appendChild(optionElement);
 });
 //when an option is selected, set compareMode to the selected index
-stats_mode_select.addEventListener('change', function () {
-	compareMode = stats_mode_select.selectedIndex;
+statsModeSelect.addEventListener('change', function () {
+	compareMode = statsModeSelect.selectedIndex;
 	refreshStatViewContent()
 });
 
@@ -169,14 +169,14 @@ function getColour(value, min, max) {
 
 
 //data is sortdata for the label, 
-function sortColors(_unit, label) {
+function sortColors(Unit, label) {
 	//get the unit by the unitName 
-	//myLog('sortColors:', _unit, data, label);
-	//myLog('huh?: ', _unit[label], minValues[label], maxValues[label]);
-	var color = getColour(_unit[label], minValues[label], maxValues[label]);
+	//myLog('sortColors:', Unit, data, label);
+	//myLog('huh?: ', Unit[label], minValues[label], maxValues[label]);
+	var color = getColour(Unit[label], minValues[label], maxValues[label]);
 	var sortedColors = [];
 
-	var rank = sortedUnitData[label].length - sortedUnitData[label].lastIndexOf(_unit[label]);
+	var rank = sortedUnitData[label].length - sortedUnitData[label].lastIndexOf(Unit[label]);
 
 	for (let i = 0; i < (sortedUnitData[label].length); i++) {
 		if (i < sortedUnitData[label].length - (rank - 1)) sortedColors.push(color);
@@ -185,7 +185,7 @@ function sortColors(_unit, label) {
 
 	sortedUnitData[label].forEach(function (unit) {
 		sortedColors.push(color)
-		if (unit == _unit) { //once we reaach the passed unit we set color to black which pushes the rest of the units as black bars
+		if (unit == Unit) { //once we reaach the passed unit we set color to black which pushes the rest of the units as black bars
 			color = 'black'
 		}
 	});
@@ -223,17 +223,17 @@ var statsUnitTraitCounteredByDiv = document.createElement('div');
 statsUnitTraitCounteredByDiv.classList.add('statsUnitTraitsDiv');
 statsUnitTraitsContainer.appendChild(statsUnitTraitCounteredByDiv);
 
-function updateTraitsContainer(_unit) {
-	statsUnitTypeDiv.textContent = locale(_unit.type)
+function updateTraitsContainer(Unit) {
+	statsUnitTypeDiv.textContent = locale(Unit.type)
 	//display traits as images
-	if (_unit.name == 'raider') {
+	if (Unit.name == 'raider') {
 		statsUnitTraitsDiv.textContent = locale('traits') + ': ' + locale('raiderTraits');
 		statsUnitTraitCountersDiv.textContent = locale('counters') + ': ' + locale('economy');
 		statsUnitTraitCounteredByDiv.textContent = locale('counteredBy') + ': ' + locale('scouting');
 	}
 	else {
 		statsUnitTraitsDiv.textContent = locale('traits') + ': ';
-		_unit.traits.forEach(function (trait) {
+		Unit.traits.forEach(function (trait) {
 			var traitImg = document.createElement('img');
 			traitImg.classList.add('statsUnitTraitImg');
 			traitImg.src = 'images/traits/' + trait + '.png';
@@ -241,8 +241,8 @@ function updateTraitsContainer(_unit) {
 		});
 
 		statsUnitTraitCountersDiv.textContent = locale('counters') + ': ';
-		if (_unit.traitcounters) {
-			_unit.traitcounters.forEach(function (trait) {
+		if (Unit.traitcounters) {
+			Unit.traitcounters.forEach(function (trait) {
 				var traitImg = document.createElement('img');
 				traitImg.classList.add('statsUnitTraitImg');
 				traitImg.src = 'images/traits/' + trait + '.png';
@@ -251,8 +251,8 @@ function updateTraitsContainer(_unit) {
 		}
 
 		statsUnitTraitCounteredByDiv.textContent = locale('counteredBy') + ': ';
-		if (_unit.traitcounteredby) {
-			_unit.traitcounteredby.forEach(function (trait) {
+		if (Unit.traitcounteredby) {
+			Unit.traitcounteredby.forEach(function (trait) {
 				var traitImg = document.createElement('img');
 				traitImg.classList.add('statsUnitTraitImg');
 				traitImg.src = 'images/traits/' + trait + '.png';
@@ -321,7 +321,7 @@ function createStatsUnitBottomDiv(label) {
 		statsUnitImg.classList.add('statsUnitBuildingImg')
 	}
 	else {
-		statsUnitImg.src = 'images/resources/' + removeSpacesCapitalsSpecialCharacters(label) + '.svg';
+		statsUnitImg.src = 'images/resources/' + cleanText(label) + '.svg';
 		statsUnitImg.classList.add('statsUnitResourceImg');
 	}
 
@@ -464,15 +464,15 @@ function statRankChart(label) {
 }
 
 //write a function to update the chart data backgroundColor
-function updateStatRankChartColor(_unit, chart, label) {
-	chart.data.datasets[0].backgroundColor = sortColors(_unit, label);
+function updateStatRankChartColor(Unit, chart, label) {
+	chart.data.datasets[0].backgroundColor = sortColors(Unit, label);
 	chart.update();
 }
 
 //run updateStatRankChartColor on each label
-function updateStatRankChartColors(_unit) {
+function updateStatRankChartColors(Unit) {
 	for (var [key] of Object.entries(sortedUnitData)) {
-		updateStatRankChartColor(_unit, statRankBarCharts[key], key);
+		updateStatRankChartColor(Unit, statRankBarCharts[key], key);
 	}
 }
 
@@ -642,8 +642,8 @@ traitsComparisonChartContainer.innerHTML = 'traitsComparisonChart';
 //#region statsComparisonChart "starchart", associated minmax and scaling functions
 
 //create an example star chart in chartjs
-//const DATA_COUNT = 7;
-//const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
+//const DATACOUNT = 7;
+//const NUMBERCFG = { count: DATACOUNT, min: 0, max: 100 };
 var starchartStatsUnit = ['health', 'damage', 'damagea', 'speed', 'range'];
 var starchartMinMax = {
 	health: [5350, 64100],
@@ -736,9 +736,9 @@ function doScaling(deckID, input, min, max) { //given an input value, and a mini
 	}
 	myLog('deck ' + deckID + ' length:' + deckLength)
 	myLog('SF: ' + sf);
-	var _min = min * sf
-	var _max = max * sf
-	var value = (input - _min) / (_max - _min);
+	var Min = min * sf
+	var Max = max * sf
+	var value = (input - Min) / (Max - Min);
 	myLog(input, min, max, value);
 	if (value < 0) value = 0;
 	return value;
@@ -959,7 +959,7 @@ function refreshStatViewContent() {
 			statsContent.appendChild(traitsComparisonChartContainer);
 		}
 		//updateComparisonChart();
-		//remove all children from stats_content
+		//remove all children from statsContent
 
 	}
 }
