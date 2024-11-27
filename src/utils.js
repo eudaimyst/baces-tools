@@ -9,6 +9,7 @@ function myLog(message) {
 function makeDiv(_class, _id, _parent) {
 	const div = document.createElement('div');
 	if (_id) div.id = _id;
+	else div.id = _class;
 	if (_class) div.classList.add(_class);
 	if (_parent) _parent.appendChild(div);
 	return div;
@@ -32,6 +33,20 @@ function makeInput(_class, _id, _parent, _type, _placeholder, _onInput, _change)
 	if (_onInput) input.oninput = _onInput;
 	if (_change) input.onchange = _change;
 	return input;
+}
+
+function makeImg(_src, _class, _id, _parent, _alt) {
+	const img = document.createElement('img');
+	if (_id) img.id = _id;
+	if (_class) img.classList.add(_class);
+	if (_parent) _parent.appendChild(img);
+	if (_src) img.src = _src;
+	if (_alt) {
+		img.alt = _alt;
+		img.title = _alt;
+	};
+
+	return img;
 }
 
 function makeDropDown(_class, _id, _parent, _options) {
@@ -66,4 +81,4 @@ function cleanText(input) {
 	}
 	return input.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 }
-export { myLog, makeHeaderBtn, makeBtn, makeDiv, cleanText, makeDropDown, makeP, makeInput }
+export { myLog, makeHeaderBtn, makeBtn, makeDiv, cleanText, makeDropDown, makeP, makeImg, makeInput }

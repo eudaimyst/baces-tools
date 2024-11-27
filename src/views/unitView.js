@@ -2,7 +2,7 @@
 import { locale } from '../locale';
 import { sort } from 'fast-sort';
 import { addUnitToDeck, decks, currentDeck } from './deckView';
-import { myLog, cleanText, makeDiv, makeDropDown, makeP, makeHeaderBtn, makeInput } from '../utils';
+import { myLog, cleanText, makeDiv, makeDropDown, makeP, makeHeaderBtn, makeInput, makeImg } from '../utils';
 import { unitMouseOverAndTapped } from './statsView';
 import { unitList } from '../units';
 
@@ -49,7 +49,6 @@ const sortOptions = [
 ];
 const unitHeaderSort = makeDropDown('unitHeaderSort', 'headerElement', unitViewHeader, sortOptions)
 
-filteredUnitList = sortUnits(unitHeaderSort.value, filteredUnitList);
 
 //label
 makeP('headerElement', 'viewLabel', unitViewHeader, locale('view') + ': ')
@@ -64,7 +63,7 @@ const unitViewTableBtn = makeHeaderBtn('table', 'unitViewTableBtn', function () 
 	setUnitViewMode(0);
 	unitViewTableBtn.classList.add('selected');
 	unitViewCardBtn.classList.remove('selected');
-	redrawUnitContent();
+	redrawContent();
 });
 
 //card view button
@@ -72,7 +71,7 @@ const unitViewCardBtn = makeHeaderBtn('card', 'unitViewTableBtn', function () {
 	setUnitViewMode(1);
 	unitViewCardBtn.classList.add('selected');
 	unitViewTableBtn.classList.remove('selected');
-	redrawUnitContent();
+	redrawContent();
 });
 
 unitViewHeader.appendChild(unitViewTableBtn);
@@ -81,7 +80,7 @@ unitViewHeader.appendChild(unitViewCardBtn);
 //filter input box
 const unitFilterInput = makeInput('headerElement', 'unitFilterInput', unitViewHeader, 'text', locale('filter'), function () {
 	setFilter(unitFilterInput.value);
-	redrawUnitContent();
+	redrawContent();
 })
 
 //filter clear button that clears the filter
@@ -104,7 +103,7 @@ const unitSimpleStatsCheckbox = makeInput('headerElement', 'unitSimpleStatsCheck
 	else {
 		simpleStatsMode = false;
 	};
-	redrawUnitContent();
+	redrawContent();
 })
 
 unitSimpleStatsCheckbox.checked = true;
@@ -121,7 +120,7 @@ const hideUnavailCheckbox = makeInput('headerElement', 'unitHideUnavailableUnits
 	} else {
 		hideUnavailMode = false;
 	}
-	redrawUnitContent();
+	redrawContent();
 });
 hideUnavailCheckbox.checked = true;
 hideUnavailCheckbox.title = 'Hide unavailable units based on deck';
@@ -129,9 +128,15 @@ unitViewHeader.appendChild(hideUnavailCheckbox);
 
 //#endregion
 
-//#region unit filter
+//#region filter
 
 var filteredUnitList = []; //holds the list of units as updated by setFilter()
+
+filteredUnitList = sortUnits(unitHeaderSort.value, filteredUnitList);
+
+function setFilteredUnitList(value) {
+	filteredUnitList = value
+}
 //populate the filteredUnitList with all the units from unitList by default
 function repopulateFilteredUnitList() {
 	if (unitList) {
@@ -200,7 +205,8 @@ function setFilter(filterString) {
 
 //#endregion
 
-//#region unit-content
+//#region table
+
 
 //unitRows stores the rows of unit table by unit name so we can apply highlights later
 var tableUnitRows = {};
@@ -242,68 +248,19 @@ function drawUnitTable() {
 			var unitTableHeader = document.createElement('th');
 			unitTableHeader.classList.add('unitTableHeader');
 			//add some images to certain headers
-			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'simplespeed' || key == 'range') {
-				var img = document.createElement('img');
-				img.src = 'images/stats/' + key + '.png';
-				img.classList.add('unitTableHeaderImage');
-				if (key == 'damagea') {
-					img.setAttribute('alt', 'Air Damage');
-					img.setAttribute('title', 'Air Damage');
-				}
-				else {
-					img.setAttribute('alt', key);
-					img.setAttribute('title', key);
-				}
-				unitTableHeader.appendChild(img);
+			if (key == 'health' || key == 'damage' || key == 'damagea' || key == 'speed' || key == 'simplespeed' ||
+				key == 'range' || key == 'dps' || key == 'dpsa') {
+				makeImg('images/stats/' + key + '.png', 'unitTableHeaderImage', 'unitTableHeaderImage' + key, unitTableHeader, locale(key))
 			} else if (key == 'hp/100') {
-				var img = document.createElement('img');
-				img.src = 'images/stats/' + 'health' + '.png';
-				img.classList.add('unitTableHeaderImage');
-				img.setAttribute('alt', 'Health/100');
-				img.setAttribute('title', 'Health/100');
-				unitTableHeader.appendChild(img);
-				unitTableHeader.classList.add('unitTableSmalltext');
-			} else if (key == 'simpledamage') {
-				var img = document.createElement('img');
-				img.src = 'images/stats/' + 'damage' + '.png';
-				img.classList.add('unitTableHeaderImage');
-				img.setAttribute('alt', 'DPS/10');
-				img.setAttribute('title', 'DPS/10');
-				unitTableHeader.appendChild(img);
-				unitTableHeader.classList.add('unitTableSmalltext');
+				makeImg('images/stats/health.png', 'unitTableHeaderImage', 'unitTableHeaderImage' + key, unitTableHeader, locale(key))
 			}
-			else if (key == 'dps') {
-				var img = document.createElement('img');
-				img.src = 'images/stats/' + 'damage' + '.png';
-				img.classList.add('unitTableHeaderImage');
-				img.setAttribute('alt', 'ground dps');
-
-				img.setAttribute('title', 'ground dps');
-				unitTableHeader.appendChild(img);
-				unitTableHeader.innerHTML += '/s';
-				unitTableHeader.classList.add('unitTableSmalltext');
-			} else if (key == 'dpsa') {
-				var img = document.createElement('img');
-				img.src = 'images/stats/' + 'damagea' + '.png';
-				img.classList.add('unitTableHeaderImage');
-				img.setAttribute('alt', 'air dps');
-				img.setAttribute('title', ' air dps');
-				unitTableHeader.appendChild(img);
-				unitTableHeader.innerHTML += '/s';
-				unitTableHeader.classList.add('unitTableSmalltext');
-			} else if (key == 'matter' || key == 'energy' || key == 'bandwidth') {
-				var img = document.createElement('img');
-				img.src = 'images/resources/' + key + '.svg';
-				img.classList.add('unitTableHeaderImage');
-				img.setAttribute('alt', key);
-				img.setAttribute('title', key);
-				unitTableHeader.appendChild(img);
-			} else if (key == 'image') {
-				key == 'tier';
-				unitTableHeader.innerHTML = locale('image');
-				//no header name for images
-			} else if (key == 'ability') {
-				unitTableHeader.innerHTML = locale('ability');
+			else if (key == 'simpledamage') {
+				makeImg('images/stats/damage.png', 'unitTableHeaderImage', 'unitTableHeaderImage' + key, unitTableHeader, locale(key))
+			}
+			else if (key == 'matter' || key == 'energy' || key == 'bandwidth') {
+				makeImg('images/resources/' + key + '.svg', 'unitTableHeaderImage', 'unitTableHeaderImage' + key, unitTableHeader, locale(key))
+			} else if (key == 'image' || key == 'ability') {
+				unitTableHeader.innerHTML = locale(key);
 			} else if (key == 'manufacturer') {
 				unitTableHeader.innerHTML = locale('shortManf');
 			} else if (key == 'building') {
@@ -311,7 +268,6 @@ function drawUnitTable() {
 			} else {
 				unitTableHeader.innerHTML = locale(key);
 			}
-
 			unitTableHead.appendChild(unitTableHeader);
 		}
 	}
@@ -381,26 +337,13 @@ function drawUnitTable() {
 
 				unitTableRow.appendChild(unitTableCell);
 
-				var img = document.createElement('img');
 				if (key == 'image') {
-					img.src = 'images/units/' + value + '.png';
-					img.setAttribute('alt', value);
-					img.setAttribute('title', value);
-					img.classList.add('unitTableImage');
-					unitTableCell.appendChild(img);
+					makeImg('images/units/' + value + '.png', 'unitTableImage', 'unitTableImage' + key, unitTableCell, locale(value));
 				} else if (key == 'building') {
-					img.src = 'images/techtiers/' + value + '.svg';
-					img.setAttribute('alt', value);
-					img.setAttribute('title', value);
-					img.classList.add('unitTableImageMedium');
-					unitTableCell.appendChild(img);
+					makeImg('images/techtiers/' + value + '.svg', 'unitTableImage', 'unitTableImage' + key, unitTableCell, locale(value));
 				} else if (key == 'ability') {
 					if (value != ' ') {
-						img.src = 'images/abilities/' + value + '.png';
-						img.setAttribute('alt', value);
-						img.setAttribute('title', value);
-						img.classList.add('unitTableImageMedium');
-						unitTableCell.appendChild(img);
+						makeImg('images/abilities/' + value + '.png', 'unitTableImageMedium', 'unitTableImage' + key, unitTableCell, locale(value));
 					}
 					if (unit['traits'] == null) {
 						//console.log(unit['name']);
@@ -419,22 +362,13 @@ function drawUnitTable() {
 					}
 				} else if (key == 'manufacturer') {
 					if (value != '') {
-						img.src = 'images/manuf/' + value + '.png';
-						img.setAttribute('alt', value);
-						img.setAttribute('title', value);
-						img.classList.add('unitTableImageSmall');
-						unitTableCell.appendChild(img);
+						makeImg('images/manuf/' + value + '.png', 'unitTableImageSmall', 'unitTableImage' + key, unitTableCell, locale(value));
 					}
 				} else if (key == 'traits') {
 					if (value) {
 						value.forEach(trait => {
 							if (trait != 'none') {
-								var img = document.createElement('img');
-								img.src = 'images/traits/' + trait + '.png';
-								img.classList.add('unitTableImageSmall');
-								img.setAttribute('alt', trait);
-								img.setAttribute('title', trait);
-								unitTableCell.appendChild(img);
+								makeImg('images/traits/' + trait + '.png', 'unitTableImageSmall', 'unitTableImage' + key, unitTableCell, locale(value))
 							}
 						});
 					}
@@ -472,6 +406,9 @@ function drawUnitTable() {
 	unitContent.appendChild(unitTable);
 }
 
+//#endregion
+
+//#region cards
 var unitCards = {};
 function createUnitCard(unit) {
 	//create a card div
@@ -490,47 +427,29 @@ function createUnitCard(unit) {
 	});
 
 	//matter
-	var unitCardMatter = document.createElement('div');
-	unitCardMatter.classList.add('unitCardMatter');
+	var unitCardMatter = makeDiv('unitCardMatter', null, unitCard)
 	unitCardMatter.classList.add('unitCardText');
-	unitCardMatter.innerHTML = unit.matter
-	unitCard.appendChild(unitCardMatter);
+	unitCardMatter.textContent = unit.matter
 	//bandwidth
-	var unitCardBandwidth = document.createElement('div');
+	var unitCardBandwidth = makeDiv('unitCardBandwidth', null, unitCard)
 	unitCardBandwidth.classList.add('unitCardText');
-	unitCardBandwidth.classList.add('unitCardBandwidth');
-	unitCardBandwidth.innerHTML = unit.bandwidth
-	unitCard.appendChild(unitCardBandwidth);
+	unitCardBandwidth.textContent = unit.bandwidth
 	//energy
-	var unitCardEnergy = document.createElement('div');
-	unitCardEnergy.classList.add('unitCardEnergy');
+	var unitCardEnergy = makeDiv('unitCardEnergy', null, unitCard)
 	unitCardEnergy.classList.add('unitCardText');
-	unitCardEnergy.innerHTML = unit.energy;
-	unitCard.appendChild(unitCardEnergy);
-
-	var unitCardName = document.createElement('div');
-	unitCardName.classList.add('unitCardName');
+	unitCardEnergy.textContent = unit.energy;
+	//cardname
+	var unitCardName = makeDiv('unitCardName', null, unitCard)
 	unitCardName.classList.add('unitCardText');
-	unitCardName.innerHTML = locale(unit.slug);
-	unitCard.appendChild(unitCardName);
-	//create a div for the unit image
-	var unitCardImage = document.createElement('img');
-	unitCardImage.src = 'images/units/' + unit.slug + '.png';
-	unitCardImage.alt = unit.name;
-	unitCardImage.title = unit.name;
-	unitCardImage.classList.add('unitCardImage');
-	unitCard.appendChild(unitCardImage);
-	//create a div for the unit building
-	var unitCardBuilding = document.createElement('img');
-	unitCardBuilding.src = 'images/techtiers/' + unit.building + '.svg';
-	unitCardBuilding.alt = unit.building;
-	unitCardBuilding.title = unit.building;
-	unitCardBuilding.classList.add('unitCardBuilding');
-	unitCard.appendChild(unitCardBuilding);
+	unitCardName.textContent = locale(unit.name);
+	//create unit image
+	makeImg('images/units/' + unit.slug + '.png', 'unitCardImage', 'unitCardImage' + unit.slug, unitCard, null);
+	//create unit building image
+	makeImg('images/techtiers/' + unit.building + '.svg', 'unitCardBuilding', 'unitCardBuilding' + unit.building, unitCard, locale(unit.building));
 	//create a div for the unit type
-	var unitCardType = document.createElement('div');
-	unitCardType.classList.add('unitCardType');
+	var unitCardType = makeDiv('unitCardType', null, unitCard)
 	unitCardType.classList.add('unitCardText');
+	unitCardType.textContent = locale(unit.type)
 	//create a div for the unit traits
 	var unitCardTraits = document.createElement('div');
 	unitCardTraits.classList.add('unitCardTraits');
@@ -539,12 +458,7 @@ function createUnitCard(unit) {
 	if (unit.traits) {
 		for (let i = 0; i < unit.traits.length; i++) {
 			//create a div for the trait
-			var unitCardTrait = document.createElement('img');
-			unitCardTrait.src = 'images/traits/' + unit.traits[i] + '.png';
-			unitCardTrait.alt = unit.traits[i];
-			unitCardTrait.title = unit.traits[i];
-			unitCardTrait.classList.add('unitCardTrait');
-			unitCardTraits.appendChild(unitCardTrait);
+			makeImg('images/traits/' + unit.traits[i] + '.png', 'unitCardTrait', 'unitCardTrait' + unit.traits[i], unitCardTraits, locale(unit.traits[i]))
 		}
 	}
 	unitCard.appendChild(unitCardTraits);
@@ -556,9 +470,6 @@ function createUnitCard(unit) {
 		unitCardManufacturer.classList.add('unitCardManufacturer');
 		unitCard.appendChild(unitCardManufacturer);
 	}
-
-	unitCardType.innerHTML = locale(unit.type);
-	unitCard.appendChild(unitCardType);
 
 
 
@@ -586,8 +497,8 @@ function drawUnitCards() {
 
 //#endregion
 
-//#region redrawUnitContent expensive function: draws unit content div, iterates unitList for display
-function redrawUnitContent() {
+//#region redrawContent expensive function: draws unit content div, iterates unitList for display
+function redrawContent() {
 
 
 	unitContent.innerHTML = '';
@@ -611,46 +522,23 @@ function redrawUnitContent() {
 		//if decks[currentDeck][0] and decks[currentDeck][5] are both occupied
 		//then remove all units whose building key matches core from the filtered unit list
 		myLog(decks[currentDeck])
-		if (decks[currentDeck][0] && decks[currentDeck][4]) {
-			//remove all units whose building key matches core from the filtered unit list
-			filteredUnitList = filteredUnitList.filter((unit) => {
-				return unit.building != 'core';
-			});
-		};
-		//if decks[currentDeck][1] and decks[currentDeck][3] are both occupied
-		if (decks[currentDeck][1] && decks[currentDeck][3]) {
-			//remove all units whose building key matches foundry from the filtered unit list
-			filteredUnitList = filteredUnitList.filter((unit) => {
-				return unit.building != 'foundry';
-			});
-		};
-		if (decks[currentDeck][2] && decks[currentDeck][3]) {
-			filteredUnitList = filteredUnitList.filter((unit) => {
-				return unit.building != 'advancedfoundry';
-			});
-		};
-		if (decks[currentDeck][5] && decks[currentDeck][7]) {
-			filteredUnitList = filteredUnitList.filter((unit) => {
-				return unit.building != 'starforge';
-			});
-		};
-		if (decks[currentDeck][6] && decks[currentDeck][7]) {
-			filteredUnitList = filteredUnitList.filter((unit) => {
-				return unit.building != 'advancedstarforge';
-			});
-		};
+		const slots = decks[currentDeck]
+		const buildings = [];
+		if (slots[0] && slots[4]) buildings.push('core');
+		if (slots[1] && slots[3]) buildings.push('foundry');
+		if (slots[2] && slots[3]) buildings.push('advancedfoundry');
+		if (slots[5] && slots[7]) buildings.push('starforge');
+		if (slots[6] && slots[7]) buildings.push('advancedstarforge');
 
+		//filter the unit list by each value of unit.building in the buildings array
 
-
-
-
-
-
+		filteredUnitList = filteredUnitList.filter((unit) => {
+			return !buildings.includes(unit.building)
+		});
 	} else {
 		//if hideUnavailMode is false, we need to add the units back to the unit list
 		repopulateFilteredUnitList()
 	}
-
 	//if unitview mode == 0 draw table view
 	if (unitViewMode == 0) {
 		drawUnitTable();
@@ -659,15 +547,13 @@ function redrawUnitContent() {
 	else if (unitViewMode == 1) {
 		drawUnitCards();
 	}
-
-
 }
 
 //redrawUnitContent(); //upon loading the page we redraw the UnitContentDiv once to initialise it
 
 //#endregion
 
-//#region change-sort
+//#region changeSort
 
 //sort units
 function sortUnits(value, list) {
@@ -690,16 +576,13 @@ unitHeaderSort.onchange = function () {
 	//sort the units by the new option
 	//new function for sorting units
 	myLog(unitHeaderSort.value);
-	filteredUnitList = sortUnits(unitHeaderSort.value, filteredUnitList);
-
-	redrawUnitContent();
+	setFilteredUnitList(sortUnits(unitHeaderSort.value, filteredUnitList));
+	redrawContent();
 };
 
 
 //#endregion
-function setFilteredUnitList(value) {
-	filteredUnitList = value
-}
+
 
 export {
 	unitView,
@@ -708,7 +591,7 @@ export {
 	unitCards,
 	unitsInit,
 	repopulateFilteredUnitList,
-	redrawUnitContent,
+	redrawContent as redrawUnitContent,
 	filteredUnitList,
 	setFilteredUnitList,
 	sortUnits,
