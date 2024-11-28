@@ -1084,3 +1084,8 @@ sup {
 	border: solid;
 	border-width: 1px;
 }
+
+#stratChart {
+	width: 100%;
+	height: 100%;
+}
