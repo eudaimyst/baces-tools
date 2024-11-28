@@ -1046,7 +1046,7 @@ sup {
 
 .stratResourceContainer {
 	display: flex;
-	width: 10%;
+	width: 20%;
 	height: 100%;
 	justify-content: space-evenly;
 	flex-direction: row;
