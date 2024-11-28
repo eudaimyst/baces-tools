@@ -1,5 +1,6 @@
 
 import { locale, setLocale, getLocale, getLocaleList, languageLongNameList } from './locale';
+import { makeDiv } from './utils';
 
 const linkData = [{
 	name: 'Battle Aces Official Website',
@@ -47,22 +48,23 @@ sidebarLogoImg.style.width = '50px';
 sidebar.appendChild(sidebarLogoImg);
 
 
+const buttonContainer = makeDiv('buttonContainer', null, sidebar);
 
 //add a button to the sidebar to toggle the sidebar
 const toggleSidebarButton = document.createElement('button');
 toggleSidebarButton.id = 'toggleSidebarButton';
-sidebar.classList.add('sidebarInactive');
-sidebar.appendChild(toggleSidebarButton);
+sidebar.classList.add('sidebarBtn');
+buttonContainer.appendChild(toggleSidebarButton);
 //create a button image and add it to the toggleSidebarButton
 const toggleSidebarButtonImg = document.createElement('img');
 toggleSidebarButtonImg.src = 'images/burgericon.png';
 toggleSidebarButtonImg.classList.add('sidebarBtnImg');
 toggleSidebarButton.appendChild(toggleSidebarButtonImg);
 
-
 const deckBuilderBtn = document.createElement('button');
 deckBuilderBtn.id = 'toggleSidebarButton';
-sidebar.appendChild(deckBuilderBtn);
+deckBuilderBtn.classList.add('sidebarBtn');
+buttonContainer.appendChild(deckBuilderBtn);
 //create a button image and add it to the toggleSidebarButton
 const deckBuilderButtonImg = document.createElement('img');
 deckBuilderButtonImg.src = 'images/pageicons/deckbuilder.png';
@@ -78,7 +80,8 @@ deckBuilderBtn.addEventListener('click', () => {
 
 const stratPlannerBtn = document.createElement('button');
 stratPlannerBtn.id = 'toggleSidebarButton';
-sidebar.appendChild(stratPlannerBtn);
+deckBuilderBtn.classList.add('stratPlannerBtn');
+buttonContainer.appendChild(stratPlannerBtn);
 //create a button image and add it to the toggleSidebarButton
 const stratPlannerImg = document.createElement('img');
 stratPlannerImg.src = 'images/pageicons/resources.png';

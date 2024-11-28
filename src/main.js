@@ -34,24 +34,6 @@ function unitMouseOver(e) {
 	unitMouseOverAndTapped(unit);
 }
 
-//create a function that runs when the window is resized
-function resize() {
-	myLog('resized');
-	//get the width and height of the window
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	if (width > height) {
-		unitView.id = 'unitView-h';
-		deckView.id = 'deckView-h';
-		statsView.id = 'statsView-h';
-	} else {
-		unitView.id = 'unitView-v';
-		deckView.id = 'deckView-v';
-		statsView.id = 'statsView-v';
-	}
-}
-window.addEventListener('resize', resize);
-resize();
 
 //set the initial fragment identifier else if ()
 function loadPage() {
@@ -79,3 +61,23 @@ loadPage();
 window.addEventListener('hashchange', () => {
 	loadPage();
 });
+
+
+//create a function that runs when the window is resized
+function resize() {
+	myLog('resized');
+	//get the width and height of the window
+	const width = window.innerWidth;
+	const height = window.innerHeight;
+	if (width > height) {
+		unitView.id = 'unitView-h';
+		deckView.id = 'deckView-h';
+		statsView.id = 'statsView-h';
+	} else {
+		unitView.id = 'unitView-v';
+		deckView.id = 'deckView-v';
+		statsView.id = 'statsView-v';
+	}
+}
+window.addEventListener('resize', resize);
+resize();

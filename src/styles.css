@@ -581,6 +581,11 @@ sup {
 	vertical-align: super;
 }
 
+.buttonContainer {
+	display: flex;
+	flex-direction: column;
+}
+
 #toggleSidebarButton {
 	padding: 0 0 0 0;
 	margin: 0 0 0 0;

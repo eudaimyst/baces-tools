@@ -14,6 +14,7 @@ var currentWorkerCount = 0;
 const coreWorkerCount = 32;
 const expansionWorkerCount = 16;
 const workerSpawnTime = 60;
+const techCompleteTime = 60;
 
 const initialMatter = 400;
 const initialEnergy = 400;
