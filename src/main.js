@@ -35,6 +35,23 @@ function unitMouseOver(e) {
 }
 
 
+//change view id's when page is resized
+function resize() {
+	myLog('resized');
+	//get the width and height of the window
+	const width = window.innerWidth;
+	const height = window.innerHeight;
+	if (width > height) {
+		unitView.id = 'unitView-h';
+		deckView.id = 'deckView-h';
+		statsView.id = 'statsView-h';
+	} else {
+		unitView.id = 'unitView-v';
+		deckView.id = 'deckView-v';
+		statsView.id = 'statsView-v';
+	}
+}
+window.addEventListener('resize', resize);
 //set the initial fragment identifier else if ()
 function loadPage() {
 	const suffix = window.location.hash.slice(1); // Remove the '#'
@@ -55,6 +72,7 @@ function loadPage() {
 	else if (suffix == 'stratplanner') {
 		app.appendChild(stratView);
 	}
+	resize();
 }
 loadPage();
 // Read the fragment identifier
@@ -62,22 +80,3 @@ window.addEventListener('hashchange', () => {
 	loadPage();
 });
 
-
-//create a function that runs when the window is resized
-function resize() {
-	myLog('resized');
-	//get the width and height of the window
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	if (width > height) {
-		unitView.id = 'unitView-h';
-		deckView.id = 'deckView-h';
-		statsView.id = 'statsView-h';
-	} else {
-		unitView.id = 'unitView-v';
-		deckView.id = 'deckView-v';
-		statsView.id = 'statsView-v';
-	}
-}
-window.addEventListener('resize', resize);
-resize();

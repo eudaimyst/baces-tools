@@ -206,6 +206,8 @@ const chart = new Chart(canvas, {
 		}]
 	},
 	options: {
+		responseive: true,
+		maintainAspectRatio: false,
 		elements: {
 			line: {
 				borderWidth: 0.1, // Allow sub-pixel line width
@@ -242,6 +244,7 @@ const chart = new Chart(canvas, {
 	}
 });
 chartContainer.appendChild(canvas);
+chart.resize();
 
 //create a function to update the data of the chart
 function updateChart() {
