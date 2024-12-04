@@ -17,9 +17,9 @@ function makeDiv(_class, _id, _parent) {
 
 function makeBtn(localeString, classname, onclick) {
 	const button = document.createElement('button');
-	button.innerHTML = locale(localeString);
+	if (localeString) button.innerHTML = locale(localeString);
 	button.classList.add(classname);
-	button.onclick = onclick;
+	if (onclick) button.onclick = onclick;
 	return button;
 }
 

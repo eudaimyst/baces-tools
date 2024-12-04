@@ -1085,8 +1085,25 @@ sup {
 	border-width: 1px;
 }
 
+.stratUnitsContainer {
+	display: flex;
+	flex-direction: row;
+	height: 80%;
+	width: 90%;
+	border: solid;
+	border-width: 1px;
+}
+
 #stratChart {
 	position: relative;
 	width: 100%;
 	height: 100%;
+}
+
+.stratUnitImage {
+	height: 2vmin;
+}
+
+.stratUnitButtonRed {
+	background-color: red;
 }

@@ -1,16 +1,29 @@
 /* eslint-disable no-unused-vars */
 import { Chart } from "chart.js";
-import { makeBtn, makeDiv, makeImg } from "../utils";
+import { makeBtn, makeDiv, makeImg, makeP } from "../utils";
+import { decks, currentDeck, decklistDropdown, deckSearchInputElement } from "./deckView"
+import { locale } from "../locale";
+
+//#region definitions
 
 const stratView = makeDiv('view', 'stratView-h')
 const stratViewHeader = makeDiv('viewHeader', 'stratHeader', stratView);
 const stratViewContent = makeDiv('viewContent', 'stratContent', stratView);
+
+//add the decklist dropdown and input element to the header
+stratViewHeader.appendChild(decklistDropdown);
+stratViewHeader.appendChild(deckSearchInputElement);
 
 var currentTime = 0; //game time in seconds
 var currentM = 0;
 var currentE = 0;
 var currentWorkerCount = 0;
 
+//these will determing the min max (set by user) to fix the Y scaling
+var chartMinTime = 0;
+var chartMaxTime = 0;
+
+//game constants
 const coreWorkerCount = 32;
 const expansionWorkerCount = 16;
 const workerSpawnTime = 60;
@@ -25,14 +38,39 @@ const matterPerWorker = .75;
 const energyPerWorker = .3;
 
 const gameLength = 600;
+
 const coreWorkerStopTime = 480;
 
+//each of these arrays have the value of the variable at the index of the time in seconds
 const matter = [];
 const energy = [];
 const workerCounts = [];
 const expandTimings = []; //the time each expand or tech is started in seconds are stored in the array
 const techTimings = [];
 const chartBarData = [];
+const offsetMatter = [];
+const offsetEnergy = [];
+const tempMatter = [];
+const tempEnergy = [];
+
+for (let i = 0; i < gameLength; i++) {
+	matter.push(0);
+	energy.push(0);
+	workerCounts.push(0);
+	offsetMatter.push(0);
+	offsetEnergy.push(0);
+	tempMatter.push(0);
+	tempEnergy.push(0);
+}
+
+//initialise an array of 8 values all set to 0 named units
+const units = [];
+for (let i = 0; i < 8; i++) {
+	units.push(0);
+}
+
+//#endregion
+
 
 
 const gameTimeContainer = makeDiv('stratTimeContainer', null, stratViewContent);
@@ -51,6 +89,7 @@ const techButton = makeBtn('tech', 'techButton', function () {
 		console.log('not enough resources');
 	}
 	calculateMatterAndEnergy();
+	updateCurrents();
 	updateChart();
 	console.log(techTimings);
 });
@@ -59,16 +98,50 @@ const expandButton = makeBtn('expand', 'expandButton', function () {
 	updateCurrents();
 	if (currentE >= expandCostE && currentM >= expandCostE) {
 		expandTimings.push(Number(currentTime));
-		updateCurrents();
 	} else {
 		console.log('not enough resources');
 	}
 	calculateMatterAndEnergy();
+	updateCurrents();
 	updateChart();
 	console.log(expandTimings);
 });
 buttonsContainer.appendChild(techButton)
 buttonsContainer.appendChild(expandButton)
+
+//for each unit in the current deck add a button with its image
+const unitsContainer = makeDiv('stratUnitsContainer', null, buttonsContainer)
+
+//#region unitButtons
+function updateUnits() {
+	console.log('huhgghghgh?');
+	console.log(decks);
+	//clear the units container
+	unitsContainer.innerHTML = '';
+	for (let i = 0; i < decks[currentDeck].length; i++) {
+		const unit = decks[currentDeck][i];
+		const unitButton = makeBtn(null, 'unitButton');
+		unitButton.id = 'stratUnitBtn' + i;
+		unitButton.addEventListener('click', function () {
+			console.log('unit button pressed');
+			console.log(unit.name);
+			//if we can afford to build the unit based on its cost
+			if (currentM >= unit.matter && currentE >= unit.energy) {
+				units[i]++;
+				offsetMatter[currentTime] += unit.matter;
+				offsetEnergy[currentTime] += unit.energy;
+				calculateMatterAndEnergy(unitButton);
+			};
+		});
+		//unitButton.style.backgroundImage = 'url(' + unit.image + ')';
+		//add an image element to the button of the unit image
+		makeImg('images/units/' + unit.image + '.png', 'stratUnitImage', null, unitButton, null);
+		unitsContainer.appendChild(unitButton);
+		unitsContainer.appendChild(makeP('stratUnitName', null, unitButton, 'x' + units[i]));
+	}
+}
+
+//#endregion
 
 //add matter and resource images with currentMatter and currentEnergy values next to them to the resourceContainer div
 const matterDiv = makeDiv('stratResourceDiv', 'matterDiv', resourceContainer);
@@ -113,20 +186,30 @@ stratViewTimeInput.addEventListener('input', function () {
 updateGameTimeDiv(currentTime);
 gameTimeContainer.appendChild(stratViewTimeInput);
 
-
-function calculateMatterAndEnergy() {
+//#region calculations
+function calculateMatterAndEnergy(_unitbutton) {
+	//switch to using temp vars for checking
+	matter.forEach((value, index) => {
+		tempMatter[index] = value;
+	});
+	energy.forEach((value, index) => {
+		tempEnergy[index] = value;
+	});
 	//calculate the matter and energy for the current time
-	matter[0] = initialMatter;
-	energy[0] = initialEnergy;
+	tempMatter[0] = initialMatter;
+	tempEnergy[0] = initialEnergy;
 	workerCounts[0] = coreWorkerCount;
-	const max = Math.max(...matter, ...energy)
+
+	var success = true //for checking if less than 0
+	const max = Math.max(...matter, ...energy) //calculate the maximum y value used for the vertical line
+
 	for (let i = 0; i < gameLength - 1; i++) {
-		if (i == currentTime) chartBarData[i] = max;
+		if (i == currentTime) chartBarData[i] = max; //set the data for the vertical line (bar chart data)
 		else chartBarData[i] = 0;
 		if (i > 0) {
 			workerCounts[i] = workerCounts[i - 1]
-			matter[i] = matter[i - 1] + (workerCounts[i] * matterPerWorker);
-			energy[i] = energy[i - 1] + (workerCounts[i] * energyPerWorker);
+			tempMatter[i] = (tempMatter[i - 1] + (workerCounts[i] * matterPerWorker)) - offsetMatter[i];
+			tempEnergy[i] = (tempEnergy[i - 1] + (workerCounts[i] * energyPerWorker)) - offsetEnergy[i];
 		}
 		if (i == coreWorkerStopTime) {
 			workerCounts[i] -= coreWorkerCount;
@@ -140,25 +223,41 @@ function calculateMatterAndEnergy() {
 				workerCounts[i] += expansionWorkerCount;
 			}
 			if (i == expandTimings[j]) {
-				matter[i] -= expandCostM;
-				energy[i] -= expandCostE;
+				tempMatter[i] -= expandCostM;
+				tempEnergy[i] -= expandCostE;
 			}
 		}
 		for (let j = 0; j < techTimings.length; j++) {
 			if (i == techTimings[j]) {
-				matter[i] -= expandCostM;
-				energy[i] -= expandCostE;
+				tempMatter[i] -= expandCostM;
+				tempEnergy[i] -= expandCostE;
 			}
 		}
+		if (tempMatter[i] < 0 || tempEnergy[i] < 0) {
+			success = false;
+		}
 	}
+	if (success) {
+		matter.forEach((value, index) => {
+			matter[index] = tempMatter[index];
+		});
+		energy.forEach((value, index) => {
+			energy[index] = tempEnergy[index];
+		});
+	}
+	else {
+		//add a red bg style to unitbutton
+		if (_unitbutton != null) {
+			_unitbutton.classList.add('stratUnitButtonRed');
+		}
 
-	//get the max value of matter and energy arrays and add 10% to it
+	}
 	updateCurrents();
 }
 calculateMatterAndEnergy();
 updateCurrents();
 
-
+//#endregion
 
 const canvas = document.createElement('canvas');
 canvas.id = 'stratChart';
@@ -224,10 +323,10 @@ const chart = new Chart(canvas, {
 								text: dataset.label,
 								fillStyle: dataset.borderColor,
 								hidden: !chart.isDatasetVisible(i),
-								fontColor: 'white', // Ensure legend text is white
+								fontColor: 'white',
 								index: i,
 							}))
-							.filter((item) => item.text !== ''); // Exclude 'Dataset 2'
+							.filter((item) => item.text !== ''); //hide bar legend
 					},
 				},
 			},
@@ -253,7 +352,8 @@ function updateChart() {
 	chart.data.datasets[2].data = workerCounts.map((x) => x * 10);
 	chart.data.datasets[3].data = chartBarData;
 	chart.update();
+	updateUnits();
 }
 
 
-export { stratView }
+export { stratView, updateUnits }

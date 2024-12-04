@@ -315,6 +315,7 @@ function loadDeck() {
 	decks[currentDeck] = [];
 	fillSlotsFromDeck(deckToLoad, currentDeck)
 	refreshNameInput(currentDeck);
+	console.log(decks[currentDeck]);
 }
 
 //load button:
@@ -830,4 +831,4 @@ function addUnitToDeck(unit, deckID) {
 
 //#endregion
 
-export { deckView, addUnitToDeck, currentDeck, decks };
+export { deckView, addUnitToDeck, currentDeck, decks, filteredDecks, decklistDropdown, deckSearchInputElement };

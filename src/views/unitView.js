@@ -243,7 +243,7 @@ function drawUnitTable() {
 
 	//##tag unit-content-table-loop
 	//table header using the 2nd object in the object list
-	console.log(unitList);
+	//console.log(unitList);
 	for (const [key] of Object.entries(unitList[0])) {
 		if (!excludeKeys.includes(key)) {
 			var unitTableHeader = document.createElement('th');
@@ -510,7 +510,7 @@ function redrawContent() {
 
 	//before drawing the unit table or cards, remove the selected units for the current deck from the filtered unit lists
 	if (hideUnavailMode == true) {
-		console.log(decks)
+		//console.log(decks)
 		if (!decks) return
 		for (let i = 0; i < decks[currentDeck].length; i++) {
 			//if the unit is in the unit list
