@@ -203,9 +203,14 @@ function calculateMatterAndEnergy(_unitbutton) {
 	var success = true //for checking if less than 0
 	const max = Math.max(...matter, ...energy) //calculate the maximum y value used for the vertical line
 
+	//loop through resource arrays to adjust them based upon the offsets
 	for (let i = 0; i < gameLength - 1; i++) {
-		if (i == currentTime) chartBarData[i] = max; //set the data for the vertical line (bar chart data)
+		
+		//#tag currentTimeBar
+		//set the data for the vertical line (bar chart data)
+		if (i == currentTime) chartBarData[i] = max; 
 		else chartBarData[i] = 0;
+		
 		if (i > 0) {
 			workerCounts[i] = workerCounts[i - 1]
 			tempMatter[i] = (tempMatter[i - 1] + (workerCounts[i] * matterPerWorker)) - offsetMatter[i];
@@ -248,6 +253,7 @@ function calculateMatterAndEnergy(_unitbutton) {
 	else {
 		//add a red bg style to unitbutton
 		if (_unitbutton != null) {
+			console.log('')
 			_unitbutton.classList.add('stratUnitButtonRed');
 		}
 
