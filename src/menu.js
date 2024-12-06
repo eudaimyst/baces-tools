@@ -28,7 +28,10 @@ const linkData = [{
 }, {
 	name: 'BA by Conqueror',
 	url: 'https://docs.google.com/spreadsheets/d/1Y5sro2kxbDu2fCmKHcKmEFuzjpDd8SsFaifKDFY1SIg/edit?gid=0#gid=0'
-}
+}, {
+	name: 'Github Source',
+	url: 'https://github.com/eudaimyst/baces-tools'
+},
 ]
 
 
@@ -340,7 +343,7 @@ function information() {
 	//create a div for ads, make it a box with lots of dollar signs that looks like money and says 'this is where the money I don't have goes'
 	const infoDiv = document.createElement('div');
 	infoDiv.classList.add('info_div');
-	infoDiv.innerHTML = 'Note: Only bonus damage for ANTI-AIR units are shown currently. Will work on adding the other bonus damages';
+	infoDiv.innerHTML = 'Development has stalled. Reconsidering the use of my bandwidth.\nSource is now public\n🧡🦀Uncapped Games\n.values()';
 	infoDiv.style.margin = '5px';
 	return infoDiv;
 }
