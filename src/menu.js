@@ -1,5 +1,6 @@
 
 import { locale, setLocale, getLocale, getLocaleList, languageLongNameList } from './locale';
+import { makeDiv } from './utils';
 
 const linkData = [{
 	name: 'Battle Aces Official Website',
@@ -50,95 +51,130 @@ sidebarLogoImg.style.width = '50px';
 sidebar.appendChild(sidebarLogoImg);
 
 
+const buttonContainer = makeDiv('buttonContainer', null, sidebar);
 
 //add a button to the sidebar to toggle the sidebar
 const toggleSidebarButton = document.createElement('button');
 toggleSidebarButton.id = 'toggleSidebarButton';
-sidebar.classList.add('sidebar_inactive');
-sidebar.appendChild(toggleSidebarButton);
+sidebar.classList.add('sidebarBtn');
+buttonContainer.appendChild(toggleSidebarButton);
 //create a button image and add it to the toggleSidebarButton
 const toggleSidebarButtonImg = document.createElement('img');
 toggleSidebarButtonImg.src = 'images/burgericon.png';
-toggleSidebarButtonImg.id = 'toggleSidebarButtonImg';
+toggleSidebarButtonImg.classList.add('sidebarBtnImg');
 toggleSidebarButton.appendChild(toggleSidebarButtonImg);
 
+const deckBuilderBtn = document.createElement('button');
+deckBuilderBtn.id = 'toggleSidebarButton';
+deckBuilderBtn.classList.add('sidebarBtn');
+buttonContainer.appendChild(deckBuilderBtn);
+//create a button image and add it to the toggleSidebarButton
+const deckBuilderButtonImg = document.createElement('img');
+deckBuilderButtonImg.src = 'images/pageicons/deckbuilder.png';
+deckBuilderButtonImg.classList.add('sidebarBtnImg');
+deckBuilderBtn.appendChild(deckBuilderButtonImg);
+
+deckBuilderBtn.addEventListener('click', () => {
+	// Update the fragment identifier
+	window.location.hash = 'deckbuilder';
+
+	console.log('URL updated to:', window.location.href);
+});
+
+const stratPlannerBtn = document.createElement('button');
+stratPlannerBtn.id = 'toggleSidebarButton';
+deckBuilderBtn.classList.add('stratPlannerBtn');
+buttonContainer.appendChild(stratPlannerBtn);
+//create a button image and add it to the toggleSidebarButton
+const stratPlannerImg = document.createElement('img');
+stratPlannerImg.src = 'images/pageicons/resources.png';
+stratPlannerImg.classList.add('sidebarBtnImg');
+stratPlannerBtn.appendChild(stratPlannerImg);
+
+stratPlannerBtn.addEventListener('click', () => {
+	// Update the fragment identifier
+	window.location.hash = 'stratplanner';
+
+	console.log('URL updated to:', window.location.href);
+});
+
 var sidebarActive = true;
-const sidebar_title_div = document.createElement('div');
-sidebar_title_div.id = 'sidebar_title_div';
-sidebar_title_div.innerHTML = '';
-const sidebar_title_v_div = document.createElement('div');
-sidebar_title_v_div.id = 'sidebar_title_div_v';
-sidebar_title_v_div.innerHTML = '';
-const sidebar_content_div = document.createElement('div');
-sidebar_content_div.id = 'sidebar_content_div';
+const sidebarTitleDiv = document.createElement('div');
+sidebarTitleDiv.id = 'sidebarTitleDiv';
+sidebarTitleDiv.innerHTML = '';
+const sidebarTitleVDiv = document.createElement('div');
+sidebarTitleVDiv.id = 'sidebarTitleDivV';
+sidebarTitleVDiv.innerHTML = '';
+const sidebarContentDiv = document.createElement('div');
+sidebarContentDiv.id = 'sidebarContentDiv';
 
 
-const sidebar_footer_div = document.createElement('div');
-sidebar_footer_div.classList.add('sidebar_footer_div')
-const sidebar_footer_contents = document.createElement('div');
-sidebar_footer_div.appendChild(sidebar_footer_contents);
-sidebar_footer_contents.innerHTML = "<b>BACES Tools has no association with Uncapped Games. All rights to any game-related content remain the exclusive property of Uncapped Games.";
+const sidebarFooterDiv = document.createElement('div');
+sidebarFooterDiv.classList.add('sidebarFooterDiv')
+const sidebarFooterContents = document.createElement('div');
+sidebarFooterDiv.appendChild(sidebarFooterContents);
+sidebarFooterContents.innerHTML = "<b>BACES Tools has no association with Uncapped Games. All rights to any game-related content remain the exclusive property of Uncapped Games.";
 
-//make a region element that hides footer_contents2 and 3 until it is clicked
-const sidebar_footer_contents_region = document.createElement('div');
-sidebar_footer_contents_region.innerText = '[legal]'
-sidebar_footer_div.appendChild(sidebar_footer_contents_region);
+//make a region element that hides footerContents2 and 3 until it is clicked
+const sidebarFooterContentsRegion = document.createElement('div');
+sidebarFooterContentsRegion.innerText = '[legal]'
+sidebarFooterDiv.appendChild(sidebarFooterContentsRegion);
 //set icon to pointer when mouse is over the region
-sidebar_footer_contents_region.style.cursor = 'pointer';
+sidebarFooterContentsRegion.style.cursor = 'pointer';
 //when region is clicked, toggle the visibility of the children using an event
-sidebar_footer_contents_region.addEventListener('click', function () {
-	if (sidebar_footer_contents2.style.display == 'none') {
-		sidebar_footer_contents2.style.display = 'block';
-		sidebar_footer_contents3.style.display = 'block';
+sidebarFooterContentsRegion.addEventListener('click', function () {
+	if (sidebarFooterContents2.style.display == 'none') {
+		sidebarFooterContents2.style.display = 'block';
+		sidebarFooterContents3.style.display = 'block';
 	} else {
-		sidebar_footer_contents2.style.display = 'none';
-		sidebar_footer_contents3.style.display = 'none';
+		sidebarFooterContents2.style.display = 'none';
+		sidebarFooterContents3.style.display = 'none';
 	}
 });
 
 
 
 
-const sidebar_footer_contents2 = document.createElement('div');
-sidebar_footer_contents_region.appendChild(sidebar_footer_contents2);
-sidebar_footer_contents2.classList.add('sidebar_extraSmallFont');
-sidebar_footer_contents2.style.display = 'none';
-sidebar_footer_contents2.innerHTML = "This software is provided 'as is' with NO warranty or guarantee regarding the accuracy, completeness, or current relevance of the game data displayed. The use of this software does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains the sole property of its respective owners.";
-const sidebar_footer_contents3 = document.createElement('div');
-sidebar_footer_contents_region.appendChild(sidebar_footer_contents3);
-sidebar_footer_contents3.innerHTML = "By using this software, you acknowledge that the developers are not responsible for any claims, liabilities, or damages that may arise from the use of this software. The software is intended solely for informational purposes.";
-sidebar_footer_contents3.classList.add('sidebar_extraSmallFont');
-sidebar_footer_contents3.style.display = 'none';
-//sidebar_footer_div.innerHTML = '<b></b>.<br> <br>';
+const sidebarFooterContents2 = document.createElement('div');
+sidebarFooterContentsRegion.appendChild(sidebarFooterContents2);
+sidebarFooterContents2.classList.add('sidebarExtraSmallFont');
+sidebarFooterContents2.style.display = 'none';
+sidebarFooterContents2.innerHTML = "This software is provided 'as is' with NO warranty or guarantee regarding the accuracy, completeness, or current relevance of the game data displayed. The use of this software does not grant any rights to the underlying intellectual property or game content of Battle Aces, which remains the sole property of its respective owners.";
+const sidebarFooterContents3 = document.createElement('div');
+sidebarFooterContentsRegion.appendChild(sidebarFooterContents3);
+sidebarFooterContents3.innerHTML = "By using this software, you acknowledge that the developers are not responsible for any claims, liabilities, or damages that may arise from the use of this software. The software is intended solely for informational purposes.";
+sidebarFooterContents3.classList.add('sidebarExtraSmallFont');
+sidebarFooterContents3.style.display = 'none';
+//sidebarFooterDiv.innerHTML = '<b></b>.<br> <br>';
 
 
 function expandMenu(expand) {
 	sidebarLogoImg.style.width = '100%';
 	//if the sidebar is inactive, reduce the width to 50px, otherwise restore it to 200px
 	if (expand) {
-		sidebar.classList.add('sidebar_expanded')
-		sidebar.classList.remove('sidebar_contracted')
+		sidebar.classList.add('sidebarExpanded')
+		sidebar.classList.remove('sidebarContracted')
 		// wrapper.style.marginLeft = '200px';
-		sidebar.appendChild(sidebar_title_div);
-		sidebar.appendChild(sidebar_content_div);
-		sidebar.appendChild(sidebar_footer_div);
-		// if sidebar_title_v_div exists in sidebar
-		if (sidebar.contains(sidebar_title_v_div)) {
-			sidebar.removeChild(sidebar_title_v_div);
+		sidebar.appendChild(sidebarTitleDiv);
+		sidebar.appendChild(sidebarContentDiv);
+		sidebar.appendChild(sidebarFooterDiv);
+		// if sidebarTitleVDiv exists in sidebar
+		if (sidebar.contains(sidebarTitleVDiv)) {
+			sidebar.removeChild(sidebarTitleVDiv);
 		};
 	} else {
-		sidebar.classList.remove('sidebar_expanded')
-		sidebar.classList.add('sidebar_contracted')
+		sidebar.classList.remove('sidebarExpanded')
+		sidebar.classList.add('sidebarContracted')
 		// wrapper.style.marginLeft = '50px';
 		//if children exist
 		if (sidebar.children.length > 0) {
 			// if it is a child
-			if (sidebar.contains(sidebar_title_div)) {
-				sidebar.removeChild(sidebar_title_div);
-				sidebar.removeChild(sidebar_content_div);
-				sidebar.removeChild(sidebar_footer_div);
+			if (sidebar.contains(sidebarTitleDiv)) {
+				sidebar.removeChild(sidebarTitleDiv);
+				sidebar.removeChild(sidebarContentDiv);
+				sidebar.removeChild(sidebarFooterDiv);
 			}
-			sidebar.appendChild(sidebar_title_v_div);
+			sidebar.appendChild(sidebarTitleVDiv);
 		}
 	}
 }
@@ -155,7 +191,7 @@ expandMenu(false);
 const languageSelectDiv = document.createElement('div');
 languageSelectDiv.textContent = locale('language') + ': ';
 languageSelectDiv.classList.add('languageSelectDiv');
-sidebar_content_div.appendChild(languageSelectDiv);
+sidebarContentDiv.appendChild(languageSelectDiv);
 const languageSelect = document.createElement('select');
 languageSelect.classList.add('languageSelect');
 languageSelectDiv.appendChild(languageSelect);
@@ -180,16 +216,16 @@ languageSelect.addEventListener('change', () => {
 languageSelect.value = getLocale();
 //create a div which has a menu of links. The div should have a header, which can be clicked to expand, to show the links
 const linksDiv = document.createElement('div');
-linksDiv.classList.add('links_div');
-sidebar_content_div.appendChild(linksDiv);
+linksDiv.classList.add('linksDiv');
+sidebarContentDiv.appendChild(linksDiv);
 
 const linksHeader = document.createElement('div');
-linksHeader.classList.add('links_header');
+linksHeader.classList.add('linksHeader');
 linksHeader.innerHTML = locale('links');
 linksDiv.appendChild(linksHeader);
 
 const linksContent = document.createElement('div');
-linksContent.classList.add('links_content');
+linksContent.classList.add('linksContent');
 linksDiv.appendChild(linksContent);
 //for each link in linkData, create a link
 linkData.forEach((link) => {
@@ -202,15 +238,15 @@ linkData.forEach((link) => {
 //add event when links header is pressed
 linksHeader.addEventListener('click', () => {
 	//toggle the links div
-	linksDiv.classList.toggle('links_div_active');
+	linksDiv.classList.toggle('linksDivActive');
 });
 
 //create a div for a countdown to the beta release date
 const countdownDiv = document.createElement('div');
-countdownDiv.classList.add('countdown_div');
-//sidebar_content_div.appendChild(countdownDiv);
+countdownDiv.classList.add('countdownDiv');
+//sidebarContentDiv.appendChild(countdownDiv);
 const counDownDivCountdownText = document.createElement('p');
-counDownDivCountdownText.classList.add('countdown_text');
+counDownDivCountdownText.classList.add('countdownText');
 countdownDiv.appendChild(counDownDivCountdownText);
 //get the remaining time in days hours minutes and secionds until the 6th of November, 12pm, PST American West Coast using an online time library
 //returns a string
@@ -232,10 +268,10 @@ setInterval(() => {
 	counDownDivCountdownText.innerHTML = 'Release Countdown (estimate):<br>Closed Beta 2: ' + getRemainingTime();
 }, 1000);
 */
-//create a new div for setting the background image with a select element and append it to sidebar_content_div 
+//create a new div for setting the background image with a select element and append it to sidebarContentDiv 
 const bgImgSelectDiv = document.createElement('div');
 bgImgSelectDiv.classList.add('bgImgSelectDiv');
-sidebar_content_div.appendChild(bgImgSelectDiv);
+sidebarContentDiv.appendChild(bgImgSelectDiv);
 
 //create a select element and append it to bgImgSelectDiv
 const bgImgSelect = document.createElement('select');
@@ -319,10 +355,10 @@ const bgImgSelectText = document.createElement('p');
 bgImgSelectText.innerHTML = 'all artwork credit <a href = "https://www.playbattleaces.com" target="_blank"> playbattleaces.com</a > ';
 const bgImgSelectText2 = document.createElement('p');
 bgImgSelectText2.classList.add('menuCredits')
-bgImgSelectText2.innerHTML = 'uniforms: <a href = "https://discord.com/channels/1187021578333073418/1248357473421758586/1253092940486803569 target="_blank">Sepic</a >';
+bgImgSelectText2.innerHTML = 'uniforms: <a href = "https://discord.com/channels/1187021578333073418/1248357473421758586/1253092940486803569" target="_blank">Sepic</a >';
 const bgImgSelectText3 = document.createElement('p');
 bgImgSelectText3.classList.add('menuCredits')
-bgImgSelectText3.innerHTML = 'scraper: <a href = "https://github.com/Zaokret/battle-aces target="_blank">Zaokret</a >';
+bgImgSelectText3.innerHTML = 'scraper: <a href = "https://github.com/Zaokret/battle-aces" target="_blank">Zaokret</a >';
 
 
 const plainBGButton = document.createElement('button');
@@ -350,12 +386,12 @@ function information() {
 
 function socials() {
 	const socialsDiv = document.createElement('div');
-	socialsDiv.classList.add('socials_div');
+	socialsDiv.classList.add('socialsDiv');
 	socialsDiv.textContent = 'feedback welcome:';
 	//add a clickable image link
 	const discordImg = document.createElement('img');
 	discordImg.src = 'images/feedback/discord.png';
-	discordImg.classList.add('socials_img');
+	discordImg.classList.add('socialsImg');
 	//add a link to the socials image
 	discordImg.addEventListener('click', () => {
 		window.open('https://discord.gg/KUC223kV', '_blank');
@@ -367,7 +403,7 @@ function socials() {
 
 	const emailImg = document.createElement('img');
 	emailImg.src = 'images/feedback/email.png';
-	emailImg.classList.add('socials_img');
+	emailImg.classList.add('socialsImg');
 	//add a link to the socials image
 	emailImg.addEventListener('click', () => {
 		window.open('mailto: baces.tools@gmail.com', '_blank');
@@ -381,10 +417,10 @@ function socials() {
 	socialsDiv.appendChild(emailImg);
 	return socialsDiv;
 }
-sidebar_content_div.appendChild(socials());
-sidebar_content_div.appendChild(information());
+sidebarContentDiv.appendChild(socials());
+sidebarContentDiv.appendChild(information());
 console.log("sidebarlog")
-console.log(sidebar_content_div)
+console.log(sidebarContentDiv)
 
 export { sidebar, updateBG };
 

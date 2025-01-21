@@ -1,11 +1,6 @@
 
 import importedUnits from './units.json';
-
-
-
-function removeSpacesCapitalsSpecialCharacters(inputString) {
-	return inputString.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-}
+import { cleanText } from './utils';
 
 
 const buildingTiers = {
@@ -35,7 +30,7 @@ const keyOrder = ['image', 'name', 'type', 'building', 'matter', 'energy', 'band
 class Unit {
 	constructor(jsonImportedUnit) {
 		Object.keys(jsonImportedUnit).forEach((key) => {
-			var cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
+			var cleanNameKey = cleanText(key);
 			var value = jsonImportedUnit[key];
 			if (!value) {
 				if (cleanNameKey == 'ability') {
@@ -47,7 +42,7 @@ class Unit {
 			}
 			if (value.constructor == String) {
 				if (cleanNameKey != 'emoji' && cleanNameKey != 'videoturnaround' && cleanNameKey != 'website' && cleanNameKey != 'speed') {
-					value = removeSpacesCapitalsSpecialCharacters(value);
+					value = cleanText(value);
 				}
 			}
 			if (cleanNameKey == 'supply') {
@@ -177,4 +172,13 @@ const units = importedUnits.reduce((obj, unit) => {
 const unitList = Object.values(units);
 
 
-export { units, unitList };
+
+var currentUnit = unitList[0];
+function getCurrentUnit() {
+	return currentUnit;
+}
+function setCurrentUnit(unit) {
+	currentUnit = unit;
+}
+
+export { units, unitList, getCurrentUnit, setCurrentUnit };

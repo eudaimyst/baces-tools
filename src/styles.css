@@ -99,13 +99,14 @@ option {
 	position: absolute;
 	border-width: 1px;
 	border-color: rgba(0, 0, 0, 0.322);
+	border-color: rgb(255, 255, 255);
 	border-style: solid;
 	border-radius: 5px;
 	box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.304);
-	overflow: hidden;
+	overflow: auto;
 }
 
-.view_header {
+.viewHeader {
 	background-color: rgba(0, 0, 0, 0.664);
 	box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.304);
 	right: 5px;
@@ -122,7 +123,7 @@ option {
 }
 
 
-.view_content {
+.viewContent {
 	border-radius: 5px;
 	display: flex;
 	justify-content: space-evenly;
@@ -147,7 +148,7 @@ option {
 	color: rgba(207, 207, 207, 0.699);
 }
 
-.unit_table {
+.unitTable {
 	width: 100%;
 	height: 0%;
 }
@@ -160,11 +161,11 @@ option {
 	margin-left: 0%;
 }
 
-.countdown_div {
+.countdownDiv {
 	margin-top: 20%;
 }
 
-.unit_table_header {
+.unitTableHeader {
 	font-size: 1.5vmin;
 	font-weight: 500;
 	color: rgb(214, 214, 214);
@@ -173,11 +174,11 @@ option {
 	height: 1vmin;
 }
 
-.unit_table_smalltext {
+.unitTableSmalltext {
 	font-size: 0.5vmax;
 }
 
-.unit_table_cell {
+.unitTableCell {
 	background-color: #88000011;
 	text-align: center;
 	text-shadow: 2px 2px 1px black;
@@ -193,35 +194,35 @@ option {
 	outline-width: 1px;
 }
 
-.unit_table_cell_alt {
+.unitTableCellAlt {
 	background-color: #c5000017;
 }
 
-.unit_table_header_image {
+.unitTableHeaderImage {
 	height: 1.2vmax;
 }
 
-.unit_table_image {
+.unitTableImage {
 	height: 4vmin;
 	width: auto;
 }
 
-.unit_table_image_medium {
+.unitTableImageMedium {
 	height: 3.5vmin;
 	width: auto;
 }
 
-.unit_table_image_small {
+.unitTableImageSmall {
 	height: 2.5vmin;
 	width: auto;
 }
 
 
-.unit_table_cell_traits {
+.unitTableCellTraits {
 	overflow-x: visible;
 }
 
-.table_add_unit_button {
+.tableAddUnitButton {
 	font-style: bold;
 	font-size: 3vmin;
 	height: 4vmin;
@@ -231,7 +232,7 @@ option {
 	padding: 0;
 }
 
-#stats_content {
+#statsContent {
 	position: absolute;
 	border: none;
 	border-color: rgb(255, 255, 255);
@@ -522,13 +523,13 @@ sup {
 	;
 }
 
-.sidebar_contracted {
+.sidebarContracted {
 	padding: 0;
 	width: 50px;
 	transition: width .1s;
 }
 
-.sidebar_expanded {
+.sidebarExpanded {
 	padding: .5vmin;
 	width: 200px;
 	transition: width .1s;
@@ -547,15 +548,15 @@ sup {
 	opacity: 100%;
 }
 
-#sidebar_title_div {
+#sidebarTitleDiv {
 	padding: 10px;
 }
 
-#sidebar_title_div_v {
+#sidebarTitleDivV {
 	transform: rotate(90deg) translate(30px);
 }
 
-.sidebar_footer_div {
+.sidebarFooterDiv {
 	position: absolute;
 	bottom: 0px;
 	padding: 5px;
@@ -564,7 +565,7 @@ sup {
 	text-shadow: 2px 2px 1px black;
 }
 
-.sidebar_extraSmallFont {
+.sidebarExtraSmallFont {
 	padding: 5 0 5 0;
 	font-family: 'Times New Roman', Times, serif;
 	font-size: 8px;
@@ -578,6 +579,11 @@ sup {
 	font-variant: small-caps;
 	font-size: x-small;
 	vertical-align: super;
+}
+
+.buttonContainer {
+	display: flex;
+	flex-direction: column;
 }
 
 #toggleSidebarButton {
@@ -594,22 +600,38 @@ sup {
 	transform: translate(-40%, 0);
 }
 
-#toggleSidebarButtonImg {
+.sidebarBtnImg {
 	padding: 0 0 0 0;
 	margin: 4 0 8 0;
-	height: 80%;
+	height: 60%;
 }
 
-#unit_view-h {
+#unitView-h {
 	overflow: auto;
 	margin: 3px;
 	right: 50%;
 	left: 0px;
 	top: 0px;
 	bottom: 0px;
+	border: solid;
+	border-color: black;
+	border-width: 2px;
 }
 
-#deck_view-h {
+#stratView-h {
+	overflow: auto;
+	margin: 3px;
+	right: 0;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	border: solid;
+	border-color: black;
+	border-width: 2px;
+}
+
+#deckView-h {
+	position: absolute;
 	margin: 3px;
 	left: 50%;
 	top: 0px;
@@ -617,7 +639,7 @@ sup {
 	bottom: 50%;
 }
 
-#stats_view-h {
+#statsView-h {
 	margin: 3px;
 	left: 50%;
 	top: 50%;
@@ -626,7 +648,7 @@ sup {
 	overflow: hidden;
 }
 
-#unit_view-v {
+#unitView-v {
 	overflow: auto;
 	margin: 0;
 	left: 0;
@@ -641,7 +663,7 @@ sup {
 }
 
 
-#deck_view-v {
+#deckView-v {
 	margin: 0;
 	height: 29.5%;
 	left: 0;
@@ -654,7 +676,7 @@ sup {
 	top: 40%;
 }
 
-#stats_view-v {
+#statsView-v {
 	margin: 0;
 	margin: 0;
 	height: 30%;
@@ -670,7 +692,7 @@ sup {
 }
 
 
-#unit_table_head {
+#unitTableHead {
 	position: sticky;
 	background-color: rgba(0, 0, 0, 0.623);
 	background-color: rgba(0, 0, 0, 0.623);
@@ -678,11 +700,11 @@ sup {
 	height: 30px;
 }
 
-#unit_table_body {
+#unitTableBody {
 	top: 30px;
 }
 
-#deck_content {
+#deckContent {
 	background-color: rgba(5, 1, 66, 0.685);
 	border: dotted;
 	border-width: 0px;
@@ -690,7 +712,7 @@ sup {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-evenly;
-	overflow: hidden;
+	overflow: visible;
 }
 
 .deckSlotImage {
@@ -770,15 +792,15 @@ sup {
 	overflow: hidden;
 }
 
-.unit_deck1_slot_div_filled {
+.unitDeck1SlotDivFilled {
 	border-color: rgb(19, 104, 19);
 }
 
-.unit_deck2_slot_div_filled {
+.unitDeck2SlotDivFilled {
 	border-color: rgb(104, 24, 24);
 }
 
-.deck_stats_div {
+.deckStatsDiv {
 	font-weight: 350;
 	font-size: 1.5vmin;
 	line-height: 80%;
@@ -816,7 +838,7 @@ sup {
 	width: 25%;
 }
 
-.deck_stats_img {
+.deckStatsImg {
 	width: 2vmin;
 	padding: .5vmin;
 }
@@ -826,25 +848,25 @@ sup {
 	padding: .5vmin;
 }
 
-.deck_stats_img_ability {
+.deckStatsImgAbility {
 	width: 7%;
 }
 
-.deck_stats_img_traits {
+.deckStatsImgTraits {
 	width: 5.8%;
 }
 
-.deck_stats_img_manf {
+.deckStatsImgManf {
 	position: relative;
 	width: 7%;
 }
 
-.links_div {
+.linksDiv {
 	flex: auto;
 	position: relative;
 }
 
-.links_content {
+.linksContent {
 	position: inherit;
 	color: grey;
 }
@@ -853,7 +875,7 @@ sup {
 	color: rgb(192, 162, 81);
 }
 
-#unit_card_container {
+#unitCardContainer {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -866,12 +888,12 @@ sup {
 
 }
 
-.unit_card_text {
+.unitCardText {
 	text-shadow: 2px 2px 1px black;
 	font-weight: 700;
 }
 
-.unit_card_name {
+.unitCardName {
 	position: absolute;
 	left: 4%;
 	top: 12%;
@@ -886,7 +908,7 @@ sup {
 	text-align: center;
 }
 
-.unit_card {
+.unitCard {
 	overflow: hidden;
 	position: relative;
 	background-color: rgba(0, 0, 0, 0.493);
@@ -897,7 +919,7 @@ sup {
 	z-index: 0;
 }
 
-.unit_card_image {
+.unitCardImage {
 	position: absolute;
 	opacity: 88%;
 	width: 70%;
@@ -905,7 +927,7 @@ sup {
 	top: 30%;
 }
 
-.unit_card_building {
+.unitCardBuilding {
 	opacity: 90%;
 	position: absolute;
 	width: 30%;
@@ -913,7 +935,7 @@ sup {
 	bottom: 2%;
 }
 
-.unit_card_matter {
+.unitCardMatter {
 	position: absolute;
 	top: 0;
 	color: rgb(255, 58, 58);
@@ -923,7 +945,7 @@ sup {
 	text-align: center;
 }
 
-.unit_card_bandwidth {
+.unitCardBandwidth {
 	position: absolute;
 	left: 32%;
 	top: 0;
@@ -934,7 +956,7 @@ sup {
 	text-align: center;
 }
 
-.unit_card_energy {
+.unitCardEnergy {
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -945,7 +967,7 @@ sup {
 	text-align: center;
 }
 
-.unit_card_type {
+.unitCardType {
 	position: absolute;
 	left: 10%;
 	top: 20%;
@@ -959,19 +981,19 @@ sup {
 	transform: rotate(90deg);
 }
 
-.unit_card_trait {
+.unitCardTrait {
 	width: 90%;
 	padding: 0 0 30% 0;
 }
 
-.unit_card_traits {
+.unitCardTraits {
 	position: absolute;
 	top: 26%;
 	left: 80%;
 	right: 4%;
 }
 
-.unit_card_manufacturer {
+.unitCardManufacturer {
 	position: relative;
 	top: 83%;
 	bottom: 0%;
@@ -1000,7 +1022,88 @@ sup {
 	text-decoration: underline;
 }
 
-.socials_img {
+.socialsImg {
 	width: 1.5vmin;
 	padding: 0 0 0 10;
+}
+
+.stratViewTimeInput {
+	width: 100%;
+}
+
+.stratTimeContainer {
+	display: flex;
+	flex-direction: row;
+
+	width: 90%;
+	height: fit-content;
+	border: none;
+	border-width: 1px;
+}
+
+.stratButtonsContainer {
+	display: flex;
+	width: 90%;
+	flex-direction: row;
+	border: none;
+	border-width: 1px;
+}
+
+.stratResourceContainer {
+	display: flex;
+	width: 20%;
+	height: 100%;
+	justify-content: space-evenly;
+	flex-direction: row;
+	border: none;
+	border-width: 1px;
+}
+
+.stratResourceDiv {
+	display: flex;
+	flex-direction: row;
+	padding: 3% 0 0 0;
+	border: none;
+	border-width: 1px;
+}
+
+.stratResourceImg {
+	height: 2vmin;
+}
+
+#stratContent {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.stratChartContainer {
+	height: 80%;
+	width: 90%;
+	border: solid;
+	border-width: 1px;
+}
+
+.stratUnitsContainer {
+	display: flex;
+	flex-direction: row;
+	height: 80%;
+	width: 90%;
+	border: solid;
+	border-width: 1px;
+}
+
+#stratChart {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.stratUnitImage {
+	height: 2vmin;
+}
+
+.stratUnitButtonRed {
+	background-color: red;
 }

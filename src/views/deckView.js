@@ -1,13 +1,15 @@
 /* eslint-disable no-redeclare */
 
-import { myLog, createButton, createHeaderButton } from '../utils'
+import { myLog, makeBtn, makeHeaderBtn } from '../utils'
 import { locale } from '../locale';
 import { units, unitList } from '../units';
+import { filteredUnitList, setFilteredUnitList, sortUnits, unitHeaderSort, redrawUnitContent, setFilter, unitFilterInput, repopulateFilteredUnitList } from './unitView';
+import { updateComparisonCharts, unitMouseOverAndTapped } from './statsView'
+
 //import { sort } from 'fast-sort';
 import leaderboardData from '../leaderboard.json';
 
 //#region deck format
-
 
 var savedDecks = []
 var filteredDecks = []
@@ -149,30 +151,6 @@ if (savedDecks.length == 0) {
 //#endregion
 
 
-var repopulateFilteredUnitList
-var redrawUnitContent
-var unitMouseOverAndTapped
-var updateComparisonCharts
-var filteredUnitList
-var sortUnits
-var unit_header_sort
-var unit_filter_input
-var setFilter
-//called by main to pass required functions
-function decksInit(repop, redraw, unitHover, updateChart, _filteredUnitlist, unitlist, sortunits, uhs, ufi, setfilter) {
-	repopulateFilteredUnitList = repop;
-	redrawUnitContent = redraw;
-	unitMouseOverAndTapped = unitHover
-	updateComparisonCharts = updateChart
-	filteredUnitList = _filteredUnitlist;
-	//unitList = unitlist;
-	sortUnits = sortunits;
-	unit_header_sort = uhs;
-	unit_filter_input = ufi;
-	setFilter = setfilter;
-
-}
-
 //#tag define-deck-contents
 var decks = [[], []];
 var deckNames = ['', ''];
@@ -199,34 +177,34 @@ function setCurrentDeck(num) {
 	redrawUnitContent();
 }
 
-const deck_view = document.createElement('div');
-deck_view.id = 'deck_view-h';
-deck_view.classList.add('view');
+const deckView = document.createElement('div');
+deckView.id = 'deckView-h';
+deckView.classList.add('view');
 const deckViewHeader = document.createElement('div');
-deckViewHeader.classList.add('view_header');
-deck_view.appendChild(deckViewHeader);
-const deck_content = document.createElement('div');
-deck_content.classList.add('view_content');
-deck_content.id = 'deck_content';
-deck_view.appendChild(deck_content);
+deckViewHeader.classList.add('viewHeader');
+deckView.appendChild(deckViewHeader);
+const deckContent = document.createElement('div');
+deckContent.classList.add('viewContent');
+deckContent.id = 'deckContent';
+deckView.appendChild(deckContent);
 
 //make a constructor for header button
 
 
 //#region deck-header section of the deck view
-const deck1Btn = createHeaderButton('deck1', 'deck1_btn', function () {
+const deck1Btn = makeHeaderBtn('deck1', 'deck1Btn', function () {
 	setCurrentDeck(0);
 })
 deckViewHeader.appendChild(deck1Btn);
 deck1Btn.classList.add('selected');
-const deck2Btn = createHeaderButton('deck2', 'deck2_btn', function () {
+const deck2Btn = makeHeaderBtn('deck2', 'deck2Btn', function () {
 	setCurrentDeck(1);
 })
 deckViewHeader.appendChild(deck2Btn);
 deckButtons.push(deck1Btn, deck2Btn);
 
 //fill deck button which tries to add units from the unit list in order until the deck is full
-const deckFillBtn = createHeaderButton('fill', 'deck_fill_btn', function () {
+const deckFillBtn = makeHeaderBtn('fill', 'deckFillBtn', function () {
 	fillDeckWithUnits(currentDeck);
 	refreshNameInput();
 })
@@ -337,14 +315,15 @@ function loadDeck() {
 	decks[currentDeck] = [];
 	fillSlotsFromDeck(deckToLoad, currentDeck)
 	refreshNameInput(currentDeck);
+	console.log(decks[currentDeck]);
 }
 
 //load button:
-const deckLoadBtn = createHeaderButton('load', 'deck_load_btn', loadDeck)
+const deckLoadBtn = makeHeaderBtn('load', 'deckLoadBtn', loadDeck)
 deckViewHeader.appendChild(deckLoadBtn);
 
 //delete button:
-const deckDeleteBtn = createHeaderButton('delete', 'deck_delete_btn', function () {
+const deckDeleteBtn = makeHeaderBtn('delete', 'deckDeleteBtn', function () {
 	savedDecks.splice(selectedDeckToLoad, 1);
 	localStorage.setItem('savedDecks', JSON.stringify(savedDecks));
 	refreshDropdown();
@@ -364,7 +343,7 @@ const createNewDeckContainer = (className, deckId) => {
 	deckContainer.onclick = function () {
 		selectDeck(deckId);
 	};
-	deck_content.appendChild(deckContainer);
+	deckContent.appendChild(deckContainer);
 	return deckContainer;
 }
 
@@ -392,7 +371,7 @@ const nameInputs = []
 const createNameInput = (deckId) => {
 	//deck name input box:
 	const nameInput = document.createElement('input');
-	nameInput.id = 'name_input' + deckId;
+	nameInput.id = 'nameInput' + deckId;
 	nameInput.classList.add('deckNameInput');
 	nameInput.type = 'text';
 	nameInput.placeholder = locale('deckName');
@@ -417,7 +396,7 @@ function refreshNameInput(deckId) {
 refreshNameInput(0);
 
 const createDeckSaveBtn = (deckId) => {
-	const deckSaveBtn = createButton('save', 'deckSaveClearBtn', function () {
+	const deckSaveBtn = makeBtn('save', 'deckSaveClearBtn', function () {
 		//save the current deck as a new deck
 		if (nameInputs[deckId].value == '') {
 			alert('Deck must have a name to be saved');
@@ -445,7 +424,7 @@ deck1ContNameDiv.appendChild(createDeckSaveBtn(0));
 deck2ContNameDiv.appendChild(createDeckSaveBtn(1));
 
 const createDeckClearBtn = (deckId) => {
-	const deckClearBtn = createButton('clear', 'deckSaveClearBtn', function () {
+	const deckClearBtn = makeBtn('clear', 'deckSaveClearBtn', function () {
 		removeAllUnitsFromDeck(deckId);
 		refreshNameInput(deckId);
 		repopulateFilteredUnitList();
@@ -474,16 +453,16 @@ function removeUnitFromDeck(slotNumber, deckID, updateCharts) {
 	//Amazon Q: if unit is not in filteredUnitList, add it back to filteredUnitList
 	//if the unit is in the filteredUnitList, remove it from the filteredUnitList
 	filteredUnitList.push(deck[slotNumber])
-	//sort list by unit_header_sort.value
-	filteredUnitList = sortUnits(unit_header_sort.value, filteredUnitList);
+	//sort list by unitHeaderSort.value
+	setFilteredUnitList(sortUnits(unitHeaderSort.value, filteredUnitList));
 
 
 
 	if (deck[slotNumber]) {
 		myLog(slotNumber + ' clicked - removed ' + deck[slotNumber].name + ' from deck # ' + deckID);
 		delete deck[slotNumber];
-		deckDivs[deckID][slotNumber].classList.remove('unit_deck1_slot_div_filled');
-		deckDivs[deckID][slotNumber].classList.remove('unit_deck2_slot_div_filled');
+		deckDivs[deckID][slotNumber].classList.remove('unitDeck1SlotDivFilled');
+		deckDivs[deckID][slotNumber].classList.remove('unitDeck2SlotDivFilled');
 		if (updateCharts) updateComparisonCharts();
 	}
 	redrawUnitContent();
@@ -563,10 +542,10 @@ function createDeckSlots(container, deckID) {
 				myLog(slotBuildings[slotNumber] + ' clicked, setting filter');
 				//setFilter(slotBuildings[i]);
 				//set the filter input box to the name of the building
-				unit_filter_input.value = slotBuildings[slotNumber];
-				setFilter(unit_filter_input.value)
+				unitFilterInput.value = slotBuildings[slotNumber];
+				setFilter(unitFilterInput.value)
 				redrawUnitContent();
-				//run the unit_filter input changed event
+				//run the unitFilter input changed event
 			}
 			redrawDeckContent(deckID);
 		});
@@ -588,16 +567,16 @@ createDeckSlots(deck2Container, 1);
 function createDeckStats(container) {
 
 	//create a text input box
-	var deck_stats_div = document.createElement('div');
-	deck_stats_div.classList.add('deck_stats_div');
+	var deckStatsDiv = document.createElement('div');
+	deckStatsDiv.classList.add('deckStatsDiv');
 	//create a table with 2 columns and 4 rows
-	var stat_categories = ['matter', 'energy', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
-	var stat_category_divs = {} //stores the cells for each stat category to be updated
+	var statCategories = ['matter', 'energy', 'bandwidth', 'health', 'speed', 'range', 'damage', 'ability', 'traits', 'manufacturer']
+	var statCategoryDivs = {} //stores the cells for each stat category to be updated
 
-	stat_categories.forEach(cat => {
+	statCategories.forEach(cat => {
 		const statDiv = document.createElement('div')
 		statDiv.classList.add('statDiv');
-		stat_category_divs[cat] = valueDiv;
+		statCategoryDivs[cat] = valueDiv;
 
 		if (cat == 'traits' || cat == 'ability') {
 			statDiv.innerText = locale(cat) + ': ';
@@ -616,42 +595,42 @@ function createDeckStats(container) {
 			}
 			else {
 				img.src = 'images/stats/' + cat + '.png';
-				img.classList.add('deck_stats_img');
+				img.classList.add('deckStatsImg');
 				statDiv.classList.add('unitStatDiv');
 			}
 
 			statDiv.appendChild(img);
 		}
 		var valueDiv = document.createElement('div');
-		stat_category_divs[cat] = valueDiv;
+		statCategoryDivs[cat] = valueDiv;
 		valueDiv.innerText = '';
 		statDiv.appendChild(valueDiv);
-		deck_stats_div.appendChild(statDiv);
+		deckStatsDiv.appendChild(statDiv);
 	});
 
 
 	var deckEmojiText = document.createElement('div');
 
-	//on unit_deck_input update
+	//on unitDeckInput update
 	deckEmojiText.onchange = function () {
-		myLog('unit_deck_input');
+		myLog('unitDeckInput');
 		redrawDeckContent();
 	};
 
-	//stat_category_cells.range.innerHTML = 'test';
-	container.appendChild(deck_stats_div);
+	//statCategoryCells.range.innerHTML = 'test';
+	container.appendChild(deckStatsDiv);
 
-	return stat_category_divs;
+	return statCategoryDivs;
 }
 
-var stat_category_cells = []
-var stat_category_cells1 = createDeckStats(deck1Container);
-var stat_category_cells2 = createDeckStats(deck2Container);
-stat_category_cells.push(stat_category_cells1)
-stat_category_cells.push(stat_category_cells2)
+var statCategoryCells = []
+var statCategoryCells1 = createDeckStats(deck1Container);
+var statCategoryCells2 = createDeckStats(deck2Container);
+statCategoryCells.push(statCategoryCells1)
+statCategoryCells.push(statCategoryCells2)
 
 myLog("STAT CATEGORY CELLS");
-myLog(stat_category_cells);
+myLog(statCategoryCells);
 
 //create 1 div to hold all the unit deck slots
 
@@ -685,12 +664,12 @@ function calculateDeckStats(deckID) {
 			}
 		}
 	}
-	//stat_category_cells.range.innerHTML = 'test'
-	//for each stat set stat_category_cells['statname'].innerHTML to the correct stat
+	//statCategoryCells.range.innerHTML = 'test'
+	//for each stat set statCategoryCells['statname'].innerHTML to the correct stat
 	//myLog(stats);
 	for (var key in stats) {
-		if (stat_category_cells[deckID][key] != undefined) {
-			stat_category_cells[deckID][key].innerHTML = '';
+		if (statCategoryCells[deckID][key] != undefined) {
+			statCategoryCells[deckID][key].innerHTML = '';
 			if (key == 'ability') {
 				for (var i = 0; i < stats[key].length; i++) {
 					if (stats[key][i] != undefined && (stats[key][i] != ' ')) {
@@ -698,8 +677,8 @@ function calculateDeckStats(deckID) {
 						img.src = 'images/abilities/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('deck_stats_img_ability');
-						stat_category_cells[deckID][key].appendChild(img);
+						img.classList.add('deckStatsImgAbility');
+						statCategoryCells[deckID][key].appendChild(img);
 					}
 				}
 			}
@@ -715,8 +694,8 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i][j] + '.png';
 								img.setAttribute('alt', stats[key][i][j]);
 								img.setAttribute('title', stats[key][i][j]);
-								img.classList.add('deck_stats_img_traits');
-								stat_category_cells[deckID][key].appendChild(img);
+								img.classList.add('deckStatsImgTraits');
+								statCategoryCells[deckID][key].appendChild(img);
 							}
 						}
 						else {
@@ -724,26 +703,26 @@ function calculateDeckStats(deckID) {
 								img.src = 'images/traits/' + stats[key][i] + '.png';
 								img.setAttribute('alt', stats[key][i]);
 								img.setAttribute('title', stats[key][i]);
-								img.classList.add('deck_stats_img_traits');
-								stat_category_cells[deckID][key].appendChild(img);
+								img.classList.add('deckStatsImgTraits');
+								statCategoryCells[deckID][key].appendChild(img);
 							}
 						}
 
 						/*
-						stat_category_cells[key].sort(function (a, b) {
+						statCategoryCells[key].sort(function (a, b) {
 							return a.alt.localeCompare(b.alt);
 						})
 						
 						*/
-						//sort children of stat_category_cells[key]
+						//sort children of statCategoryCells[key]
 
 
-						var sortedChildren = Array.from(stat_category_cells[deckID][key].children).sort(function (a, b) {
+						var sortedChildren = Array.from(statCategoryCells[deckID][key].children).sort(function (a, b) {
 							return a.alt.localeCompare(b.alt);
 						});
-						stat_category_cells[deckID][key].innerHTML = '';
+						statCategoryCells[deckID][key].innerHTML = '';
 						sortedChildren.forEach(function (child) {
-							stat_category_cells[deckID][key].appendChild(child);
+							statCategoryCells[deckID][key].appendChild(child);
 						});
 
 					}
@@ -756,23 +735,23 @@ function calculateDeckStats(deckID) {
 						img.src = 'images/manuf/uniforms/' + stats[key][i] + '.png';
 						img.setAttribute('alt', stats[key][i]);
 						img.setAttribute('title', stats[key][i]);
-						img.classList.add('deck_stats_img_manf');
-						stat_category_cells[deckID][key].appendChild(img);
+						img.classList.add('deckStatsImgManf');
+						statCategoryCells[deckID][key].appendChild(img);
 					}
 
-					//sort children of stat_category_cells[key]
+					//sort children of statCategoryCells[key]
 
 
-					var sortedChildren = Array.from(stat_category_cells[deckID][key].children).sort(function (a, b) {
+					var sortedChildren = Array.from(statCategoryCells[deckID][key].children).sort(function (a, b) {
 						return a.alt.localeCompare(b.alt);
 					});
-					stat_category_cells[deckID][key].innerHTML = '';
+					statCategoryCells[deckID][key].innerHTML = '';
 					sortedChildren.forEach(function (child) {
-						stat_category_cells[deckID][key].appendChild(child);
+						statCategoryCells[deckID][key].appendChild(child);
 					});
 				}
 			}
-			else stat_category_cells[deckID][key].innerHTML = Math.round(stats[key]);
+			else statCategoryCells[deckID][key].innerHTML = Math.round(stats[key]);
 		}
 	}
 	return stats;
@@ -781,7 +760,7 @@ function calculateDeckStats(deckID) {
 function redrawDeckContent(deckID) {
 	calculateDeckStats(deckID);
 	//iterate through deckslots
-	//deck_stats.innerHTML = 'deck stats:\nhello';
+	//deckStats.innerHTML = 'deck stats:\nhello';
 	var deck = decks[deckID];
 	//deckEmojiText.innerHTML = ''
 	//for each deck1slot
@@ -799,9 +778,9 @@ function redrawDeckContent(deckID) {
 function addUnitToDeck(unit, deckID) {
 	var deck = decks[deckID];
 	myLog('Adding unit to deck ' + deckID + ': ' + unit.name);
-	//myLog(unit);about:blank#blocked
-	//add the unit name to the unit_deck_input text box
-	//unit_deck_input.value += unit.name + '\n';
+	//myLog(unit);about:_blank#blocked
+	//add the unit name to the unitDeckInput text box
+	//unitDeckInput.value += unit.name + '\n';
 	//addToDeck(unitList[i]);
 	var decklen = 0
 	var exists = false
@@ -817,8 +796,8 @@ function addUnitToDeck(unit, deckID) {
 		}
 	});
 	if (!exists && decklen < 8) {
-		var deckClass = 'unit_deck1_slot_div_filled';
-		if (deckID == 1) deckClass = 'unit_deck2_slot_div_filled';
+		var deckClass = 'unitDeck1SlotDivFilled';
+		if (deckID == 1) deckClass = 'unitDeck2SlotDivFilled';
 		//loop through deck and find if deck slotbuildings[i] matches the current units building
 		for (var i = 0; i < 8; i++) {
 			if (deck[i] == undefined) {
@@ -852,17 +831,4 @@ function addUnitToDeck(unit, deckID) {
 
 //#endregion
 
-
-decksInit(repopulateFilteredUnitList,
-	redrawUnitContent,
-	unitMouseOverAndTapped,
-	updateComparisonCharts,
-	filteredUnitList,
-	unitList,
-	sortUnits,
-	unit_header_sort,
-	unit_filter_input,
-	setFilter
-)
-
-export { deck_view, addUnitToDeck, currentDeck, decks, decksInit };
+export { deckView, addUnitToDeck, currentDeck, decks, filteredDecks, decklistDropdown, deckSearchInputElement };
