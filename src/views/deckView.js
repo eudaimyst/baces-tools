@@ -224,7 +224,7 @@ deckViewHeader.appendChild(decklistDropdown);
 
 var selectedDeckToLoad = 0;
 //for each deck in the deckLists array, add an option to select that deck in the dropdown, using the decks name
-const refreshDropdown = () => {
+function refreshDropdown() {
 	//remove all options from the decklist dropdown
 	decklistDropdown.innerHTML = '';
 
@@ -273,7 +273,7 @@ decklistDropdown.addEventListener('change', function () {
 });
 
 
-const deckSearchInput = () => {
+function deckSearchInput() {
 	//deck name input box:
 	const searchInput = document.createElement('input');
 	searchInput.id = 'deckSearchInput';

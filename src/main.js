@@ -52,7 +52,9 @@ function resize() {
 	}
 }
 window.addEventListener('resize', resize);
-//set the initial fragment identifier else if ()
+
+
+//change loaded views based on url suffix
 function loadPage() {
 	const suffix = window.location.hash.slice(1); // Remove the '#'
 	console.log('Current suffix:', suffix);
