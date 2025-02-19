@@ -1,7 +1,7 @@
 //create 3 divs called unitView, deckView and statsView, and a wrapper to contain them
 
 import { sidebar, updateBG } from './menu';
-import { deckView } from './views/deckView';
+import { deckView, deckInit } from './views/deckView';
 import { unitView, unitsInit } from './views/unitView';
 import { units, setCurrentUnit } from './units';
 import { myLog } from './utils';
@@ -9,7 +9,7 @@ import {
 	unitMouseOverAndTapped,
 	statsView
 } from './views/statsView';
-import { stratView } from './views/stratView';
+import { stratView, stratInit } from './views/stratView';
 
 var unitList = Object.values(units);
 
@@ -69,10 +69,12 @@ function loadPage() {
 		unitsInit(unitMouseOver); //also redraws unit content after decks have been initialised
 		app.appendChild(unitView);
 		app.appendChild(deckView);
+		deckInit(); //attaches the decklist dropdown and search to the deckView header
 		app.appendChild(statsView);
 	}
 	else if (suffix == 'stratplanner') {
 		app.appendChild(stratView);
+		stratInit(); //attaches the decklist dropdown and search to the stratView header
 	}
 	resize();
 }

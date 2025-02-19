@@ -11,9 +11,10 @@ const stratViewHeader = makeDiv('viewHeader', 'stratHeader', stratView);
 const stratViewContent = makeDiv('viewContent', 'stratContent', stratView);
 
 //add the decklist dropdown and input element to the header
-stratViewHeader.appendChild(decklistDropdown);
-stratViewHeader.appendChild(deckSearchInputElement);
-
+function stratInit() {
+	stratViewHeader.appendChild(decklistDropdown);
+	stratViewHeader.appendChild(deckSearchInputElement);
+}
 var currentTime = 0; //game time in seconds
 var currentM = 0;
 var currentE = 0;
@@ -205,12 +206,12 @@ function calculateMatterAndEnergy(_unitbutton) {
 
 	//loop through resource arrays to adjust them based upon the offsets
 	for (let i = 0; i < gameLength - 1; i++) {
-		
+
 		//#tag currentTimeBar
 		//set the data for the vertical line (bar chart data)
-		if (i == currentTime) chartBarData[i] = max; 
+		if (i == currentTime) chartBarData[i] = max;
 		else chartBarData[i] = 0;
-		
+
 		if (i > 0) {
 			workerCounts[i] = workerCounts[i - 1]
 			tempMatter[i] = (tempMatter[i - 1] + (workerCounts[i] * matterPerWorker)) - offsetMatter[i];
@@ -362,4 +363,4 @@ function updateChart() {
 }
 
 
-export { stratView, updateUnits }
+export { stratView, updateUnits, stratInit }

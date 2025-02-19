@@ -220,7 +220,14 @@ deckViewHeader.appendChild(deckFillBtn);
 const decklistDropdown = document.createElement('select');
 decklistDropdown.id = 'decklistDropdown';
 decklistDropdown.classList.add('headerElement');
-deckViewHeader.appendChild(decklistDropdown);
+
+function deckInit() {
+	//deckViewHeader.appendChild(decklistDropdown);
+	//add decklistDropdown as a child of deckViewHeader at the first element
+	deckViewHeader.insertBefore(deckSearchInputElement, deckViewHeader.firstChild);
+	deckViewHeader.insertBefore(decklistDropdown, deckViewHeader.firstChild);
+
+}
 
 var selectedDeckToLoad = 0;
 //for each deck in the deckLists array, add an option to select that deck in the dropdown, using the decks name
@@ -831,4 +838,4 @@ function addUnitToDeck(unit, deckID) {
 
 //#endregion
 
-export { deckView, addUnitToDeck, currentDeck, decks, filteredDecks, decklistDropdown, deckSearchInputElement };
+export { deckView, addUnitToDeck, currentDeck, decks, filteredDecks, decklistDropdown, deckSearchInputElement, deckInit };
