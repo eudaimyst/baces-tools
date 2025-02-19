@@ -409,6 +409,17 @@
 		"kr": "기술",
 		"es-419": "tecno."
 	},
+	"expand": {
+		"en": "expand",
+		"fr": "développer",
+		"de": "erweitern",
+		"es": "expandir",
+		"pt": "expandir",
+		"jp": "展開",
+		"cn": "展开",
+		"kr": "확장",
+		"es-419": "expandir"
+	},
 	"tier": {
 		"en": "Tier",
 		"fr": "Niveau",

@@ -48,7 +48,7 @@ const sortOptions = [
 	[locale('antiAir'), 'antiair'],
 	[locale('manufacturer'), 'manufacturer']
 ];
-const unitHeaderSort = makeDropDown('unitHeaderSort', 'headerElement', unitViewHeader, sortOptions)
+const unitHeaderSort = makeDropDown('headerElement', 'unitHeaderSort', unitViewHeader, sortOptions)
 
 
 //label
